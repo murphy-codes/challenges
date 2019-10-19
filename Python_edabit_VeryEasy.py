@@ -1,6 +1,6 @@
 '''
-  Author: Thomas Murphy
-  Last Modified: 2019-10-18 19:45
+  Author: Tom Murphy
+  Last Modified: 2019-10-18 20:36
 '''
 
 
@@ -11,9 +11,9 @@
 def addition(x, y):
   return x+y
 
-print(addition(3, 2))   # ? 5
-print(addition(-3, -6)) # ? -9
-print(addition(7, 3))   # ? 10
+print(addition(3, 2))   # ➞ 5
+print(addition(-3, -6)) # ➞ -9
+print(addition(7, 3))   # ➞ 10
 '''
 
 '''
@@ -23,9 +23,9 @@ print(addition(7, 3))   # ? 10
 def convert(minutes):
   return minutes*60
 
-print(convert(5)) # ? 300
-print(convert(3)) # ? 180
-print(convert(2)) # ? 120
+print(convert(5)) # ➞ 300
+print(convert(3)) # ➞ 180
+print(convert(2)) # ➞ 120
 '''
 
 '''
@@ -35,9 +35,9 @@ print(convert(2)) # ? 120
 def addition(x):
   return x+1
 
-print(addition(0))  # ? 1
-print(addition(9))  # ? 10
-print(addition(-3)) # ? -2
+print(addition(0))  # ➞ 1
+print(addition(9))  # ➞ 10
+print(addition(-3)) # ➞ -2
 '''
 
 '''
@@ -51,10 +51,10 @@ def tri_area(x, y):
   else:
     return area
 
-print(tri_area(3, 2))   # ? 3
-print(tri_area(7, 4))   # ? 14
-print(tri_area(10, 10)) # ? 50
-print(tri_area(7, 11))  # ? 38.5
+print(tri_area(3, 2))   # ➞ 3
+print(tri_area(7, 4))   # ➞ 14
+print(tri_area(10, 10)) # ➞ 50
+print(tri_area(7, 11))  # ➞ 38.5
 '''
 
 '''
@@ -64,10 +64,10 @@ print(tri_area(7, 11))  # ? 38.5
 def remainder(x, y):
   return x%y
 
-print(remainder(1, 3)) # ? 1
-print(remainder(3, 4)) # ? 3
-print(remainder(5, 5)) # ? 0
-print(remainder(7, 2)) # ? 1
+print(remainder(1, 3)) # ➞ 1
+print(remainder(3, 4)) # ➞ 3
+print(remainder(5, 5)) # ➞ 0
+print(remainder(7, 2)) # ➞ 1
 '''
 
 '''
@@ -77,9 +77,9 @@ print(remainder(7, 2)) # ? 1
 def how_many_seconds(hours):
   return hours*3600
 
-print(how_many_seconds(2))  # ? 7200
-print(how_many_seconds(10)) # ? 36000
-print(how_many_seconds(24)) # ? 86400
+print(how_many_seconds(2))  # ➞ 7200
+print(how_many_seconds(10)) # ➞ 36000
+print(how_many_seconds(24)) # ➞ 86400
 '''
 
 '''
@@ -89,9 +89,9 @@ print(how_many_seconds(24)) # ? 86400
 def next_edge(x, y):
   return x+y-1
 
-print(next_edge(8, 10)) # ? 17
-print(next_edge(5, 7))  # ? 11
-print(next_edge(9, 2))  # ? 10
+print(next_edge(8, 10)) # ➞ 17
+print(next_edge(5, 7))  # ➞ 11
+print(next_edge(9, 2))  # ➞ 10
 '''
 
 '''
@@ -101,9 +101,9 @@ print(next_edge(9, 2))  # ? 10
 def get_first_value(user_list):
   return user_list[0]
 
-print(get_first_value([1, 2, 3]))     # ? 1
-print(get_first_value([80, 5, 100]))  # ? 80
-print(get_first_value([-500, 0, 50])) # ? -500
+print(get_first_value([1, 2, 3]))     # ➞ 1
+print(get_first_value([80, 5, 100]))  # ➞ 80
+print(get_first_value([-500, 0, 50])) # ➞ -500
 '''
 
 '''
@@ -113,9 +113,9 @@ print(get_first_value([-500, 0, 50])) # ? -500
 def calculate_exponent(x, y):
   return x**y
 
-print(calculate_exponent(5, 5))   # ? 3125
-print(calculate_exponent(10, 10)) # ? 10000000000
-print(calculate_exponent(3, 3))   # ? 27
+print(calculate_exponent(5, 5))   # ➞ 3125
+print(calculate_exponent(10, 10)) # ➞ 10000000000
+print(calculate_exponent(3, 3))   # ➞ 27
 '''
 
 '''
@@ -125,9 +125,9 @@ print(calculate_exponent(3, 3))   # ? 27
 def animals(chicken, cows, pigs):
   return 4*(cows+pigs) + 2*chicken
 
-print(animals(2, 3, 5)) # ? 36
-print(animals(1, 2, 3)) # ? 22
-print(animals(5, 2, 8)) # ? 50
+print(animals(2, 3, 5)) # ➞ 36
+print(animals(1, 2, 3)) # ➞ 22
+print(animals(5, 2, 8)) # ➞ 50
 '''
 
 
@@ -182,12 +182,12 @@ def to_str(int_in):
     stringy = '-' + stringy
   return stringy
 
-print(type(to_int("77")), to_int("77"))     # ? 77
-print(type(to_int("532")), to_int("532"))   # ? 532
-print(type(to_int("-426")), to_int("-426")) # ? -426
-print(type(to_str(77)), to_str(77))       # ? "77"
-print(type(to_str(532)), to_str(532))     # ? "532"
-print(type(to_str(-426)), to_str(-426))   # ? "-426"
+print(type(to_int("77")), to_int("77"))     # ➞ 77
+print(type(to_int("532")), to_int("532"))   # ➞ 532
+print(type(to_int("-426")), to_int("-426")) # ➞ -426
+print(type(to_str(77)), to_str(77))       # ➞ "77"
+print(type(to_str(532)), to_str(532))     # ➞ "532"
+print(type(to_str(-426)), to_str(-426))   # ➞ "-426"
 '''
 
 '''
@@ -200,9 +200,9 @@ def less_than_or_equal_to_zero(value):
   else:
     return False
 
-print(less_than_or_equal_to_zero(5))  # ? False
-print(less_than_or_equal_to_zero(0))  # ? True
-print(less_than_or_equal_to_zero(-2)) # ? True
+print(less_than_or_equal_to_zero(5))  # ➞ False
+print(less_than_or_equal_to_zero(0))  # ➞ True
+print(less_than_or_equal_to_zero(-2)) # ➞ True
 '''
 
 '''
@@ -212,9 +212,9 @@ print(less_than_or_equal_to_zero(-2)) # ? True
 def convert(h, m):
   return h*3600 + m*60
 
-print(convert(1, 3)) # ? 3780
-print(convert(2, 0)) # ? 7200
-print(convert(0, 0)) # ? 0
+print(convert(1, 3)) # ➞ 3780
+print(convert(2, 0)) # ➞ 7200
+print(convert(0, 0)) # ➞ 0
 '''
 
 '''
@@ -227,9 +227,9 @@ def is_equal(x, y):
   else:
     return False
 
-print(is_equal(5, 6))   # ? False
-print(is_equal(1, 1))   # ? True
-print(is_equal("1", 1)) # ? False
+print(is_equal(5, 6))   # ➞ False
+print(is_equal(1, 1))   # ➞ True
+print(is_equal("1", 1)) # ➞ False
 '''
 
 '''
@@ -242,9 +242,9 @@ def divisible_by_five(n):
   else:
     return False
 
-print(divisible_by_five(5))  # ? True
-print(divisible_by_five(-55)) # ? True
-print(divisible_by_five(37))  # ? False
+print(divisible_by_five(5))  # ➞ True
+print(divisible_by_five(-55)) # ➞ True
+print(divisible_by_five(37))  # ➞ False
 '''
 
 '''
@@ -258,9 +258,9 @@ def findLargestNum(user_list):
       largest = n
   return largest
 
-print(findLargestNum([4, 5, 1, 3]))         # ? 5
-print(findLargestNum([300, 200, 600, 150])) # ? 600
-print(findLargestNum([1000, 1001, 857, 1])) # ? 1001
+print(findLargestNum([4, 5, 1, 3]))         # ➞ 5
+print(findLargestNum([300, 200, 600, 150])) # ➞ 600
+print(findLargestNum([1000, 1001, 857, 1])) # ➞ 1001
 '''
 
 '''
@@ -273,10 +273,10 @@ def k_to_k(n, k):
   else:
     return False
 
-print(k_to_k(4, 2))         # ? True
-print(k_to_k(387420489, 9)) # ? True
-print(k_to_k(3124, 5))      # ? False
-print(k_to_k(17, 3))        # ? False
+print(k_to_k(4, 2))         # ➞ True
+print(k_to_k(387420489, 9)) # ➞ True
+print(k_to_k(3124, 5))      # ➞ False
+print(k_to_k(17, 3))        # ➞ False
 '''
 
 '''
@@ -294,9 +294,9 @@ def difference_max_min(user_list):
     i+=1
   return max_num - min_num
 
-print(difference_max_min([10, 4, 1, 4, -10, -50, 32, 21])) # ? 82
+print(difference_max_min([10, 4, 1, 4, -10, -50, 32, 21])) # ➞ 82
 # Smallest number is -50, biggest is 32.
-print(difference_max_min([44, 32, 86, 19])) # ? 67
+print(difference_max_min([44, 32, 86, 19])) # ➞ 67
 # Smallest number is 19, biggest is 86.
 '''
 
@@ -311,11 +311,11 @@ def find_smallest_num(user_list):
       smallest = n
   return smallest
 
-print(find_smallest_num([34, 15, 88, 2])) # ? 2
-print(find_smallest_num([34, -345, -1, 100])) # ? -345
-print(find_smallest_num([-76, 1.345, 1, 0])) # ? -76
-print(find_smallest_num([7, 7, 7])) # ? 7
-print(find_smallest_num([0.4356, 0.8795, 0.5435, -0.9999])) # ? -0.9999
+print(find_smallest_num([34, 15, 88, 2])) # ➞ 2
+print(find_smallest_num([34, -345, -1, 100])) # ➞ -345
+print(find_smallest_num([-76, 1.345, 1, 0])) # ➞ -76
+print(find_smallest_num([7, 7, 7])) # ➞ 7
+print(find_smallest_num([0.4356, 0.8795, 0.5435, -0.9999])) # ➞ -0.9999
 '''
 
 '''
@@ -329,9 +329,9 @@ def profitable_gamble(prob, prize, pay):
   else:
     return False
 
-print(profitable_gamble(0.2, 50, 9)) # ? True
-print(profitable_gamble(0.9, 1, 2))  # ? False
-print(profitable_gamble(0.9, 3, 2))  # ? True
+print(profitable_gamble(0.2, 50, 9)) # ➞ True
+print(profitable_gamble(0.9, 1, 2))  # ➞ False
+print(profitable_gamble(0.9, 3, 2))  # ➞ True
 '''
 
 '''
@@ -344,9 +344,9 @@ def divisible(n):
   else:
     return False
 
-print(divisible(1))    # ? False
-print(divisible(1000)) # ? True
-print(divisible(100))  # ? True
+print(divisible(1))    # ➞ False
+print(divisible(1000)) # ➞ True
+print(divisible(100))  # ➞ True
 '''
 
 '''
@@ -364,8 +364,8 @@ def difference(user_list):
     i+=1
   return max_num - min_num
 
-print(difference([10, 15, 20, 2, 10, 6]))  # ? 18 # 20 - 2 = 18
-print(difference([-3, 4, -9, -1, -2, 15])) # ? 24 # 15 - (-9) = 24
+print(difference([10, 15, 20, 2, 10, 6]))  # ➞ 18 # 20 - 2 = 18
+print(difference([-3, 4, -9, -1, -2, 15])) # ➞ 24 # 15 - (-9) = 24
 '''
 
 '''
@@ -375,9 +375,9 @@ print(difference([-3, 4, -9, -1, -2, 15])) # ? 24 # 15 - (-9) = 24
 def hello_name(name):
   return "Hello " + name + "!"
 
-print(hello_name("Gerald"))  # ? "Hello Gerald!"
-print(hello_name("Tiffany")) # ? "Hello Tiffany!"
-print(hello_name("Ed"))      # ? "Hello Ed!"
+print(hello_name("Gerald"))  # ➞ "Hello Gerald!"
+print(hello_name("Tiffany")) # ➞ "Hello Tiffany!"
+print(hello_name("Ed"))      # ➞ "Hello Ed!"
 '''
 
 '''
@@ -387,9 +387,9 @@ print(hello_name("Ed"))      # ? "Hello Ed!"
 def concat(list_a, list_b):
   return list_a + list_b
 
-print(concat([1, 3, 5], [2, 6, 8]))       # ? [1, 3, 5, 2, 6, 8]
-print(concat([7, 8], [10, 9, 1, 1, 2]))   # ? [7, 8, 10, 9, 1, 1, 2]
-print(concat([4, 5, 1], [3, 3, 3, 3, 3])) # ? [4, 5, 1, 3, 3, 3, 3, 3]
+print(concat([1, 3, 5], [2, 6, 8]))       # ➞ [1, 3, 5, 2, 6, 8]
+print(concat([7, 8], [10, 9, 1, 1, 2]))   # ➞ [7, 8, 10, 9, 1, 1, 2]
+print(concat([4, 5, 1], [3, 3, 3, 3, 3])) # ➞ [4, 5, 1, 3, 3, 3, 3, 3]
 '''
 
 '''
@@ -402,7 +402,63 @@ def comp(str_a, str_b):
   else:
     return False
 
-print(comp("AB", "CD"))        # ? True
-print(comp("ABC", "DE"))       # ? False
-print(comp("hello", "edabit")) # ? False
+print(comp("AB", "CD"))        # ➞ True
+print(comp("ABC", "DE"))       # ➞ False
+print(comp("hello", "edabit")) # ➞ False
+'''
+
+'''
+# https://edabit.com/challenge/wtu32ZFxHJsuQnogX
+# Is the String Empty?
+# Create a function that returns True if a string is empty and False otherwise.
+def is_empty(user_str):
+  if user_str:
+    return False
+  else:
+    return True
+
+print(is_empty(""))  # ➞ True
+print(is_empty(" ")) # ➞ False
+print(is_empty("a")) # ➞ False
+'''
+
+'''
+# https://edabit.com/challenge/uPtuNNTuASzPZMQrW
+# Return the Last Element in a List
+# Create a function that accepts a list and returns the last item in the list. The list can be either homogeneous or heterogeneous.
+def get_last_item(user_list):
+  return user_list.pop()
+
+print(get_last_item([1, 2, 3]))              # ➞ 3
+print(get_last_item(["cat", "dog", "duck"])) # ➞ "duck"
+print(get_last_item([True, False, True]))    # ➞ True
+print(get_last_item([7, "String", False]))   # ➞ False
+'''
+
+'''
+# https://edabit.com/challenge/pFQPcaaASgHuACbaS
+# Concatenate First and Last Name into One String
+# Given two strings, first_name and last_name, return a single string in the format "last, first".
+def concat_name(first, last):
+  return last + ", " + first
+
+print(concat_name("First", "Last")) # ➞ "Last, First"
+print(concat_name("John", "Doe"))   # ➞ "Doe, John"
+print(concat_name("Mary", "Jane"))  # ➞ "Jane, Mary"
+'''
+
+'''
+# https://edabit.com/challenge/ZGezQDXsturZGpQcS
+# Check if a List Contains a Given Number
+# Write a function to check if a list contains a particular number.
+def check(user_list, value):
+  if value in user_list:
+    return True
+  else:
+    return False
+
+print(check([1, 2, 3, 4, 5], 3)) # ➞ True
+print(check([1, 1, 2, 1, 1], 3)) # ➞ False
+print(check([5, 5, 5, 6], 5))    # ➞ True
+print(check([], 5))              # ➞ False
 '''
