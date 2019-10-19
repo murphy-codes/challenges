@@ -1,6 +1,6 @@
 '''
   Author: Tom Murphy
-  Last Modified: 2019-10-18 21:49
+  Last Modified: 2019-10-18 22:00
 '''
 
 # https://edabit.com/challenge/K4Pqh67Y9gpixPfjo
@@ -22,5 +22,30 @@ print(is_valid_PIN("12345")) # ? False
 print(is_valid_PIN("a234"))  # ? False
 print(is_valid_PIN(""))      # ? False
 
-user_input = input('Please enter a 4-digit or 6-digit PIN: ')
-print(is_valid_PIN(user_input))	
+def validate_PIN_entry():
+  # ask for and validate user input
+  flag = 'a'
+  while type(flag) is not int:
+    try:
+      user_input = int(input('Please enter a 4-digit or 6-digit PIN: '))
+      # prevent neg int inputs
+      if user_input < 0:
+        print('Negative numbers are not accepted')
+      # prevent PINs that are less than 4-digits
+      elif user_input >= 0 and user_input < 1000:
+        print('PIN contains too few digits')
+      # prevent 5-digits PINs
+      elif user_input >= 10000 and user_input < 100000:
+        print('5-digit PINs are not accepted')
+      # prevent PINs that are greater than 6-digits
+      elif user_input >= 1000000:
+        print('PIN contains too many digits')
+      else:
+        flag = user_input
+    except ValueError:
+      # Handle the exception
+      print('Only integers are accepted')
+  print('PIN has been set to ' + str(user_input))
+
+print()
+validate_PIN_entry()
