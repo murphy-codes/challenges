@@ -1,0 +1,135 @@
+'''
+  Author: Tom Murphy
+  Last Modified: 2019-10-23 21:33
+'''
+
+# https://edabit.com/challenge/kBXHbwQZPiLmwjrMy
+# English to Pig Latin Translator
+'''
+Pig latin has two very simple rules:
+
+    If a word starts with a consonant move the first letter(s) of the word, till you reach a vowel, to the end of the word and add "ay" to the end.
+        have ? avehay
+        cram ? amcray
+        take ? aketay
+        cat ? atcay
+        shrimp ? impshray
+        trebuchet ? ebuchettray
+    If a word starts with a vowel add "yay" to the end of the word.
+        ate ? ateyay
+        apple ? appleyay
+        oaken ? oakenyay
+        eagle ? eagleyay
+
+Write two functions to make an English to pig latin translator. The first function translate_word(word) takes a single word and returns that word translated into pig latin. The second function translate_sentence(sentence) takes an English sentince and returns that sentence translated into pig latin.
+'''
+import re
+
+def translate_word(word):
+  vowels = ['A','a','E','e','I','i','O','o','U','u']
+  punctuation = ['.', '?', '!', ',', ';', ':', '-', '—', '[', ']', '{', '}', '(', ')', '\'', '"', '…', ' ']
+  if word == '':
+    return word
+  elif word[0] in punctuation:
+    return word
+  elif word[0] in vowels:
+    return word + 'yay'
+  else:
+    first_v_loc = 0
+    i = 1
+    while i < len(word) and first_v_loc == 0:
+      if word[i] in vowels:
+        first_v_loc = i
+      i+=1
+    return word[first_v_loc:len(word)] + word[0:first_v_loc] + 'ay'
+
+def translate_sentence(sentence):
+  #words = sentence.split()
+  #new_words = re.split(r'(;|,|\s)\s*', sentence)
+  #new_words = re.split(r'(;|,|\s)\s*', sentence)
+  #print(len(punct_locs))
+  #for i in sentence:
+  punctuation = ['.', '?', '!', ',', ';', ':', '-', '—', '[', ']', '{', '}', '(', ')', '\'', '"', '…', ' ']
+  puncts = dict()
+  i = 0
+  while i < len(sentence):
+    if sentence[i] in punctuation:
+      puncts[i] = sentence[i]
+    i+=1
+  rememberer = sentence
+  punct_locs = list(puncts.keys())
+  '''
+  print(type(punct_locs))
+  punct_locs = puncts.keys()
+  print(type(punct_locs))
+  print(punct_locs)
+  print(len(punct_locs))
+  print(punct_locs[0])
+  '''
+  #igpay atinlay
+  print(len(punct_locs))
+
+  #return new_words
+  if len(punct_locs) == 0:
+    sentence = [sentence]
+  else:
+    #new = remaining = ""
+    i = 0
+    #print(str(punct_locs[0]) + '=' + str(rememberer[punct_locs[0]]))
+    #print(str(punct_locs[1]) + '=' + str(rememberer[punct_locs[1]]))
+    #print(str(punct_locs[2]) + '=' + str(rememberer[punct_locs[2]]))
+    '''franky = "Frank"
+    print(franky[2:4])
+    print(franky[2:3])
+    print('"' + franky[2:2]  + '"')'''
+    while i < len(punct_locs):
+      #print()
+      #print('Loop ' + str(i+1))
+      #print(type(sentence))
+      #print(type(type(sentence)))
+      if str(type(sentence)) == "<class 'str'>":
+        sentence = [sentence[0:punct_locs[0]], sentence[punct_locs[0]], sentence[punct_locs[0]+1:len(sentence)]]
+      else: #sentence is already a list
+        sentence.pop()
+        #print('  Sentence(popped) = ' +str(sentence))
+        sentence = sentence + [rememberer[punct_locs[i-1]+1:punct_locs[i]], rememberer[punct_locs[i]], rememberer[punct_locs[i]:len(rememberer)]]
+        #remember = sentence.copy()
+        #sentence = [remember.pop()]
+        #remember.append(rememberer[punct_locs[i+1]])
+        #print('  Remember = ' +str(remember))
+        #print('  Sentence = ' +str(sentence))
+        #sentence = sentence[i].split(punct_locs[i])
+        #sentence = remember + sentence
+      i+=1
+      if i == len(punct_locs):
+        sentence.pop()
+      #print('Length = ' + str(len(sentence)))
+      #print('Sentence = ' + str(sentence))
+  '''
+  '''
+  igpay_atinlay = ''
+  for word in sentence:
+    igpay_atinlay += translate_word(word)
+
+  
+  
+  #print(len(punct_locs))
+  #return "Oday youyay inkthay"
+  return igpay_atinlay
+
+
+#print(translate_sentence("Jimmy Eat World")) 
+#print('\n\n\n')
+ 
+
+print(translate_word("flag"))   # ? "agflay"
+print(translate_word("Apple"))  # ? "Appleyay"
+print(translate_word("button")) # ? "uttonbay"
+print(translate_word(""))       # ? ""
+print(translate_sentence("I like to eat honey waffles.")) 
+# ? "Iyay ikelay otay eatyay oneyhay afflesway."
+print(translate_sentence("Do you think it is going to rain today?")) 
+# ? "Oday youyay inkthay ityay isyay oinggay otay ainray odaytay?"
+
+#print(translate_sentence("Wow"))
+#print(translate_sentence("Whoa, hey! Would you look at that, Sam!"))
