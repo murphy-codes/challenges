@@ -7,15 +7,8 @@
 # Amazon Coding Interview Question - Recursive Staircase Problem
 
 def num_ways(n):
-  result = 0
-  if n == 0:
-    return 1
-  else:
-    if n > 1:
-      result += num_ways(n-2)
-    if n > 0:
-      result += num_ways(n-1)
-    return result
+  if n == 0 or n == 1: return 1
+  return num_ways(n-2) + num_ways(n-1)
 
 def diff_num_ways(n, x):
   result = 0
