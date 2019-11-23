@@ -11,19 +11,16 @@ def num_ways(n):
   return num_ways(n-2) + num_ways(n-1)
 
 def diff_num_ways(n, x):
-  result = 0
-  stepping = True
-  if n == 0:
-    result += 1
-    stepping = False
-  i = 0
-  while i < len(x) and stepping:
-    if x[i] <= n:
-      result += diff_num_ways(n-x[i], x)
-      i+=1
-    else:
-      stepping = False
-  return result
+  if n == 0: return 1
+  ways = {0:1}
+  ways[0] = 1
+  for i in range(1,n+1):
+    total = 0
+    for j in x:
+      if i - j >= 0:
+        total += ways[i-j]
+    ways[i] = total
+  return ways[n]
 
 print(num_ways(4))
 print(diff_num_ways(4, [1,3,5]))
