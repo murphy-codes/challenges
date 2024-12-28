@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|2|[Add Two Numbers](https://leetcode.com/problems/add-two-numbers/)| [Java](./algorithms/java/2_add-two-numbers.java)|Medium|
 |1|[Two Sum](https://leetcode.com/problems/two-sum/)| [Java](./algorithms/java/1_two-sum.java)|Easy|
 
 ## [Database](https://leetcode.com/problemset/database/)
