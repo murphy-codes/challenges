@@ -7,6 +7,7 @@ LeetCode
 |---| ----- | -------- | ---------- |
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)| [Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)| [Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
+|5|[Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)| [Java](./algorithms/java/5_longest-palindromic-substring.java)|Medium|
 |4|[Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/)| [Java](./algorithms/java/4_median-of-two-sorted-arrays.java)|Hard|
 |3|[Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/)| [Java](./algorithms/java/3_longest-substring-without-repeating-characters.java)|Medium|
 |2|[Add Two Numbers](https://leetcode.com/problems/add-two-numbers/)| [Java](./algorithms/java/2_add-two-numbers.java)|Medium|
