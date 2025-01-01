@@ -6,6 +6,7 @@ LeetCode
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)| [Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
+|1422|[Maximum Score After Splitting a String](https://leetcode.com/problems/maximum-score-after-splitting-a-string/)| [Java](./algorithms/java/1422_maximum-score-after-splitting-a-string.java)|Easy|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)| [Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)| [Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |5|[Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)| [Java](./algorithms/java/5_longest-palindromic-substring.java)|Medium|
