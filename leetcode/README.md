@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3042|[Count Prefix and Suffix Pairs I](https://leetcode.com/problems/count-prefix-and-suffix-pairs-i/)|[Java](./algorithms/java/3042_count-prefix-and-suffix-pairs-i.java)|Easy|
 |2559|[Count Vowel Strings in Ranges](https://leetcode.com/problems/count-vowel-strings-in-ranges/)|[Java](./algorithms/java/2559_count-vowel-strings-in-ranges.java)|Medium|
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
 |2381|[Shifting Letters II](https://leetcode.com/problems/shifting-letters-ii/)|[Java](./algorithms/java/2381_shifting-letters-ii.java)|Medium|
