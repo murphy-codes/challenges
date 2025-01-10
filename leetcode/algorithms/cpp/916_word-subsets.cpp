@@ -1,6 +1,6 @@
-# Source: https://leetcode.com/problems/word-subsets/
-# Author: Tom Murphy https://github.com/murphy-codes/
-# Date: 2025-01-10
+// Source: https://leetcode.com/problems/word-subsets/
+// Author: Tom Murphy https://github.com/murphy-codes/
+// Date: 2025-01-10
 
 /****************************************
 * 
