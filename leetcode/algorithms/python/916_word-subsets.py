@@ -28,12 +28,12 @@ from collections import Counter
 from typing import List
 
 class Solution:
-    # We'll solve this using frequency arrays of size 26 to represent lowercase English letters.
-    # First, we create a "max frequency map" from words2, representing the maximum count of each letter required.
-    # Next, for each string in words1, we compute its frequency array and compare it against the max frequency map.
-    # If a string satisfies all the requirements, it's added to the result list.
+    # We'll solve this using frequency counts for each letter in the strings.
+    # First, we create a "max frequency map" from words2, representing the maximum count of each letter required across all words in words2.
+    # Next, for each string in words1, we compute its frequency count and compare it against the max frequency map.
+    # If a string satisfies all the requirements (i.e., has at least the required frequency for each letter in words2), it's added to the result list.
     # This approach runs in O(n1 * m + n2 * m) time, where n1 and n2 are the lengths of words1 and words2, 
-    # and m is the average string length. Space complexity is O(26) or O(1), as the frequency arrays have a constant size.
+    # and m is the average string length. Space complexity is O(1), as the frequency maps store counts for a constant number of characters (26 lowercase English letters).
     def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
         # Step 1: Build max frequency map for words2
         max_freq = Counter()
