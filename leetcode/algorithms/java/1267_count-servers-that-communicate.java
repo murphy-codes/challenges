@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/problems/map-of-highest-peak/
+// Source: https://leetcode.com/problems/count-servers-that-communicate/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-22
 
