@@ -26,18 +26,28 @@
 ****************************************/
 
 class Solution {
+    // This solution reverses an integer by extracting digits using % and / operators.  
+    // It builds the reversed number while checking for overflow using Integer.MAX_VALUE  
+    // and Integer.MIN_VALUE. If overflow is detected, it returns 0. This approach avoids  
+    // string conversions and adheres to the 32-bit integer constraint.  
+    // Time Complexity: O(log10(x)), as we process each digit of the input.  
+    // Space Complexity: O(1), using only a few integer variables.  
     public int reverse(int x) {
-        if (x == 0) { return x; } 
-        boolean neg = false;
-        long reversedLong = 0;
-        if (x < 0) { neg = true; }
-        String s = String.valueOf(Math.abs(x));
-        String reversed = new StringBuilder(s).reverse().toString();
-        reversedLong = Long.valueOf(reversed);
-        if (reversedLong > Integer.MAX_VALUE) { return 0; }
-        else if (neg) {
-            reversedLong = -1 * reversedLong;
+        int reversed = 0;
+        while (x != 0) {
+            int digit = x % 10; // Extract the last digit
+            x /= 10; // Remove the last digit from x
+
+            // Check for overflow before multiplying or adding
+            if (reversed > Integer.MAX_VALUE / 10 || (reversed == Integer.MAX_VALUE / 10 && digit > 7)) {
+                return 0; // Overflow for positive integers
+            }
+            if (reversed < Integer.MIN_VALUE / 10 || (reversed == Integer.MIN_VALUE / 10 && digit < -8)) {
+                return 0; // Overflow for negative integers
+            }
+
+            reversed = reversed * 10 + digit; // Add the digit to the reversed number
         }
-        return Math.toIntExact(reversedLong);
+        return reversed;
     }
 }
