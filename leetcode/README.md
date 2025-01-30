@@ -13,6 +13,7 @@ LeetCode
 |2658|[Maximum Number of Fish in a Grid](https://leetcode.com/problems/maximum-number-of-fish-in-a-grid/)|[Java](./algorithms/java/2658_maximum-number-of-fish-in-a-grid.java)|Medium|
 |2657|[Find the Prefix Common Array of Two Arrays](https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/)|[Java](./algorithms/java/2657_find-the-prefix-common-array-of-two-arrays.java)|Medium|
 |2559|[Count Vowel Strings in Ranges](https://leetcode.com/problems/count-vowel-strings-in-ranges/)|[Java](./algorithms/java/2559_count-vowel-strings-in-ranges.java)|Medium|
+|2493|[Divide Nodes Into the Maximum Number of Groups](https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/)|[Java](./algorithms/java/2493_divide-nodes-into-the-maximum-number-of-groups.java)|Hard|
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
