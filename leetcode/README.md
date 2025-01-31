@@ -21,7 +21,7 @@ LeetCode
 |2270|[Number of Ways to Split Array](https://leetcode.com/problems/number-of-ways-to-split-array/)|[Java](./algorithms/java/2270_number-of-ways-to-split-array.java)|Medium|
 |2185|[Counting Words With a Given Prefix](https://leetcode.com/problems/counting-words-with-a-given-prefix/)|[Java](./algorithms/java/2185_counting-words-with-a-given-prefix.java)|Easy|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
-|2127|[Grid Game](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
+|2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
 |1930|[Unique Length-3 Palindromic Subsequences](https://leetcode.com/problems/unique-length-3-palindromic-subsequences/)|[Java](./algorithms/java/1930_unique-length-3-palindromic-subsequences.java)|Medium|
 |1769|[Minimum Number of Operations to Move All Balls to Each Box](https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/)|[Java](./algorithms/java/1769_minimum-number-of-operations-to-move-all-balls-to-each-box.java)|Medium|
@@ -34,6 +34,7 @@ LeetCode
 |1267|[Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate/)|[Java](./algorithms/java/1267_count-servers-that-communicate.java)|Medium|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |916|[Word Subsets](https://leetcode.com/problems/word-subsets/)|[C++](./algorithms/cpp/916_word-subsets.cpp), [Java](./algorithms/java/916_word-subsets.java), [Python](./algorithms/python/916_word-subsets.py), [Typescript](./algorithms/typescript/916_word-subsets.ts)|Medium|
+|827|[Making A Large Island](https://leetcode.com/problems/making-a-large-island/)|[Java](./algorithms/java/827_making-a-large-island.java)|Hard|
 |802|[Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/)|[Java](./algorithms/java/802_find-eventual-safe-states.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |648|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/648_redundant-connection.java)|Medium|
