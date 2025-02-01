@@ -33,15 +33,16 @@
 ****************************************/
 
 class Solution {
+    // Iterate through the array, checking if adjacent elements have different parity.
+    // If any two consecutive numbers share the same parity, return false immediately.
+    // Otherwise, return true after scanning the entire array.
+    // Time Complexity: O(n), as we traverse the array once.
+    // Space Complexity: O(1)
     public boolean isArraySpecial(int[] nums) {
-        boolean parity = nums[0] % 2 == 0;
-        int i = 1;
-        while (i < nums.length) {
-            if (parity == (nums[i] % 2 == 0)) {
+        for (int i = 1; i < nums.length; i++) {
+            if ((nums[i] % 2) == (nums[i - 1] % 2)) {
                 return false;
             }
-            parity = nums[i] % 2 == 0;
-            i++;
         }
         return true;
     }
