@@ -27,6 +27,7 @@ LeetCode
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
 |1930|[Unique Length-3 Palindromic Subsequences](https://leetcode.com/problems/unique-length-3-palindromic-subsequences/)|[Java](./algorithms/java/1930_unique-length-3-palindromic-subsequences.java)|Medium|
 |1800|[Maximum Ascending Subarray Sum](https://leetcode.com/problems/maximum-ascending-subarray-sum/)|[Java](./algorithms/java/1800_maximum-ascending-subarray-sum.java)|Easy|
+|1790|[Check if One String Swap Can Make Strings Equal](https://leetcode.com/problems/check-if-one-string-swap-can-make-strings-equal/)|[Java](./algorithms/java/1790_check-if-one-string-swap-can-make-strings-equal.java)|Easy|
 |1769|[Minimum Number of Operations to Move All Balls to Each Box](https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/)|[Java](./algorithms/java/1769_minimum-number-of-operations-to-move-all-balls-to-each-box.java)|Medium|
 |1765|[Map of Highest Peak](https://leetcode.com/problems/map-of-highest-peak/)|[Java](./algorithms/java/1765_map-of-highest-peak.java)|Medium|
 |1752|[Map of Highest Peak](https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/)|[Java](./algorithms/java/1752_check-if-array-is-sorted-and-rotated.java)|Easy|
