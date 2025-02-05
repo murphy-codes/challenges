@@ -32,25 +32,21 @@
 ****************************************/
 
 class Solution {
+    // Traverse the array while maintaining the sum of the current ascending subarray.  
+    // If the sequence breaks, update the maximum sum and reset for a new subarray.  
+    // The final maximum is checked at the end to ensure the last subarray is counted.  
+    // Time Complexity: O(n), as we iterate through the array once.  
+    // Space Complexity: O(1), using only a few integer variables.  
     public int maxAscendingSum(int[] nums) {
         int maximum = nums[0], current = nums[0];
-        boolean isAscending = true;
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] > nums[i - 1]) {
-                if (isAscending) {
-                    current+=nums[i];
-                } else {
-                    maximum = Math.max(maximum, current);
-                    current = nums[i] + nums[i-1];
-                    isAscending = true;
-                }
+                current += nums[i]; // Continue summing ascending subarray
             } else {
-                if (isAscending) {
-                    maximum = Math.max(maximum, current);
-                     isAscending = false;
-                }
+                maximum = Math.max(maximum, current); // Update max before resetting
+                current = nums[i]; // Reset sum for new subarray
             }
         }
-        return Math.max(maximum, current);
+        return Math.max(maximum, current); // Ensure final subarray is counted
     }
 }
