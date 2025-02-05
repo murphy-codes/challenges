@@ -44,32 +44,32 @@ class Solution {
     // Time Complexity: O(n), as we iterate through the array once.  
     // Space Complexity: O(1), as only a few variables are used.  
     public int longestMonotonicSubarray(int[] nums) {
-        int longest = 1;
-        int current = 1;
-        String direction = "NONE";
+        int longest = 1, current = 1, direction = 0; // 0: none, 1: increasing, -1: decreasing
+
         for (int i = 1; i < nums.length; i++) {
-            if (nums[i] > nums[i-1]) {
-                if (direction == "INCREASING") {
-                    current += 1;
+            if (nums[i] > nums[i - 1]) {
+                if (direction == 1) {
+                    current++;
                 } else {
-                    longest = Math.max(longest,current);
+                    longest = Math.max(longest, current);
                     current = 2;
-                    direction = "INCREASING";
+                    direction = 1;
                 }
-            } else if (nums[i] < nums[i-1]) {
-                if (direction == "DECREASING") {
-                    current += 1;
+            } else if (nums[i] < nums[i - 1]) {
+                if (direction == -1) {
+                    current++;
                 } else {
-                    longest = Math.max(longest,current);
+                    longest = Math.max(longest, current);
                     current = 2;
-                    direction = "DECREASING";
+                    direction = -1;
                 }
             } else {
-                longest = Math.max(longest,current);
+                longest = Math.max(longest, current);
                 current = 1;
-                direction = "NONE";
+                direction = 0;
             }
         }
-        return Math.max(longest,current);
+
+        return Math.max(longest, current);
     }
 }
