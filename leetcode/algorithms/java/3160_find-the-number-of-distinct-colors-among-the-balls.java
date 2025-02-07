@@ -43,6 +43,11 @@
 import java.util.HashMap;
 
 class Solution {
+    // This solution uses two HashMaps: one to track ball colors and another
+    // to maintain the count of distinct colors. On each query, we update the
+    // ball's color, adjust the color count accordingly, and store the result.
+    // Each operation (put, get, remove) runs in O(1), making the overall time
+    // complexity O(n). The space complexity is O(n) due to the HashMaps.
     public int[] queryResults(int limit, int[][] queries) {
         HashMap<Integer, Integer> balls = new HashMap<Integer, Integer>();
         HashMap<Integer, Integer> colors = new HashMap<Integer, Integer>();
