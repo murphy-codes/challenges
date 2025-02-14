@@ -7,7 +7,7 @@ LeetCode
 |---| ----- | -------- | ---------- |
 |3223|[Minimum Length of String After Operations](https://leetcode.com/problems/minimum-length-of-string-after-operations/)|[Java](./algorithms/java/3223_minimum-length-of-string-after-operations.java)|Medium|
 |3174|[Clear Digits](https://leetcode.com/problems/clear-digits/)|[Java](./algorithms/java/3174_clear-digits.java)|Easy|
-|3066|[Find the Number of Distinct Colors Among the Balls](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
+|3066|[Minimum Operations to Exceed Threshold Value II](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
 |3160|[Find the Number of Distinct Colors Among the Balls](https://leetcode.com/problems/find-the-number-of-distinct-colors-among-the-balls/)|[Java](./algorithms/java/3160_find-the-number-of-distinct-colors-among-the-balls.java)|Medium|
 |3151|[Special Array I](https://leetcode.com/problems/special-array-i/)|[Java](./algorithms/java/3151_special-array-i.java)|Easy|
 |3105|[Longest Strictly Increasing or Strictly Decreasing Subarray](https://leetcode.com/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/)|[Java](./algorithms/java/3105_longest-strictly-increasing-or-strictly-decreasing-subarray.java)|Easy|
@@ -44,6 +44,7 @@ LeetCode
 |1408|[String Matching in an Array](https://leetcode.com/problems/string-matching-in-an-array/)|[Java](./algorithms/java/1408_string-matching-in-an-array.java)|Easy|
 |1400|[Construct K Palindrome Strings](https://leetcode.com/problems/construct-k-palindrome-strings/)|[Java](./algorithms/java/1400_construct-k-palindrome-strings.java)|Medium|
 |1368|[Minimum Cost to Make at Least One Valid Path in a Grid](https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/)|[Java](./algorithms/java/1368_minimum-cost-to-make-at-least-one-valid-path-in-a-grid.java)|Hard|
+|1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
 |1267|[Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate/)|[Java](./algorithms/java/1267_count-servers-that-communicate.java)|Medium|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |916|[Word Subsets](https://leetcode.com/problems/word-subsets/)|[C++](./algorithms/cpp/916_word-subsets.cpp), [Java](./algorithms/java/916_word-subsets.java), [Python](./algorithms/python/916_word-subsets.py), [Typescript](./algorithms/typescript/916_word-subsets.ts)|Medium|
