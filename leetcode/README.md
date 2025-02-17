@@ -48,6 +48,7 @@ LeetCode
 |1368|[Minimum Cost to Make at Least One Valid Path in a Grid](https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/)|[Java](./algorithms/java/1368_minimum-cost-to-make-at-least-one-valid-path-in-a-grid.java)|Hard|
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
 |1267|[Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate/)|[Java](./algorithms/java/1267_count-servers-that-communicate.java)|Medium|
+|1079|[Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)|[Java](./algorithms/java/1079_letter-tile-possibilities.java)|Medium|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |916|[Word Subsets](https://leetcode.com/problems/word-subsets/)|[C++](./algorithms/cpp/916_word-subsets.cpp), [Java](./algorithms/java/916_word-subsets.java), [Python](./algorithms/python/916_word-subsets.py), [Typescript](./algorithms/typescript/916_word-subsets.ts)|Medium|
 |827|[Making A Large Island](https://leetcode.com/problems/making-a-large-island/)|[Java](./algorithms/java/827_making-a-large-island.java)|Hard|
