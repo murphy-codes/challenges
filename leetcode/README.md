@@ -24,6 +24,7 @@ LeetCode
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
 |2381|[Shifting Letters II](https://leetcode.com/problems/shifting-letters-ii/)|[Java](./algorithms/java/2381_shifting-letters-ii.java)|Medium|
+|2375|[Construct Smallest Number From DI String](https://leetcode.com/problems/construct-smallest-number-from-di-string/)|[Java](./algorithms/java/2375_construct-smallest-number-from-di-string.java)|Medium|
 |2364|[Count Number of Bad Pairs](https://leetcode.com/problems/count-number-of-bad-pairs/)|[Java](./algorithms/java/2364_count-number-of-bad-pairs.java)|Medium|
 |2349|[Design a Number Container System](https://leetcode.com/problems/design-a-number-container-system/)|[Java](./algorithms/java/2349_design-a-number-container-system.java)|Medium|
 |2342|[Max Sum of a Pair With Equal Sum of Digits](https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/)|[Java](./algorithms/java/2342_max-sum-of-a-pair-with-equal-sum-of-digits.java)|Medium|
