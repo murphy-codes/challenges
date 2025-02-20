@@ -30,25 +30,18 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // Uses HashSet for O(1) lookups and iterates over at most n+1 numbers.
-    // Time Complexity: O(n), Space Complexity: O(n) (for HashSet storage).
+    // This solution leverages Cantor’s Diagonalization to construct a unique
+    // binary string in O(n) time. By flipping the ith character of the ith
+    // string in nums, we ensure the result differs from every string in nums
+    // by at least one character. Since nums contains exactly n unique n-bit
+    // strings, this approach guarantees a valid answer in O(n) space as well.
     public String findDifferentBinaryString(String[] nums) {
-        int n = nums.length;
-        Set<String> set = new HashSet<>();
-        for (String num : nums) {
-            set.add(num);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < nums.length; i++) {
+            sb.append(nums[i].charAt(i) == '0' ? '1' : '0');
         }
-        
-        for (int i = 0; i < (1 << n); i++) { // Iterate through all possible n-bit binary strings
-            String candidate = String.format("%" + n + "s", Integer.toBinaryString(i)).replace(' ', '0');
-            if (!set.contains(candidate)) {
-                return candidate;
-            }
-        }
-        return ""; // This should never be reached due to constraints
+        return sb.toString();
     }
 }
+
