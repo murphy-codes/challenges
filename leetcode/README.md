@@ -67,7 +67,7 @@ LeetCode
 |3|[Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/)|[Java](./algorithms/java/3_longest-substring-without-repeating-characters.java)|Medium|
 |2|[Add Two Numbers](https://leetcode.com/problems/add-two-numbers/)|[Java](./algorithms/java/2_add-two-numbers.java)|Medium|
 |1|[Two Sum](https://leetcode.com/problems/two-sum/)|[Java](./algorithms/java/1_two-sum.java)|Easy|
-git 
+
 ## [Database](https://leetcode.com/problemset/database/)
 
 | # | Title | Solution | Difficulty |
