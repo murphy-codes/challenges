@@ -22,6 +22,7 @@ LeetCode
 |2493|[Divide Nodes Into the Maximum Number of Groups](https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/)|[Java](./algorithms/java/2493_divide-nodes-into-the-maximum-number-of-groups.java)|Hard|
 |2467|[Most Profitable Path in a Tree](https://leetcode.com/problems/most-profitable-path-in-a-tree/)|[Java](./algorithms/java/2467_most-profitable-path-in-a-tree.java)|Medium|
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
+|2460|[Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array/)|[Java](./algorithms/java/2460_apply-operations-to-an-array.java)|Easy|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
 |2381|[Shifting Letters II](https://leetcode.com/problems/shifting-letters-ii/)|[Java](./algorithms/java/2381_shifting-letters-ii.java)|Medium|
