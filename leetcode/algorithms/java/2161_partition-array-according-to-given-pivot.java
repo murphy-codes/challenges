@@ -34,38 +34,44 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-
 class Solution {
-    // This solution partitions `nums` into two lists: one for elements < pivot
-    // and one for elements > pivot. The count of pivot elements is stored as an
-    // integer. The result array is then reconstructed in O(n) while maintaining
-    // relative order. The algorithm runs in O(n) time and uses O(n) extra space, 
-    // making it efficient for large inputs.
+    // This solution partitions the array using a single pass and minimal space.
+    // We use a result array and two pointers to fill elements < pivot from the start
+    // and elements > pivot from the end, while counting occurrences of pivot.
+    // Afterward, we place all pivot elements in the middle and reverse the right side.
+    // Time Complexity: O(n) (single pass + O(n) reversal); Space Complexity: O(1) aux.
     public int[] pivotArray(int[] nums, int pivot) {
-        ArrayList<Integer> less = new ArrayList<>();
-        ArrayList<Integer> greater = new ArrayList<>();
-        int pivotCount = 0;
+        int n = nums.length;
+        int[] result = new int[n];
+        int left = 0, right = n - 1, pivotCount = 0;
 
-        // Step 1: Classify elements
+        // First pass: Count pivot occurrences & populate left/right in one pass
         for (int num : nums) {
             if (num < pivot) {
-                less.add(num);
-            } else if (num == pivot) {
-                pivotCount++;
+                result[left++] = num;  // Fill from start
+            } else if (num > pivot) {
+                result[right--] = num; // Fill from end
             } else {
-                greater.add(num);
+                pivotCount++;  // Count pivot occurrences
             }
         }
 
-        // Step 2: Construct the result array
-        int[] result = new int[nums.length];
-        int index = 0;
+        // Second pass: Place pivot elements in the middle
+        while (pivotCount-- > 0) {
+            result[left++] = pivot;
+        }
 
-        for (int num : less) result[index++] = num;  // Less-than pivot
-        while (pivotCount-- > 0) result[index++] = pivot;  // Pivot values
-        for (int num : greater) result[index++] = num;  // Greater-than pivot
+        // Reverse the right section since we filled it backwards
+        reverseSegment(result, right + 1, n - 1);
 
         return result;
+    }
+
+    private void reverseSegment(int[] arr, int start, int end) {
+        while (start < end) {
+            int temp = arr[start];
+            arr[start++] = arr[end];
+            arr[end--] = temp;
+        }
     }
 }
