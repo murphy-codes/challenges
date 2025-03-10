@@ -6,6 +6,7 @@ LeetCode
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
 |3223|[Minimum Length of String After Operations](https://leetcode.com/problems/minimum-length-of-string-after-operations/)|[Java](./algorithms/java/3223_minimum-length-of-string-after-operations.java)|Medium|
+|3208|[Alternating Groups II](https://leetcode.com/problems/alternating-groups-ii/)|[Java](./algorithms/java/3208_alternating-groups-ii.java)|Medium|
 |3174|[Clear Digits](https://leetcode.com/problems/clear-digits/)|[Java](./algorithms/java/3174_clear-digits.java)|Easy|
 |3066|[Minimum Operations to Exceed Threshold Value II](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
 |3160|[Find the Number of Distinct Colors Among the Balls](https://leetcode.com/problems/find-the-number-of-distinct-colors-among-the-balls/)|[Java](./algorithms/java/3160_find-the-number-of-distinct-colors-among-the-balls.java)|Medium|
