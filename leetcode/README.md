@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3356|[Zero Array Transformation II](https://leetcode.com/problems/zero-array-transformation-ii/)|[Java](./algorithms/java/3356_zero-array-transformation-ii.java)|Medium|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
 |3223|[Minimum Length of String After Operations](https://leetcode.com/problems/minimum-length-of-string-after-operations/)|[Java](./algorithms/java/3223_minimum-length-of-string-after-operations.java)|Medium|
 |3208|[Alternating Groups II](https://leetcode.com/problems/alternating-groups-ii/)|[Java](./algorithms/java/3208_alternating-groups-ii.java)|Medium|
