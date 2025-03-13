@@ -31,6 +31,7 @@
 * Follow up: Can you solve the problem in O(log(n)) time complexity?
 * 
 ****************************************/
+
 class Solution {
     // Time Complexity: O(log n) -> Two binary searches, each O(log n).
     // Space Complexity: O(1) -> Only a few extra variables are used.
