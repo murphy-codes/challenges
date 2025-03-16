@@ -4,77 +4,67 @@
 
 /****************************************
 * 
-* There are several consecutive houses along a street, each of which has some money inside. There is also a robber, who wants to steal money from the homes, but he refuses to steal from adjacent homes.
-* The capability of the robber is the maximum amount of money he steals from one house of all the houses he robbed.
-* You are given an integer array `nums` representing how much money is stashed in each house. More formally, the `i^th` house from the left has `nums[i]` dollars.
-* You are also given an integer `k`, representing the minimum number of houses the robber will steal from. It is always possible to steal at least `k` houses.
-* Return the minimum capability of the robber out of all the possible ways to steal at least `k` houses.
+* You are given an integer array `ranks` representing the ranks of some mechanics. `ranks_i` is the rank of the `i^th` mechanic. A mechanic with a rank `r` can repair `n` cars in `r * n2` minutes.
+* You are also given an integer `cars` representing the total number of cars waiting in the garage to be repaired.
+* Return the minimum time taken to repair all the cars.
+* Note: All the mechanics can repair the cars simultaneously.
 *
 * Example 1:
-* Input: nums = [2,3,5,9], k = 2
-* Output: 5
+* Input: ranks = [4,2,3,1], cars = 10
+* Output: 16
 * Explanation:
-* There are three ways to rob at least 2 houses:
-* - Rob the houses at indices 0 and 2. Capability is max(nums[0], nums[2]) = 5.
-* - Rob the houses at indices 0 and 3. Capability is max(nums[0], nums[3]) = 9.
-* - Rob the houses at indices 1 and 3. Capability is max(nums[1], nums[3]) = 9.
-* Therefore, we return min(5, 9, 9) = 5.
+* - The first mechanic will repair two cars. The time required is 4 * 2 * 2 = 16 minutes.
+* - The second mechanic will repair two cars. The time required is 2 * 2 * 2 = 8 minutes.
+* - The third mechanic will repair two cars. The time required is 3 * 2 * 2 = 12 minutes.
+* - The fourth mechanic will repair four cars. The time required is 1 * 4 * 4 = 16 minutes.
+* It can be proved that the cars cannot be repaired in less than 16 minutes.​​​​​
 *
 * Example 2:
-* Input: nums = [2,7,9,3,1], k = 2
-* Output: 2
-* Explanation: There are 7 ways to rob the houses. The way which leads to minimum capability is to rob the house at index 0 and 4. Return max(nums[0], nums[4]) = 2.
+* Input: ranks = [5,1,8], cars = 6
+* Output: 16
+* Explanation:
+* - The first mechanic will repair one car. The time required is 5 * 1 * 1 = 5 minutes.
+* - The second mechanic will repair four cars. The time required is 1 * 4 * 4 = 16 minutes.
+* - The third mechanic will repair one car. The time required is 8 * 1 * 1 = 8 minutes.
+* It can be proved that the cars cannot be repaired in less than 16 minutes.​​​​​
 *
 * Constraints:
-* • 1 <= nums.length <= 10^5
-* • 1 <= nums[i] <= 10^9
-* • 1 <= k <= (nums.length + 1)/2
+* • 1 <= ranks.length <= 10^5
+* • 1 <= ranks[i] <= 100
+* • 1 <= cars <= 10^6
 * 
 ****************************************/
 
 class Solution {
-    // Time Complexity: O(n log M)
-    // - Binary search runs in O(log M), where M is the range of values (10^9).
-    // - Each check (greedy selection) runs in O(n).
-    // - Overall, O(n log M), which is optimal for n up to 10^5.
-    // Space Complexity: O(1)
-    // - Only a few extra variables are used.
-    public int minCapability(int[] nums, int k) {
-        int left = Integer.MAX_VALUE, right = Integer.MIN_VALUE;
+    // Uses binary search on time to find the minimum possible repair time.
+    // For a given time limit, checks if all cars can be repaired using mechanics.
+    // Each mechanic repairs sqrt(timeLimit / rank) cars within the given time.
+    // Time Complexity: O(n * log(m * max_rank)), where n = mechanics, m = cars.
+    // Space Complexity: O(1), as only a few extra variables are used.
+    public long repairCars(int[] ranks, int cars) {
+        // Set the search range: min time is 1, max time is the worst mechanic doing all repairs.
+        long left = 1;
+        long right = (long) ranks[0] * (long) cars * (long) cars; // Worst case: slowest mechanic does all cars
 
-        // Find the min and max value in nums
-        for (int num : nums) {
-            left = Math.min(left, num);
-            right = Math.max(right, num);
-        }
-
-        // Binary search for the minimum capability
         while (left < right) {
-            int mid = left + (right - left) / 2;
-            if (canRobAtLeastK(nums, k, mid)) {
-                right = mid; // Try to lower capability
+            long mid = left + (right - left) / 2;
+            if (canRepairAllCars(ranks, cars, mid)) {
+                right = mid; // Try to minimize time
             } else {
-                left = mid + 1; // Increase capability
+                left = mid + 1; // Need more time
             }
         }
 
-        return left; // The minimum valid capability found
+        return left; // The minimal time to repair all cars
     }
 
-    // Helper function: Can we rob at least k houses with max value ≤ capability?
-    private boolean canRobAtLeastK(int[] nums, int k, int capability) {
-        int count = 0;
-        int i = 0;
-
-        while (i < nums.length) {
-            if (nums[i] <= capability) { // Rob this house
-                count++;
-                if (count >= k) return true; // We successfully robbed k houses
-                i++; // Skip next house (since adjacent houses can't be robbed)
-            }
-            i++; // Move to the next house
+    private boolean canRepairAllCars(int[] ranks, int cars, long timeLimit) {
+        long carsRepaired = 0;
+        for (int rank : ranks) {
+            // Each mechanic can repair sqrt(timeLimit / rank) cars in the given time
+            carsRepaired += (long) Math.sqrt(timeLimit / rank);
+            if (carsRepaired >= cars) return true; // No need to check further
         }
-
         return false;
     }
 }
