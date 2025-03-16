@@ -22,6 +22,7 @@ LeetCode
 |2661|[First Completely Painted Row or Column](https://leetcode.com/problems/first-completely-painted-row-or-column/)|[Java](./algorithms/java/2661_first-completely-painted-row-or-column.java)|Medium|
 |2658|[Maximum Number of Fish in a Grid](https://leetcode.com/problems/maximum-number-of-fish-in-a-grid/)|[Java](./algorithms/java/2658_maximum-number-of-fish-in-a-grid.java)|Medium|
 |2657|[Find the Prefix Common Array of Two Arrays](https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/)|[Java](./algorithms/java/2657_find-the-prefix-common-array-of-two-arrays.java)|Medium|
+|2594|[Minimum Time to Repair Cars](https://leetcode.com/problems/minimum-time-to-repair-cars/)|[Java](./algorithms/java/2594_minimum-time-to-repair-cars.java)|Medium|
 |2579|[Count Total Number of Colored Cells](https://leetcode.com/problems/count-total-number-of-colored-cells/)|[Java](./algorithms/java/2579_count-total-number-of-colored-cells.java)|Medium|
 |2570|[Merge Two 2D Arrays by Summing Values](https://leetcode.com/problems/merge-two-2d-arrays-by-summing-values/)|[Java](./algorithms/java/2570_merge-two-2d-arrays-by-summing-values.java)|Easy|
 |2560|[House Robber IV](https://leetcode.com/problems/house-robber-iv/)|[Java](./algorithms/java/2560_house-robber-iv.java)|Medium|
