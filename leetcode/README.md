@@ -35,6 +35,7 @@ LeetCode
 |2460|[Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array/)|[Java](./algorithms/java/2460_apply-operations-to-an-array.java)|Easy|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
+|2401|[Longest Nice Subarray](https://leetcode.com/problems/longest-nice-subarray/)|[Java](./algorithms/java/2401_longest-nice-subarray.java)|Medium|
 |2381|[Shifting Letters II](https://leetcode.com/problems/shifting-letters-ii/)|[Java](./algorithms/java/2381_shifting-letters-ii.java)|Medium|
 |2379|[Minimum Recolors to Get K Consecutive Black Blocks](https://leetcode.com/problems/minimum-recolors-to-get-k-consecutive-black-blocks/)|[Java](./algorithms/java/2379_minimum-recolors-to-get-k-consecutive-black-blocks.java)|Easy|
 |2375|[Construct Smallest Number From DI String](https://leetcode.com/problems/construct-smallest-number-from-di-string/)|[Java](./algorithms/java/2375_construct-smallest-number-from-di-string.java)|Medium|
