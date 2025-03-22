@@ -20,6 +20,7 @@ LeetCode
 |2965|[Find Missing and Repeated Values](https://leetcode.com/problems/find-missing-and-repeated-values/)|[Java](./algorithms/java/2965_find-missing-and-repeated-values.java)|Easy|
 |2948|[Make Lexicographically Smallest Array by Swapping Elements](https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/)|[Java](./algorithms/java/2948_make-lexicographically-smallest-array-by-swapping-elements.java)|Medium|
 |2698|[Find the Punishment Number of an Integer](https://leetcode.com/problems/find-the-punishment-number-of-an-integer/)|[Java](./algorithms/java/2698_find-the-punishment-number-of-an-integer.java)|Medium|
+|2685|[Count the Number of Complete Components](https://leetcode.com/problems/count-the-number-of-complete-components/)|[Java](./algorithms/java/2685_count-the-number-of-complete-components.java)|Medium|
 |2683|[Neighboring Bitwise XOR](https://leetcode.com/problems/neighboring-bitwise-xor/)|[Java](./algorithms/java/2683_neighboring-bitwise-xor.java)|Medium|
 |2661|[First Completely Painted Row or Column](https://leetcode.com/problems/first-completely-painted-row-or-column/)|[Java](./algorithms/java/2661_first-completely-painted-row-or-column.java)|Medium|
 |2658|[Maximum Number of Fish in a Grid](https://leetcode.com/problems/maximum-number-of-fish-in-a-grid/)|[Java](./algorithms/java/2658_maximum-number-of-fish-in-a-grid.java)|Medium|
@@ -51,6 +52,7 @@ LeetCode
 |2161|[Partition Array According to Given Pivot](https://leetcode.com/problems/partition-array-according-to-given-pivot/)|[Java](./algorithms/java/2161_partition-array-according-to-given-pivot.java)|Medium|
 |2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
+|2115|[Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)|[Java](./algorithms/java/2115_find-all-possible-recipes-from-given-supplies.java)|Medium|
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
 |1980|[Find Unique Binary String](https://leetcode.com/problems/find-unique-binary-string/)|[Java](./algorithms/java/1980_find-unique-binary-string.java)|Medium|
 |1930|[Unique Length-3 Palindromic Subsequences](https://leetcode.com/problems/unique-length-3-palindromic-subsequences/)|[Java](./algorithms/java/1930_unique-length-3-palindromic-subsequences.java)|Medium|
