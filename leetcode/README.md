@@ -55,6 +55,7 @@ LeetCode
 |2115|[Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)|[Java](./algorithms/java/2115_find-all-possible-recipes-from-given-supplies.java)|Medium|
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
 |1980|[Find Unique Binary String](https://leetcode.com/problems/find-unique-binary-string/)|[Java](./algorithms/java/1980_find-unique-binary-string.java)|Medium|
+|1976|[Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)|[Java](./algorithms/java/1976_number-of-ways-to-arrive-at-destination.java)|Medium|
 |1930|[Unique Length-3 Palindromic Subsequences](https://leetcode.com/problems/unique-length-3-palindromic-subsequences/)|[Java](./algorithms/java/1930_unique-length-3-palindromic-subsequences.java)|Medium|
 |1910|[Remove All Occurrences of a Substring](https://leetcode.com/problems/remove-all-occurrences-of-a-substring/)|[Java](./algorithms/java/1910_remove-all-occurrences-of-a-substring.java)|Medium|
 |1800|[Maximum Ascending Subarray Sum](https://leetcode.com/problems/maximum-ascending-subarray-sum/)|[Java](./algorithms/java/1800_maximum-ascending-subarray-sum.java)|Easy|
