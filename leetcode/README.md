@@ -93,6 +93,7 @@ LeetCode
 |873|[length-of-longest-fibonacci-subsequence](https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/)|[Java](./algorithms/java/873_length-of-longest-fibonacci-subsequence.java)|Medium|
 |827|[Making A Large Island](https://leetcode.com/problems/making-a-large-island/)|[Java](./algorithms/java/827_making-a-large-island.java)|Hard|
 |802|[Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/)|[Java](./algorithms/java/802_find-eventual-safe-states.java)|Medium|
+|763|[Partition Labels](https://leetcode.com/problems/partition-labels/)|[Java](./algorithms/java/763_partition-labels.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |648|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/648_redundant-connection.java)|Medium|
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
