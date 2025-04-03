@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-02
 // At the time of submission:
-//   Runtime 3 ms Beats 61.29%
-//   Memory 62.64 MB Beats 19.89%
+//   Runtime 2 ms Beats 97.85%
+//   Memory 57.33 MB Beats 70.43%
 
 /****************************************
 * 
@@ -38,35 +38,22 @@
 ****************************************/
 
 class Solution {
-    // This solution uses prefix & suffix maximums to efficiently find the best 
-    // triplet (i, j, k). We precompute the max values before and after each index 
-    // to enable O(n) lookup for each j. The final triplet value is calculated 
-    // iterating through j in O(n), leading to an O(n) time and O(n) space solution.
+    // This solution efficiently finds the max value of (nums[i] - nums[j]) * nums[k]
+    // using a single pass (O(n) time). It tracks maxNum (largest nums[i] seen),
+    // maxDiff (largest nums[i] - nums[j]), and maxProduct (best result so far).
+    // By iterating once, we update these values in O(1) space, ensuring efficiency.
+    // If all triplets have a negative value, it returns 0 instead of a negative result.
     public long maximumTripletValue(int[] nums) {
-        int n = nums.length;
-        if (n < 3) return 0; // Edge case, though constraints guarantee n >= 3
-
-        // Precompute prefix maximums (largest number before index j)
-        int[] maxBefore = new int[n];
-        maxBefore[0] = nums[0];
-        for (int j = 1; j < n; j++) {
-            maxBefore[j] = Math.max(maxBefore[j - 1], nums[j - 1]);
+        long maxProduct = 0;
+        int maxDiff = 0;
+        int maxNum = 0;
+        
+        for (int num : nums) {
+            maxProduct = Math.max(maxProduct, (long) maxDiff * num);
+            maxNum = Math.max(maxNum, num);
+            maxDiff = Math.max(maxDiff, maxNum - num);
         }
-
-        // Precompute suffix maximums (largest number after index j)
-        int[] maxAfter = new int[n];
-        maxAfter[n - 1] = nums[n - 1];
-        for (int j = n - 2; j >= 0; j--) {
-            maxAfter[j] = Math.max(maxAfter[j + 1], nums[j + 1]);
-        }
-
-        // Compute max triplet value
-        long maxValue = 0;
-        for (int j = 1; j < n - 1; j++) {
-            long tripletValue = (long) (maxBefore[j] - nums[j]) * maxAfter[j];
-            maxValue = Math.max(maxValue, tripletValue);
-        }
-
-        return maxValue;
+        
+        return maxProduct > 0 ? maxProduct : 0;
     }
 }
