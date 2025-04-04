@@ -88,6 +88,7 @@ LeetCode
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
 |1267|[Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate/)|[Java](./algorithms/java/1267_count-servers-that-communicate.java)|Medium|
 |1261|[Find Elements in a Contaminated Binary Tree](https://leetcode.com/problems/find-elements-in-a-contaminated-binary-tree/)|[Java](./algorithms/java/1261_find-elements-in-a-contaminated-binary-tree.java)|Medium|
+|1123|[Lowest Common Ancestor of Deepest Leaves](https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/)|[Java](./algorithms/java/1123_lowest-common-ancestor-of-deepest-leaves.java)|Medium|
 |1092[Shortest Common Supersequence](https://leetcode.com/problems/shortest-common-supersequence/)|[Java](./algorithms/java/1092_shortest-common-supersequence.java)|Hard|
 |1079|[Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)|[Java](./algorithms/java/1079_letter-tile-possibilities.java)|Medium|
 |1028|[Recover a Tree From Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/)|[Java](./algorithms/java/1028_recover-a-tree-from-preorder-traversal.java)|Hard|
