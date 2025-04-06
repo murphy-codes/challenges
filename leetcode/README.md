@@ -68,6 +68,7 @@ LeetCode
 |1976|[Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)|[Java](./algorithms/java/1976_number-of-ways-to-arrive-at-destination.java)|Medium|
 |1930|[Unique Length-3 Palindromic Subsequences](https://leetcode.com/problems/unique-length-3-palindromic-subsequences/)|[Java](./algorithms/java/1930_unique-length-3-palindromic-subsequences.java)|Medium|
 |1910|[Remove All Occurrences of a Substring](https://leetcode.com/problems/remove-all-occurrences-of-a-substring/)|[Java](./algorithms/java/1910_remove-all-occurrences-of-a-substring.java)|Medium|
+|1863|[Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals/)|[Java](./algorithms/java/1863_sum-of-all-subset-xor-totals.java)|Easy|
 |1800|[Maximum Ascending Subarray Sum](https://leetcode.com/problems/maximum-ascending-subarray-sum/)|[Java](./algorithms/java/1800_maximum-ascending-subarray-sum.java)|Easy|
 |1790|[Check if One String Swap Can Make Strings Equal](https://leetcode.com/problems/check-if-one-string-swap-can-make-strings-equal/)|[Java](./algorithms/java/1790_check-if-one-string-swap-can-make-strings-equal.java)|Easy|
 |1780|[Check if Number is a Sum of Powers of Three](https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three.java/)|[Java](./algorithms/java/1780_check-if-number-is-a-sum-of-powers-of-three.java)|Medium|
@@ -102,6 +103,7 @@ LeetCode
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |648|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/648_redundant-connection.java)|Medium|
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
+|368|[Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/)|[Java](./algorithms/java/368_largest-divisible-subset.java)|Medium|
 |42|[Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)|[Java](./algorithms/java/42_trapping-rain-water.java)|Hard|
 |7|[Zigzag Conversion](https://leetcode.com/problems/reverse-integer/)|[Java](./algorithms/java/7_reverse-integer.java)|Medium|
 |6|[Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion/)|[Java](./algorithms/java/6_zigzag-conversion.java)|Medium|
