@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-06
 // At the time of submission:
-//   Runtime 9 ms Beats 98.90%
-//   Memory 57.12 MB Beats 30.91%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 42.42 MB Beats 80.66%
 
 /****************************************
 * 
@@ -27,34 +27,53 @@
 ****************************************/
 
 class Solution {
-    // This solution uses recursive backtracking with memoization to check if a subset
-    // of nums adds up to half of the total sum. A 2D Boolean array stores results to
-    // avoid redundant calculations. The time complexity is O(n * s), where n is the
-    // number of elements and s is half the total sum. The space complexity is O(n * s)
-    // due to the recursion stack and memoization table.
-    private Boolean[][] memo;
+    // This solution uses recursion with memoization to determine if a subset
+    // with sum equal to half the total array sum exists. The time complexity
+    // is O(n * s), where n is the number of elements and s is half the total
+    // sum. The space complexity is O(s) due to the memoization array storing
+    // results for subset sums from 0 to s.
 
-    private boolean canPartitionRecursive(int targetSum, int index, int[] nums) {
-        if (targetSum == 0) return true; // Found a valid subset sum
-        if (targetSum < 0 || index < 0) return false; // Base cases
-        if (memo[index][targetSum] != null) return memo[index][targetSum]; // Use memoized result
+    // Helper function to determine if a subset with sum 's' exists
+    Boolean subsetSumExists(Boolean[] memo, int s, int index, int[] nums) {
+        // Base case: if the subset sum reaches zero, a valid subset is found
+        if (s == 0)
+            return true;
 
-        // Recursively check if we can reach the target by including or excluding nums[index]
-        return memo[index][targetSum] = canPartitionRecursive(targetSum - nums[index], index - 1, nums)
-                || canPartitionRecursive(targetSum, index - 1, nums);
+        // If the sum becomes negative, this path is not valid
+        if (s < 0)
+            return false;
+
+        // If we've reached the first element, check if it matches the remaining sum
+        if (index == 0)
+            return s == nums[0];
+
+        // If the result for this sum has been computed before, return it
+        if (memo[s] != null)
+            return memo[s];
+
+        // Recursively check if including or excluding the current element leads to a solution
+        return memo[s] = subsetSumExists(memo, s - nums[index], index - 1, nums) 
+                      || subsetSumExists(memo, s, index - 1, nums);
     }
 
     public boolean canPartition(int[] nums) {
-        int totalSum = 0;
+        int s = 0;
 
-        for (int num : nums) totalSum += num; // Compute total sum
+        // Calculate the total sum of the array
+        for (int i = 0; i < nums.length; i++)
+            s += nums[i];
 
-        if (totalSum % 2 != 0) return false; // If sum is odd, partition is impossible
+        // If the sum is odd, partitioning into equal subsets is impossible
+        if (s % 2 != 0)
+            return false;
 
-        int targetSum = totalSum / 2;
         int n = nums.length;
-        memo = new Boolean[n][targetSum + 1]; // Fix: Use a 2D memo array indexed by (index, targetSum)
+        s /= 2; // We need to check if a subset exists with sum equal to half the total
 
-        return canPartitionRecursive(targetSum, n - 1, nums);
+        // Memoization array to store computed results for subproblems
+        Boolean[] memo = new Boolean[s + 1];
+
+        // Call the recursive function to determine if such a subset exists
+        return subsetSumExists(memo, s, n - 1, nums);
     }
 }
