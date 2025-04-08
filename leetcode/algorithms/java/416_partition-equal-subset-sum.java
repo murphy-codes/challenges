@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-06
 // At the time of submission:
-//   Runtime 4 ms Beats 100.00%
-//   Memory 42.80 MB Beats 77.98%
+//   Runtime 9 ms Beats 98.90%
+//   Memory 57.12 MB Beats 30.91%
 
 /****************************************
 * 
@@ -27,39 +27,34 @@
 ****************************************/
 
 class Solution {
-    Boolean canPartition(Boolean[] memo, int s, int index, int[] nums) {
-        if (s == 0)
-            return true;
+    // This solution uses recursive backtracking with memoization to check if a subset
+    // of nums adds up to half of the total sum. A 2D Boolean array stores results to
+    // avoid redundant calculations. The time complexity is O(n * s), where n is the
+    // number of elements and s is half the total sum. The space complexity is O(n * s)
+    // due to the recursion stack and memoization table.
+    private Boolean[][] memo;
 
-        if (s < 0)
-            return false;
-       
-        if (index == 0)
-            return s == nums[0];
-       
-        if (memo[s] != null)
-            return memo[s];
-       
-        return memo[s] = canPartition(memo, s - nums[index], index - 1, nums) || canPartition(memo, s, index - 1, nums);
+    private boolean canPartitionRecursive(int targetSum, int index, int[] nums) {
+        if (targetSum == 0) return true; // Found a valid subset sum
+        if (targetSum < 0 || index < 0) return false; // Base cases
+        if (memo[index][targetSum] != null) return memo[index][targetSum]; // Use memoized result
+
+        // Recursively check if we can reach the target by including or excluding nums[index]
+        return memo[index][targetSum] = canPartitionRecursive(targetSum - nums[index], index - 1, nums)
+                || canPartitionRecursive(targetSum, index - 1, nums);
     }
 
     public boolean canPartition(int[] nums) {
+        int totalSum = 0;
 
-        int s = 0;
+        for (int num : nums) totalSum += num; // Compute total sum
 
-        for (int i = 0; i < nums.length; i++)
-            s += nums[i];
+        if (totalSum % 2 != 0) return false; // If sum is odd, partition is impossible
 
-        if (s % 2 != 0)
-            return false;
-
+        int targetSum = totalSum / 2;
         int n = nums.length;
+        memo = new Boolean[n][targetSum + 1]; // Fix: Use a 2D memo array indexed by (index, targetSum)
 
-        s /= 2;
-
-        Boolean[] memo = new Boolean[s + 1];
-
-        return canPartition(memo, s, n - 1, nums);
-
+        return canPartitionRecursive(targetSum, n - 1, nums);
     }
 }
