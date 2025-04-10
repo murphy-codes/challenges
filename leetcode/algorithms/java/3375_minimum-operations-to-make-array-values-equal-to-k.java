@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-08
 // At the time of submission:
-//   Runtime 2 ms Beats ??.??%
-//   Memory 44.30 MB Beats ??.??%
+//   Runtime 2 ms Beats 82.19%
+//   Memory 44.30 MB Beats 98.97%
 //     (Leetcode was having trouble that day and didn't display the comparison between my code submission and others.)
 
 
