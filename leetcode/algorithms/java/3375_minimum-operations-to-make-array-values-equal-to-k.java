@@ -4,8 +4,6 @@
 // At the time of submission:
 //   Runtime 2 ms Beats 82.19%
 //   Memory 44.30 MB Beats 98.97%
-//     (Leetcode was having trouble that day and didn't display the comparison between my code submission and others.)
-
 
 /****************************************
 * 
