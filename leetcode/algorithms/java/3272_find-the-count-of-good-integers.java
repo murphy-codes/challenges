@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-12
 // At the time of submission:
-//   Runtime 57 ms Beats 100.00%
-//   Memory 40.34 MB Beats 96.15%
+//   Runtime 58 ms Beats 96.15%
+//   Memory 40.70 MB Beats 96.15%
 
 /****************************************
 * 
@@ -48,7 +48,9 @@ class Solution {
     // Uses bitmasking and precomputed powers/mods to speed up residue checks.
     // Avoids permutations with leading zeros and counts only valid arrangements.
     // Time: O(10^(n/2) * n), Space: O(n) for recursion and digit state.
-    private static final int[][] modPow10 = new int[][]{
+
+    // Precomputed mod values for digit × power-of-10 mod k cases
+    private static final int[][] modPow10 = new int[][] {
         {0}, 
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
@@ -61,69 +63,97 @@ class Solution {
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
 
-    private static final int[] factorial = new int[]{1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800};
+    // Precomputed factorials up to 10!
+    private static final int[] factorial = {
+        1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800
+    };
+
+    // Entry point: Count all palindromic numbers of length `n` divisible by `k`
     public long countGoodIntegers(int n, int k) {
-        if(n == 1) return 9/k;
-        return backtrackDigitCombos(0, 0, n, k,  new int[(n+1)/2]);
+        if (n == 1) return 9 / k;  // Special case: Single digit numbers
+        return generateHalfPalindromes(0, 0, n, k, new int[(n + 1) / 2]);
     }
 
-    private long backtrackDigitCombos(int idx, int lo, int n, int k, int[] digits) {
-        if(idx == digits.length) {
-            if(digits[idx-1] == 0) return 0;
-            if(n % 2 == 1) {
-                if(digits[idx-2] == 0) return hasKPalPerm(digits, n, k, 0, 1 << (idx-2), 0) ? validPermCnt(digits, n, 0) : 0;
-                long res = 0;
-                for(int c = 0; c < digits.length; c++) { 
-                    if(c > 0 && digits[c] == digits[c-1]) continue;
-                    if(hasKPalPerm(digits, n, k, (digits[c]*modPow10[k][n/2]) % k, 1 << c, 0)) {
-                        res += validPermCnt(digits, n, digits[c]);
+    // Backtracking to generate non-decreasing digit combinations for half-palindromes
+    private long generateHalfPalindromes(int idx, int minDigit, int n, int k, int[] halfDigits) {
+        if (idx == halfDigits.length) {
+            if (halfDigits[idx - 1] == 0) return 0;
+
+            if (n % 2 == 1) {
+                // Odd length: need to try all possible center digits
+                if (halfDigits[idx - 2] == 0) {
+                    return isValidPalindrome(halfDigits, n, k, 0, 1 << (idx - 2), 0)
+                        ? countValidPermutations(halfDigits, n, 0)
+                        : 0;
+                }
+
+                long total = 0;
+                for (int i = 0; i < halfDigits.length; i++) {
+                    if (i > 0 && halfDigits[i] == halfDigits[i - 1]) continue; // Avoid duplicates
+
+                    int centerDigit = halfDigits[i];
+                    int residue = (centerDigit * modPow10[k][n / 2]) % k;
+
+                    if (isValidPalindrome(halfDigits, n, k, residue, 1 << i, 0)) {
+                        total += countValidPermutations(halfDigits, n, centerDigit);
                     }
                 }
-                return res;
+                return total;
             }
-            
-            return hasKPalPerm(digits, n, k, 0, 0, 0) ? validPermCnt(digits, n, -1) : 0;
+
+            // Even length palindrome
+            return isValidPalindrome(halfDigits, n, k, 0, 0, 0)
+                ? countValidPermutations(halfDigits, n, -1)
+                : 0;
         }
-        long res = 0;
-        for(int d = lo; d <= 9; d++) {
-            digits[idx] = d;
-            res += backtrackDigitCombos(idx+1, d, n, k, digits);
+
+        long total = 0;
+        for (int digit = minDigit; digit <= 9; digit++) {
+            halfDigits[idx] = digit;
+            total += generateHalfPalindromes(idx + 1, digit, n, k, halfDigits);
         }
-        return res;
+        return total;
     }
 
-    private boolean hasKPalPerm(int[] digits, int n, int k, int residue, int mask, int chosenCnt) {
-        if(chosenCnt == n/2) {
-            return residue == 0;
-        }
+    // Recursive check: Is there a valid palindrome permutation divisible by k?
+    private boolean isValidPalindrome(int[] halfDigits, int n, int k, int residue, int usedMask, int count) {
+        if (count == n / 2) return residue == 0;
 
-        for(int i = digits.length-1; i >= 0; i--) {
-            if(chosenCnt == 0 && digits[i] == 0) break;
-            if((mask & (1 << i)) != 0) continue;
-            if(hasKPalPerm(digits, n, k, (residue + digits[i]*(modPow10[k][n-chosenCnt-1] + modPow10[k][chosenCnt])) % k, mask | (1 << i), chosenCnt+1)) return true;
-        }
+        for (int i = halfDigits.length - 1; i >= 0; i--) {
+            if (count == 0 && halfDigits[i] == 0) break; // Leading 0 not allowed
+            if ((usedMask & (1 << i)) != 0) continue;    // Skip used digits
 
+            int digit = halfDigits[i];
+            int power = modPow10[k][n - count - 1] + modPow10[k][count];
+            int newResidue = (residue + digit * power) % k;
+
+            if (isValidPalindrome(halfDigits, n, k, newResidue, usedMask | (1 << i), count + 1)) {
+                return true;
+            }
+        }
         return false;
     }
 
-    private int validPermCnt(int[] digits, int n, int center) {
+    // Count valid palindromic permutations of digits with an optional center digit
+    private int countValidPermutations(int[] halfDigits, int n, int centerDigit) {
+        int nonZeroStart = 0;
+        while (halfDigits[nonZeroStart] == 0) nonZeroStart++;
 
-        int nonZeroInd = 0;
-        while(digits[nonZeroInd] == 0) nonZeroInd++;
-        int zeroCnt = nonZeroInd * 2 - (center == 0 ? 1 : 0);
+        int zeroCount = nonZeroStart * 2 - (centerDigit == 0 ? 1 : 0);
+        long totalPerms = factorial[n] / factorial[zeroCount];
 
-        long perms = factorial[n]/factorial[zeroCnt];
+        // Count repetitions in the digit list
         int streak = 1;
-        for(int i = nonZeroInd+1; i < digits.length; i++) {
-            if(digits[i] == digits[i-1]) {
+        for (int i = nonZeroStart + 1; i < halfDigits.length; i++) {
+            if (halfDigits[i] == halfDigits[i - 1]) {
                 streak++;
             } else {
-                perms /= factorial[2*streak - (digits[i-1] == center ? 1 : 0)];
+                totalPerms /= factorial[2 * streak - (halfDigits[i - 1] == centerDigit ? 1 : 0)];
                 streak = 1;
             }
         }
-        perms /= factorial[2*streak - (digits[digits.length-1] == center ? 1 : 0)];
+        totalPerms /= factorial[2 * streak - (halfDigits[halfDigits.length - 1] == centerDigit ? 1 : 0)];
 
-        return (int)(perms*(n-zeroCnt)/n);
+        return (int)(totalPerms * (n - zeroCount) / n); // Adjust for leading zeros
     }
 }
