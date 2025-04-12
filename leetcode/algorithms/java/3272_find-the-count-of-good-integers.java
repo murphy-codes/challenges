@@ -44,6 +44,10 @@
 ****************************************/
 
 class Solution {
+    // Generates palindromic digit combinations, then checks for divisibility by k.
+    // Uses bitmasking and precomputed powers/mods to speed up residue checks.
+    // Avoids permutations with leading zeros and counts only valid arrangements.
+    // Time: O(10^(n/2) * n), Space: O(n) for recursion and digit state.
     private static final int[][] modPow10 = new int[][]{
         {0}, 
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
