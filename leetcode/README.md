@@ -64,6 +64,7 @@ LeetCode
 |2206|[Divide Array Into Equal Pairs](https://leetcode.com/problems/divide-array-into-equal-pairs/)|[Java](./algorithms/java/2206_divide-array-into-equal-pairs.java)|Easy|
 |2185|[Counting Words With a Given Prefix](https://leetcode.com/problems/counting-words-with-a-given-prefix/)|[Java](./algorithms/java/2185_counting-words-with-a-given-prefix.java)|Easy|
 |2179|[Count Good Triplets in an Array](https://leetcode.com/problems/count-good-triplets-in-an-array/)|[Java](./algorithms/java/2179_count-good-triplets-in-an-array)|Medium|
+|2176|[Count Equal and Divisible Pairs in an Array](https://leetcode.com/problems/count-equal-and-divisible-pairs-in-an-array/)|[Java](./algorithms/java/2176_count-equal-and-divisible-pairs-in-an-array)|Easy|
 |2161|[Partition Array According to Given Pivot](https://leetcode.com/problems/partition-array-according-to-given-pivot/)|[Java](./algorithms/java/2161_partition-array-according-to-given-pivot.java)|Medium|
 |2140|[Solving Questions With Brainpower](https://leetcode.com/problems/solving-questions-with-brainpower/)|[Java](./algorithms/java/2140_solving-questions-with-brainpower.java)|Medium|
 |2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
@@ -114,6 +115,7 @@ LeetCode
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
 |368|[Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/)|[Java](./algorithms/java/368_largest-divisible-subset.java)|Medium|
 |42|[Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)|[Java](./algorithms/java/42_trapping-rain-water.java)|Hard|
+|38|[Count and Say](https://leetcode.com/problems/count-and-say/)|[Java](./algorithms/java/38_count-and-say.java)|Medium|
 |7|[Zigzag Conversion](https://leetcode.com/problems/reverse-integer/)|[Java](./algorithms/java/7_reverse-integer.java)|Medium|
 |6|[Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion/)|[Java](./algorithms/java/6_zigzag-conversion.java)|Medium|
 |5|[Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)|[Java](./algorithms/java/5_longest-palindromic-substring.java)|Medium|
