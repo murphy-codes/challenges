@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-17
 // At the time of submission:
-//   Runtime 5 ms Beats 11.63%
-//   Memory 43.13 MB Beats 8.25%
+//   Runtime 3 ms Beats 98.38%
+//   Memory 42.44 MB Beats 79.97%
 
 /****************************************
 * 
@@ -32,35 +32,23 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+// Brute-force O(n^2) approach used intentionally.
+// For this small input size, it's faster due to lower overhead.
+// Over-optimizing here adds complexity without real gains.
 
 class Solution {
-    // Group indices of equal values using a map to avoid unnecessary checks.
-    // Only consider index pairs where nums[i] == nums[j] by iterating grouped indices.
-    // For each such pair (i, j), check if i * j is divisible by k.
-    // Time: O(n^2) in worst case (if all values are equal), but pruned significantly.
-    // Space: O(n) for storing indices grouped by value.
+    // Check all (i, j) pairs where i < j.
+    // For each pair, confirm nums[i] == nums[j] and (i * j) % k == 0.
+    // Time: O(n^2), acceptable for n <= 100.
+    // Space: O(1), constant extra space used.
     public int countPairs(int[] nums, int k) {
-        HashMap<Integer, List<Integer>> valueToIndices = new HashMap<>();
         int count = 0;
+        int n = nums.length;
 
-        for (int i = 0; i < nums.length; i++) {
-            valueToIndices
-                .computeIfAbsent(nums[i], v -> new ArrayList<>())
-                .add(i);
-        }
-
-        for (List<Integer> indices : valueToIndices.values()) {
-            int size = indices.size();
-            for (int i = 0; i < size; i++) {
-                for (int j = i + 1; j < size; j++) {
-                    int idx1 = indices.get(i);
-                    int idx2 = indices.get(j);
-                    if ((idx1 * idx2) % k == 0) {
-                        count++;
-                    }
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (nums[i] == nums[j] && (i * j) % k == 0) {
+                    count++;
                 }
             }
         }
