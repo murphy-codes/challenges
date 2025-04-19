@@ -2,7 +2,7 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-18
 // At the time of submission:
-//   Runtime 63 ms Beats 50.60%
+//   Runtime 24 ms Beats 78.66%
 //   Memory 57.24 MB Beats 71.77%
 
 /****************************************
@@ -34,47 +34,25 @@
 import java.util.Arrays;
 
 class Solution {
-    // Sort the array so we can binary search efficiently for valid pairs.
-    // For each i, find how many j > i satisfy:
-    //   lower <= nums[i] + nums[j] <= upper
-    // Use lowerBound and upperBound binary search helpers to count range.
-    // Time: O(n log n) due to sort + n binary searches. Space: O(1) extra.
+    // This solution sorts the array (O(n log n)) and then uses two calls to a 
+    // linear two-pointer method to count valid pairs. First, it counts pairs 
+    // with sum ≤ upper, then subtracts pairs with sum < lower (i.e. ≤ lower-1).
+    // Time complexity: O(n log n) due to sorting. Space complexity: O(1) extra.
+    // Efficient for large arrays thanks to avoiding repeated binary searches.
+
     public long countFairPairs(int[] nums, int lower, int upper) {
         Arrays.sort(nums);
-        long count = 0;
-
-        for (int i = 0; i < nums.length; i++) {
-            int left = lowerBound(nums, i + 1, nums.length - 1, lower - nums[i]);
-            int right = upperBound(nums, i + 1, nums.length - 1, upper - nums[i]);
-            count += (right - left);
-        }
-
-        return count;
+        return countPairsWithSumAtMost(nums, upper) 
+             - countPairsWithSumAtMost(nums, lower - 1);
     }
 
-    // Finds the first index where nums[idx] >= target
-    private int lowerBound(int[] nums, int left, int right, int target) {
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] < target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
+    private long countPairsWithSumAtMost(int[] nums, int target) {
+        long pairCount = 0;
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            if (nums[left] + nums[right] > target) right--; // If the sum is too large, decrease right to reduce the sum
+            else pairCount += right - left++; // All pairs from (left, left+1) to (left, right) are valid
         }
-        return left;
-    }
-
-    // Finds the first index where nums[idx] > target
-    private int upperBound(int[] nums, int left, int right, int target) {
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] <= target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
-        return left;
+        return pairCount;
     }
 }
