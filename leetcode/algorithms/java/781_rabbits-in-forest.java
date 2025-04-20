@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-19
 // At the time of submission:
-//   Runtime 3 ms Beats 82.48%
-//   Memory 42.93 MB Beats 7.12%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 42.46 MB Beats 41.97%
 
 /****************************************
 * 
@@ -33,34 +33,26 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
-    // Each rabbit that answers x implies a group of (x + 1) same-colored rabbits.
-    // We count how many such rabbits gave the same answer, then calculate how
-    // many full (x + 1)-sized groups are needed to fit them all.
-    // Time: O(n) for counting and grouping, where n is length of answers[]
-    // Space: O(n) for the frequency map.
+    // Each rabbit says how many *others* have their color. So x → group of x+1.
+    // We use an array to track how many rabbits gave the same answer (x).
+    // Each new group adds x+1 to the total, and resets once filled.
+    // Time: O(n) - single pass through the answers array.
+    // Space: O(1) - fixed-size array for 0 <= x < 1000.
     public int numRabbits(int[] answers) {
-        Map<Integer, Integer> countMap = new HashMap<>();
-        int totalRabbits = 0;
+        int[] count = new int[1000];  // Track number of rabbits for each answer value
+        int total = 0;
 
         for (int answer : answers) {
-            countMap.put(answer, countMap.getOrDefault(answer, 0) + 1);
+            // First rabbit of this group → start a new group
+            if (++count[answer] == 1)
+                total += answer + 1;
+
+            // Group is full → reset count for a potential new group
+            if (count[answer] == answer + 1)
+                count[answer] = 0;
         }
 
-        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
-            int answer = entry.getKey();
-            int freq = entry.getValue();
-            int groupSize = answer + 1;
-
-            // Divide freq into groups of size `groupSize`, rounding up
-            int numGroups = (freq + groupSize - 1) / groupSize;
-
-            totalRabbits += numGroups * groupSize;
-        }
-
-        return totalRabbits;
+        return total;
     }
 }
