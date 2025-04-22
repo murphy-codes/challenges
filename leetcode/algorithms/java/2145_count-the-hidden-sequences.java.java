@@ -1,0 +1,75 @@
+// Source: https://leetcode.com/count-the-hidden-sequences/
+// Author: Tom Murphy https://github.com/murphy-codes/
+// Date: 2025-04-22
+// At the time of submission:
+//   Runtime 4 ms Beats 92.06%
+//   Memory 63.85 MB Beats 6.35%
+
+/****************************************
+* 
+* You are given a 0-indexed array of `n` integers `differences`,
+* _ which describes the differences between each pair of consecutive
+* _ integers of a hidden sequence of length `(n + 1)`. More formally,
+* _ call the hidden sequence `hidden`, then we have
+* _ `that differences[i] = hidden[i + 1] - hidden[i]`.
+* You are further given two integers `lower` and `upper` that describe
+* _ the inclusive range of values `[lower, upper]` that the
+* _ hidden sequence can contain.
+* • For example, given `differences = [1, -3, 4]`, `lower = 1`, `upper = 6`,
+* _ the hidden sequence is a sequence of length `4` whose elements are in
+* _ between `1` and `6` (inclusive).
+* > • `[3, 4, 1, 5]` and `[4, 5, 2, 6]` are possible hidden sequences.
+* > • `[5, 6, 3, 7]` is not possible since it contains an element greater than 6.
+* > • `[1, 2, 3, 4]` is not possible since the differences are not correct.
+* Return the number of possible hidden sequences there are.
+* _ If there are no possible sequences, return `0`.
+*
+* Example 1:
+* Input: differences = [1,-3,4], lower = 1, upper = 6
+* Output: 2
+* Explanation: The possible hidden sequences are:
+* - [3, 4, 1, 5]
+* - [4, 5, 2, 6]
+* Thus, we return 2.
+*
+* Example 2:
+* Input: differences = [3,-4,5,1,-2], lower = -4, upper = 5
+* Output: 4
+* Explanation: The possible hidden sequences are:
+* - [-3, 0, -4, 1, 2, 0]
+* - [-2, 1, -3, 2, 3, 1]
+* - [-1, 2, -2, 3, 4, 2]
+* - [0, 3, -1, 4, 5, 3]
+* Thus, we return 4.
+*
+* Example 3:
+* Input: differences = [4,-7,2], lower = 3, upper = 6
+* Output: 0
+* Explanation: There are no possible hidden sequences. Thus, we return 0.
+*
+* Constraints:
+* • n == differences.length
+* • 1 <= n <= 10^5
+* • -10^5 <= differences[i] <= 10^5
+* • -10^5 <= lower <= upper <= 10^5
+* 
+****************************************/
+
+class Solution {
+    // Track the min and max prefix sum from the difference array,
+    // representing the lowest and highest offsets from the starting value.
+    // Compute the possible range of valid starting values such that all
+    // elements in the hidden sequence stay within [lower, upper].
+    // Time: O(n), Space: O(1), as we only use a few counters.
+    public int numberOfArrays(int[] differences, int lower, int upper) {
+        long min = 0, max = 0, sum = 0;
+        for (int diff : differences) {
+            sum += diff;
+            min = Math.min(min, sum);
+            max = Math.max(max, sum);
+        }
+        long startMin = lower - min;
+        long startMax = upper - max;
+        return (startMax < startMin) ? 0 : (int)(startMax - startMin + 1);
+    }
+}
