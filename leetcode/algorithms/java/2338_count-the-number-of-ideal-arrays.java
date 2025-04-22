@@ -45,78 +45,66 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
 
 class Solution {
-    // Uses combinatorics to count valid arrays where each arr[i]
-    // divides arr[i+1]. For each x in [1, maxValue], we factor x
-    // into primes and count ways to distribute its exponents over n slots.
-    // Combinations C(n + p - 1, p) model prime factor distributions.
-    // Time: O((n + log(m)) * log(m) + m * loglog(m))
-    // Space: O((n + log(m)) * log(m)) for precomputed factors/combinations
+    // Computes the number of ideal arrays of length n with elements ≤ maxValue.
+    // Uses prime factorization and combinatorics to count valid sequences.
+    // Precomputes C(n + k - 1, k) for k up to log₂(maxValue) using BigInteger.
+    // Time: O(m log log m), Space: O(m + log n), where m = maxValue.
+    // Efficient and readable, with fast sieve and minimal binomial calculations.
+    private static final int MOD = (int) 1e9 + 7;
 
-    static final int MOD = 1_000_000_007;
-    static final int MAX_N = 10010;
-    static final int MAX_P = 15; // Max number of prime factors
-    static int[][] c = new int[MAX_N + MAX_P][MAX_P + 1];
-    static int[] sieve = new int[MAX_N]; // Stores smallest prime factor
-    static List<Integer>[] ps = new List[MAX_N]; // Prime factor counts for each number
-
-    public Solution() {
-        // Only initialize once to avoid redundant work
-        if (c[0][0] == 1) return;
-
-        // Initialize prime factor list
-        for (int i = 0; i < MAX_N; i++) {
-            ps[i] = new ArrayList<>();
-        }
-
-        // Sieve of Eratosthenes to find smallest prime factor
-        for (int i = 2; i < MAX_N; i++) {
-            if (sieve[i] == 0) {
-                for (int j = i; j < MAX_N; j += i) {
-                    if (sieve[j] == 0) {
-                        sieve[j] = i;
+    public int idealArrays(int n, int maxValue) {
+        // Sieve of Eratosthenes storing smallest prime divisor for each number
+        int[] smallestPrime = new int[maxValue + 1];
+        for (int i = 2; i <= maxValue; i++) {
+            if (smallestPrime[i] == 0) {
+                for (int j = i; j <= maxValue; j += i) {
+                    if (smallestPrime[j] == 0) {
+                        smallestPrime[j] = i;
                     }
                 }
             }
         }
 
-        // Precompute prime factor multiplicities for all numbers
-        for (int i = 2; i < MAX_N; i++) {
-            int x = i;
+        // max exponent of any prime is at most log2(maxValue)
+        int maxExponent = (int) (Math.log(maxValue) / Math.log(2)) + 1;
+
+        // Precompute binomial coefficients C(n + k - 1, k) for k = 1..maxExponent
+        int[] binomials = new int[maxExponent + 1];
+        BigInteger coeff = BigInteger.ONE;
+        BigInteger bigMod = BigInteger.valueOf(MOD);
+
+        for (int k = 1; k <= maxExponent; k++) {
+            coeff = coeff.multiply(BigInteger.valueOf(n + k - 1));
+            coeff = coeff.divide(BigInteger.valueOf(k));
+            binomials[k] = coeff.mod(bigMod).intValue();
+        }
+
+        int result = 0;
+
+        // For each number from 1 to maxValue
+        for (int num = 1; num <= maxValue; num++) {
+            int x = num;
+            long product = 1;
+
+            // Factorize x using smallestPrime[]
             while (x > 1) {
-                int p = sieve[x], cnt = 0;
-                while (x % p == 0) {
-                    x /= p;
-                    cnt++;
+                int prime = smallestPrime[x];
+                int count = 0;
+
+                while (x % prime == 0) {
+                    x /= prime;
+                    count++;
                 }
-                ps[i].add(cnt);
+
+                product = (product * binomials[count]) % MOD;
             }
+
+            result = (int)((result + product) % MOD);
         }
 
-        // Precompute combinations: c[i][j] = C(i, j)
-        c[0][0] = 1;
-        for (int i = 1; i < MAX_N + MAX_P; i++) {
-            c[i][0] = 1;
-            for (int j = 1; j <= Math.min(i, MAX_P); j++) {
-                c[i][j] = (c[i - 1][j] + c[i - 1][j - 1]) % MOD;
-            }
-        }
-    }
-
-    public int idealArrays(int n, int maxValue) {
-        long ans = 0;
-
-        for (int x = 1; x <= maxValue; x++) {
-            long mul = 1;
-            for (int count : ps[x]) {
-                mul = (mul * c[n + count - 1][count]) % MOD;
-            }
-            ans = (ans + mul) % MOD;
-        }
-
-        return (int) ans;
+        return result;
     }
 }
