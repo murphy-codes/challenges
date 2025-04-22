@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-22
 // At the time of submission:
-//   Runtime 4 ms Beats 92.06%
-//   Memory 63.85 MB Beats 6.35%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 61.65 MB Beats 49.21%
 
 /****************************************
 * 
@@ -56,20 +56,18 @@
 ****************************************/
 
 class Solution {
-    // Track the min and max prefix sum from the difference array,
-    // representing the lowest and highest offsets from the starting value.
-    // Compute the possible range of valid starting values such that all
-    // elements in the hidden sequence stay within [lower, upper].
-    // Time: O(n), Space: O(1), as we only use a few counters.
+    // We compute the running prefix sum of differences to track the min/max
+    // deviation from the starting value. This defines the range shift needed
+    // for all values to remain within [lower, upper]. We then calculate how
+    // many valid starting values are possible that keep the entire sequence
+    // within bounds. Time: O(n), Space: O(1).
     public int numberOfArrays(int[] differences, int lower, int upper) {
         long min = 0, max = 0, sum = 0;
         for (int diff : differences) {
             sum += diff;
-            min = Math.min(min, sum);
-            max = Math.max(max, sum);
+            min = (min>sum)?sum:min;
+            max = (max<sum)?sum:max;
         }
-        long startMin = lower - min;
-        long startMax = upper - max;
-        return (startMax < startMin) ? 0 : (int)(startMax - startMin + 1);
+        return (int)Math.max(0,(upper - max)-(lower - min)+1);
     }
 }
