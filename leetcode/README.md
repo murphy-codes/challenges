@@ -96,6 +96,7 @@ LeetCode
 |1415|[The k-th Lexicographical String of All Happy Strings of Length n](https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/)|[Java](./algorithms/java/1415_the-k-th-lexicographical-string-of-all-happy-strings-of-length-n.java)|Medium|
 |1408|[String Matching in an Array](https://leetcode.com/problems/string-matching-in-an-array/)|[Java](./algorithms/java/1408_string-matching-in-an-array.java)|Easy|
 |1400|[Construct K Palindrome Strings](https://leetcode.com/problems/construct-k-palindrome-strings/)|[Java](./algorithms/java/1400_construct-k-palindrome-strings.java)|Medium|
+|1399|[Count Largest Group](https://leetcode.com/problems/count-largest-group/)|[Java](./algorithms/java/1399_count-largest-group.java)|Easy|
 |1368|[Minimum Cost to Make at Least One Valid Path in a Grid](https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/)|[Java](./algorithms/java/1368_minimum-cost-to-make-at-least-one-valid-path-in-a-grid.java)|Hard|
 |1358|[Number of Substrings Containing All Three Characters](https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/)|[Java](./algorithms/java/1358_number-of-substrings-containing-all-three-characters.java)|Medium|
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
