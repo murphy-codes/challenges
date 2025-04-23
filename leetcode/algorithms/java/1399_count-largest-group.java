@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-22
 // At the time of submission:
-//   Runtime 4 ms Beats 77.06%
-//   Memory 40.68 MB Beats 72.76%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 40.88 MB Beats 64.52%
 
 /****************************************
 * 
@@ -29,40 +29,80 @@
 ****************************************/
 
 class Solution {
-    // Groups numbers 1 to n by the sum of their digits, then finds how many
-    // groups have the largest size. Uses an array for digit sums (max 36).
-    // Time: O(n) for computing digit sums and tracking frequencies.
-    // Space: O(1), since array size is fixed and independent of input n.
-    // Fast and elegant due to bounded digit sums and direct array access.
-    public int countLargestGroup(int n) {
-        int[] digitSums = new int[37]; // max sum of digits for n = 9999 is 36
+    // Time Complexity: O(log(n) * D^2), where D=36 (the max digit sum of 9999).
+    // Space Complexity: O(D^2) for memoizing digit sum combinations.
+    // Uses DP to avoid brute-force sum calculation for each number up to n.
+    // Efficient for n up to 10^4, leveraging combinatorics and prefix sums.
 
-        for (int i = 1; i <= n; i++) {
-            int sum = digitSum(i);
-            digitSums[sum]++;
+    // ref[d][s] will eventually hold the number of ways to get a digit sum 's' with 'd' digits
+    int[][] digitSumWays = { {1}, new int[10], new int[19], new int[28] };
+
+    public int countLargestGroup(int n) {
+        // Holds the number of digits per position (units, tens, hundreds, thousands)
+        int[] digitCounts = {1, 0, 0, 0};
+
+        // Array to count how many numbers have a certain digit sum
+        int[] sumFrequencies = new int[37];
+
+        // Number of digits and prefix sum of all digits
+        int numDigits = 0;
+        int totalDigitSum = 0;
+
+        // Preprocess digits of n (clamp to 9999 max) into digitCounts array
+        for (int number = Math.min(n, 9999); number > 0; number /= 10) {
+            int digit = number % 10;
+            totalDigitSum += digitCounts[numDigits] += digit;
+            numDigits++;
         }
 
-        int maxGroupSize = 0;
-        int count = 0;
+        // Build combinations of digit sums dynamically
+        for (int digitPos = 0; digitPos < numDigits; digitPos++) {
+            int digit = digitCounts[digitPos];
+            int prevSize = digitSumWays[digitPos].length;
 
-        for (int size : digitSums) {
-            if (size > maxGroupSize) {
-                maxGroupSize = size;
-                count = 1;
-            } else if (size == maxGroupSize) {
-                count++;
+            // Determine whether to compute digitSumWays[d+1] for the next digit position
+            boolean shouldComputeNext = digitPos <= 2 && digitSumWays[digitPos + 1][digitSumWays[digitPos + 1].length - 1] == 0;
+            int nextSize = shouldComputeNext ? digitSumWays[digitPos + 1].length : 0;
+
+            // Calculate limit for sum index range in this digit position
+            int sumLimit = Math.max(digitPos * 9 + digit, nextSize);
+
+            // We subtract current digit because we’ll be shifting from psum to psum + i
+            totalDigitSum -= digit;
+
+            int rollingSum = 0;
+            for (int sum = 0; sum < sumLimit; sum++) {
+                // Compute rolling sum of possible combinations to reach 'sum' using current digit
+                rollingSum += (sum < prevSize ? digitSumWays[digitPos][sum] : 0)
+                            - (sum >= digit && sum - digit < prevSize ? digitSumWays[digitPos][sum - digit] : 0);
+
+                // Update the count of numbers that can form this digit sum
+                sumFrequencies[totalDigitSum + sum] += rollingSum;
+
+                // Update next level of digitSumWays if needed
+                if (shouldComputeNext) {
+                    digitSumWays[digitPos + 1][sum] =
+                        (sum > 0 && sum - 1 < nextSize ? digitSumWays[digitPos + 1][sum - 1] : 0)
+                      + (sum < prevSize ? digitSumWays[digitPos][sum] : 0)
+                      - (sum >= 10 && sum - 10 < prevSize ? digitSumWays[digitPos][sum - 10] : 0);
+                }
             }
         }
 
-        return count;
-    }
+        // Ignore sumFrequencies[0] since it's a dummy
+        sumFrequencies[0] = 0;
 
-    private int digitSum(int num) {
-        int sum = 0;
-        while (num > 0) {
-            sum += num % 10;
-            num /= 10;
+        // Find the max group size and count how many groups have that size
+        int maxGroupSize = 0, groupCount = 0;
+        for (int frequency : sumFrequencies) {
+            if (frequency > maxGroupSize) {
+                maxGroupSize = frequency;
+                groupCount = 1;
+            } else if (frequency == maxGroupSize) {
+                groupCount++;
+            }
         }
-        return sum;
+
+        return groupCount;
     }
 }
