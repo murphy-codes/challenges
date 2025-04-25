@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-25
 // At the time of submission:
-//   Runtime 36 ms Beats 45.71%
-//   Memory 55.74 MB Beats 99.05%
+//   Runtime 8 ms Beats 97.14%
+//   Memory 57.02 MB Beats 84.76%
 
 /****************************************
 * 
@@ -50,34 +50,40 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 class Solution {
-    // Tracks prefix sums of elements where nums[i] % modulo == k.
-    // For each prefix, count how many earlier prefixes match the condition:
-    // (currentCount - previousCount) % modulo == k.
-    // Uses a HashMap to store frequency of prefix sums mod `modulo`.
-    // Time: O(n), Space: O(modulo) in worst case.
+    // Count subarrays where the count of nums[i] % modulo == k also % modulo == k.
+    // Use prefix sum of such counts and store frequencies in an array for speed.
+    // For each prefix sum, look up how many times the needed offset has occurred.
+    // This avoids HashMap overhead, improving performance on large input sizes.
+    // Time: O(n), Space: O(n) assuming modulo ≤ n (else risk of IndexOutOfBounds).
     public long countInterestingSubarrays(List<Integer> nums, int modulo, int k) {
-        Map<Integer, Long> countMap = new HashMap<>();
-        countMap.put(0, 1L); // base case: one way to have count 0 before any elements
-        
-        long res = 0;
-        int count = 0;
-        
+        int n = nums.size();
+        if (k > n) return 0;
+
+        int[] count = new int[n + 1]; // or use `new int[modulo]` if modulo is small
+        count[0] = 1;
+
+        long ans = 0;
+        int sum = 0;
+
         for (int num : nums) {
             if (num % modulo == k) {
-                count++;
+                sum++;
             }
-            int rem = count % modulo;
-            int needed = (rem - k + modulo) % modulo;
-            res += countMap.getOrDefault(needed, 0L);
-            countMap.put(rem, countMap.getOrDefault(rem, 0L) + 1);
+            sum %= modulo;
+
+            int target = (sum - k + modulo) % modulo;
+            if (target < count.length) {
+                ans += count[target];
+            }
+
+            if (sum < count.length) {
+                count[sum]++;
+            }
         }
-        
-        return res;
+
+        return ans;
     }
 }
-
