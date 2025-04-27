@@ -7,6 +7,7 @@ LeetCode
 |---| ----- | -------- | ---------- |
 |3396|[Minimum Number of Operations to Make Elements in Array Distinct](https://leetcode.com/problems/minimum-number-of-operations-to-make-elements-in-array-distinct/)|[Java](./algorithms/java/3396_minimum-number-of-operations-to-make-elements-in-array-distinct.java)|Easy|
 |3394|[Zero Array Transformation II](https://leetcode.com/problems/check-if-grid-can-be-cut-into-sections/)|[Java](./algorithms/java/3394_check-if-grid-can-be-cut-into-sections.java.java)|Medium|
+|3392|[Count Subarrays of Length Three With a Condition](https://leetcode.com/problems/count-subarrays-of-length-three-with-a-condition/)|[Java](./algorithms/java/3392_count-subarrays-of-length-three-with-a-condition.java)|Easy|
 |3375|[Minimum Operations to Make Array Values Equal to K](https://leetcode.com/problems/minimum-operations-to-make-array-values-equal-to-k/)|[Java](./algorithms/java/3375_minimum-operations-to-make-array-values-equal-to-k.java)|Easy|
 |3356|[Zero Array Transformation II](https://leetcode.com/problems/zero-array-transformation-ii/)|[Java](./algorithms/java/3356_zero-array-transformation-ii.java)|Medium|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
@@ -27,6 +28,7 @@ LeetCode
 |2948|[Make Lexicographically Smallest Array by Swapping Elements](https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/)|[Java](./algorithms/java/2948_make-lexicographically-smallest-array-by-swapping-elements.java)|Medium|
 |2874|[Maximum Value of an Ordered Triplet II](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/)|[Java](./algorithms/java/2874_maximum-value-of-an-ordered-triplet-ii.java)|Medium|
 |2873|[Maximum Value of an Ordered Triplet I](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-i/)|[Java](./algorithms/java/2873_maximum-value-of-an-ordered-triplet-i.java)|Easy|
+|2845|[Count of Interesting Subarrays](https://leetcode.com/problems/count-of-interesting-subarrays/)|[Java](./algorithms/java/2845_count-of-interesting-subarrays.java)|Medium|
 |2843|[Count Symmetric Integers](https://leetcode.com/problems/count-symmetric-integers/)|[Java](./algorithms/java/2843_count-symmetric-integers.java)|Easy|
 |2818|[Apply Operations to Maximize Score](https://leetcode.com/problems/apply-operations-to-maximize-score/)|[Java](./algorithms/java/2818_apply-operations-to-maximize-score.java)|Hard|
 |2780|[Minimum Index of a Valid Split](https://leetcode.com/problems/minimum-index-of-a-valid-split/)|[Java](./algorithms/java/2780_minimum-index-of-a-valid-split.java)|Medium|
@@ -51,6 +53,7 @@ LeetCode
 |2467|[Most Profitable Path in a Tree](https://leetcode.com/problems/most-profitable-path-in-a-tree/)|[Java](./algorithms/java/2467_most-profitable-path-in-a-tree.java)|Medium|
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
 |2460|[Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array/)|[Java](./algorithms/java/2460_apply-operations-to-an-array.java)|Easy|
+|2444|[Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds/)|[Java](./algorithms/java/2444_count-subarrays-with-fixed-bounds.java)|Hard|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
 |2401|[Longest Nice Subarray](https://leetcode.com/problems/longest-nice-subarray/)|[Java](./algorithms/java/2401_longest-nice-subarray.java)|Medium|
