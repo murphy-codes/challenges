@@ -25,6 +25,7 @@ LeetCode
 |3042|[Count Prefix and Suffix Pairs I](https://leetcode.com/problems/count-prefix-and-suffix-pairs-i/)|[Java](./algorithms/java/3042_count-prefix-and-suffix-pairs-i.java)|Easy|
 |2999|[Count the Number of Powerful Integers](https://leetcode.com/problems/count-the-number-of-powerful-integers/)|[Java](./algorithms/java/2999_count-the-number-of-powerful-integers.java)|Hard|
 |2965|[Find Missing and Repeated Values](https://leetcode.com/problems/find-missing-and-repeated-values/)|[Java](./algorithms/java/2965_find-missing-and-repeated-values.java)|Easy|
+|2962|[Count Subarrays Where Max Element Appears at Least K Times](https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/)|[Java](./algorithms/java/2962_count-subarrays-where-max-element-appears-at-least-k-times.java)|Medium|
 |2948|[Make Lexicographically Smallest Array by Swapping Elements](https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/)|[Java](./algorithms/java/2948_make-lexicographically-smallest-array-by-swapping-elements.java)|Medium|
 |2874|[Maximum Value of an Ordered Triplet II](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/)|[Java](./algorithms/java/2874_maximum-value-of-an-ordered-triplet-ii.java)|Medium|
 |2873|[Maximum Value of an Ordered Triplet I](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-i/)|[Java](./algorithms/java/2873_maximum-value-of-an-ordered-triplet-i.java)|Easy|
@@ -64,6 +65,7 @@ LeetCode
 |2349|[Design a Number Container System](https://leetcode.com/problems/design-a-number-container-system/)|[Java](./algorithms/java/2349_design-a-number-container-system.java)|Medium|
 |2342|[Max Sum of a Pair With Equal Sum of Digits](https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/)|[Java](./algorithms/java/2342_max-sum-of-a-pair-with-equal-sum-of-digits.java)|Medium|
 |2338|[Count the Number of Ideal Arrays](https://leetcode.com/problems/count-the-number-of-ideal-arrays/)|[Java](./algorithms/java/2338_count-the-number-of-ideal-arrays.java)|Medium|
+|2302|[Count Subarrays With Score Less Than K](https://leetcode.com/problems/count-subarrays-with-score-less-than-k/)|[Java](./algorithms/java/2302_count-subarrays-with-score-less-than-k.java)|Hard|
 |2270|[Number of Ways to Split Array](https://leetcode.com/problems/number-of-ways-to-split-array/)|[Java](./algorithms/java/2270_number-of-ways-to-split-array.java)|Medium|
 |2226|[Maximum Candies Allocated to K Children](https://leetcode.com/problems/maximum-candies-allocated-to-k-children/)|[Java](./algorithms/java/2226_maximum-candies-allocated-to-k-children.java)|Medium|
 |2206|[Divide Array Into Equal Pairs](https://leetcode.com/problems/divide-array-into-equal-pairs/)|[Java](./algorithms/java/2206_divide-array-into-equal-pairs.java)|Easy|
@@ -106,7 +108,7 @@ LeetCode
 |1267|[Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate/)|[Java](./algorithms/java/1267_count-servers-that-communicate.java)|Medium|
 |1261|[Find Elements in a Contaminated Binary Tree](https://leetcode.com/problems/find-elements-in-a-contaminated-binary-tree/)|[Java](./algorithms/java/1261_find-elements-in-a-contaminated-binary-tree.java)|Medium|
 |1123|[Lowest Common Ancestor of Deepest Leaves](https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/)|[Java](./algorithms/java/1123_lowest-common-ancestor-of-deepest-leaves.java)|Medium|
-|1092[Shortest Common Supersequence](https://leetcode.com/problems/shortest-common-supersequence/)|[Java](./algorithms/java/1092_shortest-common-supersequence.java)|Hard|
+|1092|[Shortest Common Supersequence](https://leetcode.com/problems/shortest-common-supersequence/)|[Java](./algorithms/java/1092_shortest-common-supersequence.java)|Hard|
 |1079|[Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)|[Java](./algorithms/java/1079_letter-tile-possibilities.java)|Medium|
 |1028|[Recover a Tree From Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/)|[Java](./algorithms/java/1028_recover-a-tree-from-preorder-traversal.java)|Hard|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
