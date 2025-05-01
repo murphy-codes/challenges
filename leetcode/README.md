@@ -78,6 +78,7 @@ LeetCode
 |2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
 |2115|[Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)|[Java](./algorithms/java/2115_find-all-possible-recipes-from-given-supplies.java)|Medium|
+|2071|[Maximum Number of Tasks You Can Assign](https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/)|[Java](./algorithms/java/2071_maximum-number-of-tasks-you-can-assign.java)|Hard|
 |2033|[Minimum Operations to Make a Uni-Value Grid](https://leetcode.com/problems/minimum-operations-to-make-a-uni-value-grid)|[Java](./algorithms/java/2033_minimum-operations-to-make-a-uni-value-grid.java)|Medium|
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
 |1980|[Find Unique Binary String](https://leetcode.com/problems/find-unique-binary-string/)|[Java](./algorithms/java/1980_find-unique-binary-string.java)|Medium|
