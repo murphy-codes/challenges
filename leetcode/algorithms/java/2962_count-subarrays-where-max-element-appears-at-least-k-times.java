@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-subarrays-where-max-element-appears-at-least-k-times/
+// Source: https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-28
 // At the time of submission:
