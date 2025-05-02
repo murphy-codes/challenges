@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-subarrays-with-score-less-than-k/
+// Source: https://leetcode.com/problems/count-subarrays-with-score-less-than-k/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-27
 // At the time of submission:
