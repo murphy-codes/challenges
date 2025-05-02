@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-and-say/
+// Source: https://leetcode.com/problems/count-and-say/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-17
 // At the time of submission:
