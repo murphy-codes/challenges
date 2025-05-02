@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-largest-group/
+// Source: https://leetcode.com/problems/count-largest-group/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-22
 // At the time of submission:
