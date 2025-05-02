@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-of-interesting-subarrays/
+// Source: https://leetcode.com/problems/count-of-interesting-subarrays/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-25
 // At the time of submission:
