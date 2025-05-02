@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-equal-and-divisible-pairs-in-an-array/
+// Source: https://leetcode.com/problems/count-equal-and-divisible-pairs-in-an-array/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-17
 // At the time of submission:
