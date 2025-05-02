@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/rabbits-in-forest/
+// Source: https://leetcode.com/problems/rabbits-in-forest/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-19
 // At the time of submission:
