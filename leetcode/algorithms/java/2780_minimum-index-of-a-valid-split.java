@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/minimum-index-of-a-valid-split/
+// Source: https://leetcode.com/problems/minimum-index-of-a-valid-split/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-26
 // At the time of submission:
