@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/minimum-cost-walk-in-weighted-graph/
+// Source: https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-19
 
