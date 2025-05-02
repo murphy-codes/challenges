@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-the-number-of-complete-components/
+// Source: https://leetcode.com/problems/count-the-number-of-complete-components/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-21
 
