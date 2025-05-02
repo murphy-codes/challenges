@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/find-all-possible-recipes-from-given-supplies/
+// Source: https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-21
 
