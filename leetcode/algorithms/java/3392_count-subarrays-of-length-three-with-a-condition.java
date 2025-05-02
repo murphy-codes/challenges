@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-subarrays-of-length-three-with-a-condition/
+// Source: https://leetcode.com/problems/count-subarrays-of-length-three-with-a-condition/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-25
 // At the time of submission:
