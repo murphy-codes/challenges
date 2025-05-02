@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-the-number-of-fair-pairs/
+// Source: https://leetcode.com/problems/problems/count-the-number-of-fair-pairs/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-18
 // At the time of submission:
