@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-subarrays-with-fixed-bounds/
+// Source: https://leetcode.com/problems/count-subarrays-with-fixed-bounds/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-25
 // At the time of submission:
