@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-the-number-of-good-subarrays/
+// Source: https://leetcode.com/problems/count-the-number-of-good-subarrays/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-15
 // At the time of submission:
