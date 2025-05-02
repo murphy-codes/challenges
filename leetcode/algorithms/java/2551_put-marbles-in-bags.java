@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/problems//
+// Source: https://leetcode.com/problems/put-marbles-in-bags/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-30
 // At the time of submission:
