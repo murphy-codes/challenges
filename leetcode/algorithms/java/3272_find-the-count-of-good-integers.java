@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/find-the-count-of-good-integers/
+// Source: https://leetcode.com/problems/find-the-count-of-good-integers/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-12
 // At the time of submission:
