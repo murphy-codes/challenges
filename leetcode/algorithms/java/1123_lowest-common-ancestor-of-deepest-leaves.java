@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/lowest-common-ancestor-of-deepest-leaves/
+// Source: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-04
 // At the time of submission:
