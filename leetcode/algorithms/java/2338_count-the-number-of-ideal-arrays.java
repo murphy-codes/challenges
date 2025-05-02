@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-the-number-of-ideal-arrays/
+// Source: https://leetcode.com/problems/count-the-number-of-ideal-arrays/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-22
 // At the time of submission:
