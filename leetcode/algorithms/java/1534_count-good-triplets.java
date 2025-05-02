@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-good-triplets/
+// Source: https://leetcode.com/problems/count-good-triplets/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-13
 // At the time of submission:
