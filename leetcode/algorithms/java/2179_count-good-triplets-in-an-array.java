@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-good-triplets-in-an-array/
+// Source: https://leetcode.com/problems/count-good-triplets-in-an-array/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-15
 // At the time of submission:
