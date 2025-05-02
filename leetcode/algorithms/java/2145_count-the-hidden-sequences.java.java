@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/count-the-hidden-sequences/
+// Source: https://leetcode.com/problems/count-the-hidden-sequences/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-04-22
 // At the time of submission:
