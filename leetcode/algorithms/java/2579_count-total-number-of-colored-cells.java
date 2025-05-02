@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/count-total-number-of-colored-cells/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-04
+// At the time of submission:
+//   Runtime 0 ms Beats 100.00%
+//   Memory 40.30 MB Beats 90.26%
 
 /****************************************
 * 
