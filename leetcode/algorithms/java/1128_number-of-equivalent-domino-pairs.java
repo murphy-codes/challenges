@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-03
 // At the time of submission:
-//   Runtime 10 ms Beats 62.60%
-//   Memory 53.05 MB Beats 51.15%
+//   Runtime 2 ms Beats 98.22%
+//   Memory 52.80 MB Beats 64.63%
 
 /****************************************
 * 
@@ -29,26 +29,37 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
-    // Normalize each domino by sorting the two numbers,
-    // and map it to a unique key in range [11, 99].
-    // Count frequency of each key and for each duplicate,
-    // add to result the number of existing pairs formed.
-    // Time: O(n), Space: O(1) due to limited unique keys.
+    // Count each domino as a pair [a][b] in a 10x10 matrix, since values range
+    // from 1 to 9. Then for each unique unordered pair [i][j], compute the number
+    // of equivalent pairs using n * (n - 1) / 2, summing symmetric pairs [i][j]
+    // and [j][i] when i != j. This avoids extra normalization or hashing overhead.
+    // Time: O(n), Space: O(1) due to fixed-size 2D array.
     public int numEquivDominoPairs(int[][] dominoes) {
-        Map<Integer, Integer> countMap = new HashMap<>();
-        int result = 0;
+        int[][] pairCounts = new int[10][10]; // Tracks counts of domino [a][b]
 
+        // Count each domino directly into the matrix
         for (int[] domino : dominoes) {
             int a = domino[0];
             int b = domino[1];
-            int key = a < b ? a * 10 + b : b * 10 + a;
-            int currentCount = countMap.getOrDefault(key, 0);
-            result += currentCount; // Add current count to result
-            countMap.put(key, currentCount + 1);
+            pairCounts[a][b]++;
+        }
+
+        int result = 0;
+
+        // For each unique unordered domino pair [i][j]
+        for (int i = 1; i <= 9; i++) {
+            for (int j = i; j <= 9; j++) {
+                int count = pairCounts[i][j];
+
+                // If i != j, also add count of symmetric [j][i]
+                if (i != j) {
+                    count += pairCounts[j][i];
+                }
+
+                // Add number of unique pairs from count (n choose 2)
+                result += count * (count - 1) / 2;
+            }
         }
 
         return result;
