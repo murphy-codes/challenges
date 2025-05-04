@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-19
+// At the time of submission:
+//   Runtime 30 ms Beats 13.19%
+//   Memory 135.85 MB Beats 5.68%
 
 /****************************************
 * 
