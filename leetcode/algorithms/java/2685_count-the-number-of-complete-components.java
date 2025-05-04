@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-21
 // At the time of submission:
-//   Runtime 22 ms Beats 23.97%
-//   Memory 45.66 MB Beats 15.62%
+//   Runtime 4 ms Beats 98.91%
+//   Memory 45.49 MB Beats 37.31%
 
 /****************************************
 * 
@@ -37,65 +37,75 @@
 * 
 ****************************************/
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // This solution finds all connected components using DFS, then checks
-    // if each component is complete. A complete component with k nodes
-    // must have exactly k * (k - 1) / 2 edges. We store the graph as an
-    // adjacency list and use a visited array to avoid redundant traversal.
-    // Time Complexity: O(V + E), where V is nodes and E is edges.
-    // Space Complexity: O(V + E), for adjacency list and visited set.
-    public int countCompleteComponents(int n, int[][] edges) {
-        // Step 1: Build adjacency list
-        List<Set<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            graph.add(new HashSet<>());
+    // This solution uses Union-Find to group nodes into connected components.
+    // Each component tracks its size and total edge count during union steps.
+    // A component is complete if it has exactly size * (size - 1) / 2 edges.
+    // Time Complexity: O(E * α(N)) for unions, O(N) for final check.
+    // Space Complexity: O(N) for parent, size, and edge count arrays.
+
+    private int[] parent;   // Disjoint set parents
+    private int[] size;     // Size of each component
+    private int[] edgeCount; // Number of edges in each component
+
+    // Find the root of the component
+    private int find(int node) {
+        if (parent[node] != node) {
+            parent[node] = find(parent[node]); // Path compression
         }
-        for (int[] edge : edges) {
-            graph.get(edge[0]).add(edge[1]);
-            graph.get(edge[1]).add(edge[0]);
+        return parent[node];
+    }
+
+    // Union two components and track edges
+    private void union(int u, int v) {
+        int rootU = find(u);
+        int rootV = find(v);
+
+        if (rootU == rootV) {
+            edgeCount[rootU]++;  // Adding edge within same component
+            return;
         }
 
-        // Step 2: Find all connected components using DFS
-        boolean[] visited = new boolean[n];
+        // Merge smaller component into larger one
+        if (size[rootU] > size[rootV]) {
+            parent[rootV] = rootU;
+            size[rootU] += size[rootV];
+            edgeCount[rootU] += edgeCount[rootV] + 1;
+        } else {
+            parent[rootU] = rootV;
+            size[rootV] += size[rootU];
+            edgeCount[rootV] += edgeCount[rootU] + 1;
+        }
+    }
+
+    public int countCompleteComponents(int n, int[][] edges) {
+        parent = new int[n];
+        size = new int[n];
+        edgeCount = new int[n];
+
+        // Initialize each node as its own component
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+
+        // Process each edge
+        for (int[] edge : edges) {
+            union(edge[0], edge[1]);
+        }
+
         int completeComponents = 0;
 
-        for (int node = 0; node < n; node++) {
-            if (!visited[node]) {
-                Set<Integer> component = new HashSet<>();
-                dfs(node, graph, visited, component);
-
-                // Step 3: Check if the component is complete
-                if (isComplete(component, graph)) {
+        // A component is complete if it has exactly size*(size - 1)/2 edges
+        for (int i = 0; i < n; i++) {
+            if (parent[i] == i) {
+                int expectedEdges = size[i] * (size[i] - 1) / 2;
+                if (edgeCount[i] == expectedEdges) {
                     completeComponents++;
                 }
             }
         }
 
         return completeComponents;
-    }
-
-    private void dfs(int node, List<Set<Integer>> graph, boolean[] visited, Set<Integer> component) {
-        visited[node] = true;
-        component.add(node);
-        for (int neighbor : graph.get(node)) {
-            if (!visited[neighbor]) {
-                dfs(neighbor, graph, visited, component);
-            }
-        }
-    }
-
-    private boolean isComplete(Set<Integer> component, List<Set<Integer>> graph) {
-        int size = component.size();
-        for (int node : component) {
-            if (graph.get(node).size() != size - 1) {
-                return false;
-            }
-        }
-        return true;
     }
 }
