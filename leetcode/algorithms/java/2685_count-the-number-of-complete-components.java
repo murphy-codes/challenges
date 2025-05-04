@@ -1,16 +1,21 @@
 // Source: https://leetcode.com/problems/count-the-number-of-complete-components/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-21
+// At the time of submission:
+//   Runtime 22 ms Beats 23.97%
+//   Memory 45.66 MB Beats 15.62%
 
 /****************************************
 * 
-* You are given an integer `n`. There is an undirected graph with `n` vertices, numbered from `0` to `n - 1`.
-* You are given a 2D integer array `edges` where `edges[i] = [a_i, b_i]` denotes that there exists an
-* undirected edge connecting vertices `a_i` and `b_i`.
+* You are given an integer `n`. There is an undirected graph with `n` vertices, numbered 
+* _ from `0` to `n - 1`.
+* You are given a 2D integer array `edges` where `edges[i] = [a_i, b_i]` denotes that there 
+* _ exists an undirected edge connecting vertices `a_i` and `b_i`.
 * Return the number of complete connected components of the graph.
-* A connected component is a subgraph of a graph in which there exists a path between any two vertices,
-* and no vertex of the subgraph shares an edge with a vertex outside of the subgraph.
-* A connected component is said to be complete if there exists an edge between every pair of its vertices.
+* A connected component is a subgraph of a graph in which there exists a path between any two 
+* _ vertices, and no vertex of the subgraph shares an edge with a vertex outside of the subgraph.
+* A connected component is said to be complete if there exists an edge between every 
+* _ pair of its vertices.
 *
 * Example 1:
 * Input: n = 6, edges = [[0,1],[0,2],[1,2],[3,4]]
