@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-23
 // At the time of submission:
-//   Runtime 39 ms Beats 64.02%
-//   Memory 100.56 MB Beats 44.05%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 100.36 MB Beats 59.22%
 
 /****************************************
 * 
@@ -40,29 +40,59 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort the meetings by start time (O(n log n)).
-    // Iterate through meetings, merging overlapping intervals (O(n)).
-    // Track the total occupied days and subtract from `days` (O(1)).
-    // Overall complexity: O(n log n), optimal for large inputs.
-    public int countDays(int days, int[][] meetings) {
-        // Sort meetings by start day
-        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
-        
-        int occupiedDays = 0, prevEnd = 0;
+    // Recursively calculates the number of free days by checking how each meeting  
+    // overlaps with the current interval [startDay, endDay]. If a meeting overlaps,  
+    // the interval is split and the function recurses on the non-overlapping parts.  
+    // Assumes `meetings` is sorted by start day for correctness and performance.  
+    // Time: O(n^2) in worst case due to recursion; Space: O(n) call stack depth.
+    public int countDays(int totalDays, int[][] meetings) {
+        return countFreeDays(1, totalDays, meetings, 0);
+    }
 
-        for (int[] meeting : meetings) {
-            int start = meeting[0], end = meeting[1];
-            if (start > prevEnd) {
-                occupiedDays += end - start + 1;
-            } else if (end > prevEnd) {
-                occupiedDays += end - prevEnd;
+    private int countFreeDays(int startDay, int endDay, int[][] meetings, int index) {
+        int freeDays = 0;
+
+        while (index < meetings.length) {
+            int meetingStart = meetings[index][0];
+            int meetingEnd = meetings[index][1];
+
+            // Case 1: Meeting starts before or at current interval
+            if (meetingStart <= startDay) {
+                if (meetingEnd >= endDay) {
+                    // Meeting fully covers the interval: no free days
+                    return freeDays;
+                } else if (meetingEnd < startDay) {
+                    // Meeting is before current interval: skip it
+                    index++;
+                } else {
+                    // Overlaps at the beginning: move startDay forward
+                    startDay = meetingEnd + 1;
+                    index++;
+                }
             }
-            prevEnd = Math.max(prevEnd, end);
+
+            // Case 2: Meeting ends after or at current interval
+            else if (meetingEnd >= endDay) {
+                if (meetingStart > endDay) {
+                    // Meeting starts after current interval: skip it
+                    index++;
+                } else {
+                    // Overlaps at the end: shrink endDay
+                    endDay = meetingStart - 1;
+                    index++;
+                }
+            }
+
+            // Case 3: Meeting is strictly inside the current interval
+            else {
+                // Count free days before this meeting, recurse after
+                freeDays += countFreeDays(startDay, meetingStart - 1, meetings, index + 1);
+                startDay = meetingEnd + 1;
+            }
         }
 
-        return days - occupiedDays;
+        // Remaining interval is free
+        return freeDays + (endDay - startDay + 1);
     }
 }
