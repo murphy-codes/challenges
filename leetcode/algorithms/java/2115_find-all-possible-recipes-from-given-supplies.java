@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-21
 // At the time of submission:
-//   Runtime 67 ms Beats 40.77%
-//   Memory 47.47 MB Beats 7.63%
+//   Runtime 35 ms Beats 71.55%
+//   Memory 46.62 MB Beats 67.74%
 
 /****************************************
 * 
@@ -50,72 +50,56 @@
 * 
 ****************************************/
 
-import java.util.List;
-import java.util.Queue;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 class Solution {
-    // Uses topological sorting (BFS) to determine which recipes can be made.
-    // Builds an adjacency list mapping ingredients to dependent recipes.
-    // Tracks the in-degree (remaining required ingredients) for each recipe.
-    // Processes available supplies in a queue, reducing in-degree for recipes.
-    // When a recipe's in-degree reaches 0, it is added to the queue & result.
-    // Time Complexity: O(N + M), where N = recipes, M = total ingredients.
-    // Space Complexity: O(N + M) for graph storage and tracking in-degree.
     public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
-        // Adjacency List: ingredient -> list of recipes that depend on it
-        Map<String, List<String>> graph = new HashMap<>();
-        // In-degree map: recipe -> number of remaining needed ingredients
-        Map<String, Integer> inDegree = new HashMap<>();
-        // Set of all supplies for quick lookup
-        Set<String> available = new HashSet<>();
-        
-        // Initialize available supplies
-        for (String supply : supplies) {
-            available.add(supply);
-        }
+        Set<String> available = new HashSet<>(Arrays.asList(supplies));
+        Map<String, List<String>> dependencyGraph = new HashMap<>();
+        Map<String, Integer> recipeInDegree = new HashMap<>();
 
-        // Build graph and in-degree map
+        // Build the graph: ingredient -> recipes that depend on it
         for (int i = 0; i < recipes.length; i++) {
             String recipe = recipes[i];
-            inDegree.put(recipe, ingredients.get(i).size()); // Count needed ingredients
-
             for (String ingredient : ingredients.get(i)) {
-                graph.putIfAbsent(ingredient, new ArrayList<>());
-                graph.get(ingredient).add(recipe);
+                if (!available.contains(ingredient)) {
+                    dependencyGraph.computeIfAbsent(ingredient, k -> new ArrayList<>()).add(recipe);
+                    recipeInDegree.put(recipe, recipeInDegree.getOrDefault(recipe, 0) + 1);
+                }
             }
         }
 
-        // BFS Queue: Start with all initially available supplies
-        Queue<String> queue = new LinkedList<>(available);
-        List<String> result = new ArrayList<>();
-
-        while (!queue.isEmpty()) {
-            String ingredient = queue.poll();
-
-            // If this ingredient is a recipe we can make, add to result
-            if (inDegree.containsKey(ingredient)) {
-                result.add(ingredient);
+        // Recipes with no unknown ingredients can be made immediately
+        Deque<String> queue = new ArrayDeque<>();
+        for (String recipe : recipes) {
+            if (!recipeInDegree.containsKey(recipe)) {
+                queue.offer(recipe);
             }
+        }
 
-            // Process all recipes that depend on this ingredient
-            if (graph.containsKey(ingredient)) {
-                for (String recipe : graph.get(ingredient)) {
-                    inDegree.put(recipe, inDegree.get(recipe) - 1);
+        List<String> possibleRecipes = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+            possibleRecipes.add(current);
 
-                    // If all ingredients are now available, we can make this recipe
-                    if (inDegree.get(recipe) == 0) {
-                        queue.offer(recipe);
+            List<String> dependents = dependencyGraph.get(current);
+            if (dependents != null) {
+                for (String dependent : dependents) {
+                    recipeInDegree.merge(dependent, -1, Integer::sum);
+                    if (recipeInDegree.get(dependent) == 0) {
+                        queue.offer(dependent);
                     }
                 }
             }
         }
 
-        return result;
+        return possibleRecipes;
     }
 }
