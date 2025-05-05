@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/count-days-without-meetings/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-23
+// At the time of submission:
+//   Runtime 39 ms Beats 64.02%
+//   Memory 100.56 MB Beats 44.05%
 
 /****************************************
 * 
