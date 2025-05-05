@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/apply-operations-to-maximize-score/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-29
+// At the time of submission:
+//   Runtime 495 ms Beats 5.00%
+//   Memory 64.88 MB Beats 15.19%
 
 /****************************************
 * 
