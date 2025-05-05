@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-29
 // At the time of submission:
-//   Runtime 495 ms Beats 5.00%
-//   Memory 64.88 MB Beats 15.19%
+//   Runtime 28 ms Beats 99.99%
+//   Memory 60.23 MB Beats 74.21%
 
 /****************************************
 * 
@@ -45,81 +45,94 @@
 * 
 ****************************************/
 
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
-
 class Solution {
-    // This solution computes the prime score for each element in the input array nums
-    // using the Sieve of Eratosthenes to find primes up to the maximum element. 
-    // The algorithm calculates dominance subarrays via a monotonic stack and sorts 
-    // the elements by value in descending order. Binary exponentiation is then 
-    // used to compute the final score. Time complexity is O(n × (logm + logn) + m log log m), 
-    // and space complexity is O(max(n, m)), where m is the maximum element in nums.
+    // This solution calculates a maximum product score using contribution counts  
+    // derived from a monotonic stack and a prime score-based sorting strategy.  
+    // It leverages dense remapping of unique numbers for efficiency and handles  
+    // both full and partial subarray score accumulation. Time: O(n log n), Space: O(n).
+    private static final int MAX = 100001;
+    private static final int[] primeScores = computePrimeScores();
     private static final int MOD = 1_000_000_007;
-    
+
+    static int[] numberToIndex = new int[MAX];
+    static int[] indexToNumber = new int[MAX];
+
     public int maximumScore(List<Integer> nums, int k) {
         int n = nums.size();
-        int[] primeScores = computePrimeScores(100000);
-        
-        // Step 1: Compute prime score for each number
-        int[] scores = new int[n];
-        for (int i = 0; i < n; i++) {
-            scores[i] = primeScores[nums.get(i)];
+        int totalSubarrays = n * (n + 1) / 2;
+
+        int[] numArray = new int[n];
+        BitSet uniqueNumbersBitSet = new BitSet();
+
+        // Initialize the working array and mark unique numbers
+        for (int i = 0; i < n; ++i) {
+            int num = nums.get(i);
+            numArray[i] = num;
+            if (k != totalSubarrays) uniqueNumbersBitSet.set(num);
         }
 
-        // Step 2: Find the range where each element is the max prime score
-        int[] left = new int[n], right = new int[n];
-        Arrays.fill(left, -1);
-        Arrays.fill(right, n);
-        
-        Stack<Integer> stack = new Stack<>();
+        long[] contributionCounts = new long[n];
+        int[] monoStack = new int[n];
+        int top = -1;
+
+        // Monotonic stack to calculate contribution count (span) for each element
         for (int i = 0; i < n; i++) {
-            while (!stack.isEmpty() && scores[stack.peek()] < scores[i]) {
-                right[stack.pop()] = i;
+            int primeFactorScore = primeScores[numArray[i]];
+            while (top != -1 && primeScores[numArray[monoStack[top]]] < primeFactorScore) {
+                int index = monoStack[top--];
+                contributionCounts[index] *= (i - index);
             }
-            stack.push(i);
+
+            int prevIndex = (top == -1) ? -1 : monoStack[top];
+            contributionCounts[i] = i - prevIndex;
+            monoStack[++top] = i;
         }
 
-        stack.clear();
-        for (int i = n - 1; i >= 0; i--) {
-            while (!stack.isEmpty() && scores[stack.peek()] <= scores[i]) {
-                left[stack.pop()] = i;
+        // Finish calculating contribution for remaining elements
+        while (top != -1) {
+            int index = monoStack[top--];
+            contributionCounts[index] *= (n - index);
+        }
+
+        long result = 1;
+
+        // Shortcut: if k == total possible subarrays, just multiply all contributions
+        if (k == totalSubarrays) {
+            for (int i = 0; i < n; ++i) {
+                result = pow(numArray[i], contributionCounts[i], result);
             }
-            stack.push(i);
+            return (int) result;
         }
 
-        // Step 3: Add all valid subarray choices to a max-heap
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]); // max-heap
-        for (int i = 0; i < n; i++) {
-            int count = (i - left[i]) * (right[i] - i);  // total choices for this index
-            pq.add(new int[]{nums.get(i), count});
+        // Remap unique numbers to dense indices for efficient sorting
+        int uniqueIndex = 0;
+        for (int num = uniqueNumbersBitSet.nextSetBit(0); num != -1; num = uniqueNumbersBitSet.nextSetBit(num + 1)) {
+            indexToNumber[uniqueIndex] = num;
+            numberToIndex[num] = uniqueIndex++;
         }
 
-        // Step 4: Extract top k elements and compute the final score
-        long score = 1;
-        while (k > 0 && !pq.isEmpty()) {
-            int[] top = pq.poll();
-            int value = top[0], count = top[1];
-
-            int take = Math.min(k, count);
-            k -= take;
-            score = (score * fastPow(value, take, MOD)) % MOD;
+        long[] scoreCount = new long[uniqueIndex];
+        for (int i = 0; i < n; ++i) {
+            int mapIndex = numberToIndex[numArray[i]];
+            scoreCount[mapIndex] = Math.min(k, scoreCount[mapIndex] + contributionCounts[i]);
         }
 
-        if (((int) score) == 704465527) {
-            return 153096350;
+        // Iterate from largest number to smallest, greedily applying score
+        for (int i = uniqueIndex - 1; i >= 0; --i) {
+            long times = Math.min(k, scoreCount[i]);
+            result = pow(indexToNumber[i], times, result);
+            k -= times;
+            if (k == 0) return (int) result;
         }
-        return (int) score;
+
+        return (int) result;
     }
 
-    private int[] computePrimeScores(int limit) {
-        int[] scores = new int[limit + 1];
-        for (int i = 2; i <= limit; i++) {
-            if (scores[i] == 0) { // Prime number
-                for (int j = i; j <= limit; j += i) {
+    private static int[] computePrimeScores() {
+        int[] scores = new int[MAX];
+        for (int i = 2; i < MAX; i++) {
+            if (scores[i] == 0) {
+                for (int j = i; j < MAX; j += i) {
                     scores[j]++;
                 }
             }
@@ -127,11 +140,12 @@ class Solution {
         return scores;
     }
 
-    private long fastPow(long base, long exp, int mod) {
-        long result = 1;
+    // Modular exponentiation: result * base^exp % MOD
+    private long pow(long base, long exp, long result) {
         while (exp > 0) {
-            if ((exp & 1) == 1) result = (result * base) % mod;
-            base = (base * base) % mod;
+            if ((exp & 1) == 1)
+                result = (result * base) % MOD;
+            base = (base * base) % MOD;
             exp >>= 1;
         }
         return result;
