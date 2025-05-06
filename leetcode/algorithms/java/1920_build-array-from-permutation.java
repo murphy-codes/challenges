@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-05
 // At the time of submission:
-//   Runtime 1 ms Beats 98.72%
-//   Memory 45.36 MB Beats 63.62%
+//   Runtime 2 ms Beats 7.30%
+//   Memory 45.55 MB Beats 27.48%
 
 /****************************************
 * 
@@ -39,16 +39,24 @@
 ****************************************/
 
 class Solution {
-    // Build a new array where each element at index i is set to nums[nums[i]].
-    // Since nums is a valid permutation (distinct values from 0 to n-1),
-    // all indices are within bounds. This uses O(n) time and O(n) space.
-    // Time Complexity: O(n) — one pass through the array.
-    // Space Complexity: O(n) — for the output array `ans`.
+    // Encode the new value nums[nums[i]] at index i without using extra space.
+    // We do this by storing both the current and new value in a single integer:
+    // nums[i] = old_value + (new_value % n) * n.
+    // In the second pass, we retrieve the new value using nums[i] / n.
+    // Time Complexity: O(n), Space Complexity: O(1) (in-place modification).
     public int[] buildArray(int[] nums) {
-        int[] ans = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            ans[i]=nums[nums[i]];
+        int n = nums.length;
+
+        // Encode new values into the existing array
+        for (int i = 0; i < n; i++) {
+            nums[i] += (nums[nums[i]] % n) * n;
         }
-        return ans;
+
+        // Decode to get the final result
+        for (int i = 0; i < n; i++) {
+            nums[i] /= n;
+        }
+
+        return nums;
     }
 }
