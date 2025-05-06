@@ -3,7 +3,7 @@
 // Date: 2025-05-05
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 45.39 MB Beats 63.62%
+//   Memory 45.15 MB Beats 91.98%
 
 /****************************************
 * 
@@ -39,16 +39,22 @@
 ****************************************/
 
 class Solution {
+    // This approach uses recursion to safely transform nums[i] = nums[nums[i]]
+    // by delaying the write operation until after the recursive call. This
+    // guarantees that all values nums[*] are accessed while still unmodified.
+    // It avoids allocating a new array (in-place transformation), but recursion
+    // adds O(n) call stack space.
     public int[] buildArray(int[] nums) {
-        apermutation(nums,0);
+        transformInPlace(nums,0);
         return nums;
     }
-    void apermutation(int[] nums, int start){
-        if(start<nums.length){
-            int temp = nums[start];
-            int result = nums[temp];
-            apermutation(nums,start+1);
-            nums[start]=result;
+    // Recursively build the result array in-place using postorder traversal
+    void transformInPlace(int[] nums, int index){
+        if(index<nums.length){
+            int currentValue = nums[index]; // Store the current value before the array gets modified
+            int result = nums[currentValue]; // Lookup nums[nums[i]], before recursion mutates
+            transformInPlace(nums,index+1); // Recursively transform the next index first
+            nums[index]=result;
         }
     }
 }
