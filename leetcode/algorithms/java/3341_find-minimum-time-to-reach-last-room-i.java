@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-06
 // At the time of submission:
-//   Runtime 152 ms Beats 5.61%
-//   Memory 44.49 MB Beats 93.77%
+//   Runtime 6 ms Beats 98.75%
+//   Memory 45.02 MB Beats 53.27%
 
 /****************************************
 * 
@@ -45,60 +45,71 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.PriorityQueue;
 
-public class Solution {
-    // Uses Dijkstra's algorithm to find the shortest time from (0,0)
-    // to (n-1,m-1) in a grid where each cell enforces an earliest
-    // entry time. Movement to a neighbor takes 1s and must satisfy
-    // that the destination cell's moveTime is met or exceeded.
-    // Time complexity: O(n * m * log(n * m)), Space: O(n * m)
+class Solution {
+    // This solution uses Dijkstra's algorithm to find the earliest time to
+    // reach the bottom-right cell. Each cell tracks its minimum entry time.
+    // A priority queue ensures we always process the next soonest cell.
+    // The neighbor traversal is inlined for performance. The time complexity
+    // is O(m * n * log(m * n)) and space complexity is O(m * n), where m and n
+    // are the number of rows and columns in the grid.
 
-    private static final int INF = Integer.MAX_VALUE;
-
-    public int minTimeToReach(int[][] moveTime) {
-        int n = moveTime.length, m = moveTime[0].length;
-        int[][] dist = new int[n][m];
-        for (int[] row : dist) Arrays.fill(row, INF);
-
-        // Min-heap to prioritize cells with the shortest arrival time
-        PriorityQueue<Cell> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.time));
-        dist[0][0] = 0;
-        pq.offer(new Cell(0, 0, 0));
-
-        int[][] directions = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
-
-        while (!pq.isEmpty()) {
-            Cell cur = pq.poll();
-            int r = cur.row, c = cur.col, time = cur.time;
-
-            if (r == n - 1 && c == m - 1) return time;
-
-            if (time > dist[r][c]) continue; // Skip if already found better path
-
-            for (int[] dir : directions) {
-                int nr = r + dir[0], nc = c + dir[1];
-                if (nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
-
-                int arrival = Math.max(time, moveTime[nr][nc]) + 1;
-                if (arrival < dist[nr][nc]) {
-                    dist[nr][nc] = arrival;
-                    pq.offer(new Cell(nr, nc, arrival));
-                }
-            }
-        }
-
-        return -1; // Destination unreachable
-    }
-
-    private static class Cell {
+    private static class Cell implements Comparable<Cell> {
         int row, col, time;
         Cell(int row, int col, int time) {
             this.row = row;
             this.col = col;
             this.time = time;
+        }
+        @Override
+        public int compareTo(Cell other) {
+            return this.time - other.time;
+        }
+    }
+
+    public int minTimeToReach(int[][] moveTime) {
+        int rows = moveTime.length, cols = moveTime[0].length;
+
+        // Tracks the earliest time to reach each cell
+        int[][] minTime = new int[rows][cols];
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                minTime[i][j] = Integer.MAX_VALUE;
+
+        PriorityQueue<Cell> pq = new PriorityQueue<>();
+        pq.offer(new Cell(0, 0, 0));
+        minTime[0][0] = 0;
+
+        while (!pq.isEmpty()) {
+            Cell current = pq.poll();
+            int r = current.row, c = current.col, time = current.time;
+
+            if (r == rows - 1 && c == cols - 1)
+                return time;
+
+            // Skip outdated entries
+            if (time > minTime[r][c]) continue;
+
+            // Inline neighbor traversal for performance
+            if (r > 0) tryMove(r - 1, c, time, moveTime, minTime, pq);
+            if (c > 0) tryMove(r, c - 1, time, moveTime, minTime, pq);
+            if (r + 1 < rows) tryMove(r + 1, c, time, moveTime, minTime, pq);
+            if (c + 1 < cols) tryMove(r, c + 1, time, moveTime, minTime, pq);
+        }
+
+        return -1; // Unreachable (shouldn't happen per problem description)
+    }
+
+    private void tryMove(int r, int c, int currTime,
+                         int[][] moveTime, int[][] minTime,
+                         PriorityQueue<Cell> pq) {
+        int open = moveTime[r][c];
+        int nextTime = Math.max(currTime, open) + 1;
+
+        if (nextTime < minTime[r][c]) {
+            minTime[r][c] = nextTime;
+            pq.offer(new Cell(r, c, nextTime));
         }
     }
 }
