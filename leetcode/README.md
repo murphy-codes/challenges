@@ -10,6 +10,7 @@ LeetCode
 |3392|[Count Subarrays of Length Three With a Condition](https://leetcode.com/problems/count-subarrays-of-length-three-with-a-condition/)|[Java](./algorithms/java/3392_count-subarrays-of-length-three-with-a-condition.java)|Easy|
 |3375|[Minimum Operations to Make Array Values Equal to K](https://leetcode.com/problems/minimum-operations-to-make-array-values-equal-to-k/)|[Java](./algorithms/java/3375_minimum-operations-to-make-array-values-equal-to-k.java)|Easy|
 |3356|[Zero Array Transformation II](https://leetcode.com/problems/zero-array-transformation-ii/)|[Java](./algorithms/java/3356_zero-array-transformation-ii.java)|Medium|
+|3341|[Find Minimum Time to Reach Last Room I](https://leetcode.com/problems/find-minimum-time-to-reach-last-room-i/)|[Java](./algorithms/java/3341_find-minimum-time-to-reach-last-room-i.java)|Medium|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
 |3272|[Find the Count of Good Integers](https://leetcode.com/problems/find-the-count-of-good-integers/)|[Java](./algorithms/java/3272_find-the-count-of-good-integers.java)|Hard|
 |3223|[Minimum Length of String After Operations](https://leetcode.com/problems/minimum-length-of-string-after-operations/)|[Java](./algorithms/java/3223_minimum-length-of-string-after-operations.java)|Medium|
