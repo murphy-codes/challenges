@@ -101,6 +101,8 @@ LeetCode
 |1749|[Maximum Absolute Sum of Any Subarray](https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/)|[Java](./algorithms/java/1749_maximum-absolute-sum-of-any-subarray.java)|Medium|
 |1726|[Course Schedule IV](https://leetcode.com/problems/tuple-with-same-product/)|[Java](./algorithms/java/1726_tuple-with-same-product.java)|Medium|
 |1718|[Construct the Lexicographically Largest Valid Sequence](https://leetcode.com/problems/construct-the-lexicographically-largest-valid-sequence/)|[Java](./algorithms/java/1718_construct-the-lexicographically-largest-valid-sequence.java)|Medium|
+|1550|[Three Consecutive Odds](https://leetcode.com/problems/three-consecutive-odds/)|[Java](./algorithms/java/1550_three-consecutive-odds.java)|Easy|
+|1534|[Count Good Triplets](https://leetcode.com/problems/count-good-triplets/)|[Java](./algorithms/java/1534_count-good-triplets.java)|Easy|
 |1524|[Number of Sub-arrays With Odd Sum](https://leetcode.com/problems/number-of-sub-arrays-with-odd-sum/)|[Java](./algorithms/java/1524_number-of-sub-arrays-with-odd-sum.java)|Medium|
 |1462|[Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)|[Java](./algorithms/java/1462_course-schedule-iv.java)|Medium|
 |1422|[Maximum Score After Splitting a String](https://leetcode.com/problems/maximum-score-after-splitting-a-string/)|[Java](./algorithms/java/1422_maximum-score-after-splitting-a-string.java)|Easy|
