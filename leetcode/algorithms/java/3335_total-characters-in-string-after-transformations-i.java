@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-12
 // At the time of submission:
-//   Runtime 123 ms Beats 56.96%
-//   Memory 62.70 MB Beats 15.19%
+//   Runtime 11 ms Beats 100.00%
+//   Memory 45.32 MB Beats 91.14%
 
 /****************************************
 * 
@@ -56,40 +56,49 @@
 ****************************************/
 
 class Solution {
-    // Use dynamic programming to track the length of each character
-    // after t transformations, avoiding repeated computation.
-    // 'z' expands to "ab" → adds 2 characters, others move forward
-    // Precompute dp[char][t] for all 26 letters and sum the result
-    // Total time: O(n + 26*t), space: O(26*t)
-    
-    private static final int MOD = 1_000_000_007;
-
+    // Simulate t character transformations by tracking 26 character counts.
+    // Each full 26-step cycle is processed in O(26) time via count shifting.
+    // 'z' transforms into "ab", growing the total count and updating counts.
+    // Avoids string mutation, using a fixed-size array for performance.
+    // Time: O(t), Space: O(1), since array size is constant (26 letters).
     public int lengthAfterTransformations(String s, int t) {
-        // dp[i][j] = number of characters after j transformations on char (char)('a' + i)
-        int[][] dp = new int[26][t + 1];
+        final int MOD = 1_000_000_007;
+        long[] charCounts = new long[26]; // Tracks how many times each letter appears
 
-        // Base case: 0 transformations → length is 1
-        for (int i = 0; i < 26; i++) {
-            dp[i][0] = 1;
-        }
-
-        // Fill dp table
-        for (int j = 1; j <= t; j++) {
-            for (int i = 0; i < 26; i++) {
-                if (i == 25) { // 'z'
-                    dp[i][j] = (dp[0][j - 1] + dp[1][j - 1]) % MOD; // "ab"
-                } else {
-                    dp[i][j] = dp[i + 1][j - 1]; // next character
-                }
-            }
-        }
-
-        // Sum up transformed lengths for each character in the string
-        int result = 0;
+        // Step 1: Count initial frequencies of characters
         for (char c : s.toCharArray()) {
-            result = (result + dp[c - 'a'][t]) % MOD;
+            charCounts[c - 'a']++;
         }
 
-        return result;
+        // Step 2: Apply full cycles of 26 transformations
+        while (t >= 26) {
+            long zCount = charCounts[25]; // Number of 'z' characters
+
+            // Shift counts forward by one character
+            for (int i = 25; i > 0; i--) {
+                charCounts[i] = (charCounts[i] + charCounts[i - 1]) % MOD;
+            }
+
+            // Apply 'z' → "ab"
+            charCounts[0] = (charCounts[0] + zCount) % MOD;
+            charCounts[1] = (charCounts[1] + zCount) % MOD;
+
+            t -= 26;
+        }
+
+        // Step 3: Calculate result length
+        long totalLength = 0;
+
+        // Base contribution: all characters count once
+        for (int i = 0; i < 26; i++) {
+            totalLength = (totalLength + charCounts[i]) % MOD;
+        }
+
+        // Additional contribution: characters in range [26 - t, 25] transform again
+        for (int i = 26 - t; i < 26; i++) {
+            totalLength = (totalLength + charCounts[i]) % MOD;
+        }
+
+        return (int) totalLength;
     }
 }
