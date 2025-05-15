@@ -33,6 +33,7 @@ LeetCode
 |2962|[Count Subarrays Where Max Element Appears at Least K Times](https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/)|[Java](./algorithms/java/2962_count-subarrays-where-max-element-appears-at-least-k-times.java)|Medium|
 |2948|[Make Lexicographically Smallest Array by Swapping Elements](https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/)|[Java](./algorithms/java/2948_make-lexicographically-smallest-array-by-swapping-elements.java)|Medium|
 |2918|[Minimum Equal Sum of Two Arrays After Replacing Zeros](https://leetcode.com/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/)|[Java](./algorithms/java/2918_minimum-equal-sum-of-two-arrays-after-replacing-zeros.java)|Medium|
+|2900|[Longest Unequal Adjacent Groups Subsequence I](https://leetcode.com/problems/longest-unequal-adjacent-groups-subsequence-i/)|[Java](./algorithms/java/2900_longest-unequal-adjacent-groups-subsequence-i.java)|Easy|
 |2874|[Maximum Value of an Ordered Triplet II](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/)|[Java](./algorithms/java/2874_maximum-value-of-an-ordered-triplet-ii.java)|Medium|
 |2873|[Maximum Value of an Ordered Triplet I](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-i/)|[Java](./algorithms/java/2873_maximum-value-of-an-ordered-triplet-i.java)|Easy|
 |2845|[Count of Interesting Subarrays](https://leetcode.com/problems/count-of-interesting-subarrays/)|[Java](./algorithms/java/2845_count-of-interesting-subarrays.java)|Medium|
