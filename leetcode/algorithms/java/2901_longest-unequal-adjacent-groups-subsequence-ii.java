@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-15
 // At the time of submission:
-//   Runtime 41 ms Beats 82.93%
-//   Memory 45.12 MB Beats 36.59%
+//   Runtime 15 ms Beats 97.56%
+//   Memory 47.45 MB Beats 17.07%
 
 /****************************************
 * 
@@ -55,58 +55,74 @@
 ****************************************/
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class Solution {
-    // Time Complexity: O(n^2 * l), where n = words.length, l = max word length
-    // For each pair (i, j), we check equal length, group mismatch, and Hamming dist
-    // Space Complexity: O(n) for dp and prev arrays to reconstruct the result
-    // Efficient for n <= 1000 and word length <= 10, as guaranteed by constraints
-    // This uses dynamic programming to find the longest valid subsequence
-
+    // Builds the longest subsequence of words such that:
+    //   - Each word differs from the next by exactly one character (Hamming dist = 1)
+    //   - Adjacent words have different group values
+    // Uses bitmask encoding (5 bits per char) to efficiently compare Hamming-1 words
+    // Time complexity: O(n * L) where L is max word length (<=10)
+    // Space complexity: O(n * L) due to map and dp arrays
     public List<String> getWordsInLongestSubsequence(String[] words, int[] groups) {
         int n = words.length;
-        int[] dp = new int[n];        // dp[i] = length of longest valid subsequence ending at i
-        int[] prev = new int[n];      // prev[i] = previous index in the subsequence
-        for (int i = 0; i < n; i++) {
-            dp[i] = 1;     // Minimum subsequence is the word itself
-            prev[i] = -1;  // Initialize with no previous
-            for (int j = 0; j < i; j++) {
-                if (groups[i] != groups[j] &&
-                    words[i].length() == words[j].length() &&
-                    hammingDistance(words[i], words[j]) == 1) {
-                    if (dp[j] + 1 > dp[i]) {
-                        dp[i] = dp[j] + 1;
-                        prev[i] = j;
+
+        // Map from bitmask with one bit flipped to list of indices
+        Map<Long, List<Integer>> bitmaskToIndices = new HashMap<>();
+
+        int[] nextIndex = new int[n];   // To reconstruct the path
+        int[] dp = new int[n];          // dp[i] = length of longest valid subsequence starting at i
+        Arrays.fill(nextIndex, n);      // n means end of subsequence
+
+        int maxStartIdx = 0;
+
+        // Traverse from end to beginning to build valid subsequences
+        for (int i = n - 1; i >= 0; i--) {
+            String word = words[i];
+            int len = word.length();
+            long fullMask = 0L;
+
+            // Store bitmasks for each character position
+            long[] charMasks = new long[len];
+            for (int j = 0; j < len; j++) {
+                // Use 5 bits per character: (a = 1, b = 2, ..., z = 26)
+                charMasks[j] = (long)(word.charAt(j) - 'a' + 1) << (5 * j);
+                fullMask |= charMasks[j];
+            }
+
+            int maxLen = 1;
+            for (int j = 0; j < len; j++) {
+                // Flip the j-th character to create a Hamming-1 mask
+                long hammingMask = fullMask ^ charMasks[j];
+                List<Integer> candidates = bitmaskToIndices.getOrDefault(hammingMask, new ArrayList<>());
+
+                for (int idx : candidates) {
+                    if (groups[i] == groups[idx]) continue; // Must have different group
+                    if (dp[idx] + 1 > maxLen) {
+                        maxLen = dp[idx] + 1;
+                        nextIndex[i] = idx;
                     }
                 }
+
+                // Store current index for future matching
+                bitmaskToIndices.computeIfAbsent(hammingMask, k -> new ArrayList<>()).add(i);
+            }
+
+            dp[i] = maxLen;
+            if (dp[i] > dp[maxStartIdx]) {
+                maxStartIdx = i;
             }
         }
 
-        // Find index of maximum dp[i]
-        int maxIndex = 0;
-        for (int i = 1; i < n; i++) {
-            if (dp[i] > dp[maxIndex]) {
-                maxIndex = i;
-            }
-        }
-
-        // Reconstruct the sequence
+        // Reconstruct result path
         List<String> result = new ArrayList<>();
-        while (maxIndex != -1) {
-            result.add(0, words[maxIndex]);  // prepend to result
-            maxIndex = prev[maxIndex];
+        for (int i = maxStartIdx; i < n; i = nextIndex[i]) {
+            result.add(words[i]);
         }
 
         return result;
-    }
-
-    private int hammingDistance(String a, String b) {
-        int count = 0;
-        for (int i = 0; i < a.length(); i++) {
-            if (a.charAt(i) != b.charAt(i)) count++;
-            if (count > 1) return count; // Early exit
-        }
-        return count;
     }
 }
