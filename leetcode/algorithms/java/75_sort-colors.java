@@ -3,7 +3,7 @@
 // Date: 2025-05-16
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 41.87 MB Beats 81.46%
+//   Memory 42.19 MB Beats 30.03%
 
 /****************************************
 * 
@@ -32,30 +32,28 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Count the number of 0s, 1s, and 2s in a first pass (O(n))
-    // Then overwrite the input array in order using these counts (O(n))
-    // Time complexity: O(n); Space complexity: O(1) extra space
-    // This is a two-pass, constant-space solution;
+    // One-pass in-place sorting using Dutch National Flag algorithm
+    // low: boundary for 0s; mid: current element; high: boundary for 2s
+    // Time complexity: O(n); Space complexity: O(1)
+    // Guarantees in-place sorting with a single scan of the array
     public void sortColors(int[] nums) {
-        int[] colors = new int[3];
-        for (int c : nums) {
-            colors[c]+=1;
+        int low = 0, mid = 0, high = nums.length - 1;
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                swap(nums, low++, mid++);
+            } else if (nums[mid] == 1) {
+                mid++;
+            } else { // nums[mid] == 2
+                swap(nums, mid, high--);
+            }
         }
-        int i = 0;
-        while (i < colors[0]) {
-            nums[i] = 0;
-            i++;
-        }
-        while (i < (colors[0] + colors[1])) {
-            nums[i] = 1;
-            i++;
-        }
-        while (i < nums.length) {
-            nums[i] = 2;
-            i++;
-        }
+    }
+
+    // Helper method to swap two elements in the array
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
