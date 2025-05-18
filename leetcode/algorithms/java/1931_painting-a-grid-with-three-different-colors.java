@@ -53,6 +53,7 @@ class Solution {
     private static final int MOD = 1_000_000_007;
 
     public int colorTheGrid(int m, int n) {
+        if (m == 1) return (int)(3L * fastPow(2, n - 1, MOD) % MOD); 
         List<int[]> patterns = new ArrayList<>();
         generatePatterns(m, 0, new int[m], patterns);
 
@@ -104,5 +105,18 @@ class Solution {
             if (a[i] == b[i]) return false;
         }
         return true;
+    }
+
+    private int fastPow(int base, int exp, int mod) {
+        long result = 1;
+        long b = base;
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                result = (result * b) % mod;
+            }
+            b = (b * b) % mod;
+            exp >>= 1;
+        }
+        return (int) result;
     }
 }
