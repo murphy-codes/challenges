@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-18
 // At the time of submission:
-//   Runtime 35 ms Beats 81.71%
-//   Memory 44.82 MB Beats 30.49%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 40.30 MB Beats 100.00%
 
 /****************************************
 * 
@@ -38,85 +38,93 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 class Solution {
-    // Dynamic programming over columns, with vertical coloring patterns
-    // Precompute all valid vertical patterns (no adjacent same colors)
-    // Build a transition graph for pattern-to-pattern compatibility
-    // For each column, update dp based on compatible prior patterns
-    // Time: O(n * P^2), Space: O(P); where P ≈ 243 valid patterns (m ≤ 5)
+    // This solution uses matrix exponentiation to solve the coloring problem
+    // for fixed m values up to 5 by precomputing valid transitions.
+    // Each transition matrix represents how states can follow one another.
+    // Time complexity: O(k³ log n), where k = # of valid states for given m.
+    // Space complexity: O(k²), since we store and multiply square matrices.
 
-    private static final int MOD = 1_000_000_007;
+    static final int MOD = (int) 1e9 + 7;
+
+    // Precomputed transition matrices for m = 1 to 5
+    static final long[][][] TRANSITION_MATRICES = {
+        { { 2 } },  // m = 1
+        { { 3 } },  // m = 2
+        { { 3, 2 }, { 2, 2 } }, // m = 3
+        {
+            { 3, 2, 1, 2 },
+            { 2, 2, 1, 2 },
+            { 1, 1, 2, 1 },
+            { 2, 2, 1, 2 },
+        }, // m = 4
+        {
+            { 3, 2, 2, 1, 0, 1, 2, 2 },
+            { 2, 2, 2, 1, 1, 1, 1, 1 },
+            { 2, 2, 2, 1, 0, 1, 2, 2 },
+            { 1, 1, 1, 2, 1, 1, 1, 1 },
+            { 0, 1, 0, 1, 2, 1, 0, 1 },
+            { 1, 1, 1, 1, 1, 2, 1, 1 },
+            { 2, 1, 2, 1, 0, 1, 2, 1 },
+            { 2, 1, 2, 1, 1, 1, 1, 2 },
+        }, // m = 5
+    };
 
     public int colorTheGrid(int m, int n) {
-        if (m == 1) return (int)(3L * fastPow(2, n - 1, MOD) % MOD); 
-        List<int[]> patterns = new ArrayList<>();
-        generatePatterns(m, 0, new int[m], patterns);
+        int stateCount = m == 1 ? 1 : (int) Math.pow(2, m - 2);
 
-        Map<Integer, List<Integer>> transitions = new HashMap<>();
-        for (int i = 0; i < patterns.size(); i++) {
-            transitions.put(i, new ArrayList<>());
-            for (int j = 0; j < patterns.size(); j++) {
-                if (isCompatible(patterns.get(i), patterns.get(j))) {
-                    transitions.get(i).add(j);
+        // Initialize the DP vector (column 0)
+        long[][] dpVector = new long[stateCount][1];
+        for (long[] row : dpVector) {
+            row[0] = m == 1 ? 3 : 6;
+        }
+
+        long[][] transitionMatrix = TRANSITION_MATRICES[m - 1];
+
+        // Multiply the transition matrix (n - 1) times using matrix exponentiation
+        dpVector = multiply(
+            matrixPower(transitionMatrix, n - 1, MOD),
+            dpVector,
+            MOD
+        );
+
+        // Sum the values in the resulting DP vector
+        long totalWays = 0;
+        for (long[] row : dpVector) {
+            totalWays = (totalWays + row[0]) % MOD;
+        }
+
+        return (int) totalWays;
+    }
+
+    // Matrix multiplication (modular)
+    private long[][] multiply(long[][] a, long[][] b, long mod) {
+        int rows = a.length, cols = b[0].length, inner = b.length;
+        long[][] product = new long[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                for (int k = 0; k < inner; k++) {
+                    product[i][j] = (product[i][j] + a[i][k] * b[k][j] % mod) % mod;
                 }
             }
         }
+        return product;
+    }
 
-        int P = patterns.size();
-        int[] dp = new int[P];
-        for (int i = 0; i < P; i++) dp[i] = 1;
+    // Matrix exponentiation by squaring
+    private long[][] matrixPower(long[][] matrix, long exponent, long mod) {
+        int size = matrix.length;
+        long[][] result = new long[size][size];
+        for (int i = 0; i < size; i++) result[i][i] = 1; // Identity matrix
 
-        for (int col = 1; col < n; col++) {
-            int[] newDp = new int[P];
-            for (int i = 0; i < P; i++) {
-                for (int j : transitions.get(i)) {
-                    newDp[i] = (newDp[i] + dp[j]) % MOD;
-                }
+        while (exponent > 0) {
+            if ((exponent & 1) != 0) {
+                result = multiply(result, matrix, mod);
             }
-            dp = newDp;
+            matrix = multiply(matrix, matrix, mod);
+            exponent >>= 1;
         }
-
-        int total = 0;
-        for (int val : dp) {
-            total = (total + val) % MOD;
-        }
-        return total;
-    }
-
-    private void generatePatterns(int m, int pos, int[] current, List<int[]> patterns) {
-        if (pos == m) {
-            patterns.add(current.clone());
-            return;
-        }
-        for (int color = 0; color < 3; color++) {
-            if (pos > 0 && current[pos - 1] == color) continue;
-            current[pos] = color;
-            generatePatterns(m, pos + 1, current, patterns);
-        }
-    }
-
-    private boolean isCompatible(int[] a, int[] b) {
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] == b[i]) return false;
-        }
-        return true;
-    }
-
-    private int fastPow(int base, int exp, int mod) {
-        long result = 1;
-        long b = base;
-        while (exp > 0) {
-            if ((exp & 1) == 1) {
-                result = (result * b) % mod;
-            }
-            b = (b * b) % mod;
-            exp >>= 1;
-        }
-        return (int) result;
+        return result;
     }
 }
