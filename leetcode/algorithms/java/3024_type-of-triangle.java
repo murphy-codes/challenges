@@ -3,7 +3,7 @@
 // Date: 2025-05-18
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 42.15 MB Beats 43.93%
+//   Memory 41.78 MB Beats 95.86%
 
 /****************************************
 * 
@@ -37,16 +37,17 @@
 ****************************************/
 
 class Solution {
-    // First, check if the sides satisfy triangle inequality. If not, return "none".
-    // Then compare sides directly: all equal means equilateral, two equal is isosceles,
-    // and all distinct means scalene. No extra data structures used.
-    // Time complexity: O(1), fixed comparisons on 3 elements.
-    // Space complexity: O(1), no additional memory allocated.
+    // Check triangle inequality to determine if a valid triangle can be formed.
+    // If valid, compare side lengths directly to classify the triangle type:
+    // all equal (equilateral), two equal (isosceles), else diff' (scalene).
+    // Time complexity: O(1), constant-time checks on 3 fixed elements.
+    // Space complexity: O(1), no extra memory allocated beyond input array.
     public String triangleType(int[] nums) {
-        int a = nums[0], b = nums[1], c = nums[2];
-        if (a + b <= c || a + c <= b || b + c <= a) return "none";
-        if (a == b && b == c) return "equilateral";
-        if (a == b || b == c || a == c) return "isosceles";
-        return "scalene";
+        if (nums[0]+nums[1]<=nums[2] || nums[0]+nums[2]<=nums[1] || nums[1]+nums[2]<=nums[0]) return "none";
+        else {
+            if(nums[0]==nums[1] && nums[1]==nums[2]) return "equilateral";
+            else if(nums[0]==nums[1] || nums[1]==nums[2] || nums[2]==nums[0]) return "isosceles";
+            else return "scalene";
+        }
     }
 }
