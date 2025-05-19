@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-18
 // At the time of submission:
-//   Runtime 1 ms Beats 34.56%
-//   Memory 42.71 MB Beats 6.80%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 42.15 MB Beats 43.93%
 
 /****************************************
 * 
@@ -36,29 +36,17 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // Check triangle inequality first; return "none" if invalid triangle.
-    // Use a HashSet to count distinct side lengths. If all three are distinct,
-    // it's scalene. If two are equal, it's isosceles. If all are equal, equilateral.
-    // Time complexity: O(1), since the array is always size 3.
-    // Space complexity: O(1), using at most 3 entries in the HashSet.
+    // First, check if the sides satisfy triangle inequality. If not, return "none".
+    // Then compare sides directly: all equal means equilateral, two equal is isosceles,
+    // and all distinct means scalene. No extra data structures used.
+    // Time complexity: O(1), fixed comparisons on 3 elements.
+    // Space complexity: O(1), no additional memory allocated.
     public String triangleType(int[] nums) {
-        if (nums[0] + nums[1] <= nums[2]) return "none"; 
-        if (nums[0] + nums[2] <= nums[1]) return "none"; 
-        if (nums[1] + nums[2] <= nums[0]) return "none";
-        Set<Integer> sides = new HashSet<>();
-        sides.add(nums[0]);
-        sides.add(nums[1]);
-        sides.add(nums[2]);
-        if (sides.size() == 3) {
-            return "scalene";
-        } else if (sides.size() == 2) {
-            return "isosceles";
-        } else {
-            return "equilateral";
-        }
+        int a = nums[0], b = nums[1], c = nums[2];
+        if (a + b <= c || a + c <= b || b + c <= a) return "none";
+        if (a == b && b == c) return "equilateral";
+        if (a == b || b == c || a == c) return "isosceles";
+        return "scalene";
     }
 }
