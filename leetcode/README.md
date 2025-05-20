@@ -10,6 +10,7 @@ LeetCode
 |3392|[Count Subarrays of Length Three With a Condition](https://leetcode.com/problems/count-subarrays-of-length-three-with-a-condition/)|[Java](./algorithms/java/3392_count-subarrays-of-length-three-with-a-condition.java)|Easy|
 |3375|[Minimum Operations to Make Array Values Equal to K](https://leetcode.com/problems/minimum-operations-to-make-array-values-equal-to-k/)|[Java](./algorithms/java/3375_minimum-operations-to-make-array-values-equal-to-k.java)|Easy|
 |3356|[Zero Array Transformation II](https://leetcode.com/problems/zero-array-transformation-ii/)|[Java](./algorithms/java/3356_zero-array-transformation-ii.java)|Medium|
+|3355|[Zero Array Transformation I](https://leetcode.com/problems/zero-array-transformation-i/)|[Java](./algorithms/java/3355_zero-array-transformation-i.java)|Medium|
 |3343|[Count Number of Balanced Permutations](https://leetcode.com/problems/count-number-of-balanced-permutations/)|[Java](./algorithms/java/3343_count-number-of-balanced-permutations.java)|Hard|
 |3342|[Find Minimum Time to Reach Last Room II](https://leetcode.com/problems/find-minimum-time-to-reach-last-room-ii/)|[Java](./algorithms/java/3342_find-minimum-time-to-reach-last-room-ii.java)|Medium|
 |3341|[Find Minimum Time to Reach Last Room I](https://leetcode.com/problems/find-minimum-time-to-reach-last-room-i/)|[Java](./algorithms/java/3341_find-minimum-time-to-reach-last-room-i.java)|Medium|
