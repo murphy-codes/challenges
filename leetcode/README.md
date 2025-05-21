@@ -146,6 +146,7 @@ LeetCode
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
 |368|[Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/)|[Java](./algorithms/java/368_largest-divisible-subset.java)|Medium|
 |75|[Sort Colors](https://leetcode.com/problems/sort-colors/)|[Java](./algorithms/java/75_sort-colors.java)|Medium|
+|73|[Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)|[Java](./algorithms/java/73_set-matrix-zeroes.java)|Medium|
 |42|[Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)|[Java](./algorithms/java/42_trapping-rain-water.java)|Hard|
 |38|[Count and Say](https://leetcode.com/problems/count-and-say/)|[Java](./algorithms/java/38_count-and-say.java)|Medium|
 |7|[Zigzag Conversion](https://leetcode.com/problems/reverse-integer/)|[Java](./algorithms/java/7_reverse-integer.java)|Medium|
