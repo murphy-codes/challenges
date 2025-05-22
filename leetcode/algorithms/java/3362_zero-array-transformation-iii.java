@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-21
 // At the time of submission:
-//   Runtime 79 ms Beats 34.81%
-//   Memory 92.98 MB Beats 70.89%
+//   Runtime 18 ms Beats 98.73%
+//   Memory 110.07 MB Beats 10.76%
 
 /****************************************
 * 
@@ -49,46 +49,118 @@
 ****************************************/
 
 import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Collections;
 
 class Solution {
-    // Traverse nums left to right, applying minimum necessary queries.
-    // Use a max-heap to greedily apply the queries with largest right
-    // endpoints that cover current index. Track active operations using
-    // a difference array. Queries not used in this process are removable.
-    // Time: O(n + m * log m), Space: O(n + m)
+    // Greedy + Max-Heap + Difference Array solution.
+    // At each index, greedily apply queries with largest right-ends
+    // that cover the current index. Track active operations with a
+    // difference array. Queries not used can be safely removed.
+    // Time: O(n + m + m * log m)
+    // Space: O(n + m)
+
     public int maxRemoval(int[] nums, int[][] queries) {
-        // Sort queries by left endpoint
-        Arrays.sort(queries, (a, b) -> Integer.compare(a[0], b[0]));
+        int n = nums.length;
+        int m = queries.length;
 
-        PriorityQueue<Integer> heap = new PriorityQueue<>(Collections.reverseOrder());
-        int[] deltaArray = new int[nums.length + 1];
-        int operations = 0;
+        // Custom max-heap for ints: avoids boxing/unboxing overhead
+        IntMaxHeap maxHeap = new IntMaxHeap(m + 1);
+        maxHeap.add(-1); // Sentinel value to prevent empty-heap access
 
-        for (int i = 0, j = 0; i < nums.length; i++) {
-            operations += deltaArray[i];
+        // Preprocess: For each index i, store a list of query right-ends that start at i
+        int[][] rightEndsByStart = preprocessRightEnds(n, queries);
 
-            // Push all queries with left endpoint == i into the heap
-            while (j < queries.length && queries[j][0] == i) {
-                heap.offer(queries[j][1]);
-                j++;
+        int[] delta = new int[n + 1]; // Difference array for efficient range updates
+        int usedQueries = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (i > 0) {
+                delta[i] += delta[i - 1]; // Apply prefix sum to get actual value at index i
             }
 
-            // Add enough queries to satisfy nums[i] using largest right endpoints
-            while (operations < nums[i] && !heap.isEmpty() && heap.peek() >= i) {
-                int r = heap.poll();
-                operations += 1;
-                deltaArray[r + 1] -= 1;
+            // Add all queries starting at index i into the heap
+            for (int r : rightEndsByStart[i]) {
+                maxHeap.add(r);
             }
 
-            // Not enough operations available — nums[i] can't be reduced
-            if (operations < nums[i]) {
-                return -1;
+            // Use heap to greedily cover this index until nums[i] is satisfied
+            while (delta[i] < nums[i]) {
+                int end = maxHeap.poll();
+                if (end < i) return -1; // Cannot cover index i with any remaining queries
+                delta[i]++;
+                delta[end + 1]--; // Mark the end of the operation's effect
+                usedQueries++;
             }
         }
 
-        // Remaining queries in heap were not used — can be removed
-        return heap.size();
+        return m - usedQueries; // Number of queries that can be removed (not used)
+    }
+
+    // Groups right-end values by their left index
+    private int[][] preprocessRightEnds(int len, int[][] queries) {
+        int[] counts = new int[len];
+        for (int[] q : queries) {
+            counts[q[0]]++;
+        }
+
+        int[][] ends = new int[len][];
+        for (int i = 0; i < len; i++) {
+            ends[i] = new int[counts[i]];
+        }
+
+        // Populate the 2D array in reverse (using decrement trick)
+        for (int[] q : queries) {
+            ends[q[0]][--counts[q[0]]] = q[1];
+        }
+
+        return ends;
+    }
+
+    // Custom Max Heap for integers — avoids autoboxing overhead of PriorityQueue<Integer>
+    private static class IntMaxHeap {
+        int[] heap;
+        int size;
+
+        IntMaxHeap(int capacity) {
+            heap = new int[capacity];
+        }
+
+        void add(int val) {
+            heap[size] = val;
+            siftUp(size++);
+        }
+
+        int poll() {
+            int top = heap[0];
+            siftDown(0, heap[--size]);
+            return top;
+        }
+
+        private void siftUp(int idx) {
+            while (idx > 0) {
+                int parent = (idx - 1) / 2;
+                if (heap[idx] <= heap[parent]) break;
+                swap(idx, parent);
+                idx = parent;
+            }
+        }
+
+        private void siftDown(int idx, int val) {
+            while (true) {
+                int left = 2 * idx + 1;
+                if (left >= size) break;
+                int right = left + 1;
+                int largest = (right < size && heap[right] > heap[left]) ? right : left;
+                if (val >= heap[largest]) break;
+                heap[idx] = heap[largest];
+                idx = largest;
+            }
+            heap[idx] = val;
+        }
+
+        private void swap(int i, int j) {
+            int tmp = heap[i];
+            heap[i] = heap[j];
+            heap[j] = tmp;
+        }
     }
 }
