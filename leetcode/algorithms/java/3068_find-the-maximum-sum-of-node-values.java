@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-23
 // At the time of submission:
-//   Runtime 2 ms Beats 76.32%
-//   Memory 54.63 MB Beats 63.16%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 54.93 MB Beats 47.37%
 
 /****************************************
 * 
@@ -58,36 +58,21 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // For each node, compute gain from flipping (XOR with k).
-    // Greedily apply all flips with positive gain, track count.
-    // If number of flips is odd, remove smallest gain to make it even.
-    // This ensures the operation count is even (valid via tree edge rule).
-    // Time: O(n), Space: O(1) — efficient even for large input size.
-    public long maximumValueSum(int[] nums, int k, int[][] edges) {
-        long total = 0;
-        int minDelta = Integer.MAX_VALUE;
-        int countPositive = 0;
-
-        for (int num : nums) {
-            int flipped = num ^ k;
-            int delta = flipped - num;
-            if (delta > 0) {
-                total += flipped;
-                countPositive++;
-            } else {
-                total += num;
-            }
-            minDelta = Math.min(minDelta, Math.abs(delta));
+    // For each node, compute value with and without XORing with k.
+    // Greedily take the max of original vs flipped value for total sum.
+    // Track parity of beneficial flips and smallest delta between values.
+    // If flip count is odd, subtract smallest delta to make it even.
+    // Time: O(n), Space: O(1)
+     public long maximumValueSum(int[] nums, int k, int[][] edges) {
+        long totalSum = 0;
+        int minGainDelta = 1 << 30, flipParity = 0;
+        for (int originalValue : nums) {
+            int flippedValue = originalValue ^ k;
+            totalSum += Math.max(originalValue, flippedValue);
+            flipParity ^= originalValue < flippedValue ? 1 : 0;
+            minGainDelta = Math.min(minGainDelta, Math.abs(originalValue - flippedValue));
         }
-
-        // If count of flips is even, we’re good. Else subtract smallest gain to make it even.
-        if (countPositive % 2 == 1) {
-            total -= minDelta;
-        }
-
-        return total;
+        return totalSum - minGainDelta * flipParity;
     }
 }
