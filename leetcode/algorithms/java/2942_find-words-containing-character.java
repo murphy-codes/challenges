@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-23
 // At the time of submission:
-//   Runtime 2 ms Beats 52.59%
-//   Memory 45.12 MB Beats 24.98%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.90 MB Beats 76.79%
 
 /****************************************
 * 
@@ -34,22 +34,14 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 class Solution {
-    // For each word, check for the matching char
-    // Upon a match, add to the return list and break
+    // For each word, check for the index of the input character
     // O(n^2) time, O(n) space → viable given the constraints
     public List<Integer> findWordsContaining(String[] words, char x) {
         List<Integer> result = new ArrayList<>();
         for (int i = 0; i < words.length; i++) {
-            for (char c : words[i]) {
-                if (c == x) { // Match found
-                    result.add(i);
-                    break; // Stop here!
-                }
+            if (words[i].indexOf(x) != -1) {
+                result.add(i);
             }
         }
         return result;
