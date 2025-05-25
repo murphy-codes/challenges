@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-24
 // At the time of submission:
-//   Runtime 62 ms Beats 55.69%
-//   Memory 58.20 MB Beats 57.11%
+//   Runtime 14 ms Beats 92.28%
+//   Memory 60.50 MB Beats 20.12%
 
 /****************************************
 * 
@@ -40,45 +40,36 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
-    // Count the frequency of each 2-letter word.
-    // Pair non-palindromic words with their reverse to form mirrored sides.
-    // Pair palindromic words (like "cc") in twos, and use one odd word in center.
-    // Each valid pair contributes 4 to length; center adds 2 if available.
-    // Time: O(n), Space: O(n), where n is the number of words.
+    // Count all 2-letter word combinations using a 26x26 array.
+    // For each word, check if its reverse was seen; if so, form a 4-letter pair.
+    // Otherwise, record the word for potential future pairing.
+    // After all pairs, add 2 if any symmetric word like "aa" exists for center.
+    // Time: O(n), Space: O(1), since 26x26 array is constant-sized.
     public int longestPalindrome(String[] words) {
-        Map<String, Integer> freq = new HashMap<>();
-        for (String word : words) {
-            freq.put(word, freq.getOrDefault(word, 0) + 1);
-        }
-
+        int[][] count = new int[26][26]; // Count of 2-letter combinations
         int length = 0;
         boolean hasCenter = false;
 
-        for (String word : freq.keySet()) {
-            String reversed = new StringBuilder(word).reverse().toString();
+        for (String word : words) {
+            int i = word.charAt(0) - 'a';
+            int j = word.charAt(1) - 'a';
 
-            if (!word.equals(reversed)) {
-                if (freq.containsKey(reversed)) {
-                    int pairs = Math.min(freq.get(word), freq.get(reversed));
-                    length += pairs * 4;
-                    freq.put(word, freq.get(word) - pairs);
-                    freq.put(reversed, freq.get(reversed) - pairs);
-                }
+            if (count[j][i] > 0) {
+                // Found a reverse match (e.g., "ab" after "ba")
+                length += 4;
+                count[j][i]--;
             } else {
-                int count = freq.get(word);
-                length += (count / 2) * 4;
-                if (count % 2 == 1) {
-                    hasCenter = true;
-                }
+                count[i][j]++;
             }
         }
 
-        if (hasCenter) {
-            length += 2;
+        // Check for a center (word like "gg")
+        for (int i = 0; i < 26; i++) {
+            if (count[i][i] > 0) {
+                length += 2;
+                break; // Only one center allowed
+            }
         }
 
         return length;
