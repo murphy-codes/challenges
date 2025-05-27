@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-26
 // At the time of submission:
-//   Runtime 1 ms Beats 74.69%
-//   Memory 40.36 MB Beats 98.27%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.15 MB Beats 19.43%
 
 /****************************************
 * 
@@ -45,19 +45,17 @@
 ****************************************/
 
 class Solution {
-// Loop from 1 to n, checking if each number is divisible by m.
-    // Accumulate two sums: one for divisible numbers (num2),
-    // and one for non-divisible numbers (num1).
-    // Return the difference: (sum of non-divisible) - (sum of divisible).
-    // Time complexity: O(n), space complexity: O(1).
+    // Compute total sum from 1 to n using the formula n*(n+1)/2.
+    // Then, iterate through multiples of m up to n to get divisible sum.
+    // Subtract twice the divisible sum from the total to get the result.
+    // This avoids checking every number individually.
+    // Time complexity: O(n/m), space complexity: O(1).
     public int differenceOfSums(int n, int m) {
-        int num1 = 0, num2 = 0;
-        for(int i = 1; i < n+1; i++){
-            if(i%m == 0)
-                num2+=i;
-            else
-                num1+=i;
+        int totalSum = n * (n + 1) / 2;
+        int divisibleSum = 0;
+        for (int i = m; i <= n; i += m) {
+            divisibleSum += i;
         }
-        return num1 - num2;
+        return totalSum - 2 * divisibleSum;
     }
 }
