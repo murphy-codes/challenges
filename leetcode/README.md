@@ -39,6 +39,7 @@ LeetCode
 |2918|[Minimum Equal Sum of Two Arrays After Replacing Zeros](https://leetcode.com/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/)|[Java](./algorithms/java/2918_minimum-equal-sum-of-two-arrays-after-replacing-zeros.java)|Medium|
 |2901|[Longest Unequal Adjacent Groups Subsequence II](https://leetcode.com/problems/longest-unequal-adjacent-groups-subsequence-ii/)|[Java](./algorithms/java/2901_longest-unequal-adjacent-groups-subsequence-ii.java)|Medium|
 |2900|[Longest Unequal Adjacent Groups Subsequence I](https://leetcode.com/problems/longest-unequal-adjacent-groups-subsequence-i/)|[Java](./algorithms/java/2900_longest-unequal-adjacent-groups-subsequence-i.java)|Easy|
+|2894|[Divisible and Non-divisible Sums Difference](https://leetcode.com/problems/divisible-and-non-divisible-sums-difference/)|[Java](./algorithms/java/2894_divisible-and-non-divisible-sums-difference.java)|Easy|
 |2874|[Maximum Value of an Ordered Triplet II](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/)|[Java](./algorithms/java/2874_maximum-value-of-an-ordered-triplet-ii.java)|Medium|
 |2873|[Maximum Value of an Ordered Triplet I](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-i/)|[Java](./algorithms/java/2873_maximum-value-of-an-ordered-triplet-i.java)|Easy|
 |2845|[Count of Interesting Subarrays](https://leetcode.com/problems/count-of-interesting-subarrays/)|[Java](./algorithms/java/2845_count-of-interesting-subarrays.java)|Medium|
@@ -103,7 +104,7 @@ LeetCode
 |1920|[Build Array from Permutation](https://leetcode.com/problems/build-array-from-permutation/)|[Java](./algorithms/java/1920_build-array-from-permutation.java)|Easy|
 |1910|[Remove All Occurrences of a Substring](https://leetcode.com/problems/remove-all-occurrences-of-a-substring/)|[Java](./algorithms/java/1910_remove-all-occurrences-of-a-substring.java)|Medium|
 |1863|[Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals/)|[Java](./algorithms/java/1863_sum-of-all-subset-xor-totals.java)|Easy|
-|1857|[Largest Color Value in a Directed Graph](https://leetcode.com/problems/largest-color-value-in-a-directed-graph/)|[Java](./algorithms/java/1857_largest-color-value-in-a-directed-graph.java)|Medium|
+|1857|[Largest Color Value in a Directed Graph](https://leetcode.com/problems/largest-color-value-in-a-directed-graph/)|[Java](./algorithms/java/1857_largest-color-value-in-a-directed-graph.java)|Hard|
 |1800|[Maximum Ascending Subarray Sum](https://leetcode.com/problems/maximum-ascending-subarray-sum/)|[Java](./algorithms/java/1800_maximum-ascending-subarray-sum.java)|Easy|
 |1790|[Check if One String Swap Can Make Strings Equal](https://leetcode.com/problems/check-if-one-string-swap-can-make-strings-equal/)|[Java](./algorithms/java/1790_check-if-one-string-swap-can-make-strings-equal.java)|Easy|
 |1780|[Check if Number is a Sum of Powers of Three](https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three.java/)|[Java](./algorithms/java/1780_check-if-number-is-a-sum-of-powers-of-three.java)|Medium|
