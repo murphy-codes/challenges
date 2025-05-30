@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-05-30
 // At the time of submission:
-//   Runtime 11 ms Beats 89.90%
-//   Memory 58.20 MB Beats 79.79%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 58.96 MB Beats 76.31%
 
 /****************************************
 * 
@@ -42,52 +42,49 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-
 class Solution {
-    // Traverse from both node1 and node2, recording distances
-    // to all reachable nodes from each. Then, for each node
-    // reachable by both, compute the max of the two distances.
-    // Return the node with the smallest such max distance.
-    // Time: O(n), Space: O(n), where n is number of nodes.
+    // Traverse the graph from both node1 and node2 simultaneously, marking 
+    // visited nodes. If either traversal reaches a node already visited by 
+    // the other, it's a candidate for the closest meeting node. 
+    // Return early once a valid node is found.   
+    // Time complexity is O(n); space is O(n) for two visited arrays.
     public int closestMeetingNode(int[] edges, int node1, int node2) {
         int n = edges.length;
+        boolean[] visitedFrom1 = new boolean[n];
+        boolean[] visitedFrom2 = new boolean[n];
+        int result = Integer.MAX_VALUE;
 
-        // Distance from node1 to every reachable node
-        int[] dist1 = getDistances(edges, node1, n);
-        int[] dist2 = getDistances(edges, node2, n);
+        // Traverse from both node1 and node2 in parallel
+        while (node1 != -1 || node2 != -1) {
 
-        int result = -1;
-        int minDist = Integer.MAX_VALUE;
-
-        for (int i = 0; i < n; i++) {
-            if (dist1[i] != -1 && dist2[i] != -1) {
-                int maxDist = Math.max(dist1[i], dist2[i]);
-                if (maxDist < minDist) {
-                    minDist = maxDist;
-                    result = i;
+            // Step from node1
+            if (node1 != -1) {
+                // If node2 has already visited this node, it's a candidate
+                if (visitedFrom2[node1]) result = Math.min(result, node1);
+                // If we've already visited this node from node1, stop
+                if (visitedFrom1[node1]) node1 = -1;
+                else {
+                    visitedFrom1[node1] = true;
+                    node1 = edges[node1];
                 }
             }
+
+            // Step from node2
+            if (node2 != -1) {
+                // If node1 has already visited this node, it's a candidate
+                if (visitedFrom1[node2]) result = Math.min(result, node2);
+                // If we've already visited this node from node2, stop
+                if (visitedFrom2[node2]) node2 = -1;
+                else {
+                    visitedFrom2[node2] = true;
+                    node2 = edges[node2];
+                }
+            }
+
+            // If we found a candidate node, return immediately
+            if (result != Integer.MAX_VALUE) return result;
         }
 
-        return result;
-    }
-
-    private int[] getDistances(int[] edges, int start, int n) {
-        int[] dist = new int[n];
-        boolean[] visited = new boolean[n];
-        int curr = start;
-        int d = 0;
-
-        // Initialize distances to -1 (unreachable)
-        for (int i = 0; i < n; i++) dist[i] = -1;
-
-        while (curr != -1 && !visited[curr]) {
-            dist[curr] = d++;
-            visited[curr] = true;
-            curr = edges[curr];
-        }
-
-        return dist;
+        return -1; // No common node found
     }
 }
