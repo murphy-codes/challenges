@@ -155,6 +155,7 @@ LeetCode
 |416|[Zigzag Conversion](https://leetcode.com/problems/partition-equal-subset-sum/)|[Java](./algorithms/java/416_partition-equal-subset-sum.java)|Medium|
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
 |368|[Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/)|[Java](./algorithms/java/368_largest-divisible-subset.java)|Medium|
+|135|[Candy](https://leetcode.com/problems/candy/)|[Java](./algorithms/java/135_candy.java)|Hard|
 |75|[Sort Colors](https://leetcode.com/problems/sort-colors/)|[Java](./algorithms/java/75_sort-colors.java)|Medium|
 |73|[Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)|[Java](./algorithms/java/73_set-matrix-zeroes.java)|Medium|
 |42|[Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)|[Java](./algorithms/java/42_trapping-rain-water.java)|Hard|
