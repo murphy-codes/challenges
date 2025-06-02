@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-01
 // At the time of submission:
-//   Runtime 10 ms Beats 17.59%
-//   Memory 44.99 MB Beats 33.38%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.59 MB Beats 71.18%
 
 /****************************************
 * 
@@ -55,58 +55,74 @@
 * 
 ****************************************/
 
-import java.util.Queue;
-import java.util.LinkedList;
-import java.util.HashSet;
-
 class Solution {
-    // Use BFS to simulate moves from square 1, tracking visited squares.  
-    // From each square, try moving to the next 1–6 positions, following  
-    // ladders or snakes when present. A helper maps square numbers to  
-    // board (row, col) positions considering the zigzag layout.  
-    // Time: O(n^2), Space: O(n^2) for visited and queue structures.
+    // Performs BFS on a flattened snakes-and-ladders board using an array-based
+    // circular queue for optimal performance. Ladders/snakes are applied directly
+    // using a flattened lookup. Uses early exits and pruning to reduce runtime.
+    // Time: O(n^2), Space: O(n^2), where n is the board length.
     public int snakesAndLadders(int[][] board) {
         int n = board.length;
-        Queue<Integer> queue = new LinkedList<>();
-        HashSet<Integer> visited = new HashSet<>();
+        int goal = n * n;
 
-        queue.offer(1);  // start from square 1
-        visited.add(1);
-        int moves = 0;
+        // Flatten the board into a 1D array for easy index access
+        short[] squareToDest = new short[goal + 1];
+        int index = 1;
 
-        while (!queue.isEmpty()) {
-            int size = queue.size();
+        // Fill in the flattened board in zigzag order
+        for (int row = n - 1; row >= 0; row--) {
+            for (int col = 0; col < n; col++) {
+                squareToDest[index++] = (short) board[row][col];
+            }
+            if (--row < 0) break;
+            for (int col = n - 1; col >= 0; col--) {
+                squareToDest[index++] = (short) board[row][col];
+            }
+        }
 
-            // process all positions reachable in this number of moves
-            for (int i = 0; i < size; i++) {
-                int curr = queue.poll();
-                if (curr == n * n) return moves;
+        // Use a circular queue to perform BFS efficiently
+        short[] queue = new short[goal];
+        int head = 0, tail = 0;
+        queue[tail++] = 1;
 
-                for (int next = curr + 1; next <= Math.min(curr + 6, n * n); next++) {
-                    int[] pos = getCoordinates(next, n);
-                    int row = pos[0], col = pos[1];
-                    int dest = board[row][col] == -1 ? next : board[row][col];
+        // Track number of moves to reach each square (0 means unvisited)
+        int[] movesToReach = new int[goal + 1];
+        movesToReach[1] = 1;
 
-                    if (!visited.contains(dest)) {
-                        visited.add(dest);
-                        queue.offer(dest);
-                    }
-                }
+        while (head != tail) {
+            int curr = queue[head++];
+            head %= goal;
+
+            // If we can reach or overshoot the goal with a dice roll, return steps
+            if (curr + 6 >= goal) {
+                return movesToReach[curr];
             }
 
-            moves++;
+            int bestNeutral = 0;
+            for (int roll = 6; roll >= 1; roll--) {
+                int next = curr + roll;
+
+                // If there's a ladder or snake, jump to the destination
+                if (squareToDest[next] >= 0) {
+                    next = squareToDest[next];
+                    if (next == goal) return movesToReach[curr];
+                } else {
+                    // Skip worse neutral (no snake or ladder) positions
+                    if (roll < bestNeutral) continue;
+                    bestNeutral = roll;
+                }
+
+                // If this square hasn't been visited yet
+                if (movesToReach[next] == 0) {
+                    movesToReach[next] = movesToReach[curr] + 1;
+                    queue[tail++] = (short) next;
+                    tail %= goal;
+
+                    // Detect circular queue overflow (shouldn't happen)
+                    if (head == tail) return 0;
+                }
+            }
         }
 
-        return -1; // cannot reach the end
-    }
-
-    // Convert 1D square number to (row, col) coordinates on the board
-    private int[] getCoordinates(int square, int n) {
-        int row = n - 1 - (square - 1) / n;
-        int col = (square - 1) % n;
-        if (((n - row) % 2) == 0) {
-            col = n - 1 - col; // reverse direction for even rows (from bottom)
-        }
-        return new int[]{row, col};
+        return -1; // If the goal is unreachable
     }
 }
