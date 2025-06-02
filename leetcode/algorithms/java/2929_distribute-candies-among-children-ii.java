@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-01
 // At the time of submission:
-//   Runtime 1 ms Beats 90.00%
-//   Memory 41.14 MB Beats 32.86%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.40 MB Beats 14.29%
 
 /****************************************
 * 
@@ -28,22 +28,20 @@
 ****************************************/
 
 class Solution {
-    // Use inclusion-exclusion to count valid (x, y, z) where  
-    // x + y + z == n and all ≤ limit. Base is C(n+2,2), the  
-    // count of non-negative integer solutions. Subtract cases  
-    // where one or more variables exceed limit.  
-    // Time: O(1), Space: O(1), using closed-form combinations.
+    // Uses inclusion-exclusion to count valid distributions of candies where  
+    // each child gets at most 'limit' candies. The formula counts all ways  
+    // to sum to 'n' with 3 non-negative integers, then subtracts cases where  
+    // one or more exceed 'limit'. Time complexity is O(1), space is O(1).  
     public long distributeCandies(int n, int limit) {
-        long total = comb(n + 2, 2);
-        total -= 3 * comb(n - limit - 1 + 2, 2);
-        total += 3 * comb(n - 2 * (limit + 1) + 2, 2);
-        total -= comb(n - 3 * (limit + 1) + 2, 2);
-        return total;
+        return countUnboundedWays(n)
+             - 3 * countUnboundedWays(n - (limit + 1))
+             + 3 * countUnboundedWays(n - 2 * (limit + 1))
+             -     countUnboundedWays(n - 3 * (limit + 1));
     }
 
-    private long comb(int k, int r) {
-        if (r > k || k < 0) return 0;
-        if (r == 2) return (long) k * (k - 1) / 2;
-        return 0;
+    // Returns number of non-negative integer solutions to x + y + z == sum
+    private long countUnboundedWays(long sum) {
+        if (sum < 0) return 0;
+        return (sum + 2) * (sum + 1) / 2; // C(sum + 2, 2)
     }
 }
