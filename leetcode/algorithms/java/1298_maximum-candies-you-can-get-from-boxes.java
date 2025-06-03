@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-02
 // At the time of submission:
-//   Runtime 5 ms Beats 68.66%
-//   Memory 56.92 MB Beats 62.69%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 57.58 MB Beats 43.78%
 
 /****************************************
 * 
@@ -50,58 +50,50 @@
 * 
 ****************************************/
 
-import java.util.Queue;
-import java.util.LinkedList;
-
 class Solution {
-    // BFS approach to process boxes as they become available and open.
-    // Track which boxes you have, which are open, and which keys you find.
-    // Add boxes to the queue when you either initially have them open or
-    // gain the key for them later. Process until no new boxes can be opened.
+    // DFS-based solution to traverse all reachable boxes recursively.
+    // Keys unlock more boxes and allow deeper traversal through the graph.
+    // Candies are collected only from boxes that are both visited and open.
     // Time: O(n + total keys + total contained boxes), Space: O(n)
+    // Efficient for sparse connections and avoids queue overhead.
     public int maxCandies(int[] status, int[] candies, int[][] keys,
                           int[][] containedBoxes, int[] initialBoxes) {
-        int n = status.length;
-        boolean[] hasKey = new boolean[n];
-        boolean[] hasBox = new boolean[n];
-        boolean[] visited = new boolean[n];
-        Queue<Integer> queue = new LinkedList<>();
-
-        for (int box : initialBoxes) {
-            hasBox[box] = true;
-            if (status[box] == 1) {
-                queue.offer(box);
-                visited[box] = true;
-            }
-        }
 
         int totalCandies = 0;
+        boolean[] visited = new boolean[status.length];
 
-        while (!queue.isEmpty()) {
-            int box = queue.poll();
-            totalCandies += candies[box];
+        // Start DFS on all initial boxes regardless of open/closed status
+        for (int box : initialBoxes) {
+            dfs(box, status, keys, containedBoxes, visited);
+        }
 
-            // Acquire keys and unlock more boxes
-            for (int key : keys[box]) {
-                hasKey[key] = true;
-                if (hasBox[key] && !visited[key]) {
-                    queue.offer(key);
-                    visited[key] = true;
-                }
-            }
-
-            // Discover new boxes
-            for (int newBox : containedBoxes[box]) {
-                hasBox[newBox] = true;
-                if (status[newBox] == 1 || hasKey[newBox]) {
-                    if (!visited[newBox]) {
-                        queue.offer(newBox);
-                        visited[newBox] = true;
-                    }
-                }
+        // After DFS, collect candies from visited & open boxes
+        for (int i = 0; i < candies.length; i++) {
+            if (visited[i] && status[i] == 1) {
+                totalCandies += candies[i];
             }
         }
 
         return totalCandies;
+    }
+
+    // Recursive DFS function to mark boxes as visited and unlock more boxes
+    private void dfs(int box, int[] status, int[][] keys,
+                     int[][] containedBoxes, boolean[] visited) {
+        visited[box] = true;
+
+        // Collect keys and mark those boxes as open
+        for (int key : keys[box]) {
+            if (key != box) {
+                status[key] = 1;
+            }
+        }
+
+        // Recursively visit all newly found boxes
+        for (int contained : containedBoxes[box]) {
+            if (!visited[contained]) {
+                dfs(contained, status, keys, containedBoxes, visited);
+            }
+        }
     }
 }
