@@ -139,6 +139,7 @@ LeetCode
 |1123|[Lowest Common Ancestor of Deepest Leaves](https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/)|[Java](./algorithms/java/1123_lowest-common-ancestor-of-deepest-leaves.java)|Medium|
 |1092|[Shortest Common Supersequence](https://leetcode.com/problems/shortest-common-supersequence/)|[Java](./algorithms/java/1092_shortest-common-supersequence.java)|Hard|
 |1079|[Letter Tile Possibilities](https://leetcode.com/problems/letter-tile-possibilities/)|[Java](./algorithms/java/1079_letter-tile-possibilities.java)|Medium|
+|1061|[Lexicographically Smallest Equivalent String](https://leetcode.com/problems/lexicographically-smallest-equivalent-string/)|[Java](./algorithms/java/1061_lexicographically-smallest-equivalent-string.java)|Medium|
 |1028|[Recover a Tree From Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/)|[Java](./algorithms/java/1028_recover-a-tree-from-preorder-traversal.java)|Hard|
 |1007|[Minimum Domino Rotations For Equal Row](https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/)|[Java](./algorithms/java/1007_minimum-domino-rotations-for-equal-row.java)|Medium|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
