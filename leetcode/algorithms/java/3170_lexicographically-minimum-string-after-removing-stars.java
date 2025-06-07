@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-06
 // At the time of submission:
-//   Runtime 69 ms Beats 92.12%
-//   Memory 47.14 MB Beats 72.12%
+//   Runtime 22 ms Beats 98.79%
+//   Memory 46.00 MB Beats 93.94%
 
 /****************************************
 * 
@@ -34,44 +34,61 @@
 * 
 ****************************************/
 
-import java.util.Deque;
-import java.util.ArrayDeque;
+import java.util.Arrays;
 
 class Solution {
-    // Greedy deletion using 26 stacks (one per lowercase letter).
-    // For each '*', delete the smallest available char to its left.
-    // Time: O(n * 26) worst-case (each star scans all 26 stacks), but O(n) in practice.
-    // Space: O(n) for the stacks and input string reconstruction.
+    // Efficient solution using a byte array and custom linked lists.
+    // Deletes the leftmost '*' and smallest char to its left by tracking
+    // recent char positions in heads[]. Marks deleted chars as zero.
+    // Time: O(n) — each character is processed at most once.
+    // Space: O(n) for the byte array and tracking arrays.
     public String clearStars(String s) {
-        Deque<Integer>[] charIndices = new Deque[26];
-        for (int i = 0; i < 26; i++) {
-            charIndices[i] = new ArrayDeque<>();
+        int n = s.length();
+        byte[] str = new byte[n + 1];
+        s.getBytes(0, n, str, 0);
+        str[n] = '*'; // Add sentinel '*' to simplify loop logic.
+
+        int start = 0;
+        int starCount = 0;
+
+        // Find first useful index after skipping characters we know will be removed.
+        for (int i = 0; i < n; i++) {
+            if (str[i] == '*') {
+                starCount++;
+                if (starCount == ((i + 2) >> 1)) start = i + 1;
+            }
         }
 
-        char[] arr = s.toCharArray();
+        if (starCount == 0) return s;
+        if (start == n) return "";
 
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] != '*') {
-                charIndices[arr[i] - 'a'].push(i);
-            } else {
-                // Find and delete the smallest available character to the left
-                for (int j = 0; j < 26; j++) {
-                    if (!charIndices[j].isEmpty()) {
-                        arr[charIndices[j].pop()] = '*'; // mark char as deleted
+        int[] links = new int[n];
+        int[] heads = new int[128]; // ASCII letters
+        Arrays.fill(heads, -1);
+
+        for (int i = start;; i++) {
+            int c = str[i];
+            if (c == '*') {
+                if (i >= n) break;
+                str[i] = 0;
+                for (int j = 'a'; j <= 'z'; j++) {
+                    if (heads[j] >= 0) {
+                        str[heads[j]] = 0;
+                        heads[j] = links[heads[j]];
                         break;
                     }
                 }
+            } else {
+                links[i] = heads[c];
+                heads[c] = i;
             }
         }
 
-        // Build the result without any '*'
-        StringBuilder result = new StringBuilder();
-        for (char c : arr) {
-            if (c != '*') {
-                result.append(c);
-            }
+        int write = 0;
+        for (int i = start; i < n; i++) {
+            if (str[i] != 0) str[write++] = str[i];
         }
 
-        return result.toString();
+        return new String(str, 0, write);
     }
 }
