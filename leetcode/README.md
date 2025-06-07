@@ -26,6 +26,7 @@ LeetCode
 |3208|[Alternating Groups II](https://leetcode.com/problems/alternating-groups-ii/)|[Java](./algorithms/java/3208_alternating-groups-ii.java)|Medium|
 |3191|[Minimum Operations to Make Binary Array Elements Equal to One I](https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/)|[Java](./algorithms/java/3191_minimum-operations-to-make-binary-array-elements-equal-to-one-i.java)|Medium|
 |3174|[Clear Digits](https://leetcode.com/problems/clear-digits/)|[Java](./algorithms/java/3174_clear-digits.java)|Easy|
+|3170|[Lexicographically Minimum String After Removing Stars](https://leetcode.com/problems/lexicographically-minimum-string-after-removing-stars/)|[Java](./algorithms/java/3170_lexicographically-minimum-string-after-removing-stars.java)|Medium|
 |3169|[Count Days Without Meetings](https://leetcode.com/problems/count-days-without-meetings/)|[Java](./algorithms/java/3169_count-days-without-meetings.java)|Medium|
 |3160|[Find the Number of Distinct Colors Among the Balls](https://leetcode.com/problems/find-the-number-of-distinct-colors-among-the-balls/)|[Java](./algorithms/java/3160_find-the-number-of-distinct-colors-among-the-balls.java)|Medium|
 |3151|[Special Array I](https://leetcode.com/problems/special-array-i/)|[Java](./algorithms/java/3151_special-array-i.java)|Easy|
@@ -72,6 +73,7 @@ LeetCode
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
 |2460|[Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array/)|[Java](./algorithms/java/2460_apply-operations-to-an-array.java)|Easy|
 |2444|[Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds/)|[Java](./algorithms/java/2444_count-subarrays-with-fixed-bounds.java)|Hard|
+|2434|[Using a Robot to Print the Lexicographically Smallest String](https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/)|[Java](./algorithms/java/2434_using-a-robot-to-print-the-lexicographically-smallest-string.java)|Medium|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
 |2401|[Longest Nice Subarray](https://leetcode.com/problems/longest-nice-subarray/)|[Java](./algorithms/java/2401_longest-nice-subarray.java)|Medium|
