@@ -28,7 +28,7 @@
 * There is no '*' in the string.
 *
 * Constraints:
-* • 1 <= s.length <= 105
+* • 1 <= s.length <= 10^5
 * • `s` consists only of lowercase English letters and `'*'`.
 * • The input is generated such that it is possible to delete all `'*'` characters.
 * 
