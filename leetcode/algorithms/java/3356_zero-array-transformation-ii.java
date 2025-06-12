@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/zero-array-transformation-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-12
+// At the time of submission:
+//   Runtime 3 ms Beats 99.80%
+//   Memory 129.09 MB Beats 5.24%
 
 /****************************************
 * 
