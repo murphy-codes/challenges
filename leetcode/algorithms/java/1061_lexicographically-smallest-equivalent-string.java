@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/lexicographically-smallest-equivalent-string/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-06-05
+// Date: 2025-06-11
 // At the time of submission:
-//   Runtime 2 ms Beats 97.03%
-//   Memory 41.88 MB Beats 89.95%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 42.18 MB Beats 59.14%
 
 /****************************************
 * 
@@ -47,49 +47,52 @@
 ****************************************/
 
 class Solution {
-    static int parent[];
-    public static int find(int val)
-    {
-        if(parent[val]!=val)
-        {
-            parent[val]=find(parent[val]);
-            
-        }
-        return parent[val];
-    }
-    public static void union(int a,int b)
-    {
-        int leta=find(a);
-        int letb=find(b);
+    // We use Union-Find to track character equivalence groups.
+    // Always union with the lexicographically smaller character as root.
+    // For each character in baseStr, we find its smallest equivalent root.
+    // Time: O(α(n)) per union/find → nearly O(1) per op; overall O(N).
+    // Space: O(26) for DSU parent array, constant space.
+    private int[] parent = new int[26];  // 26 letters in the alphabet
 
-        if(leta<letb)
-        {
-            parent[letb]=leta;
-        }
-        else
-        {
-            parent[leta]=letb;
-        }
-    }
     public String smallestEquivalentString(String s1, String s2, String baseStr) {
-        int n=baseStr.length();
-        parent=new int[26];
-        for(int i=0;i<26;i++)
-        {
-            parent[i]=i;
+        // Initialize: every character is its own parent
+        for (int i = 0; i < 26; i++) {
+            parent[i] = i;
         }
 
-        for(int i=0;i<s1.length();i++)
-        {
-            union(s1.charAt(i)-'a',s2.charAt(i)-'a');
+        // Union characters from s1 and s2
+        for (int i = 0; i < s1.length(); i++) {
+            union(s1.charAt(i) - 'a', s2.charAt(i) - 'a');
         }
 
-        StringBuilder res = new StringBuilder();
-        for(int i=0;i<n;i++)
-        {
-            char chh=baseStr.charAt(i);
-            res.append((char)(find(chh-'a')+'a'));
+        // Transform baseStr
+        StringBuilder sb = new StringBuilder();
+        for (char c : baseStr.toCharArray()) {
+            int root = find(c - 'a');
+            sb.append((char)(root + 'a'));
         }
-        return res.toString();
+
+        return sb.toString();
+    }
+
+    // Find with path compression
+    private int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    // Union two sets, keeping the smaller lexicographical character as root
+    private void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        if (rootX != rootY) {
+            if (rootX < rootY) {
+                parent[rootY] = rootX;
+            } else {
+                parent[rootX] = rootY;
+            }
+        }
     }
 }
