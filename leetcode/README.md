@@ -5,6 +5,9 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3445|[Maximum Difference Between Even and Odd Frequency II](https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-ii/)|[Java](./algorithms/java/3445_maximum-difference-between-even-and-odd-frequency-ii.java)|Hard|
+|3442|[Maximum Difference Between Even and Odd Frequency I](https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-i/)|[Java](./algorithms/java/3442_maximum-difference-between-even-and-odd-frequency-i.java)|Easy|
+|3423|[Maximum Difference Between Adjacent Elements in a Circular Array](https://leetcode.com/problems/maximum-difference-between-adjacent-elements-in-a-circular-array/)|[Java](./algorithms/java/3423_maximum-difference-between-adjacent-elements-in-a-circular-array.java)|Easy|
 |3403|[Find the Lexicographically Largest String From the Box I](https://leetcode.com/problems/find-the-lexicographically-largest-string-from-the-box-i/)|[Java](./algorithms/java/3403_find-the-lexicographically-largest-string-from-the-box-i.java)|Medium|
 |3396|[Minimum Number of Operations to Make Elements in Array Distinct](https://leetcode.com/problems/minimum-number-of-operations-to-make-elements-in-array-distinct/)|[Java](./algorithms/java/3396_minimum-number-of-operations-to-make-elements-in-array-distinct.java)|Easy|
 |3394|[Check if Grid can be Cut into Sections](https://leetcode.com/problems/check-if-grid-can-be-cut-into-sections/)|[Java](./algorithms/java/3394_check-if-grid-can-be-cut-into-sections.java)|Medium|
@@ -90,8 +93,8 @@ LeetCode
 |2226|[Maximum Candies Allocated to K Children](https://leetcode.com/problems/maximum-candies-allocated-to-k-children/)|[Java](./algorithms/java/2226_maximum-candies-allocated-to-k-children.java)|Medium|
 |2206|[Divide Array Into Equal Pairs](https://leetcode.com/problems/divide-array-into-equal-pairs/)|[Java](./algorithms/java/2206_divide-array-into-equal-pairs.java)|Easy|
 |2185|[Counting Words With a Given Prefix](https://leetcode.com/problems/counting-words-with-a-given-prefix/)|[Java](./algorithms/java/2185_counting-words-with-a-given-prefix.java)|Easy|
-|2179|[Count Good Triplets in an Array](https://leetcode.com/problems/count-good-triplets-in-an-array/)|[Java](./algorithms/java/2179_count-good-triplets-in-an-array)|Medium|
-|2176|[Count Equal and Divisible Pairs in an Array](https://leetcode.com/problems/count-equal-and-divisible-pairs-in-an-array/)|[Java](./algorithms/java/2176_count-equal-and-divisible-pairs-in-an-array)|Easy|
+|2179|[Count Good Triplets in an Array](https://leetcode.com/problems/count-good-triplets-in-an-array/)|[Java](./algorithms/java/2179_count-good-triplets-in-an-array.java)|Medium|
+|2176|[Count Equal and Divisible Pairs in an Array](https://leetcode.com/problems/count-equal-and-divisible-pairs-in-an-array/)|[Java](./algorithms/java/2176_count-equal-and-divisible-pairs-in-an-array.java)|Easy|
 |2161|[Partition Array According to Given Pivot](https://leetcode.com/problems/partition-array-according-to-given-pivot/)|[Java](./algorithms/java/2161_partition-array-according-to-given-pivot.java)|Medium|
 |2145|[Count the Hidden Sequences](https://leetcode.com/problems/count-the-hidden-sequences/)|[Java](./algorithms/java/2145_count-the-hidden-sequences.java)|Medium|
 |2140|[Solving Questions With Brainpower](https://leetcode.com/problems/solving-questions-with-brainpower/)|[Java](./algorithms/java/2140_solving-questions-with-brainpower.java)|Medium|
@@ -99,7 +102,7 @@ LeetCode
 |2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
 |2115|[Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)|[Java](./algorithms/java/2115_find-all-possible-recipes-from-given-supplies.java)|Medium|
-|2094|[Finding 3-Digit Even Numbers](https://leetcode.com/problems//)|[Java](./algorithms/java/2094_finding-3-digit-even-numbers.java)|Easy|
+|2094|[Finding 3-Digit Even Numbers](https://leetcode.com/problems/finding-3-digit-even-numbers/)|[Java](./algorithms/java/2094_finding-3-digit-even-numbers.java)|Easy|
 |2071|[Maximum Number of Tasks You Can Assign](https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/)|[Java](./algorithms/java/2071_maximum-number-of-tasks-you-can-assign.java)|Hard|
 |2033|[Minimum Operations to Make a Uni-Value Grid](https://leetcode.com/problems/minimum-operations-to-make-a-uni-value-grid)|[Java](./algorithms/java/2033_minimum-operations-to-make-a-uni-value-grid.java)|Medium|
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
@@ -156,7 +159,7 @@ LeetCode
 |781|[Rabbits in Forest](https://leetcode.com/problems/rabbits-in-forest/)|[Java](./algorithms/java/781_rabbits-in-forest.java)|Medium|
 |763|[Partition Labels](https://leetcode.com/problems/partition-labels/)|[Java](./algorithms/java/763_partition-labels.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
-|648|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/648_redundant-connection.java)|Medium|
+|684|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/684_redundant-connection.java)|Medium|
 |440|[K-th Smallest in Lexicographical Order](https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/)|[Java](./algorithms/java/440_k-th-smallest-in-lexicographical-order.java)|Medium|
 |416|[Zigzag Conversion](https://leetcode.com/problems/partition-equal-subset-sum/)|[Java](./algorithms/java/416_partition-equal-subset-sum.java)|Medium|
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
