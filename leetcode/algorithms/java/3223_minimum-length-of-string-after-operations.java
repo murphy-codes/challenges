@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/minimum-length-of-string-after-operations/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-12
+// At the time of submission:
+//   Runtime 84 ms Beats 33.12%
+//   Memory 51.12 MB Beats 8.93%
 
 /****************************************
 * 
