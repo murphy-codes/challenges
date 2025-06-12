@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-09
+// At the time of submission:
+//   Runtime 275 ms Beats 35.64%
+//   Memory 46.32 MB Beats 61.51%
 
 /****************************************
 * 
