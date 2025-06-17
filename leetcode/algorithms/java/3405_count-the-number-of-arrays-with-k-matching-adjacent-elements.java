@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-16
 // At the time of submission:
-//   Runtime 29 ms Beats 65.85%
-//   Memory 42.73 MB Beats 46.34%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 45.09 MB Beats 31.71%
 
 /****************************************
 * 
@@ -42,57 +42,63 @@
 * 
 ****************************************/
 
-import static java.lang.Math.min;
-
 class Solution {
-    // This solution uses combinatorics to count arrays of length `n` with `k`
-    // adjacent equal elements. The array is divided into `n - k` segments, each
-    // with constant values. The total count is:
-    //    m * C(n - 1, k) * (m - 1)^(n - k - 1)
-    // where C(n - 1, k) is a binomial coefficient, and powers are computed
-    // with modular exponentiation.
-    // Time: O(log(n - k)), Space: O(1) (ignoring factorial precomputation).
-    static final int MOD = 1_000_000_007;
-    static final int MAX = 100_005;
+    // This solution counts arrays of size `n` with `k` matching adjacent pairs
+    // using combinatorics. It calculates:
+    //    m * C(n-1, k) * (m-1)^(n-k-1)
+    // Factorials are computed recursively and cached for performance, and
+    // modular inverses are calculated using a recursive Euclidean identity.
+    // Time: O(log(n-k)), Space: O(n) due to lazy caching of factorials.
 
-    static long[] fact = new long[MAX];
-    static long[] invFact = new long[MAX];
+    // Modulo constant
+    int mod = 1_000_000_007;
 
-    // Binary exponentiation: computes x^n % MOD
-    static long powmod(long x, int n) {
-        long res = 1;
-        while (n > 0) {
-            if ((n & 1) == 1)
-                res = (res * x) % MOD;
-            x = (x * x) % MOD;
-            n >>= 1;
-        }
-        return res;
-    }
-
-    // Precompute factorials and inverse factorials
-    static {
-        fact[0] = 1;
-        for (int i = 1; i < MAX; i++) {
-            fact[i] = (fact[i - 1] * i) % MOD;
-        }
-        invFact[MAX - 1] = powmod(fact[MAX - 1], MOD - 2);
-        for (int i = MAX - 2; i >= 0; i--) {
-            invFact[i] = (invFact[i + 1] * (i + 1)) % MOD;
-        }
-    }
-
-    // Compute C(n, k) % MOD
-    static long comb(int n, int k) {
-        if (k < 0 || k > n) return 0;
-        return (((fact[n] * invFact[k]) % MOD) * invFact[n - k]) % MOD;
-    }
+    // Static cache for factorials and reverse values
+    static long[] inverseCache = new long[100001];
+    static int[] factorialCache = new int[100001];
 
     public int countGoodArrays(int n, int m, int k) {
-        // Total count = m * C(n-1, k) * (m - 1)^(n - k - 1)
-        long res = comb(n - 1, k);
-        res = (res * m) % MOD;
-        res = (res * powmod(m - 1, n - k - 1)) % MOD;
-        return (int) res;
+        // Lazy init of factorial base case
+        if (factorialCache[0] == 0)
+            factorialCache[0] = 1;
+
+        // Apply the formula:
+        // m * C(n-1, n-1-k) * (m - 1)^(n - 1 - k)
+        long result = m;
+        result = result * pow(m - 1, n - 1 - k) % mod;
+        result = result * combination(n - 1, n - 1 - k) % mod;
+        return (int) result;
+    }
+
+    // Fast exponentiation: computes a^b % mod
+    public long pow(int base, int exponent) {
+        long result = 1, b = base;
+        while (exponent > 0) {
+            if ((exponent & 1) == 1)
+                result = result * b % mod;
+            b = b * b % mod;
+            exponent >>= 1;
+        }
+        return result;
+    }
+
+    // Computes C(a, b) = a! / (b! * (a - b)!) % mod
+    public long combination(int a, int b) {
+        return (long) getFactorial(a) * modularInverse(getFactorial(a - b)) % mod
+               * modularInverse(getFactorial(b)) % mod;
+    }
+
+    // Computes a! using memoization
+    public long getFactorial(int a) {
+        if (factorialCache[a] != 0)
+            return factorialCache[a];
+        return factorialCache[a] = (int) (getFactorial(a - 1) * a % mod);
+    }
+
+    // Modular inverse using recursive Euclidean identity
+    public long modularInverse(long a) {
+        if (a == 1)
+            return 1;
+        return mod - mod / a * modularInverse(mod % a) % mod;
     }
 }
