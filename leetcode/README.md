@@ -40,6 +40,7 @@ LeetCode
 |3042|[Count Prefix and Suffix Pairs I](https://leetcode.com/problems/count-prefix-and-suffix-pairs-i/)|[Java](./algorithms/java/3042_count-prefix-and-suffix-pairs-i.java)|Easy|
 |3024|[Type of Triangle](https://leetcode.com/problems/type-of-triangle/)|[Java](./algorithms/java/3024_type-of-triangle.java)|Easy|
 |2999|[Count the Number of Powerful Integers](https://leetcode.com/problems/count-the-number-of-powerful-integers/)|[Java](./algorithms/java/2999_count-the-number-of-powerful-integers.java)|Hard|
+|2966|[Divide Array Into Arrays With Max Difference](https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/)|[Java](./algorithms/java/2966_divide-array-into-arrays-with-max-difference.java)|Medium|
 |2965|[Find Missing and Repeated Values](https://leetcode.com/problems/find-missing-and-repeated-values/)|[Java](./algorithms/java/2965_find-missing-and-repeated-values.java)|Easy|
 |2962|[Count Subarrays Where Max Element Appears at Least K Times](https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/)|[Java](./algorithms/java/2962_count-subarrays-where-max-element-appears-at-least-k-times.java)|Medium|
 |2948|[Make Lexicographically Smallest Array by Swapping Elements](https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/)|[Java](./algorithms/java/2948_make-lexicographically-smallest-array-by-swapping-elements.java)|Medium|
