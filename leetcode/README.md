@@ -6,6 +6,7 @@ LeetCode
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
 |3445|[Maximum Difference Between Even and Odd Frequency II](https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-ii/)|[Java](./algorithms/java/3445_maximum-difference-between-even-and-odd-frequency-ii.java)|Hard|
+|3443|[Maximum Manhattan Distance After K Changes](https://leetcode.com/problems/maximum-manhattan-distance-after-k-changes/)|[Java](./algorithms/java/3443_maximum-manhattan-distance-after-k-changes.java)|Medium|
 |3442|[Maximum Difference Between Even and Odd Frequency I](https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-i/)|[Java](./algorithms/java/3442_maximum-difference-between-even-and-odd-frequency-i.java)|Easy|
 |3423|[Maximum Difference Between Adjacent Elements in a Circular Array](https://leetcode.com/problems/maximum-difference-between-adjacent-elements-in-a-circular-array/)|[Java](./algorithms/java/3423_maximum-difference-between-adjacent-elements-in-a-circular-array.java)|Easy|
 |3405|[Count the Number of Arrays with K Matching Adjacent Elements](https://leetcode.com/problems/count-the-number-of-arrays-with-k-matching-adjacent-elements/)|[Java](./algorithms/java/3405_count-the-number-of-arrays-with-k-matching-adjacent-elements.java)|Hard|
