@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-20
 // At the time of submission:
-//   Runtime 30 ms Beats 14.18%
-//   Memory 45.68 MB Beats 52.48%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 45.69 MB Beats 52.48%
 
 /****************************************
 * 
@@ -37,34 +37,39 @@
 ****************************************/
 
 class Solution {
-	// Count character frequencies using an array of size 26.
-	// Try every possible value x (1 to max frequency) as the minimum
-	// frequency to keep. For each character frequency f:
-	// - If f < x: delete all of f
-	// - If f > x + k: delete the excess beyond x + k
-	// Track the minimum deletions needed across all x.
-	// Time: O(n + 26 * maxF), Space: O(1)
+    // Count frequency of each character (O(n) time).
+    // Try each character frequency as the minimum kept frequency.
+    // For each target frequency, calculate deletions needed to make
+    // all other frequencies within [x, x + k]. Keep the minimum.
+    // Time: O(n + 26^2) = O(n), Space: O(1) due to fixed 26-letter alphabet.
     public int minimumDeletions(String word, int k) {
         int[] freq = new int[26];
-        for (char c : word.toCharArray()) {
-            freq[c - 'a']++;
-        }
 
-        int maxF = 0;
-        for (int f : freq) {
-            maxF = Math.max(f, maxF);
+        // Count frequency of each character
+        for (int i = 0; i < word.length(); i++) {
+            freq[word.charAt(i) - 'a']++;
         }
 
         int minDeletions = Integer.MAX_VALUE;
 
-        for (int x = 1; x <= maxF; x++) {
-            int deletions = 0;
-            for (int f : freq) {
-                if (f == 0) continue;
-                if (f < x) deletions += f;
-                else if (f > x + k) deletions += f - (x + k);
+        // Try using freq[i] as the target min frequency to keep
+        for (int i = 0; i < 26; i++) {
+            if (freq[i] == 0) continue;
+
+            int deletionsNeeded = 0;
+            int targetFreq = freq[i];
+
+            for (int j = 0; j < 26; j++) {
+                if (freq[j] == 0 || i == j) continue;
+
+                if (freq[j] < targetFreq) {
+                    deletionsNeeded += freq[j]; // delete all of this char
+                } else if (freq[j] - targetFreq > k) {
+                    deletionsNeeded += freq[j] - targetFreq - k; // trim excess
+                }
             }
-            minDeletions = Math.min(minDeletions, deletions);
+
+            minDeletions = Math.min(minDeletions, deletionsNeeded);
         }
 
         return minDeletions;
