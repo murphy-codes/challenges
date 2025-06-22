@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/alternating-groups-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-09
+// At the time of submission:
+//   Runtime 3 ms Beats 85.29%
+//   Memory 63.64 MB Beats 6.30%
 
 /****************************************
 * 
