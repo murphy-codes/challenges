@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/maximum-number-of-fish-in-a-grid/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-28
+// At the time of submission:
+//   Runtime 6 ms Beats 33.66%
+//   Memory 45.13 MB Beats 42.62%
 
 /****************************************
 * 
