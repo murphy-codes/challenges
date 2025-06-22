@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/clear-digits/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-09
+// At the time of submission:
+//   Runtime 2 ms Beats 73.57%
+//   Memory 42.38 MB Beats 94.08%
 
 /****************************************
 * 
