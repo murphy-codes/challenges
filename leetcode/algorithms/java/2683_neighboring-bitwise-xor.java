@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/neighboring-bitwise-xor/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-17
+// At the time of submission:
+//   Runtime 2 ms Beats 100.00%
+//   Memory 62.18 MB Beats 68.16%
 
 /****************************************
 * 
