@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/minimum-time-to-repair-cars/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-16
+// At the time of submission:
+//   Runtime 20 ms Beats 84.11%
+//   Memory 56.60 MB Beats 16.72%
 
 /****************************************
 * 
