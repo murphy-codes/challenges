@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/find-the-number-of-distinct-colors-among-the-balls/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-07
+// At the time of submission:
+//   Runtime 50 ms Beats 19.63%
+//   Memory 93.56 MB Beats 73.21%
 
 /****************************************
 * 
