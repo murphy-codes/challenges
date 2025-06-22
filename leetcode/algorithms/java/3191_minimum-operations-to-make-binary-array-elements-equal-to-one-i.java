@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-18
+// At the time of submission:
+//   Runtime 7 ms Beats 57.77%
+//   Memory 57.32 MB Beats 58.56%
 
 /****************************************
 * 
