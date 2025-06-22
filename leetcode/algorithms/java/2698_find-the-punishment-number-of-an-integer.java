@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/find-the-punishment-number-of-an-integer/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-14
+// At the time of submission:
+//   Runtime 22 ms Beats 69.33%
+//   Memory 44.13 MB Beats 55.62%
 
 /****************************************
 * 
