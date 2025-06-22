@@ -105,6 +105,7 @@ LeetCode
 |2161|[Partition Array According to Given Pivot](https://leetcode.com/problems/partition-array-according-to-given-pivot/)|[Java](./algorithms/java/2161_partition-array-according-to-given-pivot.java)|Medium|
 |2145|[Count the Hidden Sequences](https://leetcode.com/problems/count-the-hidden-sequences/)|[Java](./algorithms/java/2145_count-the-hidden-sequences.java)|Medium|
 |2140|[Solving Questions With Brainpower](https://leetcode.com/problems/solving-questions-with-brainpower/)|[Java](./algorithms/java/2140_solving-questions-with-brainpower.java)|Medium|
+|2138|[Divide a String Into Groups of Size k](https://leetcode.com/problems/divide-a-string-into-groups-of-size-k/)|[Java](./algorithms/java/2138_divide-a-string-into-groups-of-size-k.java)|Easy|
 |2131|[Longest Palindrome by Concatenating Two Letter Words](https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/)|[Java](./algorithms/java/2131_longest-palindrome-by-concatenating-two-letter-words.java)|Medium|
 |2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
