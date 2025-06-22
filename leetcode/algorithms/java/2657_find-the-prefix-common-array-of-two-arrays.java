@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-14
+// At the time of submission:
+//   Runtime 5 ms Beats 48.55%
+//   Memory 46.04 MB Beats 6.71%
 
 /****************************************
 * 
