@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/merge-two-2d-arrays-by-summing-values/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-02
+// At the time of submission:
+//   Runtime 0 ms Beats 100.00%
+//   Memory 45.44 MB Beats 41.88%
 
 /****************************************
 * 
