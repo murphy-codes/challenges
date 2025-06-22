@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/first-completely-painted-row-or-column/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-20
+// At the time of submission:
+//   Runtime 15 ms Beats 88.45%
+//   Memory 51.12 MB Beats 8.93%
 
 /****************************************
 * 
