@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-04
+// At the time of submission:
+//   Runtime 1 ms Beats 90.29%
+//   Memory 42.73 MB Beats 51.68%
 
 /****************************************
 * 
