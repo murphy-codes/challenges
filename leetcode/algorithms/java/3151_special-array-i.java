@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/special-array-i/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-01
+// At the time of submission:
+//   Runtime 0 ms Beats 100.00%
+//   Memory 43.36 MB Beats 58.63%
 
 /****************************************
 * 
