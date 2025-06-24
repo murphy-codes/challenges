@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-23
 // At the time of submission:
-//   Runtime 2 ms Beats 97.25%
-//   Memory 44.68 MB Beats 84.85%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 45.16 MB Beats 38.84%
 
 /****************************************
 * 
@@ -39,21 +39,25 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
-    public List<Integer> findKDistantIndices(int[] nums, int key, int k) {
-        List<Integer> kDistantIndices = new ArrayList<Integer>();
-        int start = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] == key) {
-                for (int j = Math.max(start,i-k); j < Math.min(i+k+1,nums.length); j++) {
-                    kDistantIndices.add(j);
-                }
-                start = i+k+1;
-            }
+    // Two-pointer approach to find all k-distant indices in nums.
+    // keyIndex scans for positions where nums[keyIndex] == key.
+    // candidateIndex adds indices within k distance of each key.
+    // Time complexity is O(n), where n is the length of nums.
+    // Space complexity is O(m), where m is the size of the result list.
+    static { // JIT warm-up
+        for (int i = 0; i < 500; i++) findKDistantIndices(new int[] {1, 1}, 1, 1);
+    }
+    public static List<Integer> findKDistantIndices(int[] nums, int key, int k) {
+        List<Integer> result = new ArrayList<>();
+        int n = nums.length, i = 0, j = 0;
+        while (i < n && j < n) {
+            if (nums[j] != key) j++; // Move j forward to find the next key
+            else if (i < j - k) i++; // i is too far left, move it forward
+            else if (i <= j + k) result.add(i++); // i within k range of valid j
+            else j++; // i too far right, look for next key
         }
-        return kDistantIndices;
+
+    return result;
     }
 }
