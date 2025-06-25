@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-24
 // At the time of submission:
-//   Runtime 763 ms Beats 34.88%
-//   Memory 55.37 MB Beats 66.67%
+//   Runtime 61 ms Beats 61.00%
+//   Memory 55.03 MB Beats 91.47%
 
 /****************************************
 * 
@@ -50,67 +50,80 @@
 ****************************************/
 
 class Solution {
-    // Binary search over the range of possible product values.
-    // For each mid, count how many products are ≤ mid using two-pointer logic.
-    // Positive and negative values are handled separately due to product rules.
-    // Time: O(n * log m * log(maxVal)), Space: O(1) extra.
-    // Efficient for input sizes up to 5 * 10^4.
+    // Binary search over product values to find the kth smallest product.
+    // Negative products are handled separately using array splitting.
+    // Arrays are divided into negative and positive parts, then transformed
+    // to use two-pointer counting logic efficiently on positive values only.
+    // Time: O((n + m) log(maxProduct)), Space: O(n + m)
     public long kthSmallestProduct(int[] nums1, int[] nums2, long k) {
-        long low = -100_000L * 100_000L; // Minimum possible product
-        long high = 100_000L * 100_000L; // Maximum possible product
+        int zeroIdx1 = findFirstNonNegative(nums1);
+        int zeroIdx2 = findFirstNonNegative(nums2);
+        int len1 = nums1.length, len2 = nums2.length;
 
+        int[] pos1 = Arrays.copyOfRange(nums1, zeroIdx1, len1);
+        int[] pos2 = Arrays.copyOfRange(nums2, zeroIdx2, len2);
+        int[] neg1 = reverseAndNegate(nums1, zeroIdx1);
+        int[] neg2 = reverseAndNegate(nums2, zeroIdx2);
+
+        // Count of all negative products (neg * pos or pos * neg)
+        int negativeProductCount = neg1.length * pos2.length + pos1.length * neg2.length;
+
+        long sign = 1L;
+        if (k <= negativeProductCount) {
+            // Flip the arrays to count negative products as positive
+            int[] temp = neg2;
+            neg2 = pos2;
+            pos2 = temp;
+            sign = -1L;
+            k = negativeProductCount - k + 1;
+        } else {
+            k -= negativeProductCount;
+        }
+
+        long low = 0, high = (long) Math.pow(10, 10);
         while (low < high) {
             long mid = low + (high - low) / 2;
-            if (countLessOrEqual(nums1, nums2, mid) < k) {
-                low = mid + 1;
-            } else {
+            long count = countLessEqual(neg1, neg2, mid) + countLessEqual(pos1, pos2, mid);
+            if (count >= k) {
                 high = mid;
+            } else {
+                low = mid + 1;
             }
         }
-        return low;
+
+        return low * sign;
     }
 
-    private long countLessOrEqual(int[] nums1, int[] nums2, long target) {
+    // Count number of (a * b) ≤ max for sorted positive arrays a and b
+    private long countLessEqual(int[] a, int[] b, long max) {
         long count = 0;
-        for (int a : nums1) {
-            if (a > 0) {
-                count += countPositive(a, nums2, target);
-            } else if (a < 0) {
-                count += countNegative(a, nums2, target);
-            } else {
-                if (target >= 0) count += nums2.length;
+        int j = b.length - 1;
+        for (int i = 0; i < a.length; i++) {
+            while (j >= 0 && (long) a[i] * b[j] > max) {
+                j--;
             }
+            count += (j + 1);
         }
         return count;
     }
 
-    private int countPositive(int a, int[] nums2, long target) {
-        // Count how many b in nums2 such that a * b <= target, with a > 0
-        int left = 0, right = nums2.length - 1, res = -1;
+    // Find first index where value is >= 0 (binary search)
+    private int findFirstNonNegative(int[] nums) {
+        int left = 0, right = nums.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if ((long) a * nums2[mid] <= target) {
-                res = mid;
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
+            if (nums[mid] >= 0) right = mid - 1;
+            else left = mid + 1;
         }
-        return res + 1;
+        return left;
     }
 
-    private int countNegative(int a, int[] nums2, long target) {
-        // Count how many b in nums2 such that a * b <= target, with a < 0
-        int left = 0, right = nums2.length - 1, res = nums2.length;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if ((long) a * nums2[mid] <= target) {
-                res = mid;
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
+    // Copy and reverse the first `len` elements, and negate them
+    private int[] reverseAndNegate(int[] nums, int len) {
+        int[] result = new int[len];
+        for (int i = 0; i < len; i++) {
+            result[i] = -nums[len - 1 - i];
         }
-        return nums2.length - res;
+        return result;
     }
 }
