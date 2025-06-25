@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-25
 // At the time of submission:
-//   Runtime 242 ms Beats 24.11%
-//   Memory 45.33 MB Beats 26.38%
+//   Runtime 3 ms Beats 99.49%
+//   Memory 45.18 MB Beats 49.84%
 
 /****************************************
 * 
@@ -30,34 +30,41 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 class Solution {
-    // Count total number of distinct elements in the original array.
-    // Then, iterate over every subarray and track its distinct elements.
-    // Increment the count if a subarray's distinct count matches the original.
-    // Time: O(n^2) due to nested loops; Space: O(n) for temporary sets.
+    // Count total unique elements in the input array first.
+    // Use sliding window with two pointers to maintain a window that contains
+    // all unique elements. For each such window, all subarrays ending at or after
+    // the current right pointer are valid. Time: O(n), Space: O(1) (fixed array).
     public int countCompleteSubarrays(int[] nums) {
-        // Count the total number of distinct elements in the array
-        HashSet<Integer> distinctSet = new HashSet<>();
-        for (int num : nums) {
-            distinctSet.add(num);
-        }
-        int totalDistinct = distinctSet.size();
+        int result = 0;
+        int totalUnique = 0;
+        boolean[] seen = new boolean[2001];
 
-        int count = 0;
-        // Check every subarray starting at index i
-        for (int i = 0; i < nums.length; i++) {
-            HashSet<Integer> seen = new HashSet<>();
-            for (int j = i; j < nums.length; j++) {
-                seen.add(nums[j]);
-                if (seen.size() == totalDistinct) {
-                    count++;
-                }
+        // Count total number of unique elements in the array
+        for (int num : nums) {
+            if (!seen[num]) {
+                seen[num] = true;
+                totalUnique++;
             }
         }
 
-        return count;
+        int[] freq = new int[2001]; // Frequency of elements in current window
+        int uniqueInWindow = 0;
+        int left = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            if (freq[nums[right]] == 0) uniqueInWindow++;
+            freq[nums[right]]++;
+
+            // Shrink window from left while it's "complete"
+            while (left <= right && uniqueInWindow == totalUnique) {
+                result += nums.length - right; // Count all valid suffixes
+                freq[nums[left]]--;
+                if (freq[nums[left]] == 0) uniqueInWindow--;
+                left++;
+            }
+        }
+
+        return result;
     }
 }
