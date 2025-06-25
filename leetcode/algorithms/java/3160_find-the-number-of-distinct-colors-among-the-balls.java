@@ -2,17 +2,18 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-07
 // At the time of submission:
-//   Runtime 50 ms Beats 19.63%
-//   Memory 93.56 MB Beats 73.21%
+//   Runtime 29 ms Beats 99.70%
+//   Memory 91.00 MB Beats 76.44%
 
 /****************************************
 * 
 * You are given an integer `limit` and a 2D array `queries` of size `n x 2`.
-* 
-* There are `limit + 1` balls with distinct labels in the range `[0, limit]`. Initially, all balls are uncolored. For every query in `queries` that is of the form `[x, y]`, you mark ball `x` with the color `y`. After each query, you need to find the number of distinct colors among the balls.
-* 
-* Return an array `result` of length `n`, where `result[i]` denotes the number of distinct colors after `ith` query.
-* 
+* There are `limit + 1` balls with distinct labels in the range `[0, limit]`. 
+* _ Initially, all balls are uncolored. For every query in `queries` that is of 
+* _ the form `[x, y]`, you mark ball `x` with the color `y`. After each query, 
+* _ you need to find the number of distinct colors among the balls.
+* Return an array `result` of length `n`, where `result[i]` denotes the number 
+* _ of distinct colors after `ith` query.
 * Note that when answering a query, lack of a color will not be considered as a color.
 * 
 * Example 1:
@@ -32,7 +33,8 @@
 * After query 1, ball 0 has color 1, and ball 1 has color 2.
 * After query 2, ball 0 has color 1, and balls 1 and 2 have color 2.
 * After query 3, ball 0 has color 1, balls 1 and 2 have color 2, and ball 3 has color 4.
-* After query 4, ball 0 has color 1, balls 1 and 2 have color 2, ball 3 has color 4, and ball 4 has color 5.
+* After query 4, ball 0 has color 1, balls 1 and 2 have color 2, ball 3 has color 4, 
+* __ and ball 4 has color 5.
 * 
 * Constraints:
 * • 1 <= limit <= 10^9
@@ -43,38 +45,41 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-
 class Solution {
-    // This solution uses two HashMaps: one to track ball colors and another
-    // to maintain the count of distinct colors. On each query, we update the
-    // ball's color, adjust the color count accordingly, and store the result.
-    // Each operation (put, get, remove) runs in O(1), making the overall time
-    // complexity O(n). The space complexity is O(n) due to the HashMaps.
+    // For each query, we update the color of a ball and track how many times
+    // each color is used across all balls. We maintain the count of distinct
+    // colors by incrementing when a color is first used, and decrementing when
+    // a color becomes unused. All operations are O(1) thanks to HashMaps.
+    // Time: O(n), Space: O(n), where n is the number of queries.
     public int[] queryResults(int limit, int[][] queries) {
-        HashMap<Integer, Integer> balls = new HashMap<Integer, Integer>();
-        HashMap<Integer, Integer> colors = new HashMap<Integer, Integer>();
-        int[] distinctColors = new int[queries.length];
+        final int n = queries.length;
+        HashMap<Integer, Integer> ballToColor = new HashMap<>(n);   // maps ball -> color
+        HashMap<Integer, Integer> colorUsageCount = new HashMap<>(n); // maps color -> usage count
+        int[] result = new int[n];
+        int distinctColorCount = 0;
 
-        for (int i = 0; i < queries.length; i++) {
-            if (balls.containsKey(queries[i][0])){
-                if (colors.get(balls.get(queries[i][0])) == 1){
-                    colors.remove(balls.get(queries[i][0]));
-                } else {
-                    colors.replace(balls.get(queries[i][0]),colors.get(balls.get(queries[i][0]))-1);
-                }
-                balls.replace(queries[i][0],queries[i][1]);
-                //
-            } else {
-                balls.put(queries[i][0],queries[i][1]);
+        for (int i = 0; i < n; i++) {
+            int ball = queries[i][0];
+            int newColor = queries[i][1];
+
+            // Increase count for the new color (if it's new, increment distinct counter)
+            int countBefore = colorUsageCount.getOrDefault(newColor, 0);
+            if (countBefore == 0) distinctColorCount++;
+            colorUsageCount.put(newColor, countBefore + 1);
+
+            // Check if the ball had a previous color and update that color's count
+            Integer oldColor = ballToColor.get(ball);
+            if (oldColor != null) {
+                int oldColorCount = colorUsageCount.getOrDefault(oldColor, 0);
+                if (oldColorCount == 1) distinctColorCount--;
+                colorUsageCount.put(oldColor, oldColorCount - 1);
             }
-            if (colors.containsKey(queries[i][1])){
-                colors.replace(queries[i][1],colors.get(queries[i][1])+1);
-            } else {
-                colors.put(queries[i][1],1);
-            }
-            distinctColors[i] = colors.size();
+
+            // Update the ball's color
+            ballToColor.put(ball, newColor);
+            result[i] = distinctColorCount;
         }
-        return distinctColors;
+
+        return result;
     }
 }
