@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-17
 // At the time of submission:
-//   Runtime 23 ms Beats 81.15%
-//   Memory 62.08 MB Beats 9.42%
+//   Runtime 7 ms Beats 99.96%
+//   Memory 56.34 MB Beats 98.43%
 
 /****************************************
 * 
@@ -46,26 +46,47 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort the array to group similar values together.
-    // Then, iterate in steps of 3 and form triplets.
-    // For each triplet, check if max - min ≤ k.
-    // If not, return empty; otherwise, store it.
-    // Time: O(n log n) due to sorting. Space: O(n) for result.
+    // Use counting sort to arrange nums in ascending order.
+    // Then, group every 3 consecutive values and check if max - min ≤ k.
+    // Return an empty array if any triplet violates the constraint.
+    // Time: O(n + m), where m is the max value in nums.
+    // Space: O(m) for the frequency array.
     public int[][] divideArray(int[] nums, int k) {
-        int n = nums.length;
-        Arrays.sort(nums);
-        int[][] result = new int[n / 3][3];
-
-        for (int i = 0; i < n; i += 3) {
-            int a = nums[i], b = nums[i + 1], c = nums[i + 2];
-            if (c - a > k) {
-                return new int[0][0]; // not a valid triplet
-            }
-            result[i / 3] = new int[] {a, b, c};
+        // Find the max value to size the counting sort array
+        int maxValue = 0;
+        for (int num : nums) {
+            if (num > maxValue) maxValue = num;
         }
+
+        // Count occurrences of each number
+        int[] freq = new int[maxValue + 1];
+        for (int num : nums) {
+            freq[num]++;
+        }
+
+        // Rebuild nums[] in sorted order using frequency array
+        int index = 0;
+        for (int num = 0; num < freq.length; num++) {
+            for (int count = 0; count < freq[num]; count++) {
+                nums[index++] = num;
+            }
+        }
+
+        // Validate each group of 3 for the max difference constraint
+        for (int i = 0; i < nums.length; i += 3) {
+            if (nums[i + 2] - nums[i] > k) {
+                return new int[0][];
+            }
+        }
+
+        // Build result using valid triplets
+        int[][] result = new int[nums.length / 3][];
+        index = 0;
+        for (int i = 0; i < result.length; i++) {
+            result[i] = new int[] { nums[index++], nums[index++], nums[index++] };
+        }
+
         return result;
     }
 }
