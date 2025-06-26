@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-19
 // At the time of submission:
-//   Runtime 55 ms Beats 86.36%
-//   Memory 45.92 MB Beats 31.82%
+//   Runtime 23 ms Beats 99.98%
+//   Memory 46.24 MB Beats 8.11%
 
 /****************************************
 * 
@@ -46,36 +46,35 @@
 * 
 ****************************************/
 
-public class Solution {
-    // Traverse the string step-by-step, tracking net vertical and horizontal
-    // movement. At each step, compute the Manhattan distance and consider
-    // up to k changes, each adding 2 units of distance. Cap the result by
-    // the number of steps taken so far (i + 1). This ensures we don’t exceed
-    // the number of actual moves. Time: O(n), Space: O(1).
+class Solution {
+    // Tracks position as we follow the movement string step-by-step.
+    // Computes Manhattan distance from origin at each step, allowing up
+    // to k direction changes (each worth up to +2 distance). Caps result
+    // at current step count to ensure we don’t exceed actual moves taken.
+    // Time: O(n), Space: O(1) — only fixed-size arrays used.
     public int maxDistance(String s, int k) {
-        int vertical = 0;   // North-South axis
-        int horizontal = 0; // East-West axis
-        int maxDist = 0;
+        // Predefined direction vectors: [dx, dy] for 'N', 'S', 'E', 'W'
+        int[][] direction = new int[26][2];
+        direction['N' - 'A'] = new int[]{0, 1};
+        direction['S' - 'A'] = new int[]{0, -1};
+        direction['E' - 'A'] = new int[]{1, 0};
+        direction['W' - 'A'] = new int[]{-1, 0};
 
-        for (int i = 0; i < s.length(); i++) {
-            char move = s.charAt(i);
-            switch (move) {
-                case 'N': vertical++; break;
-                case 'S': vertical--; break;
-                case 'E': horizontal++; break;
-                case 'W': horizontal--; break;
-            }
+        int result = 0;
+        int[] location = new int[2]; // [x, y]
+        int steps = 0;
 
-            // Raw Manhattan distance from (0,0)
-            int current = Math.abs(vertical) + Math.abs(horizontal);
+        for (char c : s.toCharArray()) {
+            int[] move = direction[c - 'A'];
+            location[0] += move[0];
+            location[1] += move[1];
 
-            // Add up to k modifications (each can increase distance by 2)
-            int boosted = current + 2 * k;
-
-            // Distance can't exceed the number of steps taken
-            maxDist = Math.max(maxDist, Math.min(boosted, i + 1));
+            int manhattan = Math.abs(location[0]) + Math.abs(location[1]);
+            int boosted = manhattan + (k << 1); // Up to k moves can each add 2 distance
+            result = Math.max(result, Math.min(boosted, steps + 1));
+            steps++;
         }
 
-        return maxDist;
+        return result;
     }
 }
