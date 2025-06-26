@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-18
 // At the time of submission:
-//   Runtime 34 ms Beats 42.55%
-//   Memory 56.96 MB Beats 54.61%
+//   Runtime 4 ms Beats 97.05%
+//   Memory 58.24 MB Beats 13.84%
 
 /****************************************
 * 
@@ -50,29 +50,50 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort the array to group values with small differences together.
-    // Greedily form subsequences by starting from the smallest unused value.
-    // Keep adding values to the current subsequence while their difference
-    // from the start value is ≤ k. When exceeded, start a new subsequence.
-    // Time: O(n log n) for sorting. Space: O(1) extra (excluding output).
+    // Group values into the minimum number of subsequences such that the
+    // difference between any two elements in a group is ≤ k. Uses a boolean
+    // presence array instead of sorting to allow linear-time grouping.
+    // Time: O(n + range) where range = max(nums) - min(nums)
+    // Space: O(max(nums)) for the presence array
     public int partitionArray(int[] nums, int k) {
-        Arrays.sort(nums);
-        int count = 0;
-        int i = 0;
         int n = nums.length;
+        int max = -1;
+        int min = Integer.MAX_VALUE;
 
-        while (i < n) {
-            int start = nums[i]; // start a new subsequence
-            count++;
-            // extend subsequence as far as allowed by k
-            while (i < n && nums[i] - start <= k) {
+        // Find global min and max to determine array range
+        for (int value : nums) {
+            max = Math.max(max, value);
+            min = Math.min(min, value);
+        }
+
+        // If all numbers fit within a single k-range, only one group is needed
+        if (max - min <= k) {
+            return 1;
+        }
+
+        // Create a presence array (bitmap) to quickly check number existence
+        boolean[] present = new boolean[max + 1];
+        for (int value : nums) {
+            present[value] = true;
+        }
+
+        int groups = 1;
+        int i = min + k + 1;
+
+        // Greedily skip ahead by k steps after each group is formed
+        while (i <= max) {
+            // Find the next value that exists
+            while (i <= max && !present[i]) {
                 i++;
+            }
+            if (i <= max) {
+                groups++;
+                i += k + 1; // Skip ahead to avoid overlap
             }
         }
 
-        return count;
+        return groups;
     }
 }
+
