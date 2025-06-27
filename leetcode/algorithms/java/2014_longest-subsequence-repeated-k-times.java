@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-06-26
 // At the time of submission:
-//   Runtime 200 ms Beats 86.79%
-//   Memory 45.69 MB Beats 18.87%
+//   Runtime 97 ms Beats 100.00%
+//   Memory 45.38 MB Beats 52.83%
 
 /****************************************
 * 
@@ -46,63 +46,65 @@
 * 
 ****************************************/
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Queue;
-import java.util.LinkedList;
 
 class Solution {
-    // Use BFS to build all possible subsequences from characters 
-    // that appear at least k times. Check each candidate to see 
-    // if it can be repeated k times as a subsequence of s.
-    // Prioritize lexicographically larger strings by ordering 
-    // candidate characters in reverse.
+    // Build all possible subsequences using characters that appear at least k times.
+    // Group valid subsequences by length (up to 7) and generate longer ones by appending
+    // one character at a time. For each candidate, check if it repeats k times in s.
+    // Among valid options, track the lexicographically largest of the longest ones.
+    // Time: O(n * m!), where m = max subsequence length ≤ 7; Space: O(m!).
     public String longestSubsequenceRepeatedK(String s, int k) {
-        int[] freq = new int[26];
-        for (char ch : s.toCharArray()) freq[ch - 'a']++;
+        char[] source = s.toCharArray();
+        int n = source.length;
 
-        List<Character> candidate = new ArrayList<>();
-        for (int i = 25; i >= 0; i--) {
-            if (freq[i] >= k) candidate.add((char)('a' + i));
+        char[] freq = new char[26];
+        for (char ch : source)
+            freq[ch - 'a']++;
+
+        // Store candidates of length 1 to 7
+        ArrayList<String>[] candidates = new ArrayList[8];
+        candidates[1] = new ArrayList<>();
+        String result = "";
+
+        // Initialize with characters that appear at least k times
+        for (int i = 0; i < 26; i++) {
+            if (freq[i] >= k) {
+                String single = "" + (char) ('a' + i);
+                candidates[1].add(single);
+                result = single; // Track latest valid result
+            }
         }
 
-        Queue<String> queue = new LinkedList<>();
-        for (char ch : candidate) queue.offer(String.valueOf(ch));
-
-        String answer = "";
-        while (!queue.isEmpty()) {
-            Queue<String> nextQueue = new LinkedList<>();
-            while (!queue.isEmpty()) {
-                String curr = queue.poll();
-                if (curr.length() > answer.length() ||
-                    (curr.length() == answer.length() && curr.compareTo(answer) > 0)) {
-                    answer = curr;
-                }
-                for (char ch : candidate) {
-                    String next = curr + ch;
-                    if (isKRepeatedSubsequence(s, next, k)) {
-                        nextQueue.offer(next);
+        // Generate candidate subsequences of length 2 to 7
+        for (int len = 2; len < 8; len++) {
+            candidates[len] = new ArrayList<>();
+            for (String prev : candidates[len - 1]) {
+                for (String suffix : candidates[1]) {
+                    String next = prev + suffix;
+                    if (isKRepeatedSubsequence(source, next, k)) {
+                        candidates[len].add(next);
+                        result = next; // Update best result
                     }
                 }
             }
-            queue = nextQueue; // Move to the next level
         }
 
-        return answer;
+        return result;
     }
 
-    private boolean isKRepeatedSubsequence(String s, String t, int k) {
-        int pos = 0, matched = 0, m = t.length();
-        for (char ch : s.toCharArray()) {
-            if (ch == t.charAt(pos)) {
-                pos++;
-                if (pos == m) {
-                    matched++;
-                    pos = 0;
-                    if (matched == k) return true;
-                }
+    private boolean isKRepeatedSubsequence(char[] source, String pattern, int k) {
+        char[] target = pattern.toCharArray();
+        int i = 0, j = 0, n = source.length, m = target.length;
+
+        while (k-- > 0) {
+            j = 0;
+            while (i < n && j < m) {
+                if (source[i] == target[j]) j++;
+                i++;
             }
+            if (j != m) return false;
         }
-        return false;
+        return true;
     }
 }
