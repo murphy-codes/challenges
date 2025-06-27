@@ -96,6 +96,7 @@ LeetCode
 |2349|[Design a Number Container System](https://leetcode.com/problems/design-a-number-container-system/)|[Java](./algorithms/java/2349_design-a-number-container-system.java)|Medium|
 |2342|[Max Sum of a Pair With Equal Sum of Digits](https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/)|[Java](./algorithms/java/2342_max-sum-of-a-pair-with-equal-sum-of-digits.java)|Medium|
 |2338|[Count the Number of Ideal Arrays](https://leetcode.com/problems/count-the-number-of-ideal-arrays/)|[Java](./algorithms/java/2338_count-the-number-of-ideal-arrays.java)|Hard|
+|2311|[Longest Binary Subsequence Less Than or Equal to K](https://leetcode.com/problems/longest-binary-subsequence-less-than-or-equal-to-k/)|[Java](./algorithms/java/2311_longest-binary-subsequence-less-than-or-equal-to-k.java)|Medium|
 |2302|[Count Subarrays With Score Less Than K](https://leetcode.com/problems/count-subarrays-with-score-less-than-k/)|[Java](./algorithms/java/2302_count-subarrays-with-score-less-than-k.java)|Hard|
 |2294|[Partition Array Such That Maximum Difference Is K](https://leetcode.com/problems/partition-array-such-that-maximum-difference-is-k/)|[Java](./algorithms/java/2294_partition-array-such-that-maximum-difference-is-k.java)|Medium|
 |2270|[Number of Ways to Split Array](https://leetcode.com/problems/number-of-ways-to-split-array/)|[Java](./algorithms/java/2270_number-of-ways-to-split-array.java)|Medium|
@@ -120,6 +121,7 @@ LeetCode
 |2033|[Minimum Operations to Make a Uni-Value Grid](https://leetcode.com/problems/minimum-operations-to-make-a-uni-value-grid)|[Java](./algorithms/java/2033_minimum-operations-to-make-a-uni-value-grid.java)|Medium|
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
 |2016|[Maximum Difference Between Increasing Elements](https://leetcode.com/problems/maximum-difference-between-increasing-elements/)|[Java](./algorithms/java/2016_maximum-difference-between-increasing-elements.java)|Easy|
+|2014|[Longest Subsequence Repeated k Times](https://leetcode.com/problems/longest-subsequence-repeated-k-times/)|[Java](./algorithms/java/2014_longest-subsequence-repeated-k-times.java)|Hard|
 |1980|[Find Unique Binary String](https://leetcode.com/problems/find-unique-binary-string/)|[Java](./algorithms/java/1980_find-unique-binary-string.java)|Medium|
 |1976|[Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)|[Java](./algorithms/java/1976_number-of-ways-to-arrive-at-destination.java)|Medium|
 |1931|[Painting a Grid With Three Different Colors](https://leetcode.com/problems/painting-a-grid-with-three-different-colors/)|[Java](./algorithms/java/1931_painting-a-grid-with-three-different-colors.java)|Hard|
