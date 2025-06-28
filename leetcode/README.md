@@ -114,6 +114,7 @@ LeetCode
 |2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
 |2115|[Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)|[Java](./algorithms/java/2115_find-all-possible-recipes-from-given-supplies.java)|Medium|
+|2099|[Find Subsequence of Length K With the Largest Sum](https://leetcode.com/problems/find-subsequence-of-length-k-with-the-largest-sum/)|[Java](./algorithms/java/2099_find-subsequence-of-length-k-with-the-largest-sum.java)|Easy|
 |2094|[Finding 3-Digit Even Numbers](https://leetcode.com/problems/finding-3-digit-even-numbers/)|[Java](./algorithms/java/2094_finding-3-digit-even-numbers.java)|Easy|
 |2081|[Sum of k-Mirror Numbers](https://leetcode.com/problems/sum-of-k-mirror-numbers/)|[Java](./algorithms/java/2081_sum-of-k-mirror-numbers.java)|Hard|
 |2071|[Maximum Number of Tasks You Can Assign](https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/)|[Java](./algorithms/java/2071_maximum-number-of-tasks-you-can-assign.java)|Hard|
