@@ -179,6 +179,7 @@ LeetCode
 |763|[Partition Labels](https://leetcode.com/problems/partition-labels/)|[Java](./algorithms/java/763_partition-labels.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |684|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/684_redundant-connection.java)|Medium|
+|594|[Longest Harmonious Subsequence](https://leetcode.com/problems/longest-harmonious-subsequence/)|[Java](./algorithms/java/594_longest-harmonious-subsequence.java)|Easy|
 |440|[K-th Smallest in Lexicographical Order](https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/)|[Java](./algorithms/java/440_k-th-smallest-in-lexicographical-order.java)|Hard|
 |416|[Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)|[Java](./algorithms/java/416_partition-equal-subset-sum.java)|Medium|
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
