@@ -25,6 +25,7 @@ LeetCode
 |3341|[Find Minimum Time to Reach Last Room I](https://leetcode.com/problems/find-minimum-time-to-reach-last-room-i/)|[Java](./algorithms/java/3341_find-minimum-time-to-reach-last-room-i.java)|Medium|
 |3337|[Total Characters in String After Transformations II](https://leetcode.com/problems/total-characters-in-string-after-transformations-i/)|[Java](./algorithms/java/3337_total-characters-in-string-after-transformations-ii.java)|Hard|
 |3335|[Total Characters in String After Transformations I](https://leetcode.com/problems/total-characters-in-string-after-transformations-i/)|[Java](./algorithms/java/3335_total-characters-in-string-after-transformations-i.java)|Medium|
+|3333|[Find the Original Typed String II](https://leetcode.com/problems/find-the-original-typed-string-ii/)|[Java](./algorithms/java/3333_find-the-original-typed-string-ii.java)|Hard|
 |3330|[Find the Original Typed String I](https://leetcode.com/problems/find-the-original-typed-string-i/)|[Java](./algorithms/java/3330_find-the-original-typed-string-i.java)|Easy|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
 |3272|[Find the Count of Good Integers](https://leetcode.com/problems/find-the-count-of-good-integers/)|[Java](./algorithms/java/3272_find-the-count-of-good-integers.java)|Hard|
