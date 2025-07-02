@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-01
 // At the time of submission:
-//   Runtime 163 ms Beats 63.89%
-//   Memory 55.84 MB Beats 27.78%
+//   Runtime 103 ms Beats 80.56%
+//   Memory 55.71 MB Beats 38.89%
 
 /****************************************
 * 
@@ -41,68 +41,69 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 class Solution {
-    // Count all original strings Alice might have intended to type.
-    // For each run of repeated chars, Alice can choose 1 to run.length presses.
-    // Total = product of run lengths (multiplication principle).
-    // Subtract all combinations where final length < k using DP + prefix sums.
-    // Time: O(n + k^2), Space: O(k) — works even for large strings (n up to 5 * 10^5).
+    // Group consecutive repeated characters into runs, and compute the total
+    // number of ways to shrink each run (choose 1 to full length). Total valid
+    // results = product of run lengths. Use DP to subtract cases where result
+    // length < k. Optimize by computing valid combinations backwards and
+    // rolling the prefix sum. Time: O(k^2), Space: O(k^2) worst-case.
 
-    private static final int MOD = 1_000_000_007;
+    private static final long MOD = (long)1e9 + 7;
 
     public int possibleStringCount(String word, int k) {
+        if (word.length() == k) return 1;
+
+        // Step 1: Group consecutive characters and count their run lengths
+        List<Integer> runLengths = new ArrayList<>();
         int n = word.length();
-        List<Integer> freq = new ArrayList<>();
-        int count = 1;
+        int i = 0;
+        while (i < n) {
+            int j = i + 1;
+            while (j < n && word.charAt(j) == word.charAt(j - 1)) j++;
+            runLengths.add(j - i);
+            i = j;
+        }
 
-        // Step 1: Count frequencies of consecutive identical characters
-        for (int i = 1; i < n; ++i) {
-            if (word.charAt(i) == word.charAt(i - 1)) {
-                ++count;
-            } else {
-                freq.add(count);
-                count = 1;
+        int m = runLengths.size();  // number of runs
+
+        // Step 2: Precompute product of runLengths in reverse for total count
+        long[] totalCombos = new long[m];
+        totalCombos[m - 1] = runLengths.get(m - 1);
+        for (i = m - 2; i >= 0; i--) {
+            totalCombos[i] = (totalCombos[i + 1] * runLengths.get(i)) % MOD;
+        }
+
+        // If the number of runs is already >= k, all combinations are valid
+        if (m >= k) return (int) totalCombos[0];
+
+        // Step 3: DP to subtract invalid strings with length < k
+        int maxExtra = k - m;
+        long[][] dp = new long[m][maxExtra + 1];
+
+        // Base case: last run
+        for (i = 0; i <= maxExtra; i++) {
+            if (runLengths.get(m - 1) + i + m > k) {
+                dp[m - 1][i] = runLengths.get(m - 1) - (k - m - i);
             }
         }
-        freq.add(count);
 
-        // Step 2: Compute total combinations using multiplication principle
-        long total = 1;
-        for (int val : freq) {
-            total = (total * val) % MOD;
-        }
+        // DP transition from end to start
+        for (i = m - 2; i >= 0; i--) {
+            long sum = (dp[i + 1][maxExtra] * runLengths.get(i)) % MOD;
+            for (int j = maxExtra; j >= 0; j--) {
+                sum = (sum + dp[i + 1][j]) % MOD;
 
-        // Step 3: If we already have k groups, all combinations are valid
-        if (freq.size() >= k) return (int) total;
-
-        // Step 4: Dynamic Programming to subtract invalid cases (length < k)
-        int[] dp = new int[k];
-        int[] prefix = new int[k];
-        dp[0] = 1;
-        Arrays.fill(prefix, 1);
-
-        for (int run : freq) {
-            int[] newDp = new int[k];
-            for (int len = 1; len < k; ++len) {
-                newDp[len] = prefix[len - 1];
-                if (len - run - 1 >= 0) {
-                    newDp[len] = (newDp[len] - prefix[len - run - 1] + MOD) % MOD;
+                if (j + runLengths.get(i) > maxExtra) {
+                    sum = (sum - dp[i + 1][maxExtra] + MOD) % MOD;
+                } else {
+                    sum = (sum - dp[i + 1][j + runLengths.get(i)] + MOD) % MOD;
                 }
-            }
 
-            int[] newPrefix = new int[k];
-            newPrefix[0] = newDp[0];
-            for (int len = 1; len < k; ++len) {
-                newPrefix[len] = (newPrefix[len - 1] + newDp[len]) % MOD;
+                dp[i][j] = sum;
             }
-
-            dp = newDp;
-            prefix = newPrefix;
         }
 
-        // Step 5: Subtract invalid combinations of length < k
-        return (int)((total - prefix[k - 1] + MOD) % MOD);
+        return (int) dp[0][0];
     }
 }
