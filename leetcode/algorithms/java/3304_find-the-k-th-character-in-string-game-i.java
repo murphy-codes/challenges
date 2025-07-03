@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-02
 // At the time of submission:
-//   Runtime 5 ms Beats 33.13%
-//   Memory 42.21 MB Beats 66.34%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.92 MB Beats 73.52%
 
 /****************************************
 * 
@@ -37,21 +37,30 @@
 ****************************************/
 
 class Solution {
-    // Simulate the string construction step-by-step by doubling and incrementing.
-    // For each round, generate the incremented copy of the current string and append.
-    // Stop when the string length reaches or exceeds k, then return k-th char.
-    // Time: O(k), since we build the string up to k characters.
-    // Space: O(k), since we store the string in a StringBuilder.
+    // This solution avoids building the full string by simulating the process
+    // through bit manipulation. Each round effectively doubles the string length,
+    // forming a tree structure. We trace back how many increments from 'a' are
+    // needed to reach the k-th character using the highest power of 2 ≤ k.
+    // Time: O(log k), since we reduce k by powers of 2 each step.
+    // Space: O(1), constant extra space is used.
     public char kthCharacter(int k) {
-        StringBuilder word = new StringBuilder("a");
-        while (word.length() < k) {
-            int len = word.length();
-            for (int i = 0; i < len; i++) {
-                char ch = word.charAt(i);
-                char next = (char) ((ch == 'z') ? 'a' : (ch + 1));
-                word.append(next);
+        int incrementCount = 0;
+        int mostSignificantBit;
+
+        while (k != 1) {
+            // Find the position of the most significant bit in k
+            mostSignificantBit = 31 - Integer.numberOfLeadingZeros(k);
+
+            // If k is a power of two, decrement the bit position by 1
+            if ((1 << mostSignificantBit) == k) {
+                mostSignificantBit--;
             }
+
+            // Subtract the largest power of two less than k
+            k -= (1 << mostSignificantBit);
+            incrementCount++;
         }
-        return word.charAt(k - 1);
+
+        return (char) ('a' + incrementCount);
     }
 }
