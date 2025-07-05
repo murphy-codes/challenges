@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-05
 // At the time of submission:
-//   Runtime 4 ms Beats 73.84%
-//   Memory 43.34 MB Beats 58.02%
+//   Runtime 1 ms Beats 99.94%
+//   Memory 43.42 MB Beats 43.99%
 
 /****************************************
 * 
@@ -32,22 +32,19 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
 class Solution {
-    // Count the frequency of each number using a HashMap.  
-    // Then, scan for values where the number equals its frequency.  
-    // Track and return the largest such value (lucky number).  
-    // Time complexity: O(n), where n is the length of arr.  
-    // Space complexity: O(n) for storing unique elements in the map.
+    // Use an array to count frequency of each number (1–500). 
+    // Then iterate backwards to find the largest number whose 
+    // value equals its frequency. Time complexity: O(n), 
+    // Space complexity: O(1), since max arr[i] is 500.
     public int findLucky(int[] arr) {
-        int lucky = -1;
-        HashMap<Integer, Integer> luckyNumbers = new HashMap<Integer, Integer>();
-        for (int i=0; i < arr.length; ++i) {
-            luckyNumbers.merge(arr[i], 1, (a, b) -> a + b);
+        int[] freq = new int[501]; // value range is [1, 500]
+        for (int num : arr) {
+            freq[num]++;
         }
-        for (int num : luckyNumbers.keySet()) {
-            if(num==luckyNumbers.get(num) && num > lucky) { lucky = num; }
+        for (int i = 500; i >= 1; i--) {
+            if (freq[i] == i) return i;
         }
-        return lucky;
+        return -1;
     }
 }
