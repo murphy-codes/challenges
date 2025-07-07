@@ -160,6 +160,7 @@ LeetCode
 |1394|[Find Lucky Integer in an Array](https://leetcode.com/problems/find-lucky-integer-in-an-array/)|[Java](./algorithms/java/1394_find-lucky-integer-in-an-array.java)|Easy|
 |1368|[Minimum Cost to Make at Least One Valid Path in a Grid](https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/)|[Java](./algorithms/java/1368_minimum-cost-to-make-at-least-one-valid-path-in-a-grid.java)|Hard|
 |1358|[Number of Substrings Containing All Three Characters](https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/)|[Java](./algorithms/java/1358_number-of-substrings-containing-all-three-characters.java)|Medium|
+|1353|[Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)|[Java](./algorithms/java/1353_maximum-number-of-events-that-can-be-attended.java)|Medium|
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
 |1298|[Maximum Candies You Can Get from Boxes](https://leetcode.com/problems/maximum-candies-you-can-get-from-boxes/)|[Java](./algorithms/java/1298_maximum-candies-you-can-get-from-boxes.java)|Hard|
 |1295|[Find Numbers with Even Number of Digits](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/)|[Java](./algorithms/java/1295_find-numbers-with-even-number-of-digits.java)|Easy|
