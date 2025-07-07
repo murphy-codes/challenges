@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-06
 // At the time of submission:
-//   Runtime 66 ms Beats 60.61%
-//   Memory 75.39 MB Beats 86.83%
+//   Runtime 30 ms Beats 99.42%
+//   Memory 74.41 MB Beats 98.37%
 
 /****************************************
 * 
@@ -35,38 +35,42 @@
 ****************************************/
 
 import java.util.Arrays;
-import java.util.PriorityQueue;
 
 class Solution {
-    // Greedy + Min-Heap approach to attend max events.
-    // Sort events by start day; use min-heap to track soonest-ending events.
-    // On each day, add newly available events, remove expired ones,
-    // and attend the event that ends earliest.
-    // Time: O(N log N), Space: O(N), where N = events.length
+    // Greedy + Union-Find (DSU) with path compression approach.
+    // Sort events by end day to prioritize earliest possible attendance.
+    // Use DSU to find the earliest available day to attend each event.
+    // Once a day is used, union it with the next available day.
+    // Time: O(N log N) from sorting + near O(1) per DSU op → total O(N log N)
+    // Space: O(D), where D = latest day among all events
     public int maxEvents(int[][] events) {
-        Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
-        
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-        int i = 0, day = 1, count = 0;
-        int n = events.length;
-        
-        while (i < n || !minHeap.isEmpty()) {
-            // Add all events starting today
-            while (i < n && events[i][0] == day) {
-                minHeap.offer(events[i][1]);
-                i++;
-            }
-            // Remove expired events
-            while (!minHeap.isEmpty() && minHeap.peek() < day) {
-                minHeap.poll();
-            }
-            // Attend the event that ends earliest
-            if (!minHeap.isEmpty()) {
-                minHeap.poll();
+        // Sort events by end day (ascending)
+        Arrays.sort(events, (a, b) -> a[1] - b[1]);
+
+        // Parent array for union-find up to the latest end day
+        int maxDay = events[events.length - 1][1];
+        int[] parent = new int[maxDay + 2]; // 1-based days
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = i;
+        }
+
+        int count = 0;
+        for (int[] event : events) {
+            int earliestDay = find(parent, event[0]);
+            if (earliestDay <= event[1]) {
                 count++;
+                // Mark this day as used by unioning to next available
+                parent[earliestDay] = find(parent, earliestDay + 1);
             }
-            day++;
         }
         return count;
+    }
+
+    // Union-Find with path compression
+    private int find(int[] parent, int day) {
+        if (parent[day] != day) {
+            parent[day] = find(parent, parent[day]);
+        }
+        return parent[day];
     }
 }
