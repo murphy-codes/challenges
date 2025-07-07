@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-06
 // At the time of submission:
-//   Runtime 138 ms Beats 86.36%
-//   Memory 73.49 MB Beats 84.96%
+//   Runtime 126 ms Beats 97.20%
+//   Memory 78.18 MB Beats 32.17%
 
 /****************************************
 * 
@@ -48,28 +48,51 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 class FindSumPairs {
-    // Build a frequency map for nums2 to allow fast lookup of complements.
-    // When add() is called, update both nums2 and the frequency map.
-    // In count(), for each num1 in nums1, check how many times (tot - num1)
-    // appears in nums2 using the map. This is efficient due to nums1 being small.
-    // Time Complexity: O(1) for add(), O(n1) for count() where n1 = nums1.length
-    // Space Complexity: O(n2) where n2 = nums2.length, due to the frequency map.
-    private int[] nums1;
-    private int[] nums2;
-    private Map<Integer, Integer> freq2;
+// This solution precomputes frequency maps for both nums1 and nums2.
+// Since nums1 is small (≤ 1000), we cache its frequencies and sort
+// its unique keys to optimize the count() operation. We update nums2
+// and its frequency map on every add(). The count() operation iterates
+// nums1 keys and checks the matching pair count in nums2.
+// Time Complexity:
+// - Constructor: O(n1 + n2 + n1*log(n1)) for maps + sorting
+// - add(): O(1)
+// - count(): O(n1) where n1 = nums1.length
+// Space Complexity: O(n1 + n2) for frequency maps
+    int[] nums1, nums2;
+
+    // Frequency maps
+    Map<Integer, Integer> freqNums1;
+    Map<Integer, Integer> freqNums2;
+
+    // Sorted unique keys of nums1
+    List<Integer> sortedNums1Keys;
 
     public FindSumPairs(int[] nums1, int[] nums2) {
         this.nums1 = nums1;
         this.nums2 = nums2;
-        this.freq2 = new HashMap<>();
 
-        // Build frequency map of nums2
+        freqNums1 = new HashMap<>();
+        freqNums2 = new HashMap<>();
+
+        // Build frequency map for nums1
+        for (int num : nums1) {
+            freqNums1.put(num, freqNums1.getOrDefault(num, 0) + 1);
+        }
+
+        // Store and sort unique keys of nums1 for optimized lookup
+        sortedNums1Keys = new ArrayList<>(freqNums1.keySet());
+        Collections.sort(sortedNums1Keys);
+
+        // Build frequency map for nums2
         for (int num : nums2) {
-            freq2.put(num, freq2.getOrDefault(num, 0) + 1);
+            freqNums2.put(num, freqNums2.getOrDefault(num, 0) + 1);
         }
     }
 
@@ -77,24 +100,34 @@ class FindSumPairs {
         int original = nums2[index];
         int updated = original + val;
 
-        // Update frequency map
-        freq2.put(original, freq2.get(original) - 1);
-        if (freq2.get(original) == 0) {
-            freq2.remove(original);
+        // Update frequency map: decrement old value
+        int oldCount = freqNums2.get(original);
+        if (oldCount == 1) {
+            freqNums2.remove(original);
+        } else {
+            freqNums2.put(original, oldCount - 1);
         }
 
-        freq2.put(updated, freq2.getOrDefault(updated, 0) + 1);
+        // Increment frequency for new value
+        freqNums2.put(updated, freqNums2.getOrDefault(updated, 0) + 1);
 
-        // Update nums2 array
+        // Update nums2 in-place
         nums2[index] = updated;
     }
 
-    public int count(int tot) {
-        int count = 0;
-        for (int num1 : nums1) {
-            int complement = tot - num1;
-            count += freq2.getOrDefault(complement, 0);
+    public int count(int targetSum) {
+        int result = 0;
+
+        for (int a : sortedNums1Keys) {
+            if (a > targetSum) break; // Early exit optimization
+            int b = targetSum - a;
+            Integer freqB = freqNums2.get(b);
+
+            if (freqB != null) {
+                result += freqNums1.get(a) * freqB;
+            }
         }
-        return count;
+
+        return result;
     }
 }
