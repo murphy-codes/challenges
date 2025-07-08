@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-07
 // At the time of submission:
-//   Runtime 135 ms Beats 20.67%
-//   Memory 128.92 MB Beats 56.25%
+//   Runtime 20 ms Beats 98.08%
+//   Memory 124.57 MB Beats 66.83%
 
 /****************************************
 * 
@@ -45,50 +45,47 @@
 
 import java.util.Arrays;
 
+import java.util.Arrays;
+
 class Solution {
-    // DP + Binary Search solution for max value of up to k non-overlapping events
-    // Sort events by startDay, and at each step, choose to skip or take an event
-    // Taking uses binary search to find the next non-conflicting event efficiently
-    // Time: O(n log n + n * k) where n = events.length (log n from binary search)
-    // Space: O(n * k) for memoization table + O(log n) call stack in worst case
+    // Bottom-up DP with binary search to find max total value from at most k events
+    // Sort events by start day; for each event, either skip or take it
+    // Taking it adds its value and moves to the next non-overlapping event via binary search
+    // Time: O(n * k + n log n), where n = number of events (log n from binary search)
+    // Space: O(n * k) for the DP table storing subproblem results
     public int maxValue(int[][] events, int k) {
-        // Sort events by start time
+        if (k == 1) {
+            int maxValue = 0;
+            for (int[] event : events) {
+                maxValue = Math.max(maxValue, event[2]);
+            }
+            return maxValue;
+        }
+
+        // Sort events by their start time
         Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
 
         int n = events.length;
-        // Memoization cache: [event index][events left to pick]
-        Integer[][] dp = new Integer[n][k + 1];
+        int[][] dp = new int[n + 1][k + 1];  // dp[i][j] = max value from i-th event with j events remaining
 
-        return dfs(events, 0, k, dp);
-    }
-
-    // Recursive DP with memoization
-    private int dfs(int[][] events, int i, int k, Integer[][] dp) {
-        if (i == events.length || k == 0) return 0;
-        if (dp[i][k] != null) return dp[i][k];
-
-        // Option 1: Skip current event
-        int res = dfs(events, i + 1, k, dp);
-
-        // Option 2: Take current event
-        int nextIndex = findNext(events, events[i][1]);
-        int take = events[i][2] + dfs(events, nextIndex, k - 1, dp);
-
-        res = Math.max(res, take);
-        return dp[i][k] = res;
-    }
-
-    // Find next event that starts AFTER endTime
-    private int findNext(int[][] events, int endTime) {
-        int low = 0, high = events.length;
-        while (low < high) {
-            int mid = low + (high - low) / 2;
-            if (events[mid][0] > endTime) {
-                high = mid;
-            } else {
-                low = mid + 1;
+        // Fill DP table from the end to the beginning
+        for (int i = n - 1; i >= 0; i--) {
+            int next = findNext(events, i + 1, n, events[i][1]);
+            for (int count = k - 1; count >= 0; count--) {
+                dp[i][count] = Math.max(dp[i + 1][count], events[i][2] + dp[next][count + 1]);
             }
         }
-        return low;
+
+        return dp[0][0];
+    }
+
+    // Binary search to find the first event starting after 'target' end day
+    private int findNext(int[][] events, int left, int right, int target) {
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (events[mid][0] > target) right = mid;
+            else left = mid + 1;
+        }
+        return left;
     }
 }
