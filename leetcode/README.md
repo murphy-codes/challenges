@@ -143,6 +143,7 @@ LeetCode
 |1769|[Minimum Number of Operations to Move All Balls to Each Box](https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/)|[Java](./algorithms/java/1769_minimum-number-of-operations-to-move-all-balls-to-each-box.java)|Medium|
 |1765|[Map of Highest Peak](https://leetcode.com/problems/map-of-highest-peak/)|[Java](./algorithms/java/1765_map-of-highest-peak.java)|Medium|
 |1752|[Map of Highest Peak](https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/)|[Java](./algorithms/java/1752_check-if-array-is-sorted-and-rotated.java)|Easy|
+|1751|[Maximum Number of Events That Can Be Attended II](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/)|[Java](./algorithms/java/1751_maximum-number-of-events-that-can-be-attended-ii.java)|Hard|
 |1749|[Maximum Absolute Sum of Any Subarray](https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/)|[Java](./algorithms/java/1749_maximum-absolute-sum-of-any-subarray.java)|Medium|
 |1726|[Tuple with Same Product](https://leetcode.com/problems/tuple-with-same-product/)|[Java](./algorithms/java/1726_tuple-with-same-product.java)|Medium|
 |1718|[Construct the Lexicographically Largest Valid Sequence](https://leetcode.com/problems/construct-the-lexicographically-largest-valid-sequence/)|[Java](./algorithms/java/1718_construct-the-lexicographically-largest-valid-sequence.java)|Medium|
