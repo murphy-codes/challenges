@@ -45,8 +45,6 @@
 
 import java.util.Arrays;
 
-import java.util.Arrays;
-
 class Solution {
     // Bottom-up DP with binary search to find max total value from at most k events
     // Sort events by start day; for each event, either skip or take it
