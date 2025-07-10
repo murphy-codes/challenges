@@ -200,6 +200,7 @@ LeetCode
 |73|[Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)|[Java](./algorithms/java/73_set-matrix-zeroes.java)|Medium|
 |42|[Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)|[Java](./algorithms/java/42_trapping-rain-water.java)|Hard|
 |38|[Count and Say](https://leetcode.com/problems/count-and-say/)|[Java](./algorithms/java/38_count-and-say.java)|Medium|
+|8|[String to Integer (atoi)](https://leetcode.com/problems/string-to-integer-atoi/)|[Java](./algorithms/java/8_string-to-integer-atoi.java)|Medium|
 |7|[Reverse Integer](https://leetcode.com/problems/reverse-integer/)|[Java](./algorithms/java/7_reverse-integer.java)|Medium|
 |6|[Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion/)|[Java](./algorithms/java/6_zigzag-conversion.java)|Medium|
 |5|[Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)|[Java](./algorithms/java/5_longest-palindromic-substring.java)|Medium|
