@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-09
 // At the time of submission:
-//   Runtime 4 ms Beats 78.21%
-//   Memory 61.78 MB Beats 42.31%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 61.07 MB Beats 55.13%
 
 /****************************************
 * 
@@ -58,52 +58,56 @@
 ****************************************/
 
 class Solution {
-    // For each meeting, check if it can be rescheduled earlier (from the left)
-    // or later (from the right) based on surrounding gaps. Store reschedulability
-    // in boolean array q[]. Then compute the maximum continuous free window that
-    // could be created by shifting exactly one meeting, using the available gaps.
-    // Time Complexity: O(n), Space Complexity: O(n)
+    // This solution computes the max continuous free time by calculating
+    // all gaps between meetings and checking if any meeting can be moved
+    // into adjacent free slots. It precomputes prefix/suffix max gaps in
+    // O(n), allowing efficient checking of move feasibility.
+    // Time: O(n), Space: O(n)
     public int maxFreeTime(int eventTime, int[] startTime, int[] endTime) {
         int n = startTime.length;
-        boolean[] canMove = new boolean[n];
 
-        int leftGap = 0;
-        int rightGap = 0;
-
-        // Forward and backward pass to determine if a meeting can be moved
+        // Calculate gaps between meetings and store them in gaps[]
+        int[] gaps = new int[n + 1];
+        int lastEnd = 0;
         for (int i = 0; i < n; i++) {
-            // Forward check: Can this meeting fit entirely in the gap before it?
-            if (endTime[i] - startTime[i] <= leftGap) {
-                canMove[i] = true;
-            }
-            leftGap = Math.max(leftGap, startTime[i] - (i == 0 ? 0 : endTime[i - 1]));
+            gaps[i] = startTime[i] - lastEnd;
+            lastEnd = endTime[i];
+        }
+        gaps[n] = eventTime - endTime[n - 1];
 
-            // Backward check: Can this meeting fit in the gap after it?
-            int j = n - i - 1;
-            if (endTime[j] - startTime[j] <= rightGap) {
-                canMove[j] = true;
-            }
-            rightGap = Math.max(rightGap, (i == 0 ? eventTime : startTime[j + 1]) - endTime[j]);
+        // Build prefix max gap array
+        int[] prefixMax = new int[n];
+        prefixMax[0] = gaps[0];
+        for (int i = 1; i < n; i++) {
+            prefixMax[i] = Math.max(prefixMax[i - 1], gaps[i]);
         }
 
-        int maxFree = 0;
-
-        // Evaluate max free time if this meeting is moved or left alone
-        for (int i = 0; i < n; i++) {
-            int gapStart = (i == 0) ? 0 : endTime[i - 1];
-            int gapEnd = (i == n - 1) ? eventTime : startTime[i + 1];
-            int gap = gapEnd - gapStart;
-
-            if (canMove[i]) {
-                // Meeting can be shifted — entire gap becomes free
-                maxFree = Math.max(maxFree, gap);
-            } else {
-                // Meeting is fixed — subtract its duration from the gap
-                int occupied = endTime[i] - startTime[i];
-                maxFree = Math.max(maxFree, gap - occupied);
-            }
+        // Build suffix max gap array
+        int[] suffixMax = new int[n];
+        suffixMax[n - 1] = gaps[n];
+        for (int i = n - 2; i >= 0; i--) {
+            suffixMax[i] = Math.max(suffixMax[i + 1], gaps[i + 1]);
         }
 
-        return maxFree;
+        int maxFreeTime = 0;
+
+        // Check for each meeting if it can be moved into either adjacent gap
+        for (int i = 0; i < n; i++) {
+            int combinedGaps = gaps[i] + gaps[i + 1];
+            int duration = endTime[i] - startTime[i];
+            boolean canFit = false;
+
+            if (i > 0 && prefixMax[i - 1] >= duration) canFit = true;
+            if (i + 1 < n && suffixMax[i + 1] >= duration) canFit = true;
+
+            if (canFit) {
+                combinedGaps += duration;
+            }
+
+            maxFreeTime = Math.max(maxFreeTime, combinedGaps);
+        }
+
+        return maxFreeTime;
     }
 }
+
