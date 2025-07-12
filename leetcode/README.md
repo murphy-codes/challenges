@@ -93,6 +93,7 @@ LeetCode
 |2434|[Using a Robot to Print the Lexicographically Smallest String](https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/)|[Java](./algorithms/java/2434_using-a-robot-to-print-the-lexicographically-smallest-string.java)|Medium|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
+|2402|[Meeting Rooms III](https://leetcode.com/problems/meeting-rooms-iii/)|[Java](./algorithms/java/2402_meeting-rooms-iii.java)|Hard|
 |2401|[Longest Nice Subarray](https://leetcode.com/problems/longest-nice-subarray/)|[Java](./algorithms/java/2401_longest-nice-subarray.java)|Medium|
 |2381|[Shifting Letters II](https://leetcode.com/problems/shifting-letters-ii/)|[Java](./algorithms/java/2381_shifting-letters-ii.java)|Medium|
 |2379|[Minimum Recolors to Get K Consecutive Black Blocks](https://leetcode.com/problems/minimum-recolors-to-get-k-consecutive-black-blocks/)|[Java](./algorithms/java/2379_minimum-recolors-to-get-k-consecutive-black-blocks.java)|Easy|
@@ -136,6 +137,7 @@ LeetCode
 |1922|[Count Good Numbers](https://leetcode.com/problems/count-good-numbers/)|[Java](./algorithms/java/1922_count-good-numbers.java)|Medium|
 |1920|[Build Array from Permutation](https://leetcode.com/problems/build-array-from-permutation/)|[Java](./algorithms/java/1920_build-array-from-permutation.java)|Easy|
 |1910|[Remove All Occurrences of a Substring](https://leetcode.com/problems/remove-all-occurrences-of-a-substring/)|[Java](./algorithms/java/1910_remove-all-occurrences-of-a-substring.java)|Medium|
+|1900|[The Earliest and Latest Rounds Where Players Compete](https://leetcode.com/problems/the-earliest-and-latest-rounds-where-players-compete/)|[Java](./algorithms/java/1900_the-earliest-and-latest-rounds-where-players-compete.java)|Hard|
 |1865|[Finding Pairs With a Certain Sum](https://leetcode.com/problems/finding-pairs-with-a-certain-sum/)|[Java](./algorithms/java/1865_finding-pairs-with-a-certain-sum.java)|Medium|
 |1863|[Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals/)|[Java](./algorithms/java/1863_sum-of-all-subset-xor-totals.java)|Easy|
 |1857|[Largest Color Value in a Directed Graph](https://leetcode.com/problems/largest-color-value-in-a-directed-graph/)|[Java](./algorithms/java/1857_largest-color-value-in-a-directed-graph.java)|Hard|
