@@ -41,6 +41,7 @@ LeetCode
 |3169|[Count Days Without Meetings](https://leetcode.com/problems/count-days-without-meetings/)|[Java](./algorithms/java/3169_count-days-without-meetings.java)|Medium|
 |3160|[Find the Number of Distinct Colors Among the Balls](https://leetcode.com/problems/find-the-number-of-distinct-colors-among-the-balls/)|[Java](./algorithms/java/3160_find-the-number-of-distinct-colors-among-the-balls.java)|Medium|
 |3151|[Special Array I](https://leetcode.com/problems/special-array-i/)|[Java](./algorithms/java/3151_special-array-i.java)|Easy|
+|3136|[Valid Word](https://leetcode.com/problems/valid-word/)|[Java](./algorithms/java/3136_valid-word.java)|Easy|
 |3108|[Minimum Cost Walk in Weighted Graph](https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/)|[Java](./algorithms/java/3108_minimum-cost-walk-in-weighted-graph.java)|Hard|
 |3105|[Longest Strictly Increasing or Strictly Decreasing Subarray](https://leetcode.com/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/)|[Java](./algorithms/java/3105_longest-strictly-increasing-or-strictly-decreasing-subarray.java)|Easy|
 |3085|[Minimum Deletions to Make String K-Special](https://leetcode.com/problems/minimum-deletions-to-make-string-k-special/)|[Java](./algorithms/java/3085_minimum-deletions-to-make-string-k-special.java)|Medium|
