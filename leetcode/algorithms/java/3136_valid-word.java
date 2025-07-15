@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-14
 // At the time of submission:
-//   Runtime 1 ms Beats 99.12%
-//   Memory 42.23 MB Beats 34.66%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.87 MB Beats 90.73%
 
 /****************************************
 * 
@@ -42,25 +42,44 @@
 * 
 ****************************************/
 
-import java.util.Set;
-
 class Solution {
-    // Iterate through the word and reject it if it contains any invalid chars.
-    // Count vowels and digits; check that there's at least one vowel and one
-    // consonant (letter that is not a vowel). Return true if valid.
-    // Time: O(n), Space: O(1) — where n is word.length() (max 20).
-    private static final Set<Character> vowels = Set.of('A', 'E', 'I', 'O', 'U', 'a', 'e', 'i', 'o', 'u');
+    // Traverse each character of the word using a switch-case to identify
+    // vowels, consonants, digits, or invalid characters. Mark presence of
+    // at least one vowel and one consonant. Return false if an invalid char
+    // is found, or if either vowel or consonant is missing.
+    // Time: O(n), Space: O(1), where n is word.length() (max 20).
     public boolean isValid(String word) {
-        if (word.length() < 3) return false;
-        int vowelCount = 0, numCount = 0;
-        for (char ch : word.toCharArray()) {
-            if (ch == '@' || ch == '#' || ch == '$') { return false; }
-            else {
-                if (vowels.contains(ch)) vowelCount++;
-                else if (ch - '0' >= 0 && ch - '0' < 10) numCount++;
+        if (word.length() < 3) {
+            return false;
+        }
+
+        boolean hasVowel = false;
+        boolean hasConsonant = false;
+
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            switch (ch) {
+                // Vowels (both lowercase and uppercase)
+                case 'a', 'e', 'i', 'o', 'u', 
+                     'A', 'E', 'I', 'O', 'U':
+                    hasVowel = true;
+                    break;
+                // Consonants (all other letters)
+                case 'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 
+                     'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
+                     'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 
+                     'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z':
+                    hasConsonant = true;
+                    break;
+                // Digits (allowed, but not counted)
+                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+                    break;
+                // Invalid characters
+                default:
+                    return false;
             }
         }
-        if (vowelCount > 0 && word.length() > vowelCount + numCount) return true;
-        else return false;
+
+        return hasVowel && hasConsonant;
     }
 }
