@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-15
 // At the time of submission:
-//   Runtime 16 ms Beats 14.75%
-//   Memory 62.43 MB Beats 38.52%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 62.33 MB Beats 52.46%
 
 /****************************************
 * 
@@ -39,32 +39,24 @@
 ****************************************/
 
 class Solution {
-    // Try all 4 valid parity patterns: even-only, odd-only,
-    // even-odd alternating, and odd-even alternating.
-    // Iterate greedily through the array to build the longest valid
-    // subsequence under each pattern and return the maximum length.
-    // Time: O(n), Space: O(1), where n = nums.length
+    // Traverse the array while tracking:
+    // - The count of even and odd numbers (same-parity subsequences)
+    // - The length of the longest alternating subsequence ending in each parity
+    // Update each parity's alternating chain based on the previous opposite parity
+    // Time: O(n), Space: O(1) — constant extra space and linear traversal
     public int maximumLength(int[] nums) {
-        int maxLen = 0;
+        int[] parityCount = new int[2];  // parityCount[0] = even, parityCount[1] = odd
+        int[] alternatingEnd = new int[2]; // alternatingEnd[0] = alt seq ending in even, etc.
 
-        // Try all 4 starting patterns:
-        // 0 = even, 1 = odd
-        for (int start = 0; start <= 1; start++) {
-            for (int alt = 0; alt <= 1; alt++) {
-                int len = 0;
-                int expect = start;
-
-                for (int num : nums) {
-                    if (num % 2 == expect) {
-                        len++;
-                        expect ^= alt; // flip between 0 and 1 if alternating
-                    }
-                }
-
-                maxLen = Math.max(maxLen, len);
-            }
+        for (int num : nums) {
+            int parity = num % 2;
+            parityCount[parity]++;
+            alternatingEnd[parity] = alternatingEnd[1 - parity] + 1;
         }
 
-        return maxLen;
+        return Math.max(
+            Math.max(parityCount[0], parityCount[1]),
+            Math.max(alternatingEnd[0], alternatingEnd[1])
+        );
     }
 }
