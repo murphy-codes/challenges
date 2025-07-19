@@ -177,6 +177,7 @@ LeetCode
 |1290|[Convert Binary Number in a Linked List to Integer](https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/)|[Java](./algorithms/java/1290_convert-binary-number-in-a-linked-list-to-integer.java)|Easy|
 |1267|[Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate/)|[Java](./algorithms/java/1267_count-servers-that-communicate.java)|Medium|
 |1261|[Find Elements in a Contaminated Binary Tree](https://leetcode.com/problems/find-elements-in-a-contaminated-binary-tree/)|[Java](./algorithms/java/1261_find-elements-in-a-contaminated-binary-tree.java)|Medium|
+|1233|[Remove Sub-Folders from the Filesystem](https://leetcode.com/problems/remove-sub-folders-from-the-filesystem/)|[Java](./algorithms/java/1233_remove-sub-folders-from-the-filesystem.java)|Medium|
 |1128|[Number of Equivalent Domino Pairs](https://leetcode.com/problems/number-of-equivalent-domino-pairs/)|[Java](./algorithms/java/1128_number-of-equivalent-domino-pairs.java)|Easy|
 |1123|[Lowest Common Ancestor of Deepest Leaves](https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/)|[Java](./algorithms/java/1123_lowest-common-ancestor-of-deepest-leaves.java)|Medium|
 |1092|[Shortest Common Supersequence](https://leetcode.com/problems/shortest-common-supersequence/)|[Java](./algorithms/java/1092_shortest-common-supersequence.java)|Hard|
