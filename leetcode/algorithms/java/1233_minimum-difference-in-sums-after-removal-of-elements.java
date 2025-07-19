@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-18
 // At the time of submission:
-//   Runtime 39 ms Beats 87.11%
-//   Memory 55.26 MB Beats 84.38%
+//   Runtime 20 ms Beats 99.61%
+//   Memory 55.32 MB Beats 74.41%
 
 /****************************************
 * 
@@ -41,30 +41,75 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class Solution {
-    // Sort the folders so parent folders come before their subfolders
-    // Iterate over sorted folders, keeping track of the last root folder
-    // If a folder is not a subfolder of the last root, add it to the result
-    // A subfolder starts with the root folder plus a '/' character
-    // Time: O(n log n + n * m), Space: O(n * m); n = num of folders, m = avg len
+    // This solution uses a Trie to efficiently store folder paths and check if a
+    // folder is a subfolder of any previously stored path. Sorting the folders
+    // by length ensures root folders are inserted first. If a folder is not a
+    // subfolder of any existing folder, it's added to the result list and the
+    // Trie. Time: O(n * L), Space: O(n * L), where L = average folder length.
+
+    // TrieNode represents each character in a folder path.
+    class TrieNode {
+        TrieNode[] children;
+        boolean isEndOfWord;
+
+        TrieNode() {
+            this.children = new TrieNode[27]; // 0-25 for a-z, 26 for '/'
+            this.isEndOfWord = false;
+        }
+    }
+
+    TrieNode root;
+
+    // Maps characters to child indices: 'a'-'z' → 0-25, '/' → 26
+    private int getIndex(char ch) {
+        return (ch == '/') ? 26 : ch - 'a';
+    }
+
+    // Inserts a folder path into the Trie
+    private void insert(String folderPath) {
+        TrieNode currentNode = root;
+        for (int i = 0; i < folderPath.length(); i++) {
+            int index = getIndex(folderPath.charAt(i));
+            if (currentNode.children[index] == null) {
+                currentNode.children[index] = new TrieNode();
+            }
+            currentNode = currentNode.children[index];
+        }
+        // Add an extra '/' node to mark end of full path
+        currentNode.children[26] = new TrieNode();
+        currentNode = currentNode.children[26];
+        currentNode.isEndOfWord = true;
+    }
+
+    // Searches whether the given path is a subfolder of an inserted root folder
+    private boolean search(String folderPath) {
+        TrieNode currentNode = root;
+        for (int i = 0; i < folderPath.length(); i++) {
+            if (currentNode.isEndOfWord) return true;
+            int index = getIndex(folderPath.charAt(i));
+            if (currentNode.children[index] == null) return false;
+            currentNode = currentNode.children[index];
+        }
+        return currentNode.isEndOfWord;
+    }
+
+    // Main logic to remove subfolders
     public List<String> removeSubfolders(String[] folder) {
-        Arrays.sort(folder); // Lexicographically sort the folder paths
-
+        root = new TrieNode();
+        Arrays.sort(folder, (a, b) -> a.length() - b.length());
         List<String> result = new ArrayList<>();
-        String prev = ""; // Holds the last root folder added to result
 
-        for (String path : folder) {
-            // If current path is not a subfolder of the last added one
-            if (prev.isEmpty() || !path.startsWith(prev + "/")) {
-                result.add(path);
-                prev = path;
+        for (String f : folder) {
+            if (!search(f)) {
+                insert(f);
+                result.add(f);
             }
         }
-
         return result;
     }
 }
