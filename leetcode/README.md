@@ -117,7 +117,7 @@ LeetCode
 |2185|[Counting Words With a Given Prefix](https://leetcode.com/problems/counting-words-with-a-given-prefix/)|[Java](./algorithms/java/2185_counting-words-with-a-given-prefix.java)|Easy|
 |2179|[Count Good Triplets in an Array](https://leetcode.com/problems/count-good-triplets-in-an-array/)|[Java](./algorithms/java/2179_count-good-triplets-in-an-array.java)|Hard|
 |2176|[Count Equal and Divisible Pairs in an Array](https://leetcode.com/problems/count-equal-and-divisible-pairs-in-an-array/)|[Java](./algorithms/java/2176_count-equal-and-divisible-pairs-in-an-array.java)|Easy|
-|2163|[Minimum Difference in Sums After Removal of Elements](https://leetcode.com/problems/remove-sub-folders-from-the-filesystem/)|[Java](./algorithms/java/2163_remove-sub-folders-from-the-filesystem.java)|Hard|
+|2163|[Minimum Difference in Sums After Removal of Elements](https://leetcode.com/problems/minimum-difference-in-sums-after-removal-of-elements/)|[Java](./algorithms/java/2163_minimum-difference-in-sums-after-removal-of-elements.java)|Hard|
 |2161|[Partition Array According to Given Pivot](https://leetcode.com/problems/partition-array-according-to-given-pivot/)|[Java](./algorithms/java/2161_partition-array-according-to-given-pivot.java)|Medium|
 |2145|[Count the Hidden Sequences](https://leetcode.com/problems/count-the-hidden-sequences/)|[Java](./algorithms/java/2145_count-the-hidden-sequences.java)|Medium|
 |2140|[Solving Questions With Brainpower](https://leetcode.com/problems/solving-questions-with-brainpower/)|[Java](./algorithms/java/2140_solving-questions-with-brainpower.java)|Medium|
