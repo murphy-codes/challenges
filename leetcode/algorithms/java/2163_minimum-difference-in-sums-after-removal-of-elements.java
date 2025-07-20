@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-18
 // At the time of submission:
-//   Runtime 283 ms Beats 21.13%
-//   Memory 97.18 MB Beats 7.04%
+//   Runtime 18 ms Beats 100.00%
+//   Memory 94.19 MB Beats 8.67%
 
 /****************************************
 * 
@@ -46,48 +46,89 @@
 import java.util.PriorityQueue;
 
 class Solution {
-    // Maintain prefixMin[i]: sum of the smallest n elements in nums[0..i].
-    // Maintain suffixMax[i]: sum of the largest n elements in nums[i..end].
-    // Use max-heap for prefix, min-heap for suffix, each O(n log n).
-    // Then scan all splits i in [n-1 … 2n-1]: minimize prefixMin[i] - suffixMax[i+1].
-    // Overall Time: O(n log n), Space: O(n).
+    // This solution uses two threads to calculate prefix and suffix sums in parallel.
+    // For the first k elements, it computes the minimum sum of any k-element subset
+    // using a max-heap; for the last k elements, it computes the maximum sum of any
+    // k-element subset using a min-heap. The minimum difference between these two
+    // is returned. Time: O(n log k), Space: O(n + k)
+
+    private long[] minPrefixSum;
+    private long[] maxSuffixSum;
+    private int[] nums;
+    private int k;
+
+    // Thread to compute minimum sum of k elements from left to right
+    class PrefixWorker extends Thread {
+        public void run() {
+            PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+            long sum = 0;
+            for (int i = 0; i < nums.length; i++) {
+                sum += nums[i];
+                maxHeap.offer(nums[i]);
+
+                if (maxHeap.size() > k) {
+                    sum -= maxHeap.poll(); // remove the largest element
+                }
+
+                if (maxHeap.size() == k) {
+                    minPrefixSum[i] = sum;
+                } else {
+                    minPrefixSum[i] = Long.MAX_VALUE;
+                }
+            }
+        }
+    }
+
+    // Thread to compute maximum sum of k elements from right to left
+    class SuffixWorker extends Thread {
+        public void run() {
+            PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+            long sum = 0;
+            for (int i = nums.length - 1; i >= 0; i--) {
+                sum += nums[i];
+                minHeap.offer(nums[i]);
+
+                if (minHeap.size() > k) {
+                    sum -= minHeap.poll(); // remove the smallest element
+                }
+
+                if (minHeap.size() == k) {
+                    maxSuffixSum[i] = sum;
+                } else {
+                    maxSuffixSum[i] = Long.MIN_VALUE;
+                }
+            }
+        }
+    }
+
     public long minimumDifference(int[] nums) {
-        int total = nums.length;
-        int n = total / 3;
+        this.nums = nums;
+        int n = nums.length;
+        this.k = n / 3;
 
-        long[] prefixMin = new long[total];
-        long[] suffixMax = new long[total];
+        minPrefixSum = new long[n];
+        maxSuffixSum = new long[n];
 
-        // 1) Prefix: minimum sum of n elements among first i+1
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
-        long sum = 0;
-        for (int i = 0; i < total; i++) {
-            sum += nums[i];
-            maxHeap.offer(nums[i]);
-            if (maxHeap.size() > n) {
-                sum -= maxHeap.poll();
+        Thread leftThread = new PrefixWorker();
+        Thread rightThread = new SuffixWorker();
+
+        leftThread.start();
+        rightThread.start();
+
+        try {
+            leftThread.join();
+            rightThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        long result = Long.MAX_VALUE;
+        for (int i = k - 1; i < n - k; i++) {
+            if (minPrefixSum[i] != Long.MAX_VALUE && maxSuffixSum[i + 1] != Long.MIN_VALUE) {
+                result = Math.min(result, minPrefixSum[i] - maxSuffixSum[i + 1]);
             }
-            prefixMin[i] = sum;
         }
 
-        // 2) Suffix: maximum sum of n elements among last total-i elements
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-        sum = 0;
-        for (int i = total - 1; i >= 0; i--) {
-            sum += nums[i];
-            minHeap.offer(nums[i]);
-            if (minHeap.size() > n) {
-                sum -= minHeap.poll();
-            }
-            suffixMax[i] = sum;
-        }
-
-        // 3) Choose best split point
-        long res = Long.MAX_VALUE;
-        for (int i = n - 1; i < 2 * n; i++) {
-            res = Math.min(res, prefixMin[i] - suffixMax[i + 1]);
-        }
-
-        return res;
+        return result;
     }
 }
