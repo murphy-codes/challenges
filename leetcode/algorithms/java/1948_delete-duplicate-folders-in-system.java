@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-19
 // At the time of submission:
-//   Runtime 92 ms Beats 68.18%
-//   Memory 69.10 MB Beats 93.18%
+//   Runtime 67 ms Beats 97.73%
+//   Memory 76.56 MB Beats 25.00%
 
 /****************************************
 * 
@@ -68,89 +68,80 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Map.Entry;
-
 class Solution {
-// This solution builds a trie from folder paths and serializes each subtree.
-// It maps all serialized subtrees and marks all duplicate ones for deletion.
-// A final DFS collects only the paths not under any duplicated subtree.
-// Time: O(N * L log L) for sorting keys and traversals (N = paths, L = avg depth)
-// Space: O(N * L) for trie, serialization map, and result storage.
+    // Build a trie of folder paths and serialize each subtree from bottom-up.
+    // Use a hash map to detect duplicate subtree structures via serialization.
+    // Mark all duplicate subtrees for deletion when a match is found.
+    // Finally, collect and return only the paths that are not marked.
+    // Time: O(n * k) where n = num paths, k = max path length; Space: O(n * k)
 
-    static class TrieNode {
-        Map<String, TrieNode> children = new HashMap<>();
-        String name = "";
-        boolean toDelete = false;
+    class Node {
+        Map<String, Node> children = new TreeMap<>();
+        String content = "";
+        boolean markedForRemoval = false;
+
+        void markSubtreeForRemoval() {
+            if (markedForRemoval) return;
+            markedForRemoval = true;
+            for (Node child : children.values()) {
+                child.markSubtreeForRemoval();
+            }
+        }
     }
-
-    Map<String, List<TrieNode>> serialToNodes = new HashMap<>();
 
     public List<List<String>> deleteDuplicateFolder(List<List<String>> paths) {
-        TrieNode root = new TrieNode();
+        // Sort paths by length to ensure parents are added before children
+        paths.sort(Comparator.comparingInt(List::size));
+        List<Node> insertedNodes = new ArrayList<>(paths.size());
+        Node root = new Node();
 
-        // Step 1: Build Trie
+        // Build the trie tree from folder paths
         for (List<String> path : paths) {
-            TrieNode curr = root;
-            for (String folder : path) {
-                curr = curr.children.computeIfAbsent(folder, k -> new TrieNode());
-                curr.name = folder;
+            Node curr = root;
+            for (int i = 0; i < path.size() - 1; i++) {
+                curr = curr.children.get(path.get(i));
+            }
+            String lastFolder = path.get(path.size() - 1);
+            Node newNode = new Node();
+            curr.children.put(lastFolder, newNode);
+            insertedNodes.add(newNode);
+        }
+
+        // Map to track unique serialized subtree structures
+        Map<String, Node> contentToNode = new HashMap<>();
+        StringBuilder serialization = new StringBuilder();
+
+        // Traverse in reverse order for post-order serialization
+        for (int i = insertedNodes.size() - 1; i >= 0; i--) {
+            Node node = insertedNodes.get(i);
+            if (node.children.isEmpty()) continue;
+
+            for (Map.Entry<String, Node> entry : node.children.entrySet()) {
+                serialization
+                    .append(entry.getKey())
+                    .append('{')
+                    .append(entry.getValue().content)
+                    .append('}');
+            }
+
+            node.content = serialization.toString();
+            serialization.setLength(0); // Clear builder for next use
+
+            Node existing = contentToNode.putIfAbsent(node.content, node);
+            if (existing != null) {
+                node.markSubtreeForRemoval();
+                existing.markSubtreeForRemoval();
             }
         }
 
-        // Step 2: Serialize and collect all subtrees
-        serialize(root);
-
-        // Step 3: Mark all nodes with duplicated serials
-        for (List<TrieNode> nodeList : serialToNodes.values()) {
-            if (nodeList.size() > 1) {
-                for (TrieNode node : nodeList) {
-                    node.toDelete = true;
-                }
-            }
-        }
-
-        // Step 4: Collect valid paths
+        // Collect paths that haven't been marked for removal
         List<List<String>> result = new ArrayList<>();
-        collect(root, new ArrayList<>(), result);
+        for (int i = 0; i < paths.size(); i++) {
+            if (!insertedNodes.get(i).markedForRemoval) {
+                result.add(paths.get(i));
+            }
+        }
+
         return result;
-    }
-
-    // Serialize the subtree and map all nodes by their serialization
-    private String serialize(TrieNode node) {
-        if (node.children.isEmpty()) return "";
-
-        StringBuilder sb = new StringBuilder();
-        List<String> keys = new ArrayList<>(node.children.keySet());
-        Collections.sort(keys);  // Ensure consistent ordering
-
-        for (String key : keys) {
-            TrieNode child = node.children.get(key);
-            sb.append("(")
-              .append(key)
-              .append(serialize(child))
-              .append(")");
-        }
-
-        String serial = sb.toString();
-        serialToNodes.computeIfAbsent(serial, k -> new ArrayList<>()).add(node);
-        return serial;
-    }
-
-    // Collect all non-deleted paths
-    private void collect(TrieNode node, List<String> path, List<List<String>> result) {
-        for (Map.Entry<String, TrieNode> entry : node.children.entrySet()) {
-            TrieNode child = entry.getValue();
-            if (child.toDelete) continue;
-            path.add(child.name);
-            result.add(new ArrayList<>(path));
-            collect(child, path, result);
-            path.remove(path.size() - 1);
-        }
     }
 }
