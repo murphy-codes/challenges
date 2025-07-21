@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-20
 // At the time of submission:
-//   Runtime 24 ms Beats 98.23%
-//   Memory 46.21 MB Beats 7.07%
+//   Runtime 14 ms Beats 100.00%
+//   Memory 45.98 MB Beats 25.25%
 
 /****************************************
 * 
@@ -40,29 +40,26 @@
 ****************************************/
 
 class Solution {
-    // Traverse the string while tracking the last two characters added.
-    // Only add the current character if it doesn't create three repeats.
+    // Traverse the input string and track repeating characters.
+    // Write only valid characters back into the input char array.
+    // Skips adding a character if it would result in three in a row.
     // Time Complexity: O(n), where n is the length of the string.
-    // Space Complexity: O(n) for the StringBuilder used to build the result.
-    // Ensures no three consecutive characters in the result string.
+    // Space Complexity: O(n) for the character array (reused, not extra).
     public String makeFancyString(String s) {
-        if (s.length() < 3)
-            return s;
-        char first = '\0';
-        char second = '\0';
-        StringBuilder sb = new StringBuilder();
-        for (char c : s.toCharArray()) {
-            if (c != first) {
-                sb.append(c);
-                first = c;
-                second = '\0';
-            } else {
-                if (c != second) {
-                sb.append(c);
-                second = c;
-                }
+        char[] chars = s.toCharArray();               // Convert input to char array
+        char lastChar = chars[0];                     // Track previous character
+        int repeatCount = 1;                          // Count of consecutive chars
+        int writeIndex = 1;                           // Write position for valid chars
+
+        for (int readIndex = 1; readIndex < chars.length; readIndex++) {
+            if (chars[readIndex] != lastChar) {
+                lastChar = chars[readIndex];          // Reset if new char
+                repeatCount = 0;
             }
+            if (++repeatCount > 2) continue;          // Skip if more than 2 in a row
+            chars[writeIndex++] = chars[readIndex];   // Write valid char
         }
-        return sb.toString();
+
+        return new String(chars, 0, writeIndex);       // Return final fancy string
     }
 }
