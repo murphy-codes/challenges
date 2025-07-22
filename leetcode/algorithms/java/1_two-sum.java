@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/two-sum/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-26
+// At the time of submission:
+//   Runtime 2 ms Beats 98.95%
+//   Memory 45.11 MB Beats 30.56%
 
 /****************************************
 * 
