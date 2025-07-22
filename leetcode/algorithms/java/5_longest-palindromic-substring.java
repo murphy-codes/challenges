@@ -1,10 +1,13 @@
 // Source: https://leetcode.com/problems/longest-palindromic-substring/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-30
+// At the time of submission:
+//   Runtime 15 ms Beats 84.83%
+//   Memory 42.80 MB Beats 54.91%
 
 /****************************************
 * 
-* Given a string s, return the longest palindromic substring in s.
+* Given a string `s`, return the longest palindromic substring in `s`.
 * 
 * Example 1:
 * Input: s = "babad"
@@ -16,9 +19,8 @@
 * Output: "bb"
 * 
 * Constraints:
-* 
-* 1 <= s.length <= 1000
-* s consist of only digits and English letters.
+* • 1 <= s.length <= 1000
+* • `s` consist of only digits and English letters.
 * 
 ****************************************/
 
