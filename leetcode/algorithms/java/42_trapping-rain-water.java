@@ -1,10 +1,14 @@
 // Source: https://leetcode.com/problems/trapping-rain-water/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-20
+// At the time of submission:
+//   Runtime 1 ms Beats 62.43%
+//   Memory 46.49 MB Beats 49.41%
 
 /****************************************
 * 
-* Given `n` non-negative integers representing an elevation map where the width of each bar is `1`, compute how much water it can trap after raining.
+* Given `n` non-negative integers representing an elevation map where the width of 
+* _ each bar is `1`, compute how much water it can trap after raining.
 * 
 * Example 1:
 *   [Image depicting a bar graph where the appropriate spots that could hold rainwater have been filled]
