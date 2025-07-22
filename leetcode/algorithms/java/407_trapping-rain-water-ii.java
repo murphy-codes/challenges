@@ -1,10 +1,14 @@
 // Source: https://leetcode.com/problems/trapping-rain-water-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-20
+// At the time of submission:
+//   Runtime 19 ms Beats 78.90%
+//   Memory 46.57 MB Beats 35.49%
 
 /****************************************
 * 
-* Given an `m x n` integer matrix `heightMap` representing the height of each unit cell in a 2D elevation map, return the volume of water it can trap after raining.
+* Given an `m x n` integer matrix `heightMap` representing the height of each unit 
+* _ cell in a 2D elevation map, return the volume of water it can trap after raining.
 * 
 * Example 1:
 *   [Image depicting the height map as grid of cubes stacked on top of each other]
