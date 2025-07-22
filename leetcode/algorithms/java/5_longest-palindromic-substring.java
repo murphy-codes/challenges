@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-30
 // At the time of submission:
-//   Runtime 15 ms Beats 84.83%
-//   Memory 42.80 MB Beats 54.91%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 42.39 MB Beats 70.58%
 
 /****************************************
 * 
@@ -24,41 +24,49 @@
 * 
 ****************************************/
 
-class Solution {
-    // Approach: Expand Around Center
-    // Treat each character and each gap between characters as a center.
-    // Expand outward from each center while maintaining the palindrome property.
-    // Track the longest palindrome found during the process.
-    // Time Complexity: O(n²), Space Complexity: O(1)
+public class Solution {
+    // Recursively expands around duplicate characters and their neighbors
+    // to find the longest palindromic substring. Handles repeated centers
+    // in one pass (e.g., "aaaa") to avoid redundant checks. Expands outward
+    // from the extended center, updating max bounds when a longer palindrome
+    // is found. Time complexity is O(n^2), space is O(n) due to recursion.
+
+    private int maxStart = 0;
+    private int maxEnd = 0;
+
     public String longestPalindrome(String s) {
-        if (s == null || s.length() < 1) return "";
-
-        int start = 0, end = 0;
-
-        for (int i = 0; i < s.length(); i++) {
-            // Expand for odd-length palindromes (single character center)
-            int len1 = expandAroundCenter(s, i, i);
-            // Expand for even-length palindromes (two character center)
-            int len2 = expandAroundCenter(s, i, i + 1);
-            // Find the maximum length
-            int len = Math.max(len1, len2);
-
-            // Update start and end indices if a longer palindrome is found
-            if (len > end - start) {
-                start = i - (len - 1) / 2;
-                end = i + len / 2;
-            }
-        }
-
-        // Return the longest palindromic substring
-        return s.substring(start, end + 1);
+        expandAroundCenters(s.toCharArray(), 0);
+        return s.substring(maxStart, maxEnd + 1);
     }
 
-    private int expandAroundCenter(String s, int left, int right) {
-        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+    private void expandAroundCenters(char[] chars, int currentIndex) {
+        int length = chars.length;
+        if (currentIndex >= length) return;
+
+        int left = currentIndex;
+        int right = currentIndex;
+
+        // Extend right to cover all identical adjacent characters (e.g., "aaaa")
+        while (right + 1 < length && chars[right] == chars[right + 1]) {
+            right++;
+        }
+
+        // Next index to check after handling duplicates
+        int nextIndex = right + 1;
+
+        // Expand outward as long as characters match
+        while (left > 0 && right < length - 1 && chars[left - 1] == chars[right + 1]) {
             left--;
             right++;
         }
-        return right - left - 1; // Length of the palindrome
+
+        // Update max palindrome range if this one is longer
+        if (right - left > maxEnd - maxStart) {
+            maxStart = left;
+            maxEnd = right;
+        }
+
+        // Recurse from next index
+        expandAroundCenters(chars, nextIndex);
     }
 }
