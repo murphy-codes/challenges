@@ -1,19 +1,23 @@
 // Source: https://leetcode.com/problems/zigzag-conversion/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-02
+// At the time of submission:
+//   Runtime 4 ms Beats 84.19%
+//   Memory 45.03 MB Beats 61.13%
 
 /****************************************
 * 
-* The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: 
-* (you may want to display this pattern in a fixed font for better legibility)
-* 
+* 12345678901234567890123456789012345678901234567890123456789012345678901234567890
+* The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of 
+* _ rows like this: 
 * P   A   H   N
 * A P L S I I G
 * Y   I   R
-* 
+* (you may want to display this pattern in a fixed font for better legibility)
 * And then read line by line: "PAHNAPLSIIGYIR"
-* Write the code that will take a string and make this conversion given a number of rows:
-* string convert(string s, int numRows);
+* Write the code that will take a string and make this conversion given a number 
+* _ of rows:
+* _ > string convert(string s, int numRows);
 * 
 * Example 1:
 * Input: s = "PAYPALISHIRING", numRows = 3
@@ -33,9 +37,8 @@
 * Output: "A"
 * 
 * Constraints:
-* 
 * • 1 <= s.length <= 1000
-* • s consists of English letters (lower-case and upper-case), ',' and '.'.
+* • `s` consists of English letters (lower-case and upper-case), `','` and `'.'`.
 * • 1 <= numRows <= 1000
 * 
 ****************************************/
