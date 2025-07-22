@@ -2,12 +2,11 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-02
 // At the time of submission:
-//   Runtime 4 ms Beats 84.19%
-//   Memory 45.03 MB Beats 61.13%
+//   Runtime 2 ms Beats 99.60%
+//   Memory 44.60 MB Beats 97.47%
 
 /****************************************
 * 
-* 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 * The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of 
 * _ rows like this: 
 * P   A   H   N
@@ -44,31 +43,37 @@
 ****************************************/
 
 class Solution {
-    // To solve in O(n), we'll use an array of StringBuilders for the rows.
-    // We iterate through the input string `s` once, appending per row.  
-    // The direction of traversal will switch at the top or bottom row.
-    // Lastly, we combine all rows into a single string for the zigzag result.
+    // This solution calculates positions of characters directly in zigzag order.
+    // It fills a result char array by traversing each row and jumping by step size.
+    // Middle rows also insert diagonal chars between vertical columns.
+    // Time: O(n), Space: O(n), where n is the input string length.
     public String convert(String s, int numRows) {
-        if (numRows == 1 || numRows >= s.length()) {
-            return s;
-        }
-        StringBuilder[] rows = new StringBuilder[numRows];
-        for(int i=0; i<numRows; i++) {
-            rows[i] = new StringBuilder();
-        }
-        boolean descending = true;
-        int i = 0;
-        for (char c : s.toCharArray()) {
-            rows[i].append(c);
-            i += descending ? 1 : -1;
-            if (i == 0 || i == numRows - 1) {
-                descending = !descending;
+        if (numRows == 1) return s;
+
+        int len = s.length();
+        char[] result = new char[len];
+        int step = (numRows - 1) * 2;
+        int resultIndex = 0;
+
+        for (int row = 0; row < numRows; row++) {
+            int j = row;
+            while (j < len) {
+                // Always add the character in the current vertical position
+                result[resultIndex++] = s.charAt(j);
+
+                // For middle rows, add the diagonal character if within bounds
+                if (row > 0 && row < numRows - 1) {
+                    int diagonalIndex = j + (numRows - row - 1) * 2;
+                    if (diagonalIndex < len) {
+                        result[resultIndex++] = s.charAt(diagonalIndex);
+                    }
+                }
+
+                // Move to the next vertical column in this zigzag cycle
+                j += step;
             }
         }
-        StringBuilder result = new StringBuilder();
-        for (StringBuilder sb : rows) {
-            result.append(sb);
-        }
-        return result.toString();
+
+        return new String(result);
     }
 }
