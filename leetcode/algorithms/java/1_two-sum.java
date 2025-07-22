@@ -2,13 +2,15 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-26
 // At the time of submission:
-//   Runtime 2 ms Beats 98.95%
+//   Runtime 0 ms Beats 100.00%
 //   Memory 45.11 MB Beats 30.56%
 
 /****************************************
 * 
-* Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-* You may assume that each input would have exactly one solution, and you may not use the same element twice.
+* Given an array of integers nums and an integer target, return indices of the two 
+* _ numbers such that they add up to target.
+* You may assume that each input would have exactly one solution, and you may not 
+* _ use the same element twice.
 * You can return the answer in any order.
 * 
 * Example 1:
@@ -34,32 +36,27 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-
-class Solution {
-    // The simplest solution has an O(n^2) time complexity, where we use a nested loop to 
-    // check every pair of elements in the array (i.e., a brute-force approach). While 
-    // straightforward, this method becomes increasingly inefficient for larger arrays.
-    // To optimize for better performance, as the 'Follow-up' suggests, we'll employ 
-    // a hash map-based approach to achieve O(n) time complexity.
-    public int[] twoSum(int[] nums, int target) {
-        // Use a HashMap to store numbers and their indices
-        HashMap<Integer, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < nums.length; i++) {
-            // Calculate the complement
-            int complement = target - nums[i];
-
-            // Check if the complement exists in the map
-            if (map.containsKey(complement)) {
-                return new int[] { map.get(complement), i };
+class Solution 
+{
+    // This solution uses a brute-force approach by comparing all unique pairs
+    // in the array. It does not use any extra space, avoiding data structures
+    // like HashMaps. Time complexity is O(n^2), and space complexity is O(1).
+    // Though less efficient for large inputs, it performs well on small arrays.
+    public int[] twoSum(int[] nums, int target) 
+    {
+        // Loop through all differences (i is the gap between two indices)
+        for (int gap = 1; gap < nums.length; gap++) 
+        {
+            // For each gap, compare nums[j - gap] and nums[j]
+            for (int j = gap; j < nums.length; j++) 
+            {
+                // Check if the pair adds up to the target
+                if (nums[j] + nums[j - gap] == target) 
+                {
+                    return new int[] { j - gap, j };
+                }
             }
-
-            // Add the current number and its index to the map
-            map.put(nums[i], i);
         }
-
-        // Per problem constraints, this won't be reached
-        throw new IllegalArgumentException("No solution exists");
+        return null; // As per constraints, this shouldn't happen
     }
 }
