@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/word-subsets/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-10
+// At the time of submission:
+//   Runtime 56 ms Beats 56.44%
+//   Memory 106.95 MB Beats 26.99%
 
 /****************************************
 * 
