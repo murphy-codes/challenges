@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-10
 // At the time of submission:
-//   Runtime 51 ms Beats 85.00%
-//   Memory 69.26 MB Beats 95.00%
+//   Runtime 25 ms Beats 100.00%
+//   Memory 68.34 MB Beats 100.00%
 
 /****************************************
 * 
@@ -29,47 +29,43 @@
 * 
 ****************************************/
 
-// We'll solve this problem using frequency arrays of size 26 to represent lowercase English letters.
-// First, we define a helper function to compute a frequency array for a given word.
-// Next, we create a "max frequency map" from words2, representing the maximum count of each letter required across all words in words2.
-// For each string in words1, we compute its frequency array and compare it against the max frequency map.
-// If a string satisfies all the requirements, it's added to the result list.
-// This approach runs in O((n1 + n2) * m) time, where n1 and n2 are the lengths of words1 and words2, 
-// and m is the average string length. Space complexity is O(26) or O(1), as the frequency arrays have a constant size.
+const aCharCode = 'a'.charCodeAt(0);
+
+// Build a max frequency map for letters required by all words in words2.
+// Then, for each word in words1, count its letters and check if it meets
+// or exceeds all required frequencies. Uses char codes for fast indexing.
+// Time: O(N * L1 + M * L2), where N = words1.length, M = words2.length.
+// Space: O(1) for 26-letter arrays. Efficient due to buffer reuse and tight loops.
 function wordSubsets(words1: string[], words2: string[]): string[] {
-    // Helper function to calculate frequency map for a word
-    const getFrequency = (word: string): number[] => {
-        const freq = new Array(26).fill(0);
-        for (const char of word) {
-            freq[char.charCodeAt(0) - 'a'.charCodeAt(0)]++;
-        }
-        return freq;
-    };
+    const tempFreq = new Array(26).fill(0); // Temporary letter frequency
+    const maxFreq = new Array(26).fill(0);  // Final required max frequencies
 
-    // Step 1: Create the max frequency map for words2
-    const maxFreq = new Array(26).fill(0);
+    // Step 1: Build max frequency requirement from all words in words2
     for (const word of words2) {
-        const freq = getFrequency(word);
-        for (let i = 0; i < 26; i++) {
-            maxFreq[i] = Math.max(maxFreq[i], freq[i]);
-        }
-    }
-
-    // Step 2: Filter words1 to find universal words
-    const result: string[] = [];
-    for (const word of words1) {
-        const freq = getFrequency(word);
-        let isUniversal = true;
-        for (let i = 0; i < 26; i++) {
-            if (freq[i] < maxFreq[i]) {
-                isUniversal = false;
-                break;
+        tempFreq.fill(0); // Reset buffer for each word
+        for (let i = 0; i < word.length; i++) {
+            const index = word.charCodeAt(i) - aCharCode;
+            tempFreq[index]++;
+            if (tempFreq[index] > maxFreq[index]) {
+                maxFreq[index] = tempFreq[index];
             }
         }
-        if (isUniversal) {
-            result.push(word);
-        }
     }
 
-    return result;
+    // Step 2: Helper to check if a word meets all max frequency requirements
+    function isUniversal(word: string): boolean {
+        const wordFreq = new Array(26).fill(0);
+        for (let i = 0; i < word.length; i++) {
+            wordFreq[word.charCodeAt(i) - aCharCode]++;
+        }
+
+        for (let i = 0; i < 26; i++) {
+            if (wordFreq[i] < maxFreq[i]) return false;
+        }
+
+        return true;
+    }
+
+    // Step 3: Filter and return universal words from words1
+    return words1.filter(isUniversal);
 }
