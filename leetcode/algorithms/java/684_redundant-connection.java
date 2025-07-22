@@ -1,14 +1,20 @@
 // Source: https://leetcode.com/problems/redundant-connection/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-28
+// At the time of submission:
+//   Runtime 0 ms Beats 100.00%
+//   Memory 43.05 MB Beats 85.77%
 
 /****************************************
 * 
 * In this problem, a tree is an undirected graph that is connected and has no cycles.
-* 
-* You are given a graph that started as a tree with n nodes labeled from `1` to `n`, with one additional edge added. The added edge has two different vertices chosen from `1` to `n`, and was not an edge that already existed. The graph is represented as an array `edges` of length `n` where `edges[i] = [ai, bi]` indicates that there is an edge between nodes `a_i` and `b_i` in the graph.
-* 
-* Return an edge that can be removed so that the resulting graph is a tree of `n` nodes. If there are multiple answers, return the answer that occurs last in the input.
+* You are given a graph that started as a tree with n nodes labeled from `1` to `n`, 
+* _ with one additional edge added. The added edge has two different vertices chosen 
+* _ from `1` to `n`, and was not an edge that already existed. The graph is 
+* _ represented as an array `edges` of length `n` where `edges[i] = [ai, bi]` 
+* _ indicates that there is an edge between nodes `a_i` and `b_i` in the graph.
+* Return an edge that can be removed so that the resulting graph is a tree of `n` 
+* _ nodes. If there are multiple answers, return the answer that occurs last in the input.
 * 
 * Example 1:
 *   [Image: https://assets.leetcode.com/uploads/2021/05/02/reduntant1-1-graph.jpg]
