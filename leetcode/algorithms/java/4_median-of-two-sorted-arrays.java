@@ -1,11 +1,14 @@
 // Source: https://leetcode.com/problems/median-of-two-sorted-arrays/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-29
+// At the time of submission:
+//   Runtime 2 ms Beats 55.41%
+//   Memory 45.95 MB Beats 84.48%
 
 /****************************************
 * 
-* Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
-* 
+* Given two sorted arrays nums1 and nums2 of size m and n respectively, return 
+* _ the median of the two sorted arrays.
 * The overall run time complexity should be O(log (m+n)).
 * 
 * Example 1:
@@ -19,13 +22,12 @@
 * Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
 *  
 * Constraints:
-* 
-* nums1.length == m
-* nums2.length == n
-* 0 <= m <= 1000
-* 0 <= n <= 1000
-* 1 <= m + n <= 2000
-* -10^6 <= nums1[i], nums2[i] <= 10^6
+* • nums1.length == m
+* • nums2.length == n
+* • 0 <= m <= 1000
+* • 0 <= n <= 1000
+* • 1 <= m + n <= 2000
+* • -10^6 <= nums1[i], nums2[i] <= 10^6
 * 
 ****************************************/
 
