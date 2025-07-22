@@ -1,11 +1,15 @@
 // Source: https://leetcode.com/problems/add-two-numbers/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-27
+// At the time of submission:
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.44 MB Beats 67.94%
 
 /****************************************
 * 
-* You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
-* 
+* You are given two non-empty linked lists representing two non-negative integers. 
+* _ The digits are stored in reverse order, and each of their nodes contains a 
+* _ single digit. Add the two numbers and return the sum as a linked list.
 * You may assume the two numbers do not contain any leading zero, except the number 0 itself.
 * 
 * Example 1:
@@ -41,6 +45,11 @@
  */
 
 class Solution {
+    // This solution iterates through both linked lists simultaneously, adding
+    // corresponding digits along with any carry from the previous step. A dummy
+    // head simplifies list construction. Time complexity is O(max(n, m)) where
+    // n and m are the lengths of the input lists. Space complexity is O(max(n, m))
+    // due to the creation of a new linked list to store the result.
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode dummyHead = new ListNode(0); // Dummy head to simplify list construction
         ListNode current = dummyHead; // Pointer to build the result list
