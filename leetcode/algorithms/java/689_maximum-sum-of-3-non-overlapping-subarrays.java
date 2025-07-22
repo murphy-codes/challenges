@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-27
 // At the time of submission:
-//   Runtime 4 ms Beats 58.33%
-//   Memory 46.56 MB Beats 61.43%
+//   Runtime 3 ms Beats 99.29%
+//   Memory 46.90 MB Beats 27.14%
 
 /****************************************
 * 
@@ -31,56 +31,61 @@
 ****************************************/
 
 class Solution {
-    // Use a prefix sum array to precompute cumulative sums. 
-    // This allows efficient subarray sum calculations during subsequent iterations, 
-    // reducing redundant computations and keeping time complexity manageable.
+    // This solution first calculates the sums of all subarrays of length k to allow
+    // O(1) access to window sums. Then, it precomputes the best (max sum) subarray
+    // indices from the left and right sides for each possible middle subarray.
+    // Finally, it iterates over all valid middle subarrays, combining with the best
+    // left and right subarrays to find the max total sum of three non-overlapping
+    // subarrays. The time complexity is O(n), and space complexity is O(n) for the 
+    // auxiliary arrays used.
     public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
         int n = nums.length;
-        int[] left = new int[n];
-        int[] right = new int[n];
+        int windowCount = n - k + 1;
+        int[] windowSums = new int[windowCount];
 
-        // Calculate prefix sums
-        int[] prefix = new int[n + 1];
-        for (int i = 0; i < n; i++) {
-            prefix[i + 1] = prefix[i] + nums[i];
+        // Step 1: Compute sums of all subarrays of length k
+        int currentSum = 0;
+        for (int i = 0; i < k; i++) {
+            currentSum += nums[i];
+        }
+        windowSums[0] = currentSum;
+        for (int i = 1; i < windowCount; i++) {
+            currentSum += nums[i + k - 1] - nums[i - 1];
+            windowSums[i] = currentSum;
         }
 
-        // Fill left array (maximum sum for subarrays from the left up to index i)
-        int bestLeftIndex = 0;
-        for (int i = k - 1; i < n; i++) {
-            int sum = prefix[i + 1] - prefix[i + 1 - k];
-            if (i == k - 1 || sum > prefix[bestLeftIndex + k] - prefix[bestLeftIndex]) {
-                bestLeftIndex = i + 1 - k;
+        // Step 2: Track index of max sum subarray from the left up to each position
+        int[] leftBestIndex = new int[windowCount];
+        int bestLeft = 0;
+        for (int i = 0; i < windowCount; i++) {
+            if (windowSums[i] > windowSums[bestLeft]) {
+                bestLeft = i;
             }
-            left[i] = bestLeftIndex;
+            leftBestIndex[i] = bestLeft;
         }
 
-        // Fill right array (maximum sum for subarrays from index i to the end)
-        int bestRightIndex = n - k;
-        for (int i = n - k; i >= 0; i--) {
-            int sum = prefix[i + k] - prefix[i];
-            if (i == n - k || sum >= prefix[bestRightIndex + k] - prefix[bestRightIndex]) {
-                bestRightIndex = i;
+        // Step 3: Track index of max sum subarray from the right starting at each position
+        int[] rightBestIndex = new int[windowCount];
+        int bestRight = windowCount - 1;
+        for (int i = windowCount - 1; i >= 0; i--) {
+            if (windowSums[i] >= windowSums[bestRight]) {
+                bestRight = i;
             }
-            right[i] = bestRightIndex;
+            rightBestIndex[i] = bestRight;
         }
 
-        // Find the best middle subarray to maximize total sum
+        // Step 4: Find max sum by choosing the best left, middle, and right subarrays
         int[] result = new int[3];
-        int maxSum = 0;
-
-        for (int midStart = k; midStart <= n - 2 * k; midStart++) {
-            int leftStart = left[midStart - 1];
-            int rightStart = right[midStart + k];
-            int totalSum = (prefix[leftStart + k] - prefix[leftStart]) +
-                           (prefix[midStart + k] - prefix[midStart]) +
-                           (prefix[rightStart + k] - prefix[rightStart]);
-
-            if (totalSum > maxSum) {
-                maxSum = totalSum;
-                result[0] = leftStart;
-                result[1] = midStart;
-                result[2] = rightStart;
+        int maxTotalSum = 0;
+        for (int mid = k; mid < windowCount - k; mid++) {
+            int left = leftBestIndex[mid - k];
+            int right = rightBestIndex[mid + k];
+            int total = windowSums[left] + windowSums[mid] + windowSums[right];
+            if (total > maxTotalSum) {
+                maxTotalSum = total;
+                result[0] = left;
+                result[1] = mid;
+                result[2] = right;
             }
         }
 
