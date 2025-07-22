@@ -3,7 +3,7 @@
 // Date: 2025-01-28
 // At the time of submission:
 //   Runtime 1 ms Beats 81.73%
-//   Memory 40.96 MB Beats 56.68%
+//   Memory 40.77 MB Beats 85.39%
 
 /****************************************
 * 
@@ -31,28 +31,27 @@
 ****************************************/
 
 class Solution {
-    // This solution reverses an integer by extracting digits using % and / operators.  
-    // It builds the reversed number while checking for overflow using Integer.MAX_VALUE  
-    // and Integer.MIN_VALUE. If overflow is detected, it returns 0. This approach avoids  
-    // string conversions and adheres to the 32-bit integer constraint.  
-    // Time Complexity: O(log10(x)), as we process each digit of the input.  
-    // Space Complexity: O(1), using only a few integer variables.  
+    // Reverses a signed 32-bit integer by extracting and rebuilding digits.
+    // Handles negative numbers by working with their absolute value, and 
+    // checks for overflow by comparing to Integer.MAX_VALUE / 10. 
+    // If overflow is possible, returns 0 immediately to prevent wraparound.
+    // Time: O(log₁₀(x)); Space: O(1) — uses constant extra space only.
     public int reverse(int x) {
+        boolean isNegative = x < 0;
+        if (isNegative) x = -x;
+
         int reversed = 0;
-        while (x != 0) {
-            int digit = x % 10; // Extract the last digit
-            x /= 10; // Remove the last digit from x
+        while (x > 0) {
+            int lastDigit = x % 10;
 
-            // Check for overflow before multiplying or adding
-            if (reversed > Integer.MAX_VALUE / 10 || (reversed == Integer.MAX_VALUE / 10 && digit > 7)) {
-                return 0; // Overflow for positive integers
-            }
-            if (reversed < Integer.MIN_VALUE / 10 || (reversed == Integer.MIN_VALUE / 10 && digit < -8)) {
-                return 0; // Overflow for negative integers
-            }
+            // Check for overflow before multiplying by 10
+            if (reversed > Integer.MAX_VALUE / 10) return 0;
 
-            reversed = reversed * 10 + digit; // Add the digit to the reversed number
+            reversed = reversed * 10 + lastDigit;
+            x /= 10;
         }
+
+        if (isNegative) reversed *= -1;
         return reversed;
     }
 }
