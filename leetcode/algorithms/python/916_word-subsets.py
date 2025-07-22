@@ -2,8 +2,8 @@
 # Author: Tom Murphy https://github.com/murphy-codes/
 # Date: 2025-01-10
 # At the time of submission:
-#   Runtime 339 ms Beats 64.23%
-#   Memory 21.09 MB Beats 93.38%
+#   Runtime 63 ms Beats 99.81%
+#   Memory 21.54 MB Beats 11.70%
 
 '''
 You are given two string arrays `words1` and `words2`.
@@ -27,30 +27,34 @@ Constraints:
 • All the strings of words1 are unique.
 '''
 
-from collections import Counter
 from typing import List
+from collections import defaultdict
 
 class Solution:
-    # We'll solve this using frequency counts for each letter in the strings.
-    # First, we create a "max frequency map" from words2, representing the maximum count of each letter required across all words in words2.
-    # Next, for each string in words1, we compute its frequency count and compare it against the max frequency map.
-    # If a string satisfies all the requirements (i.e., has at least the required frequency for each letter in words2), it's added to the result list.
-    # This approach runs in O(n1 * m + n2 * m) time, where n1 and n2 are the lengths of words1 and words2, 
-    # and m is the average string length. Space complexity is O(1), as the frequency maps store counts for a constant number of characters (26 lowercase English letters).
+    # For each word in words2, record the maximum number of times each letter
+    # must appear. Then, for each word in words1, check if it meets or exceeds
+    # those letter requirements using str.count(). Words that qualify are added
+    # to the result list. Time: O(N * L1 * 26 + M * L2^2), Space: O(26) = O(1).
     def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
-        # Step 1: Build max frequency map for words2
-        max_freq = Counter()
-        for word in words2:
-            word_count = Counter(word)
-            for char, count in word_count.items():
-                max_freq[char] = max(max_freq[char], count)
-        
-        # Step 2: Check universality for each word in words1
         result = []
+        required_counts = defaultdict(int)
+
+        # Remove duplicates from words2 to reduce redundant checks
+        words2 = list(set(words2))
+
+        # Step 1: Determine the max required frequency for each letter
+        for word in words2:
+            for char in word:
+                char_freq = word.count(char)
+                if char_freq > required_counts[char]:
+                    required_counts[char] = char_freq
+
+        # Step 2: Check each word in words1 against the required frequencies
         for word in words1:
-            word_count = Counter(word)
-            # Check if word_count satisfies max_freq
-            if all(word_count[char] >= count for char, count in max_freq.items()):
+            for char, min_count in required_counts.items():
+                if word.count(char) < min_count:
+                    break
+            else:
                 result.append(word)
-        
+
         return result
