@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2024-12-27
 // At the time of submission:
-//   Runtime 6 ms Beats 72.64%
-//   Memory 44.92 MB Beats 31.87%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 43.15 MB Beats 96.77%
 
 /****************************************
 * 
@@ -26,28 +26,38 @@
 * Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
 *  
 * Constraints:
-* • 0 <= s.length <= 5 * 104
+* • 0 <= s.length <= 5 * 10^4
 * • s consists of English letters, digits, symbols and spaces.
 * 
 ****************************************/
 
-class Solution {
+public class Solution {
+    // Uses a sliding window to track the longest substring without repeats.
+    // An array stores the last seen index of each ASCII character for O(1) lookup.
+    // Time complexity is O(n), where n is the length of the string.
+    // Space complexity is O(1), fixed to 128 ASCII characters.
     public int lengthOfLongestSubstring(String s) {
-        int n=s.length(), ans=0;
-        Map<Character, Integer> charCnt=new HashMap<>();
-        int l=0;
-        for(int r=0;r<n;r++) {
-            char c=s.charAt(r);
-            while(l<=r && charCnt.containsKey(c)) {
-                charCnt.put(s.charAt(l), charCnt.get(s.charAt(l)) - 1);
-                if(charCnt.get(s.charAt(l)) == 0)
-                    charCnt.remove(s.charAt(l));
-                l++;
-            }
-            charCnt.put(c, charCnt.getOrDefault(c, 0) + 1);
+        int[] lastSeen = new int[128]; // ASCII character tracking
+        for (int i = 0; i < 128; i++) lastSeen[i] = -1; // Initialize to -1
 
-            ans=Math.max(ans, r-l+1);
+        int maxLength = 0; // Result variable
+        int windowStart = 0; // Left boundary of the sliding window
+
+        for (int windowEnd = 0; windowEnd < s.length(); windowEnd++) {
+            char currentChar = s.charAt(windowEnd);
+
+            // If character was seen inside the current window, move start
+            if (lastSeen[currentChar] >= windowStart) {
+                windowStart = lastSeen[currentChar] + 1;
+            }
+
+            // Update the last seen index of the current character
+            lastSeen[currentChar] = windowEnd;
+
+            // Update max length if current window is larger
+            maxLength = Math.max(maxLength, windowEnd - windowStart + 1);
         }
-        return ans;
+
+        return maxLength;
     }
 }
