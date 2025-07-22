@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-20
 // At the time of submission:
-//   Runtime 19 ms Beats 78.90%
-//   Memory 46.57 MB Beats 35.49%
+//   Runtime 8 ms Beats 99.76%
+//   Memory 48.62 MB Beats 5.16%
 
 /****************************************
 * 
@@ -31,54 +31,66 @@
 * 
 ****************************************/
 
-import java.util.PriorityQueue;
-
 class Solution {
-    // Solve using a min-heap (priority queue) to simulate water flow from the outer boundary inward
-    // Push all boundary cells into the heap, keeping track of the min-height boundary at each step
-    // Process cells by popping the lowest height, updating trapped water, and adding neighbors
-    // Time: O(m * n * log(m * n)), Space: O(m * n)
+    // This solution uses iterative constraint propagation to find trapped water.
+    // It initializes water levels to terrain heights, then repeatedly updates 
+    // each cell's water level based on neighboring constraints until stable.
+    // Time complexity is O(m * n * iterations), where iterations depends on 
+    // terrain shape but generally converges quickly. Space complexity is O(m * n).
     public int trapRainWater(int[][] heightMap) {
-        if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) {
-            return 0;
+        int rows = heightMap.length;
+        int cols = heightMap[0].length;
+
+        // vols[i][j] represents the current water height at cell (i, j),
+        // initialized to the terrain height.
+        int[][] waterLevel = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                waterLevel[i][j] = heightMap[i][j];
+            }
         }
 
-        int m = heightMap.length;
-        int n = heightMap[0].length;
-        boolean[][] visited = new boolean[m][n];
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        boolean updated = true;
+        boolean isFirstIteration = true;
 
-        // Add all boundary cells to the priority queue
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i == 0 || i == m - 1 || j == 0 || j == n - 1) {
-                    pq.offer(new int[]{heightMap[i][j], i, j});
-                    visited[i][j] = true;
+        // Repeat spreading constraints until no updates happen
+        while (updated) {
+            updated = false;
+
+            // Spread constraints top-left to bottom-right
+            for (int i = 1; i < rows - 1; i++) {
+                for (int j = 1; j < cols - 1; j++) {
+                    int minNeighborLevel = Math.min(waterLevel[i - 1][j], waterLevel[i][j - 1]);
+                    int newLevel = Math.max(heightMap[i][j], minNeighborLevel);
+
+                    if (isFirstIteration || waterLevel[i][j] > newLevel) {
+                        waterLevel[i][j] = newLevel;
+                        updated = true;
+                    }
+                }
+            }
+            isFirstIteration = false;
+
+            // Spread constraints bottom-right to top-left
+            for (int i = rows - 2; i >= 1; i--) {
+                for (int j = cols - 2; j >= 1; j--) {
+                    int minNeighborLevel = Math.min(waterLevel[i + 1][j], waterLevel[i][j + 1]);
+                    int newLevel = Math.max(heightMap[i][j], minNeighborLevel);
+
+                    if (waterLevel[i][j] > newLevel) {
+                        waterLevel[i][j] = newLevel;
+                        updated = true;
+                    }
                 }
             }
         }
 
+        // Calculate total trapped water volume by summing differences
         int totalWater = 0;
-        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-
-        // Process cells in the priority queue
-        while (!pq.isEmpty()) {
-            int[] cell = pq.poll();
-            int height = cell[0], x = cell[1], y = cell[2];
-
-            // Visit all unvisited neighbors
-            for (int[] dir : directions) {
-                int nx = x + dir[0];
-                int ny = y + dir[1];
-
-                if (nx >= 0 && nx < m && ny >= 0 && ny < n && !visited[nx][ny]) {
-                    visited[nx][ny] = true;
-
-                    // If the neighbor is lower, trap water
-                    totalWater += Math.max(0, height - heightMap[nx][ny]);
-
-                    // Push the neighbor into the queue with updated height
-                    pq.offer(new int[]{Math.max(height, heightMap[nx][ny]), nx, ny});
+        for (int i = 1; i < rows - 1; i++) {
+            for (int j = 1; j < cols - 1; j++) {
+                if (waterLevel[i][j] > heightMap[i][j]) {
+                    totalWater += waterLevel[i][j] - heightMap[i][j];
                 }
             }
         }
