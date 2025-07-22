@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-21
 // At the time of submission:
-//   Runtime 49 ms Beats 87.67%
-//   Memory 61.29 MB Beats 24.07%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 60.80 MB Beats 43.48%
 
 /****************************************
 * 
@@ -32,33 +32,41 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // Use a sliding window to maintain a subarray of unique elements.
-    // Expand the right pointer to include new elements and update sum.
-    // If a duplicate is found, shrink the window from the left until unique.
-    // Time Complexity: O(n), where n is the length of the input array.
-    // Space Complexity: O(n) for the HashSet storing current window elements.
+    // Track last seen indices using an array for O(1) lookup times.
+    // Use prefix sums to compute subarray sums in constant time.
+    // Shift the window when duplicates are found to maintain uniqueness.
+    // Time Complexity: O(n), where n = nums.length (single pass, O(1) ops).
+    // Space Complexity: O(n) for prefixSum + O(1) for lastSeenAt[10001].
     public int maximumUniqueSubarray(int[] nums) {
-        Set<Integer> seen = new HashSet<>();
-        int left = 0, right = 0;
-        int currentSum = 0, maxSum = 0;
-
-        while (right < nums.length) {
-            if (!seen.contains(nums[right])) {
-                seen.add(nums[right]);
-                currentSum += nums[right];
-                maxSum = Math.max(maxSum, currentSum);
-                right++;
-            } else {
-                seen.remove(nums[left]);
-                currentSum -= nums[left];
-                left++;
-            }
+        int[] lastSeenAt = new int[10001]; // since nums[i] ≤ 10^4
+        for (int i = 0; i < lastSeenAt.length; i++) {
+            lastSeenAt[i] = -1;
         }
 
-        return maxSum;
+        int lastInvalidIndex = -1;         // marks the left boundary
+        int maxScore = 0;
+
+        // Prefix sum array for quick sum queries
+        int[] prefixSum = new int[nums.length + 1];
+
+        for (int i = 0; i < nums.length; i++) {
+            // Build prefix sum array on the fly
+            prefixSum[i + 1] = prefixSum[i] + nums[i];
+
+            // If the current number was seen before, move left pointer up
+            if (lastSeenAt[nums[i]] >= 0) {
+                lastInvalidIndex = Math.max(lastInvalidIndex, lastSeenAt[nums[i]]);
+            }
+
+            // Calculate score from lastInvalidIndex + 1 to i
+            int currentScore = prefixSum[i + 1] - prefixSum[lastInvalidIndex + 1];
+            maxScore = Math.max(maxScore, currentScore);
+
+            // Update the last seen index of the current number
+            lastSeenAt[nums[i]] = i;
+        }
+
+        return maxScore;
     }
 }
