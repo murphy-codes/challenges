@@ -1,6 +1,9 @@
 # Source: https://leetcode.com/problems/word-subsets/
 # Author: Tom Murphy https://github.com/murphy-codes/
 # Date: 2025-01-10
+# At the time of submission:
+#   Runtime 339 ms Beats 64.23%
+#   Memory 21.09 MB Beats 93.38%
 
 '''
 You are given two string arrays `words1` and `words2`.
