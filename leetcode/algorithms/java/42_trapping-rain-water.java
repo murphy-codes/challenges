@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-20
 // At the time of submission:
-//   Runtime 1 ms Beats 62.43%
-//   Memory 46.49 MB Beats 49.41%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 46.29 MB Beats 66.72%
 
 /****************************************
 * 
@@ -28,19 +28,18 @@
 ****************************************/
 
 class Solution {
-    // Use the two-pointer technique to calculate trapped water by moving inward from both ends
-    // Track the max heights from the left and right to determine water levels at each position
-    // Calculate water trapped by subtracting height from the respective max height
+    // Two-pointer approach that scans from both ends inward, tracking the max  
+    // height seen so far from the left and right. At each step, water is  
+    // trapped based on the smaller of the two max heights. Efficiently computes  
+    // trapped rainwater in one pass.  
     // Time: O(n), Space: O(1)
     public int trap(int[] height) {
-        if (height == null || height.length == 0) return 0;
-
         int left = 0, right = height.length - 1;
-        int maxLeft = 0, maxRight = 0;
-        int totalWater = 0;
+        int maxLeft = 0, maxRight = 0, totalWater = 0;
 
-        while (left <= right) {
-            if (height[left] <= height[right]) {
+        while (left < right) {
+            if (height[left] < height[right]) {
+                // Water trapped depends on max height to the left
                 if (height[left] >= maxLeft) {
                     maxLeft = height[left];
                 } else {
@@ -48,6 +47,7 @@ class Solution {
                 }
                 left++;
             } else {
+                // Water trapped depends on max height to the right
                 if (height[right] >= maxRight) {
                     maxRight = height[right];
                 } else {
