@@ -1,14 +1,22 @@
 // Source: https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-26
+// At the time of submission:
+//   Runtime 88 ms Beats 73.56%
+//   Memory 55.55 MB Beats 38.53%
 
 /****************************************
 * 
 * A sequence `x_1, x_2, ..., x_n` is Fibonacci-like if:
 * • `n >= 3`
 * • `x_i + x_i+1 == x_i+2` for all `i + 2 <= n`
-* Given a strictly increasing array `arr` of positive integers forming a sequence, return the length of the longest Fibonacci-like subsequence of `arr`. If one does not exist, return `0`.
-* A subsequence is derived from another sequence `arr` by deleting any number of elements (including none) from `arr`, without changing the order of the remaining elements. For example, `[3, 5, 8]` is a subsequence of `[3, 4, 5, 6, 7, 8]`.
+* Given a strictly increasing array `arr` of positive integers forming a sequence, 
+* _ return the length of the longest Fibonacci-like subsequence of `arr`. If one 
+* _ does not exist, return `0`.
+* A subsequence is derived from another sequence `arr` by deleting any number of 
+* _ elements (including none) from `arr`, without changing the order of the 
+* _ remaining elements. For example, `[3, 5, 8]` is a 
+* _ subsequence of `[3, 4, 5, 6, 7, 8]`.
 *
 * Example 1:
 * Input: arr = [1,2,3,4,5,6,7,8]
