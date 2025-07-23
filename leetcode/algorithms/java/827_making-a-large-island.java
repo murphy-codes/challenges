@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-31
 // At the time of submission:
-//   Runtime 70 ms Beats 88.42%
-//   Memory 72.53 MB Beats 87.81%
+//   Runtime 22 ms Beats 100.00%
+//   Memory 80.46 MB Beats 41.77%
 
 /****************************************
 * 
@@ -35,69 +35,97 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 class Solution {
-    // We use DFS to find and label all islands, storing their sizes in a hashmap.  
-    // Then, we iterate over all 0s, checking adjacent unique islands to find the  
-    // largest possible island size by flipping a single 0. If no 0s exist, we  
-    // return the largest existing island. This runs in O(n²) time and space.  
-    public int largestIsland(int[][] grid) {
-        int n = grid.length;
-        HashMap<Integer, Integer> islandSize = new HashMap<>();
-        int islandId = 2, maxIsland = 0;
+    // This solution labels each island uniquely using DFS, storing their sizes in a static
+    // array to optimize lookups. Then, for each zero cell, it calculates the potential
+    // island size by merging adjacent islands (without double-counting duplicates). It
+    // returns the max such size or the largest existing island if no zeros exist.
+    // Time complexity: O(n^2), since DFS visits all cells once and each zero checks up to 4 neighbors.
+    // Space complexity: O(n^2), due to grid modifications and the static island area array.
 
-        // Step 1: Identify islands and store their sizes
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                if (grid[r][c] == 1) {
-                    int size = dfs(grid, r, c, islandId);
-                    islandSize.put(islandId++, size);
-                    maxIsland = Math.max(maxIsland, size);
+    // Large enough array for island areas to avoid hashmap overhead.
+    static int[] islandAreas = new int[500 * 500 / 2 + 2];
+    int islandId;
+    int maxRow;
+    int maxCol;
+
+    public int largestIsland(int[][] grid) {
+        islandId = 2; // Start labeling islands from 2 (to avoid confusion with 0 and 1)
+        islandAreas[2] = 0; // Default area for first island
+        maxRow = grid.length - 1;
+        maxCol = grid[0].length - 1;
+
+        // Label islands with unique ids and record their sizes
+        for (int r = 0; r <= maxRow; r++) {
+            int[] row = grid[r];
+            for (int c = 0; c <= maxCol; c++) {
+                if (row[c] == 1) {
+                    islandAreas[islandId] = dfsMarkIsland(grid, r, c);
+                    islandId++;
                 }
             }
         }
 
-        // Step 2: Try flipping each 0 and calculate the largest possible island
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                if (grid[r][c] == 0) {
-                    HashSet<Integer> seen = new HashSet<>();
-                    int possibleSize = 1; // Count the flipped cell
+        int maxArea = islandAreas[2]; // If no zeros, largest island is the max area found so far
 
-                    // Check all 4 directions
-                    for (int[] d : directions) {
-                        int nr = r + d[0], nc = c + d[1];
-                        if (nr >= 0 && nr < n && nc >= 0 && nc < n && grid[nr][nc] > 1) {
-                            int id = grid[nr][nc];
-                            if (seen.add(id)) { // Prevent double-counting
-                                possibleSize += islandSize.get(id);
-                            }
+        // Check every zero cell: calculate potential island size if flipped
+        for (int r = 0; r <= maxRow; r++) {
+            int[] row = grid[r];
+            for (int c = 0; c <= maxCol; c++) {
+                if (row[c] == 0) {
+                    int area = 1; // Flipping this cell to 1
+                    int idxUp = 0, idxLeft = 0, idxDown = 0;
+
+                    // Check up neighbor
+                    if (r > 0) {
+                        int id = grid[r - 1][c];
+                        if (id > 0) {
+                            area += islandAreas[id];
+                            idxUp = id;
                         }
                     }
-                    maxIsland = Math.max(maxIsland, possibleSize);
+                    // Check left neighbor (avoid double-count)
+                    if (c > 0) {
+                        int id = row[c - 1];
+                        if (id > 0 && id != idxUp) {
+                            area += islandAreas[id];
+                            idxLeft = id;
+                        }
+                    }
+                    // Check down neighbor (avoid double-count)
+                    if (r < maxRow) {
+                        int id = grid[r + 1][c];
+                        if (id > 0 && id != idxUp && id != idxLeft) {
+                            area += islandAreas[id];
+                            idxDown = id;
+                        }
+                    }
+                    // Check right neighbor (avoid double-count)
+                    if (c < maxCol) {
+                        int id = row[c + 1];
+                        if (id > 0 && id != idxUp && id != idxLeft && id != idxDown) {
+                            area += islandAreas[id];
+                        }
+                    }
+
+                    if (area > maxArea) maxArea = area;
                 }
             }
         }
 
-        return maxIsland;
+        return maxArea;
     }
 
-    // Directions for up, down, left, right
-    private static final int[][] directions = {{0,1},{1,0},{0,-1},{-1,0}};
+    // DFS to mark island cells with islandId and return island size
+    private int dfsMarkIsland(int[][] grid, int r, int c) {
+        int area = 1;
+        grid[r][c] = islandId;
 
-    // DFS to mark an island and count its size
-    private int dfs(int[][] grid, int r, int c, int id) {
-        int n = grid.length, size = 1;
-        grid[r][c] = id; // Mark with island ID
+        if (r > 0 && grid[r - 1][c] == 1) area += dfsMarkIsland(grid, r - 1, c);
+        if (c > 0 && grid[r][c - 1] == 1) area += dfsMarkIsland(grid, r, c - 1);
+        if (r < maxRow && grid[r + 1][c] == 1) area += dfsMarkIsland(grid, r + 1, c);
+        if (c < maxCol && grid[r][c + 1] == 1) area += dfsMarkIsland(grid, r, c + 1);
 
-        for (int[] d : directions) {
-            int nr = r + d[0], nc = c + d[1];
-            if (nr >= 0 && nr < n && nc >= 0 && nc < n && grid[nr][nc] == 1) {
-                size += dfs(grid, nr, nc, id);
-            }
-        }
-        return size;
+        return area;
     }
 }
