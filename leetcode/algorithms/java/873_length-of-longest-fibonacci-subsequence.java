@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-26
 // At the time of submission:
-//   Runtime 88 ms Beats 73.56%
-//   Memory 55.55 MB Beats 38.53%
+//   Runtime 42 ms Beats 99.82%
+//   Memory 44.63 MB Beats 96.85%
 
 /****************************************
 * 
@@ -34,38 +34,46 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-
 class Solution {
-    // Uses DP with a HashMap to find the longest Fibonacci-like subsequence.
-    // dp[i][j] stores the length of the sequence ending at indices i and j.
-    // If arr[j] - arr[i] exists in arr, extend dp[k][i] → dp[i][j] = dp[k][i] + 1.
-    // Time Complexity: O(n²) since we check all pairs (i, j) with O(1) lookups.
-    // Space Complexity: O(n²) for DP storage plus O(n) for the HashMap.
+    // This solution finds the length of the longest Fibonacci-like subsequence
+    // by simulating all possible Fibonacci pairs using a greedy approach.
+    // It uses a HashSet for O(1) lookups and prunes early with the golden ratio.
+    // Time complexity: O(n^2 log M), where M is the max number in arr.
+    // Space complexity: O(n) for the HashSet storing the array's elements.
     public int lenLongestFibSubseq(int[] arr) {
-        int n = arr.length;
-        HashMap<Integer, Integer> indexMap = new HashMap<>();
-        int[][] dp = new int[n][n];
-        int maxLen = 0;
-
-        // Store indices for quick lookup
-        for (int i = 0; i < n; i++) {
-            indexMap.put(arr[i], i);
+        Set<Integer> numSet = new HashSet<>();
+        for (int num : arr) {
+            numSet.add(num);
         }
 
-        // Iterate through pairs (i, j) and find k such that arr[k] + arr[i] = arr[j]
-        for (int j = 1; j < n; j++) {
-            for (int i = 0; i < j; i++) {
-                int prev = arr[j] - arr[i]; // Find the number needed to form Fibonacci
-                if (prev < arr[i] && indexMap.containsKey(prev)) {
-                    int k = indexMap.get(prev);
-                    dp[i][j] = dp[k][i] + 1;
-                    maxLen = Math.max(maxLen, dp[i][j]);
+        int maxLength = 2;
+        int n = arr.length;
+
+        for (int i = 0; i < n - maxLength; i++) {
+            // Prune if even the longest possible Fib sequence is too small
+            if (arr[i] * Math.pow(1.618, maxLength - 1) > arr[n - 1])
+                break;
+
+            for (int j = i + 1; j < n - maxLength + 1; j++) {
+                if (arr[j] * Math.pow(1.618, maxLength - 2) > arr[n - 1])
+                    break;
+
+                int first = arr[i];
+                int second = arr[j];
+                int currentLength = 2;
+
+                // Try building Fibonacci sequence
+                while (numSet.contains(first + second)) {
+                    int next = first + second;
+                    first = second;
+                    second = next;
+                    currentLength++;
                 }
-                dp[i][j] = Math.max(dp[i][j], 2); // Ensure min length 2 for valid pairs
+
+                maxLength = Math.max(maxLength, currentLength);
             }
         }
 
-        return maxLen >= 3 ? maxLen : 0; // A Fibonacci sequence must have at least 3 numbers
+        return maxLength < 3 ? 0 : maxLength;
     }
 }
