@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-29
 // At the time of submission:
-//   Runtime 655 ms Beats 29.63%
-//   Memory 47.98 MB Beats 75.93%
+//   Runtime 24 ms Beats 99.07%
+//   Memory 46.14 MB Beats 97.22%
 
 /****************************************
 * 
@@ -52,102 +52,71 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 class Solution {
-    // This solution finds the max number of groups that can be formed in a graph.  
-    // It first checks if each component is bipartite using BFS. If not, return -1.  
-    // For each bipartite component, it finds the max BFS depth from the best node.  
-    // Time complexity: O(n + m) due to BFS traversal and adjacency list operations.  
-    // Space complexity: O(n + m) for graph storage, color tracking, and BFS queues.  
+    // For each component, this code finds a starting node and performs BFS
+    // to assign "layers" to each node while ensuring the graph is bipartite.
+    // It tracks the maximum depth (number of layers) reached in each component,
+    // summing those to return the total number of "magnificent sets".
+    // Time: O(n + m * d), Space: O(n + m) where m = edges, d = max node degree.
     public int magnificentSets(int n, int[][] edges) {
-        // Step 1: Build adjacency list
-        List<Integer>[] graph = new ArrayList[n + 1]; // 1-based index
-        for (int i = 1; i <= n; i++) {
-            graph[i] = new ArrayList<>();
+        List<Integer>[] adj = new ArrayList[n + 1];
+        int[] degree = new int[n + 1];
+        
+        // Build adjacency list and track degree of each node
+        for (int i = 0; i <= n; i++) {
+            adj[i] = new ArrayList<>();
         }
         for (int[] edge : edges) {
-            graph[edge[0]].add(edge[1]);
-            graph[edge[1]].add(edge[0]);
+            adj[edge[0]].add(edge[1]);
+            adj[edge[1]].add(edge[0]);
+            degree[edge[0]]++;
+            degree[edge[1]]++;
         }
 
-        // Step 2: Check for bipartiteness and process components
-        int[] color = new int[n + 1]; // 0 = unvisited, 1 & -1 = colors
-        Arrays.fill(color, 0);
-        int totalMaxGroups = 0;
+        int[] comp = new int[n + 1]; // Component ID for each node
+        int component = 1;
+        int[][] res = new int[n + 1][2]; // res[c][0]=max depth, res[c][1]=min degree in component
 
         for (int i = 1; i <= n; i++) {
-            if (color[i] == 0) { // Unvisited component
-                List<Integer> component = new ArrayList<>();
-                if (!isBipartite(graph, i, color, component)) {
-                    return -1; // Odd cycle found, impossible to group
-                }
-                // Step 3: Get max BFS depth for this component
-                totalMaxGroups += getMaxDepth(graph, component);
-            }
-        }
+            // Skip if already visited and not the lowest-degree node in component
+            if (comp[i] != 0 && res[comp[i]][1] < degree[i]) continue;
 
-        return totalMaxGroups;
-    }
+            // Assign new component if unvisited
+            if (comp[i] == 0) comp[i] = component++;
 
-    // BFS-based bipartiteness check & component collection
-    private boolean isBipartite(List<Integer>[] graph, int start, int[] color, List<Integer> component) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(start);
-        color[start] = 1; // Start coloring with 1
-        component.add(start);
+            res[comp[i]][1] = degree[i];
 
-        while (!queue.isEmpty()) {
-            int node = queue.poll();
-            for (int neighbor : graph[node]) {
-                if (color[neighbor] == 0) { // Unvisited, assign opposite color
-                    color[neighbor] = -color[node];
-                    queue.offer(neighbor);
-                    component.add(neighbor);
-                } else if (color[neighbor] == color[node]) { 
-                    return false; // Odd-length cycle detected
-                }
-            }
-        }
-        return true;
-    }
+            int[] groups = new int[n + 1]; // Layer assignments
+            Queue<Integer> q = new LinkedList<>();
+            groups[i] = 1; // Start from layer 1
+            q.offer(i);
+            int maxLayer = 0;
 
-    // BFS to find the longest path from any node in a component
-    private int getMaxDepth(List<Integer>[] graph, List<Integer> component) {
-        int maxDepth = 0;
-        for (int node : component) {
-            maxDepth = Math.max(maxDepth, bfsDepth(graph, node));
-        }
-        return maxDepth;
-    }
+            // BFS to assign groups
+            while (!q.isEmpty()) {
+                int size = q.size();
+                for (int j = 0; j < size; j++) {
+                    int node = q.poll();
+                    comp[node] = comp[i];
+                    maxLayer = Math.max(maxLayer, groups[node]);
 
-    // Perform BFS to determine the longest path from a starting node
-    private int bfsDepth(List<Integer>[] graph, int start) {
-        Queue<Integer> queue = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
-        queue.offer(start);
-        visited.add(start);
-        int depth = 0;
-
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            depth++; // Each level represents a group
-            for (int i = 0; i < size; i++) {
-                int node = queue.poll();
-                for (int neighbor : graph[node]) {
-                    if (!visited.contains(neighbor)) {
-                        queue.offer(neighbor);
-                        visited.add(neighbor);
+                    for (int neighbor : adj[node]) {
+                        if (groups[neighbor] == 0) {
+                            groups[neighbor] = groups[node] + 1;
+                            q.offer(neighbor);
+                        } else if (Math.abs(groups[neighbor] - groups[node]) != 1) {
+                            return -1; // Not bipartite
+                        }
                     }
                 }
             }
+            res[comp[i]][0] = Math.max(res[comp[i]][0], maxLayer);
         }
 
-        return depth;
+        int totalGroups = 0;
+        for (int[] r : res) {
+            totalGroups += r[0];
+        }
+        return totalGroups;
     }
 }
