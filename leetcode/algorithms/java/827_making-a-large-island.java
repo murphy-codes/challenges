@@ -1,45 +1,37 @@
 // Source: https://leetcode.com/problems/making-a-large-island/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-31
+// At the time of submission:
+//   Runtime 70 ms Beats 88.42%
+//   Memory 72.53 MB Beats 87.81%
 
 /****************************************
 * 
-* You are given a positive integer n representing the number of nodes in an undirected graph. The nodes are labeled from `1` to `n.
-* 
-* You are also given a 2D integer array `edges`, where `edges[i] = [a_i, b_i]` indicates that there is a bidirectional edge between nodes `a_i` and `b_i`. Notice that the given graph may be disconnected.
-* 
-* Divide the nodes of the graph into `m` groups (1-indexed) such that:
-* 
-* • Each node in the graph belongs to exactly one group.
-* • For every pair of nodes in the graph that are connected by an edge `[a_i, b_i]`, if `a_i` belongs to the group with index `x`, and `b_i` belongs to the group with index `y`, then `|y - x| = 1`.
-* 
-* Return the maximum number of groups (i.e., maximum `m`) into which you can divide the nodes. Return `-1` if it is impossible to group the nodes with the given conditions.
-* 
+* You are given an `n x n` binary matrix grid. You are allowed to change at most
+* _ one `0` to be `1`.
+* Return the size of the largest island in `grid` after applying this operation.
+* An island is a 4-directionally connected group of `1`s.
+*
 * Example 1:
-*   [Image depicting 4 groups, with G1 having 5, which connects to 1 in G2, which then connects to both 2 & 4 in G3. Finally, 2 in G3 connects to both 3 & 6 in G4, but 4 in G3 only connects to 6 in G4 (thus 6 in G4 connects to both elements in G3). https://assets.leetcode.com/uploads/2022/10/13/example1.png]
-* Input: n = 6, edges = [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]]
-* Output: 4
-* Explanation: As shown in the image we:
-* - Add node 5 to the first group.
-* - Add node 1 to the second group.
-* - Add nodes 2 and 4 to the third group.
-* - Add nodes 3 and 6 to the fourth group.
-* We can see that every edge is satisfied.
-* It can be shown that that if we create a fifth group and move any node from the third or fourth group to it, at least on of the edges will not be satisfied.
-* 
+* Input: grid = [[1,0],[0,1]]
+* Output: 3
+* Explanation: Change one 0 to 1 and connect two 1s, then we get an island with area = 3.
+*
 * Example 2:
-* Input: n = 3, edges = [[1,2],[2,3],[3,1]]
-* Output: -1
-* Explanation: If we add node 1 to the first group, node 2 to the second group, and node 3 to the third group to satisfy the first two edges, we can see that the third edge will not be satisfied.
-* It can be shown that no grouping is possible.
-* 
+* Input: grid = [[1,1],[1,0]]
+* Output: 4
+* Explanation: Change the 0 to 1 and make the island bigger, only one island with area = 4.
+*
+* Example 3:
+* Input: grid = [[1,1],[1,1]]
+* Output: 4
+* Explanation: Can't change any 0 to 1, only one island with area = 4.
+*
 * Constraints:
+* • n == grid.length
+* • n == grid[i].length
 * • 1 <= n <= 500
-* • 1 <= edges.length <= 10^4
-* • edges[i].length == 2
-* • 1 <= a_i, b_i <= n
-* • a_i != b_i
-* • There is at most one edge between any pair of vertices.
+* • grid[i][j] is either `0` or `1`.
 * 
 ****************************************/
 
