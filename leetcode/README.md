@@ -107,6 +107,7 @@ LeetCode
 |2349|[Design a Number Container System](https://leetcode.com/problems/design-a-number-container-system/)|[Java](./algorithms/java/2349_design-a-number-container-system.java)|Medium|
 |2342|[Max Sum of a Pair With Equal Sum of Digits](https://leetcode.com/problems/max-sum-of-a-pair-with-equal-sum-of-digits/)|[Java](./algorithms/java/2342_max-sum-of-a-pair-with-equal-sum-of-digits.java)|Medium|
 |2338|[Count the Number of Ideal Arrays](https://leetcode.com/problems/count-the-number-of-ideal-arrays/)|[Java](./algorithms/java/2338_count-the-number-of-ideal-arrays.java)|Hard|
+|2322|[Minimum Score After Removals on a Tree](https://leetcode.com/problems/minimum-score-after-removals-on-a-tree/)|[Java](./algorithms/java/2322_minimum-score-after-removals-on-a-tree.java)|Hard|
 |2311|[Longest Binary Subsequence Less Than or Equal to K](https://leetcode.com/problems/longest-binary-subsequence-less-than-or-equal-to-k/)|[Java](./algorithms/java/2311_longest-binary-subsequence-less-than-or-equal-to-k.java)|Medium|
 |2302|[Count Subarrays With Score Less Than K](https://leetcode.com/problems/count-subarrays-with-score-less-than-k/)|[Java](./algorithms/java/2302_count-subarrays-with-score-less-than-k.java)|Hard|
 |2294|[Partition Array Such That Maximum Difference Is K](https://leetcode.com/problems/partition-array-such-that-maximum-difference-is-k/)|[Java](./algorithms/java/2294_partition-array-such-that-maximum-difference-is-k.java)|Medium|
