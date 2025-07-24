@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-22
 // At the time of submission:
-//   Runtime 87 ms Beats 62.07%
-//   Memory 44.41 MB Beats 93.10%
+//   Runtime 20 ms Beats 93.10%
+//   Memory 44.66 MB Beats 82.76%
 
 /****************************************
 * 
@@ -59,90 +59,88 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
-    // DFS assigns in/out timestamps and computes XOR of each subtree
-    // For each pair of edges, we simulate cutting the tree into 3 parts
-    // We use in/out times to determine ancestor relationships in O(1)
-    // Based on inclusion, we compute the 3 component XORs from subtreeXor[]
-    // Finally, we track the min score across all such edge pairings
-    
-    private int time = 0;
-    private int[] in, out, subtreeXor;
-    private List<List<Integer>> graph = new ArrayList<>();
+    // Perform DFS to compute subtree XORs and entry/exit times.
+    // Use entry/exit times to determine subtree relationships in O(1).
+    // Check all pairs (u, v) to partition the tree into 3 parts.
+    // Calculate XOR for each part and find the min score (max - min).
+    // Time: O(n^2), Space: O(n), where n = number of nodes.
 
     public int minimumScore(int[] nums, int[][] edges) {
         int n = nums.length;
-        in = new int[n];
-        out = new int[n];
-        subtreeXor = new int[n];
-
-        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
-
-        // Build adjacency list
-        for (int[] e : edges) {
-            graph.get(e[0]).add(e[1]);
-            graph.get(e[1]).add(e[0]);
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
         }
 
-        // DFS to compute subtree XORs and in/out times
-        dfs(0, -1, nums);
+        for (int[] edge : edges) {
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
 
-        int totalXor = subtreeXor[0];
+        int[] xorSum = new int[n];   // xorSum[i] = XOR of subtree rooted at i
+        int[] entryTime = new int[n]; // entry time in DFS traversal
+        int[] exitTime = new int[n];  // exit time in DFS traversal
+        int[] time = {0};             // mutable counter used during DFS
+
+        dfs(0, -1, nums, graph, xorSum, entryTime, exitTime, time);
+
         int minScore = Integer.MAX_VALUE;
 
-        // Try all pairs of edges (v1-parent1), (v2-parent2)
-        for (int[] e1 : edges) {
-            int v1 = getChild(e1[0], e1[1]);
-            for (int[] e2 : edges) {
-                if (e1 == e2) continue;
-                int v2 = getChild(e2[0], e2[1]);
-
-                int xor1 = subtreeXor[v1];
-                int xor2 = subtreeXor[v2];
-                int xor3;
-
-                if (isAncestor(v1, v2)) {
-                    xor2 = subtreeXor[v2];
-                    xor1 = subtreeXor[v1] ^ xor2;
-                    xor3 = totalXor ^ subtreeXor[v1];
-                } else if (isAncestor(v2, v1)) {
-                    xor1 = subtreeXor[v1];
-                    xor2 = subtreeXor[v2] ^ xor1;
-                    xor3 = totalXor ^ subtreeXor[v2];
+        for (int u = 1; u < n; u++) {
+            for (int v = u + 1; v < n; v++) {
+                // Check if one is in the subtree of the other using in/out times
+                if (entryTime[v] > entryTime[u] && entryTime[v] < exitTime[u]) {
+                    // v is in subtree of u
+                    minScore = Math.min(
+                        minScore,
+                        computeScore(xorSum[0] ^ xorSum[u], xorSum[u] ^ xorSum[v], xorSum[v])
+                    );
+                } else if (entryTime[u] > entryTime[v] && entryTime[u] < exitTime[v]) {
+                    // u is in subtree of v
+                    minScore = Math.min(
+                        minScore,
+                        computeScore(xorSum[0] ^ xorSum[v], xorSum[v] ^ xorSum[u], xorSum[u])
+                    );
                 } else {
-                    xor3 = totalXor ^ xor1 ^ xor2;
+                    // u and v are in different subtrees
+                    minScore = Math.min(
+                        minScore,
+                        computeScore(xorSum[0] ^ xorSum[u] ^ xorSum[v], xorSum[u], xorSum[v])
+                    );
                 }
-
-                int max = Math.max(xor1, Math.max(xor2, xor3));
-                int min = Math.min(xor1, Math.min(xor2, xor3));
-                minScore = Math.min(minScore, max - min);
             }
         }
 
         return minScore;
     }
 
-    private int dfs(int node, int parent, int[] nums) {
-        in[node] = time++;
-        subtreeXor[node] = nums[node];
+    // Compute the score as max - min among three partition XORs
+    private int computeScore(int part1, int part2, int part3) {
+        return Math.max(part1, Math.max(part2, part3)) -
+               Math.min(part1, Math.min(part2, part3));
+    }
+
+    // DFS to compute subtree XOR and entry/exit times for Euler Tour logic
+    private void dfs(
+        int node,
+        int parent,
+        int[] nums,
+        List<List<Integer>> graph,
+        int[] xorSum,
+        int[] entryTime,
+        int[] exitTime,
+        int[] time
+    ) {
+        entryTime[node] = time[0]++;
+        xorSum[node] = nums[node];
+
         for (int neighbor : graph.get(node)) {
-            if (neighbor != parent) {
-                subtreeXor[node] ^= dfs(neighbor, node, nums);
-            }
+            if (neighbor == parent) continue;
+            dfs(neighbor, node, nums, graph, xorSum, entryTime, exitTime, time);
+            xorSum[node] ^= xorSum[neighbor];
         }
-        out[node] = time++;
-        return subtreeXor[node];
-    }
 
-    private boolean isAncestor(int u, int v) {
-        return in[u] <= in[v] && out[v] <= out[u];
-    }
-
-    private int getChild(int a, int b) {
-        // Always return the child (the one deeper in DFS)
-        return in[a] > in[b] ? a : b;
+        exitTime[node] = time[0];
     }
 }
