@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-26
 // At the time of submission:
-//   Runtime 67 ms Beats 46.15%
-//   Memory 114.93 MB Beats 87.18%
+//   Runtime 15 ms Beats 100.00%
+//   Memory 140.22 MB Beats 17.95%
 
 /****************************************
 * 
@@ -42,46 +42,56 @@
 * 
 ****************************************/
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 class Solution {
-    // For each subarray ending at r, track the highest conflicting left endpoint 
-    // L (& 2nd). Total valid subarrays ending at r = (r − maxLeft). If we remove 
-    // the restrictive pair at maxLeft, we gain (maxLeft − secondMaxLeft) extra valid
-    // subarrays. Compute base valid count + max gain across all positions. 
-    // Time O(n+m), space O(n+m).
+    // For each a, track its two smallest conflicting b's.
+    // Sweep from n → 1, tracking the most restrictive conflict window.
+    // For each i, count valid subarrays [i..r) that don’t include any conflict.
+    // Try removing the tightest conflict to see if we can unlock more subarrays.
+    // Time: O(n + m), Space: O(n + m) — extremely fast with no nested loops.
     public long maxSubarrays(int n, int[][] conflictingPairs) {
-        long validSubarrays = 0;
-        int maxLeft = 0, secondMaxLeft = 0;
-        long[] gains = new long[n + 1];
-        @SuppressWarnings("unchecked")
-        List<Integer>[] conflicts = new List[n + 1];
-        for (int i = 0; i <= n; i++) conflicts[i] = new ArrayList<>();
+        int[] minConflictB = new int[n + 1];
+        int[] secondMinConflictB = new int[n + 1];
+        Arrays.fill(minConflictB, Integer.MAX_VALUE);
+        Arrays.fill(secondMinConflictB, Integer.MAX_VALUE);
 
-        for (int[] p : conflictingPairs) {
-            int a = p[0], b = p[1];
-            conflicts[Math.max(a, b)].add(Math.min(a, b));
-        }
-
-        for (int right = 1; right <= n; right++) {
-            for (int left : conflicts[right]) {
-                if (left > maxLeft) {
-                    secondMaxLeft = maxLeft;
-                    maxLeft = left;
-                } else if (left > secondMaxLeft) {
-                    secondMaxLeft = left;
-                }
+        // Track the two smallest conflicting 'b' values for each 'a'
+        for (int[] pair : conflictingPairs) {
+            int a = Math.min(pair[0], pair[1]);
+            int b = Math.max(pair[0], pair[1]);
+            if (minConflictB[a] > b) {
+                secondMinConflictB[a] = minConflictB[a];
+                minConflictB[a] = b;
+            } else if (secondMinConflictB[a] > b) {
+                secondMinConflictB[a] = b;
             }
-            // count valid subarrays ending at 'right'
-            validSubarrays += right - maxLeft;
-            // if removing the most restrictive conflict at left = maxLeft,
-            // we can gain extra (maxLeft - secondMaxLeft) new subarrays
-            gains[maxLeft] += (maxLeft - secondMaxLeft);
         }
 
-        long maxGain = Arrays.stream(gains).max().orElse(0L);
-        return validSubarrays + maxGain;
+        long totalValid = 0;
+        int bestA = n;
+        int secondBestB = Integer.MAX_VALUE;
+        long[] gainIfRemove = new long[n + 1];
+
+        for (int i = n; i >= 1; i--) {
+            // Maintain the most restrictive 'a' (bestA) and second best 'b'
+            if (minConflictB[bestA] > minConflictB[i]) {
+                secondBestB = Math.min(secondBestB, minConflictB[bestA]);
+                bestA = i;
+            } else {
+                secondBestB = Math.min(secondBestB, minConflictB[i]);
+            }
+
+            int validEnd = Math.min(minConflictB[bestA], n + 1);
+            totalValid += validEnd - i;
+
+            int altEnd = Math.min(Math.min(secondBestB, secondMinConflictB[bestA]), n + 1);
+            gainIfRemove[bestA] += altEnd - validEnd;
+        }
+
+        long maxGain = 0;
+        for (long gain : gainIfRemove) {
+            maxGain = Math.max(maxGain, gain);
+        }
+
+        return totalValid + maxGain;
     }
 }
