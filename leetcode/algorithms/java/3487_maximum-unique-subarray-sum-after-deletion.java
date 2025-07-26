@@ -3,7 +3,7 @@
 // Date: 2025-07-26
 // At the time of submission:
 //   Runtime 1 ms Beats 99.84%
-//   Memory 42.65 MB Beats 52.17%
+//   Memory 42.42 MB Beats 77.75%
 
 /****************************************
 * 
@@ -41,25 +41,23 @@
 ****************************************/
 
 class Solution {
-    // This solution sums all unique positive integers in the array. 
-    // It uses an array to track which values have been added already.
-    // If no positive values exist, the result is the maximum (least negative) number.
-    // Time: O(n), Space: O(1) since input bounds are fixed (-100 to 100).
+    // Iterate through the array to sum unique positive integers only.  
+    // Use a boolean array to track which values in [1,100] were seen.  
+    // Track the overall maximum value to handle all-negative inputs.  
+    // Time Complexity: O(n), where n is the number of elements in nums.  
+    // Space Complexity: O(1), fixed size auxiliary array of size 101.
     public int maxSum(int[] nums) {
-        int[] unq = new int[101];
-        int max_sum = 0;
+        boolean[] seen = new boolean[101];
+        int sum_unique = 0;
         int non_empty = Integer.MIN_VALUE;
         for (int num : nums) {
-            if (num > 0) {
-                if (num != unq[num]) {
-                    unq[num] = num;
-                    max_sum += num;
-                }
-            } else {
-                non_empty = Math.max(non_empty, num);
+            non_empty = Math.max(non_empty, num);
+            if (num <= 0) continue;
+            if (!seen[num]) {
+                seen[num] = true;
+                sum_unique += num;
             }
         }
-        if (max_sum == 0) { return non_empty; }
-        else { return max_sum; }
+        return non_empty < 0 ? non_empty : sum_unique;
     }
 }
