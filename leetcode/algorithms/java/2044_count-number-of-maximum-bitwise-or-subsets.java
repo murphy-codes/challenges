@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-27
 // At the time of submission:
-//   Runtime 8 ms Beats 80.38%
-//   Memory 41.26 MB Beats 55.22%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 41.83 MB Beats 26.23%
 
 /****************************************
 * 
@@ -46,38 +46,37 @@
 ****************************************/
 
 class Solution {
-    // Use backtracking to explore all 2^n subsets of nums.
-    // Compute OR value for each subset and count those matching max OR.
-    // max OR is the OR of all elements in nums. Time: O(2^n), Space: O(n).
-    // Efficient since nums.length ≤ 16, allowing full subset traversal.
-    // No extra space used except for recursion stack (depth ≤ n).
+    // Backtrack through all subsets, tracking the running bitwise OR.
+    // If current OR matches the maximum OR, count all remaining combinations.
+    // This avoids exploring redundant paths and speeds up recursion.
+    // Time complexity: O(2^n), but optimized with pruning when OR == max.
+    // Space complexity: O(n) for recursion stack (n = nums.length).
 
     private int count = 0;
-    private int maxOr = 0;
 
     public int countMaxOrSubsets(int[] nums) {
-        // Step 1: Compute the maximum OR possible
+        int maxOr = 0;
+
+        // Step 1: Calculate the maximum OR possible from all elements
         for (int num : nums) {
             maxOr |= num;
         }
 
-        // Step 2: Use backtracking to explore all subsets
-        backtrack(nums, 0, 0);
+        // Step 2: Begin backtracking from index 0 with OR = 0
+        backtrack(nums, maxOr, 0, 0);
         return count;
     }
 
-    private void backtrack(int[] nums, int index, int currentOr) {
-        if (index == nums.length) {
-            if (currentOr == maxOr) {
-                count++;
-            }
+    private void backtrack(int[] nums, int targetOr, int currentOr, int index) {
+        // Optimization: if current OR reaches max, count all remaining subsets
+        if (currentOr == targetOr) {
+            count += 1 << (nums.length - index); // 2^(n - index)
             return;
         }
 
-        // Include nums[index]
-        backtrack(nums, index + 1, currentOr | nums[index]);
-
-        // Exclude nums[index]
-        backtrack(nums, index + 1, currentOr);
+        // Explore further by including each number starting from current index
+        for (int i = index; i < nums.length; i++) {
+            backtrack(nums, targetOr, currentOr | nums[i], i + 1);
+        }
     }
 }
