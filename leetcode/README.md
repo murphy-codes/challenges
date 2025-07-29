@@ -98,6 +98,7 @@ LeetCode
 |2434|[Using a Robot to Print the Lexicographically Smallest String](https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/)|[Java](./algorithms/java/2434_using-a-robot-to-print-the-lexicographically-smallest-string.java)|Medium|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
+|2411|[Smallest Subarrays With Maximum Bitwise OR](https://leetcode.com/problems/smallest-subarrays-with-maximum-bitwise-or/)|[Java](./algorithms/java/2411_smallest-subarrays-with-maximum-bitwise-or.java)|Medium|
 |2410|[Maximum Matching of Players With Trainers](https://leetcode.com/problems/maximum-matching-of-players-with-trainers/)|[Java](./algorithms/java/2410_maximum-matching-of-players-with-trainers.java)|Medium|
 |2402|[Meeting Rooms III](https://leetcode.com/problems/meeting-rooms-iii/)|[Java](./algorithms/java/2402_meeting-rooms-iii.java)|Hard|
 |2401|[Longest Nice Subarray](https://leetcode.com/problems/longest-nice-subarray/)|[Java](./algorithms/java/2401_longest-nice-subarray.java)|Medium|
