@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-29
 // At the time of submission:
-//   Runtime 28 ms Beats 48.65%
-//   Memory 61.58 MB Beats 44.59%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 61.69 MB Beats 41.89%
 
 /****************************************
 * 
@@ -47,32 +47,24 @@
 ****************************************/
 
 class Solution {
-    // Traverse the array backwards while tracking the last seen index for each bit.
-    // At each index, determine the farthest point needed to include all bits
-    // seen so far. The difference gives the minimal subarray length for max OR.
-    // Bitwise checks and updates ensure linear time.
-    // Time: O(n * 32) ~ O(n), Space: O(32) ~ O(1)
+    // Iterate through the array and use the current element to update
+    // all previous positions where adding this element increases the OR.
+    // This ensures that each index reflects the minimum subarray length
+    // needed to reach the maximum possible OR from that point onward.
+    // Time: O(n * 30) worst-case, amortized O(n); Space: O(1) extra space.
     public int[] smallestSubarrays(int[] nums) {
         int n = nums.length;
         int[] result = new int[n];
-        int[] lastSeen = new int[32]; // Last index each bit (0-31) was seen
 
-        // Traverse the array backwards
-        for (int i = n - 1; i >= 0; i--) {
-            // Update the lastSeen positions for bits set in nums[i]
-            for (int b = 0; b < 32; b++) {
-                if ((nums[i] & (1 << b)) != 0) {
-                    lastSeen[b] = i;
-                }
+        for (int curr = 0; curr < n; ++curr) {
+            int runningOr = nums[curr];
+            result[curr] = 1;
+
+            // Walk backward to update prior subarrays
+            for (int prev = curr - 1; prev >= 0 && (nums[prev] | runningOr) != nums[prev]; --prev) {
+                nums[prev] |= runningOr;  // Include current OR into previous
+                result[prev] = curr - prev + 1;  // Update length to current subarray
             }
-
-            // The farthest index to reach all bits from this point
-            int farthest = i;
-            for (int b = 0; b < 32; b++) {
-                farthest = Math.max(farthest, lastSeen[b]);
-            }
-
-            result[i] = farthest - i + 1;
         }
 
         return result;
