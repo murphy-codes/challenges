@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-29
 // At the time of submission:
-//   Runtime 3 ms Beats 82.57%
-//   Memory 59.06 MB Beats 98.76%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 59.34 MB Beats 93.78%
 
 /****************************************
 * 
@@ -37,27 +37,29 @@
 ****************************************/
 
 class Solution {
-    // Find the longest contiguous subarray where all elements equal the
-    // maximum value in the array. Since bitwise AND can only decrease,
-    // the maximum AND of any subarray must equal the max element.
-    // We track the longest streak of max values during a single pass.
-    // Time Complexity: O(n), where n is the length of nums.
-    // Space Complexity: O(1), using constant extra space.
+    // Efficient single-pass solution to find the longest subarray of max values.
+    // Dynamically updates the max while skipping full streaks via fast-forwarding.
+    // Time: O(n) — visits each element at most once.
+    // Space: O(1) — uses only a few variables, no extra data structures.
     public int longestSubarray(int[] nums) {
-        int maxValue = 0, maxLength = 0, currentLength = 0;
-        for (int num : nums) {
-            if (num == maxValue) {
-                currentLength++;
-                maxLength = Math.max(maxLength, currentLength);
-            } else {
-                currentLength = 0;
-                if (num > maxValue) {
-                    maxValue = num;
-                    maxLength = 1;
-                    currentLength++;
+        int max = 0, result = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] >= max) {
+                if (nums[i] > max) {
+                    max = nums[i];
+                    result = 1;
                 }
+                int count = 0;
+                while (i < nums.length && nums[i] == max) {
+                    count++;
+                    i++;
+                }
+                result = Math.max(result, count);
+                i--; // Step back since outer loop will increment again
             }
         }
-        return maxLength;
+
+        return result;
     }
 }
