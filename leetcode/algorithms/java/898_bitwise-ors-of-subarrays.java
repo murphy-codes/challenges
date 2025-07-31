@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-30
 // At the time of submission:
-//   Runtime 359 ms Beats 45.49%
-//   Memory 73.25 MB Beats 63.52%
+//   Runtime 165 ms Beats 82.38%
+//   Memory 71.12 MB Beats 85.25%
 
 /****************************************
 * 
@@ -40,24 +40,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 class Solution {
-    // For each element, track all OR results of subarrays ending at that index.
-    // Reuse previous results by OR'ing current number with each previous value.
-    // Add all results to a global set to keep track of unique OR values.
-    // Time: O(n * B), where B is the number of bits (~30), Space: O(n)
+    // For each index, OR the current value with previous elements to build
+    // subarray ORs. Stop early if OR result doesn't change (due to bit overlap).
+    // Store all distinct ORs in a global set to avoid duplicates.
+    // Time: O(n * B), where B = number of bits (~30); Space: O(n)
     public int subarrayBitwiseORs(int[] arr) {
-        Set<Integer> result = new HashSet<>();
-        Set<Integer> prev = new HashSet<>();
-        
-        for (int num : arr) {
-            Set<Integer> curr = new HashSet<>();
-            curr.add(num);
-            for (int val : prev) {
-                curr.add(val | num);
+        Set<Integer> uniqueORs = new HashSet<>();
+
+        for (int end = 0; end < arr.length; end++) {
+            uniqueORs.add(arr[end]);
+
+            for (int start = end - 1; start >= 0; start--) {
+                // If OR'ing with arr[end] doesn't change arr[start], stop early
+                if ((arr[start] | arr[end]) == arr[start]) break;
+
+                arr[start] |= arr[end];  // In-place OR update
+                uniqueORs.add(arr[start]);
             }
-            prev = curr;
-            result.addAll(curr);
         }
-        
-        return result.size();
+
+        return uniqueORs.size();
     }
 }
