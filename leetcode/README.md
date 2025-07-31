@@ -199,6 +199,7 @@ LeetCode
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |916|[Word Subsets](https://leetcode.com/problems/word-subsets/)|[C++](./algorithms/cpp/916_word-subsets.cpp), [Java](./algorithms/java/916_word-subsets.java), [Python](./algorithms/python/916_word-subsets.py), [Typescript](./algorithms/typescript/916_word-subsets.ts)|Medium|
 |909|[Snakes and Ladders](https://leetcode.com/problems/snakes-and-ladders/)|[Java](./algorithms/java/909_snakes-and-ladders.java)|Medium|
+|898|[Bitwise ORs of Subarrays](https://leetcode.com/problems/bitwise-ors-of-subarrays/)|[Java](./algorithms/java/898_bitwise-ors-of-subarrays.java)|Medium|
 |889|[Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)|[Java](./algorithms/java/889_construct-binary-tree-from-preorder-and-postorder-traversal.java)|Medium|
 |873|[Length of Longest Fibonacci Subsequence](https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/)|[Java](./algorithms/java/873_length-of-longest-fibonacci-subsequence.java)|Medium|
 |838|[Push Dominoes](https://leetcode.com/problems/push-dominoes/)|[Java](./algorithms/java/838_push-dominoes.java)|Medium|
