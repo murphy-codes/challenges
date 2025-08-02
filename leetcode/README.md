@@ -83,6 +83,7 @@ LeetCode
 |2570|[Merge Two 2D Arrays by Summing Values](https://leetcode.com/problems/merge-two-2d-arrays-by-summing-values/)|[Java](./algorithms/java/2570_merge-two-2d-arrays-by-summing-values.java)|Easy|
 |2566|[Maximum Difference by Remapping a Digit](https://leetcode.com/problems/maximum-difference-by-remapping-a-digit/)|[Java](./algorithms/java/2566_maximum-difference-by-remapping-a-digit.java)|Easy|
 |2563|[Count the Number of Fair Pairs](https://leetcode.com/problems/count-the-number-of-fair-pairs/)|[Java](./algorithms/java/2563_count-the-number-of-fair-pairs.java)|Medium|
+|2561|[Rearranging Fruits](https://leetcode.com/problems/rearranging-fruits/)|[Java](./algorithms/java/2561_rearranging-fruits.java)|Hard|
 |2560|[House Robber IV](https://leetcode.com/problems/house-robber-iv/)|[Java](./algorithms/java/2560_house-robber-iv.java)|Medium|
 |2559|[Count Vowel Strings in Ranges](https://leetcode.com/problems/count-vowel-strings-in-ranges/)|[Java](./algorithms/java/2559_count-vowel-strings-in-ranges.java)|Medium|
 |2551|[Put Marbles in Bags](https://leetcode.com/problems/put-marbles-in-bags/)|[Java](./algorithms/java/2551_put-marbles-in-bags.java)|Hard|
