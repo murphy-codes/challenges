@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-02
 // At the time of submission:
-//   Runtime 65 ms Beats 38.03%
-//   Memory 66.56 MB Beats 40.84%
+//   Runtime 15 ms Beats 100.00%
+//   Memory 57.68 MB Beats 100.00%
 
 /****************************************
 * 
@@ -37,56 +37,73 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 class Solution {
-    // Efficient solution that calculates the minimum cost to equalize two baskets.
-    // Uses frequency maps to find surplus fruits, and greedy logic to minimize cost.
-    // Either directly swaps or uses the global minimum fruit twice as proxy swap.
-    // Time complexity: O(n log n) due to sorting of surplus items.
-    // Space complexity: O(n) for frequency and surplus lists.
+    // Sort both baskets and identify unmatched items and their frequencies.
+    // For each value, record how many must be swapped to balance the baskets.
+    // Calculate the minimal swap cost using either direct value or double min.
+    // Time Complexity: O(n log n) due to sorting; rest is O(n) for processing.
+    // Space Complexity: O(n) for the swap list that tracks differences.
     public long minCost(int[] basket1, int[] basket2) {
-        Map<Integer, Integer> freq = new HashMap<>();
-        int n = basket1.length;
-        int minVal = Integer.MAX_VALUE;
+        List<int[]> swapList = new ArrayList<>();
+        Arrays.sort(basket1);
+        Arrays.sort(basket2);
 
-        // Count total frequency and track global min value
-        for (int i = 0; i < n; i++) {
-            freq.put(basket1[i], freq.getOrDefault(basket1[i], 0) + 1);
-            freq.put(basket2[i], freq.getOrDefault(basket2[i], 0) + 1);
-            minVal = Math.min(minVal, Math.min(basket1[i], basket2[i]));
+        int i = 0, j = 0;
+        int totalSwapsNeeded = 0;
+
+        // Find elements that are mismatched between baskets
+        while (i < basket1.length || j < basket2.length) {
+            if (i < basket1.length && j < basket2.length && basket1[i] == basket2[j]) {
+                i++; j++;
+                continue;
+            }
+
+            int val, count = 0;
+            if ((i < basket1.length && j < basket2.length && basket1[i] < basket2[j]) || j >= basket2.length) {
+                val = basket1[i];
+                while (i < basket1.length && basket1[i] == val) {
+                    count++;
+                    i++;
+                }
+            } else {
+                val = basket2[j];
+                while (j < basket2.length && basket2[j] == val) {
+                    count++;
+                    j++;
+                }
+            }
+
+            if (count % 2 != 0) return -1; // Odd count means impossible to pair up
+            totalSwapsNeeded += count / 2;
+            swapList.add(new int[]{val, count / 2});
         }
 
-        // Check feasibility
-        for (int val : freq.values()) {
-            if (val % 2 != 0) return -1;
-        }
+        // Calculate minimum cost using optimal strategy
+        long totalCost = 0;
+        int swapsDone = 0, swapCount = 0;
+        int minElement = Math.min(basket1[0], basket2[0]);
 
-        // Track surplus items to swap
-        Map<Integer, Integer> count1 = new HashMap<>();
-        for (int val : basket1) count1.put(val, count1.getOrDefault(val, 0) + 1);
-        for (int val : basket2) count1.put(val, count1.getOrDefault(val, 0) - 1);
+        int index = 0;
+        while (index < swapList.size()) {
+            int[] entry = swapList.get(index);
+            int val = entry[0];
+            int count = entry[1];
 
-        ArrayList<Integer> excess = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : count1.entrySet()) {
-            int val = entry.getKey();
-            int diff = entry.getValue();
-            for (int i = 0; i < Math.abs(diff) / 2; i++) {
-                excess.add(val);
+            totalCost += Math.min(val, 2 * minElement);
+            swapsDone += 2;
+            swapCount++;
+
+            if (swapsDone == totalSwapsNeeded) break;
+            if (swapCount == count) {
+                swapCount = 0;
+                index++;
             }
         }
 
-        Collections.sort(excess);
-        long cost = 0;
-        for (int i = 0; i < excess.size() / 2; i++) {
-            cost += Math.min(excess.get(i), 2 * minVal);
-        }
-
-        return cost;
+        return totalCost;
     }
-}
-
 }
