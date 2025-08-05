@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-05
 // At the time of submission:
-//   Runtime 2 ms Beats 61.07%
-//   Memory 44.77 MB Beats 23.17%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.34 MB Beats 79.27%
 
 /****************************************
 * 
@@ -45,27 +45,25 @@
 ****************************************/
 
 class Solution {
-    // For each fruit, try to place it into the leftmost available basket 
-    // that has enough capacity and hasn't been used yet. Use a boolean 
-    // array to track which baskets are already taken. If no basket fits, 
-    // count the fruit as unplaced. This is a simple simulation.
-    // Time Complexity: O(n^2); Space Complexity: O(n)
+    // For each fruit, find the first available basket that can hold it.
+    // Mark the basket as used by setting its value to 0 after placement.
+    // If no suitable basket is found, count the fruit as unplaced.
+    // Time Complexity: O(n^2), where n = fruits.length = baskets.length
+    // Space Complexity: O(1), as baskets are reused and modified in-place
     public int numOfUnplacedFruits(int[] fruits, int[] baskets) {
         int unplaced = 0;
-        boolean[] placed = new boolean[baskets.length];
         for (int fruit : fruits) {
-            int i = 0;
-            boolean notPlaced = true;
-            while (i < baskets.length) {
-                if (!placed[i] && fruit <= baskets[i]) {
-                    placed[i] = true;
-                    notPlaced = false;
-                    break;
+            boolean placed = false;
+            for (int i = 0; i < baskets.length; i++) {
+                if (fruit <= baskets[i]) {
+                    baskets[i] = 0; // Mark basket as used
+                    placed = true;
+                    break; // Exit early after placing the fruit
                 }
-                i++;
             }
-            unplaced += (notPlaced) ? 1 : 0;
+            if (!placed) unplaced++;
         }
+
         return unplaced;
     }
 }
