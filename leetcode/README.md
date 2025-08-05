@@ -7,6 +7,7 @@ LeetCode
 |---| ----- | -------- | ---------- |
 |3487|[Maximum Unique Subarray Sum After Deletion](https://leetcode.com/problems/maximum-unique-subarray-sum-after-deletion/)|[Java](./algorithms/java/3487_maximum-unique-subarray-sum-after-deletion.java)|Easy|
 |3480|[Maximize Subarrays After Removing One Conflicting Pair](https://leetcode.com/problems/maximize-subarrays-after-removing-one-conflicting-pair/)|[Java](./algorithms/java/3480_maximize-subarrays-after-removing-one-conflicting-pair.java)|Hard|
+|3477|[Fruits Into Baskets II](https://leetcode.com/problems/fruits-into-baskets-ii/)|[Java](./algorithms/java/3477_fruits-into-baskets-ii.java)|Easy|
 |3445|[Maximum Difference Between Even and Odd Frequency II](https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-ii/)|[Java](./algorithms/java/3445_maximum-difference-between-even-and-odd-frequency-ii.java)|Hard|
 |3443|[Maximum Manhattan Distance After K Changes](https://leetcode.com/problems/maximum-manhattan-distance-after-k-changes/)|[Java](./algorithms/java/3443_maximum-manhattan-distance-after-k-changes.java)|Medium|
 |3442|[Maximum Difference Between Even and Odd Frequency I](https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-i/)|[Java](./algorithms/java/3442_maximum-difference-between-even-and-odd-frequency-i.java)|Easy|
