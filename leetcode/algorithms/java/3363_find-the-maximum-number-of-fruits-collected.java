@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-05
 // At the time of submission:
-//   Runtime 13 ms Beats 75.00%
-//   Memory 215.24 MB Beats 10.00%
+//   Runtime 8 ms Beats 95.00%
+//   Memory 142.08 MB Beats 95.00%
 
 /****************************************
 * 
@@ -57,66 +57,37 @@
 ****************************************/
 
 class Solution {
-    // This solution collects diagonal fruits and uses dynamic programming (DP)
-    // twice to find the optimal non-diagonal paths from both top-right and
-    // bottom-left corners. It uses O(n^2) time for each DP run, and O(n) space
-    // per run via 1D rolling arrays. Final complexity is O(n^2) time and O(n) space.
-
+    // This solution uses a diagonal-based DP strategy with in-place updates.
+    // Each of the 3 children follows distinct, non-overlapping paths: 
+    // diagonal, top-right down, and bottom-left right. Fruits[][] is reused
+    // as a DP table to store max fruit collection from each position.
+    // Time: O(n^2), Space: O(1) extra (in-place DP using input grid).
     public int maxCollectedFruits(int[][] fruits) {
         int n = fruits.length;
-        int totalFruits = 0;
 
-        // Step 1: Collect diagonal fruits (always collected by default)
-        for (int i = 0; i < n; ++i) {
-            totalFruits += fruits[i][i];
-        }
+        // Accumulate diagonal (child 1)
+        for (int i = 1; i < n; i++) {
+            fruits[i][i] += fruits[i - 1][i - 1];
 
-        // Step 2: DP function to calculate best path from top-right or bottom-left
-        java.util.function.Supplier<Integer> dp = () -> {
-            int[] prev = new int[n]; // Previous row of DP
-            int[] curr = new int[n]; // Current row of DP
+            for (int j = i + 1; j < n; j++) {
+                // Skip positions not reachable by child 2 or 3
+                if (i + j < n - 1) continue;
 
-            // Initialize: starting from (0, n-1) or (n-1, 0), depending on matrix orientation
-            java.util.Arrays.fill(prev, Integer.MIN_VALUE);
-            prev[n - 1] = fruits[0][n - 1];
+                // Child 2: top-right to bottom-right (row < col)
+                int fromDown = (j == n - 1) ? 0 : fruits[i - 1][j + 1];
+                int fromLeft = (i + j == n - 1) ? 0 : fruits[i - 1][j];
+                int fromDiagonal = (j == 0 || i + j <= n) ? 0 : fruits[i - 1][j - 1];
+                fruits[i][j] += Math.max(fromDown, Math.max(fromLeft, fromDiagonal));
 
-            // Traverse from row 1 to n-2 (excluding diagonals)
-            for (int i = 1; i < n - 1; ++i) {
-                java.util.Arrays.fill(curr, Integer.MIN_VALUE);
-
-                // j is the column index
-                for (int j = Math.max(n - 1 - i, i + 1); j < n; ++j) {
-                    int bestPrev = prev[j];
-                    if (j - 1 >= 0) bestPrev = Math.max(bestPrev, prev[j - 1]);
-                    if (j + 1 < n) bestPrev = Math.max(bestPrev, prev[j + 1]);
-
-                    curr[j] = bestPrev + fruits[i][j];
-                }
-
-                // Swap buffers
-                int[] temp = prev;
-                prev = curr;
-                curr = temp;
-            }
-
-            return prev[n - 1]; // Final result from this path
-        };
-
-        // Step 3: Add best path from top-right to bottom-right (excluding diagonals)
-        totalFruits += dp.get();
-
-        // Step 4: Flip matrix along the main diagonal to simulate bottom-left to top-left
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                int temp = fruits[i][j];
-                fruits[i][j] = fruits[j][i];
-                fruits[j][i] = temp;
+                // Child 3: bottom-left to bottom-right (row > col)
+                int fromUp = (j == n - 1) ? 0 : fruits[j + 1][i - 1];
+                int fromRight = (i + j == n - 1) ? 0 : fruits[j][i - 1];
+                int fromDiag2 = (j == 0 || i + j <= n) ? 0 : fruits[j - 1][i - 1];
+                fruits[j][i] += Math.max(fromUp, Math.max(fromRight, fromDiag2));
             }
         }
 
-        // Step 5: Add best path again (this time simulating the second path)
-        totalFruits += dp.get();
-
-        return totalFruits;
+        // Final result, removing two extra counts of the bottom-right fruit
+        return fruits[n - 1][n - 2] + fruits[n - 2][n - 1] + fruits[n - 1][n - 1];
     }
 }
