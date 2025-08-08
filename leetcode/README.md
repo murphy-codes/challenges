@@ -210,6 +210,7 @@ LeetCode
 |873|[Length of Longest Fibonacci Subsequence](https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/)|[Java](./algorithms/java/873_length-of-longest-fibonacci-subsequence.java)|Medium|
 |838|[Push Dominoes](https://leetcode.com/problems/push-dominoes/)|[Java](./algorithms/java/838_push-dominoes.java)|Medium|
 |827|[Making A Large Island](https://leetcode.com/problems/making-a-large-island/)|[Java](./algorithms/java/827_making-a-large-island.java)|Hard|
+|808|[Soup Servings](https://leetcode.com/problems/soup-servings/)|[Java](./algorithms/java/808_soup-servings.java)|Medium|
 |802|[Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/)|[Java](./algorithms/java/802_find-eventual-safe-states.java)|Medium|
 |790|[Domino and Tromino Tiling](https://leetcode.com/problems/domino-and-tromino-tiling/)|[Java](./algorithms/java/790_domino-and-tromino-tiling.java)|Medium|
 |781|[Rabbits in Forest](https://leetcode.com/problems/rabbits-in-forest/)|[Java](./algorithms/java/781_rabbits-in-forest.java)|Medium|
