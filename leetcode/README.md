@@ -223,6 +223,7 @@ LeetCode
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
 |386|[Lexicographical Numbers](https://leetcode.com/problems/lexicographical-numbers/)|[Java](./algorithms/java/386_lexicographical-numbers.java)|Medium|
 |368|[Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/)|[Java](./algorithms/java/368_largest-divisible-subset.java)|Medium|
+|231|[Power of Two](https://leetcode.com/problems/power-of-two/)|[Java](./algorithms/java/231_power-of-two.java)|Easy|
 |135|[Candy](https://leetcode.com/problems/candy/)|[Java](./algorithms/java/135_candy.java)|Hard|
 |118|[Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)|[Java](./algorithms/java/118_pascals-triangle.java)|Easy|
 |75|[Sort Colors](https://leetcode.com/problems/sort-colors/)|[Java](./algorithms/java/75_sort-colors.java)|Medium|
