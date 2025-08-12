@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/problems/power-of-two/
+// Source: https://leetcode.com/problems/range-product-queries-of-powers/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-08
 // At the time of submission:
