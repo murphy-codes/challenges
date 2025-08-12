@@ -99,6 +99,7 @@ LeetCode
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
 |2460|[Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array/)|[Java](./algorithms/java/2460_apply-operations-to-an-array.java)|Easy|
 |2444|[Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds/)|[Java](./algorithms/java/2444_count-subarrays-with-fixed-bounds.java)|Hard|
+|2438|[Range Product Queries of Powers](https://leetcode.com/problems/range-product-queries-of-powers/)|[Java](./algorithms/java/2438_range-product-queries-of-powers.java)|Medium|
 |2434|[Using a Robot to Print the Lexicographically Smallest String](https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/)|[Java](./algorithms/java/2434_using-a-robot-to-print-the-lexicographically-smallest-string.java)|Medium|
 |2429|[Minimize XOR](https://leetcode.com/problems/minimize-xor/)|[Java](./algorithms/java/2429_minimize-xor.java)|Medium|
 |2425|[Bitwise XOR of All Pairings](https://leetcode.com/problems/bitwise-xor-of-all-pairings/)|[Java](./algorithms/java/2425_bitwise-xor-of-all-pairings.java)|Medium|
