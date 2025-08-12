@@ -73,6 +73,7 @@ LeetCode
 |2843|[Count Symmetric Integers](https://leetcode.com/problems/count-symmetric-integers/)|[Java](./algorithms/java/2843_count-symmetric-integers.java)|Easy|
 |2818|[Apply Operations to Maximize Score](https://leetcode.com/problems/apply-operations-to-maximize-score/)|[Java](./algorithms/java/2818_apply-operations-to-maximize-score.java)|Hard|
 |2799|[Count Complete Subarrays in an Array](https://leetcode.com/problems/count-complete-subarrays-in-an-array/)|[Java](./algorithms/java/2799_count-complete-subarrays-in-an-array.java)|Medium|
+|2787|[Ways to Express an Integer as Sum of Powers](https://leetcode.com/problems/ways-to-express-an-integer-as-sum-of-powers/)|[Java](./algorithms/java/2787_ways-to-express-an-integer-as-sum-of-powers.java)|Medium|
 |2780|[Minimum Index of a Valid Split](https://leetcode.com/problems/minimum-index-of-a-valid-split/)|[Java](./algorithms/java/2780_minimum-index-of-a-valid-split.java)|Medium|
 |2698|[Find the Punishment Number of an Integer](https://leetcode.com/problems/find-the-punishment-number-of-an-integer/)|[Java](./algorithms/java/2698_find-the-punishment-number-of-an-integer.java)|Medium|
 |2685|[Count the Number of Complete Components](https://leetcode.com/problems/count-the-number-of-complete-components/)|[Java](./algorithms/java/2685_count-the-number-of-complete-components.java)|Medium|
