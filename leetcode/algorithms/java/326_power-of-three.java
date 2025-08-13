@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-12
 // At the time of submission:
-//   Runtime 8 ms Beats 84.41%
-//   Memory 43.90 MB Beats 83.75%
+//   Runtime 7 ms Beats 100.00%
+//   Memory 44.44 MB Beats 18.53%
 
 /****************************************
 * 
@@ -33,13 +33,18 @@
 ****************************************/
 
 class Solution {
-    // Uses the fact that the largest power of 3 in 32-bit int range is 3^19.
-    // If n is a positive divisor of 3^19, then n must be a power of 3.
-    // This eliminates loops or recursion, achieving constant-time checks.
-    // Time Complexity: O(1) since it's a single modulus operation.
-    // Space Complexity: O(1) since no extra memory is used.
+    // This method checks if n is a power of three by dividing n by 3 repeatedly
+    // until it's no longer divisible. If the result is 1, n is a power of three.
+    // Time complexity: O(log₃ n), as we divide by 3 each loop iteration.
+    // Space complexity: O(1), using only a constant amount of extra memory.
     public boolean isPowerOfThree(int n) {
-        final int MAX_POWER_OF_THREE = 1162261467; // 3^19
-        return n > 0 && MAX_POWER_OF_THREE % n == 0;
+        // Return false immediately for non-positive integers
+        if (n <= 0) return false;
+        // Keep dividing by 3 while divisible
+        while (n % 3 == 0) {
+            n /= 3;
+        }
+        // If reduced to 1, it's a power of three
+        return n == 1;
     }
 }
