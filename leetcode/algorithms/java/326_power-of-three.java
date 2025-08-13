@@ -3,7 +3,7 @@
 // Date: 2025-08-12
 // At the time of submission:
 //   Runtime 8 ms Beats 84.41%
-//   Memory 44.30 MB Beats 39.26%
+//   Memory 43.90 MB Beats 83.75%
 
 /****************************************
 * 
@@ -33,17 +33,13 @@
 ****************************************/
 
 class Solution {
-    // Checks if n is a power of three by iteratively dividing by 3 while n > 3.
-    // If at any point n is not divisible by 3, returns false immediately.
-    // Finally, verifies if n equals 3 or was initially 1 (both valid powers).
-    // Time Complexity: O(log₃ n), since n is divided by 3 each iteration.
-    // Space Complexity: O(1), using only constant extra memory.
+    // Uses the fact that the largest power of 3 in 32-bit int range is 3^19.
+    // If n is a positive divisor of 3^19, then n must be a power of 3.
+    // This eliminates loops or recursion, achieving constant-time checks.
+    // Time Complexity: O(1) since it's a single modulus operation.
+    // Space Complexity: O(1) since no extra memory is used.
     public boolean isPowerOfThree(int n) {
-        if (n == 1) return true;
-        while (n > 3) {
-            if (n % 3 != 0) return false;
-            n = n / 3;
-        }
-        return n == 3;
+        final int MAX_POWER_OF_THREE = 1162261467; // 3^19
+        return n > 0 && MAX_POWER_OF_THREE % n == 0;
     }
 }
