@@ -3,7 +3,7 @@
 // Date: 2025-08-14
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 41.96 MB Beats 76.79%
+//   Memory 41.72 MB Beats 92.17%
 
 /****************************************
 * 
@@ -40,22 +40,21 @@
 ****************************************/
 
 class Solution {
-    // Check for "good integers" in descending order from "999" to "000".
-    // The first found substring is the largest by value, so return it immediately.
-    // Each check uses String.indexOf() → O(n), n ≤ 1000, so time is O(10n) → O(n)
-    // in practical terms (10 checks max). Space complexity is O(1) as no extra data
-    // structures are used.
+    // Checks for triplet digits in num from largest to smallest.
+    // Patterns are pre-sorted so the first match is the largest good integer.
+    // Uses String.contains() for clarity and early return for efficiency.
+    // Time Complexity: O(10 * n) → O(n), where n = length of num.
+    // Space Complexity: O(1) extra space, ignoring constant pattern array.
     public String largestGoodInteger(String num) {
-        if(num.indexOf("999")>-1) return "999";
-        if(num.indexOf("888")>-1) return "888";
-        if(num.indexOf("777")>-1) return "777";
-        if(num.indexOf("666")>-1) return "666";
-        if(num.indexOf("555")>-1) return "555";
-        if(num.indexOf("444")>-1) return "444";
-        if(num.indexOf("333")>-1) return "333";
-        if(num.indexOf("222")>-1) return "222";
-        if(num.indexOf("111")>-1) return "111";
-        if(num.indexOf("000")>-1) return "000";
+        // Possible "good integers", ordered from largest to smallest
+        String[] patterns = { "999","888","777","666","555", "444","333","222","111","000" };
+        // Check each pattern in order; return the first one found
+        for (String pattern : patterns) {
+            if (num.contains(pattern)) {
+                return pattern; // First match is the largest possible
+            }
+        }
+        // If no pattern found, return empty string
         return "";
     }
 }
