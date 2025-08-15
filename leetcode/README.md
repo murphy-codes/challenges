@@ -122,6 +122,7 @@ LeetCode
 |2302|[Count Subarrays With Score Less Than K](https://leetcode.com/problems/count-subarrays-with-score-less-than-k/)|[Java](./algorithms/java/2302_count-subarrays-with-score-less-than-k.java)|Hard|
 |2294|[Partition Array Such That Maximum Difference Is K](https://leetcode.com/problems/partition-array-such-that-maximum-difference-is-k/)|[Java](./algorithms/java/2294_partition-array-such-that-maximum-difference-is-k.java)|Medium|
 |2270|[Number of Ways to Split Array](https://leetcode.com/problems/number-of-ways-to-split-array/)|[Java](./algorithms/java/2270_number-of-ways-to-split-array.java)|Medium|
+|2264|[Largest 3-Same-Digit Number in String](https://leetcode.com/problems/largest-3-same-digit-number-in-string/)|[Java](./algorithms/java/2264_largest-3-same-digit-number-in-string.java)|Easy|
 |2226|[Maximum Candies Allocated to K Children](https://leetcode.com/problems/maximum-candies-allocated-to-k-children/)|[Java](./algorithms/java/2226_maximum-candies-allocated-to-k-children.java)|Medium|
 |2210|[Count Hills and Valleys in an Array](https://leetcode.com/problems/count-hills-and-valleys-in-an-array/)|[Java](./algorithms/java/2210_count-hills-and-valleys-in-an-array.java)|Easy|
 |2206|[Divide Array Into Equal Pairs](https://leetcode.com/problems/divide-array-into-equal-pairs/)|[Java](./algorithms/java/2206_divide-array-into-equal-pairs.java)|Easy|
