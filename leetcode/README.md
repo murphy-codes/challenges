@@ -191,6 +191,9 @@ LeetCode
 |1358|[Number of Substrings Containing All Three Characters](https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/)|[Java](./algorithms/java/1358_number-of-substrings-containing-all-three-characters.java)|Medium|
 |1353|[Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)|[Java](./algorithms/java/1353_maximum-number-of-events-that-can-be-attended.java)|Medium|
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
+
+|1323|[Maximum 69 Number](https://leetcode.com/problems/maximum-69-number/)|[Java](./algorithms/java/1323_maximum-69-number.java)|Easy|
+
 |1298|[Maximum Candies You Can Get from Boxes](https://leetcode.com/problems/maximum-candies-you-can-get-from-boxes/)|[Java](./algorithms/java/1298_maximum-candies-you-can-get-from-boxes.java)|Hard|
 |1295|[Find Numbers with Even Number of Digits](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/)|[Java](./algorithms/java/1295_find-numbers-with-even-number-of-digits.java)|Easy|
 |1290|[Convert Binary Number in a Linked List to Integer](https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/)|[Java](./algorithms/java/1290_convert-binary-number-in-a-linked-list-to-integer.java)|Easy|
