@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-17
 // At the time of submission:
-//   Runtime 5 ms Beats 80.47%
-//   Memory 44.54 MB Beats 62.63%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.02 MB Beats 90.24%
 
 /****************************************
 * 
@@ -40,58 +40,62 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
-    // Use backtracking to test all pairings of numbers and operations.
-    // Repeatedly combine two numbers with +, -, *, or / and recurse.
-    // Base case: if one number remains and is ≈ 24, return true.
-    // Time complexity is bounded (~O(4! * 4^3)), feasible for 4 cards.
-    // Space complexity is O(n) for recursion depth and lists.
-    private static final double EPSILON = 1e-6;
+    // This solution uses recursive backtracking to try all ways of combining 
+    // two numbers with +, -, *, and / until only one number remains. If that 
+    // number is close enough to 24 (within EPS), we return true. The algorithm 
+    // checks O(n^2 * 6^(n-1)) possibilities in the worst case, where n = 4 here, 
+    // so the search space is small and feasible. Space complexity is O(n) due 
+    // to recursion depth and in-place array reuse (no extra structures created).
+    private static final double EPS = 1e-6; // tolerance for floating-point comparison
+    
+    // Recursive backtracking: try all ways of reducing n numbers to 1 number
+    private boolean backtrack(double[] nums, int n) {
+        // Base case: only one number left, check if it's close to 24
+        if (n == 1) return Math.abs(nums[0] - 24) < EPS;
 
-    public boolean judgePoint24(int[] cards) {
-        List<Double> nums = new ArrayList<>();
-        for (int c : cards) nums.add((double) c);
-        return dfs(nums);
-    }
-
-    private boolean dfs(List<Double> nums) {
-        if (nums.size() == 1) {
-            return Math.abs(nums.get(0) - 24.0) < EPSILON;
-        }
-
-        int n = nums.size();
-        // Try all pairs of numbers
+        // Try every pair (i, j)
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
-                List<Double> next = new ArrayList<>();
-                // Add remaining numbers except i and j
-                for (int k = 0; k < n; k++) {
-                    if (k != i && k != j) next.add(nums.get(k));
+                double num1 = nums[i], num2 = nums[j];
+
+                // Replace nums[j] with the last element (shrink array effectively)
+                nums[j] = nums[n - 1];
+
+                // Try all possible results of combining num1 and num2
+                nums[i] = num1 + num2;
+                if (backtrack(nums, n - 1)) return true;
+
+                nums[i] = num1 - num2;
+                if (backtrack(nums, n - 1)) return true;
+
+                nums[i] = num2 - num1;
+                if (backtrack(nums, n - 1)) return true;
+
+                nums[i] = num1 * num2;
+                if (backtrack(nums, n - 1)) return true;
+
+                if (Math.abs(num2) > EPS) { // avoid divide by zero
+                    nums[i] = num1 / num2;
+                    if (backtrack(nums, n - 1)) return true;
                 }
 
-                double a = nums.get(i), b = nums.get(j);
-                // Try all possible results from a and b
-                for (double val : compute(a, b)) {
-                    next.add(val);
-                    if (dfs(next)) return true;
-                    next.remove(next.size() - 1);
+                if (Math.abs(num1) > EPS) { // avoid divide by zero
+                    nums[i] = num2 / num1;
+                    if (backtrack(nums, n - 1)) return true;
                 }
+
+                // Restore original values for next loop iteration
+                nums[i] = num1;
+                nums[j] = num2;
             }
         }
         return false;
     }
 
-    private List<Double> compute(double a, double b) {
-        List<Double> results = new ArrayList<>();
-        results.add(a + b);
-        results.add(a - b);
-        results.add(b - a);
-        results.add(a * b);
-        if (Math.abs(b) > EPSILON) results.add(a / b);
-        if (Math.abs(a) > EPSILON) results.add(b / a);
-        return results;
+    public boolean judgePoint24(int[] cards) {
+        double[] nums = new double[cards.length];
+        for (int i = 0; i < cards.length; i++) nums[i] = cards[i];
+        return backtrack(nums, nums.length);
     }
 }
