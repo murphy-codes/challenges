@@ -3,7 +3,7 @@
 // Date: 2025-08-18
 // At the time of submission:
 //   Runtime 1 ms Beats 100.00%
-//   Memory 61.72 MB Beats 52.06.02%
+//   Memory 61.72 MB Beats 52.06%
 
 /****************************************
 * 
