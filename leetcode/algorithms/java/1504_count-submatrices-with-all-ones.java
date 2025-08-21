@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-20
 // At the time of submission:
-//   Runtime 5 ms Beats 97.95%
-//   Memory 46.32 MB Beats 5.48%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 45.16 MB Beats 87.67%
 
 /****************************************
 * 
@@ -43,36 +43,59 @@
 ****************************************/
 
 class Solution {
-    // This solution builds histograms of consecutive 1s row by row.
-    // For each row, it computes how many submatrices end at each cell
-    // by scanning left and keeping track of the minimum height seen.
-    // Time complexity: O(m * n^2), Space complexity: O(n).
-    // Works efficiently within given constraints (m,n <= 150).
+    // This solution builds histogram heights for each row, then uses a
+    // monotonic stack to efficiently count submatrices of all ones ending
+    // at each column. For each row, rectangles are counted in O(cols).
+    // Overall time complexity is O(rows * cols). Space complexity is O(cols).
+
     public int numSubmat(int[][] mat) {
-        int m = mat.length, n = mat[0].length;
-        int[] heights = new int[n];
+        int rows = mat.length;
+        int cols = mat[0].length;
+
+        int totalSubmatrices = 0;
+        int[] heights = new int[cols]; // histogram heights for each column
+
+        for (int i = 0; i < rows; i++) {
+            // Update histogram heights for current row
+            for (int j = 0; j < cols; j++) {
+                heights[j] = (mat[i][j] == 0) ? 0 : heights[j] + 1;
+            }
+
+            // Count rectangles in this histogram row
+            totalSubmatrices += countRectangles(heights);
+        }
+
+        return totalSubmatrices;
+    }
+
+    private int countRectangles(int[] heights) {
+        int cols = heights.length;
         int count = 0;
 
-        for (int i = 0; i < m; i++) {
-            // update heights histogram
-            for (int j = 0; j < n; j++) {
-                if (mat[i][j] == 0) {
-                    heights[j] = 0;
-                } else {
-                    heights[j] += 1;
-                }
+        int[] monoStack = new int[cols]; // stack of indices
+        int stackTop = -1;
+        int[] rectCountEndingHere = new int[cols]; // #rectangles ending at column j
+
+        for (int j = 0; j < cols; j++) {
+            // Maintain increasing stack (remove taller or equal heights)
+            while (stackTop >= 0 && heights[monoStack[stackTop]] >= heights[j]) {
+                stackTop--;
             }
 
-            // count rectangles ending at row i
-            for (int j = 0; j < n; j++) {
-                int minHeight = heights[j];
-                for (int k = j; k >= 0 && minHeight > 0; k--) {
-                    minHeight = Math.min(minHeight, heights[k]);
-                    count += minHeight;
-                }
+            if (stackTop == -1) {
+                // If stack is empty, all rectangles extend from col 0 to j
+                rectCountEndingHere[j] = heights[j] * (j + 1);
+            } else {
+                // Otherwise, extend rectangles from stackTop+1 to j
+                rectCountEndingHere[j] = rectCountEndingHere[monoStack[stackTop]]
+                                       + heights[j] * (j - monoStack[stackTop]);
             }
+
+            count += rectCountEndingHere[j];
+            monoStack[++stackTop] = j; // push current index
         }
 
         return count;
     }
 }
+
