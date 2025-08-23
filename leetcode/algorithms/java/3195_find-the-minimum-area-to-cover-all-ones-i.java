@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-22
 // At the time of submission:
-//   Runtime 5 ms Beats 94.49%
-//   Memory 197.00 MB Beats 48.03%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 196.96 MB Beats 48.03%
 
 /****************************************
 * 
@@ -34,36 +34,68 @@
 ****************************************/
 
 class Solution {
-    // Traverse the grid to find the min/max row and col containing a 1.  
-    // These values define the smallest rectangle covering all 1's.  
-    // The rectangle's height = (maxRow - minRow + 1), width = (maxCol - minCol + 1).  
-    // Final area is height * width.  
-    // Time Complexity: O(n*m), since we scan the entire grid once.  
-    // Space Complexity: O(1), since only a few variables are stored.
+    // This solution finds the bounding rectangle of all 1's by scanning
+    // from each direction (top, bottom, left, right) and stopping early
+    // as soon as the first 1 is found. This reduces unnecessary work.
+    // Time complexity: O(rows * cols) in worst case (must scan all cells).
+    // Space complexity: O(1), since only a few integers/flags are used.
     public int minimumArea(int[][] grid) {
-        int rows = grid.length;
-        int cols = grid[0].length;
+        int rows = grid.length, cols = grid[0].length;
+        int topRow = 0, bottomRow = 0, leftCol = 0, rightCol = 0;
+        boolean found = false;
 
-        // Initialize bounds with extremes
-        int minRow = rows, maxRow = -1;
-        int minCol = cols, maxCol = -1;
-
-        // Traverse the grid and track boundaries of 1's
+        // Find the first row that contains a 1
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (grid[i][j] == 1) {
-                    minRow = Math.min(minRow, i);
-                    maxRow = Math.max(maxRow, i);
-                    minCol = Math.min(minCol, j);
-                    maxCol = Math.max(maxCol, j);
+                    topRow = i;
+                    found = true;
+                    break;
                 }
             }
+            if (found) break;
         }
 
-        // Compute area from bounding rectangle
-        int height = maxRow - minRow + 1;
-        int width = maxCol - minCol + 1;
+        found = false;
+        // Find the last row that contains a 1
+        for (int i = rows - 1; i >= 0; i--) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 1) {
+                    bottomRow = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
 
-        return height * width;
+        found = false;
+        // Find the first column that contains a 1
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < rows; j++) {
+                if (grid[j][i] == 1) {
+                    leftCol = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+
+        found = false;
+        // Find the last column that contains a 1
+        for (int i = cols - 1; i >= 0; i--) {
+            for (int j = 0; j < rows; j++) {
+                if (grid[j][i] == 1) {
+                    rightCol = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+
+        // Compute area = width × height
+        return (rightCol - leftCol + 1) * (bottomRow - topRow + 1);
     }
 }
