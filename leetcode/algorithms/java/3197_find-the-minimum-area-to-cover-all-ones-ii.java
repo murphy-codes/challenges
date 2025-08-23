@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-22
 // At the time of submission:
-//   Runtime 43 ms Beats 64.86%
-//   Memory 44.62 MB Beats 59.46%
+//   Runtime 10 ms Beats 86.49%
+//   Memory 45.02 MB Beats 35.14%
 
 /****************************************
 * 
@@ -40,83 +40,126 @@
 ****************************************/
 
 class Solution {
-    // This solution partitions the grid into 3 rectangles using only straight
-    // horizontal or vertical cuts. Each rectangle's cost is the smallest bounding
-    // box that covers all 1s inside it. The algorithm tries every possible way
-    // to split into 1 + 2 rectangles and combines results recursively.
-    // Time complexity: O(n^3 * m^3) worst case due to nested loops over subgrids.
-    // Space complexity: O(1), aside from recursion stack and input grid.
-
-    int[][] grid;
-    int rows, cols;
-
+    // This solution computes the minimum sum of 3 rectangles covering all 1s.
+    // It uses precomputation (minimumArea) to store minimal bounding rectangles
+    // for all submatrices, then tries every valid partition with symmetry.
+    // Rotations let us reuse the same logic for vertical/horizontal splits.
+    // Time complexity: O(n^2 * m), due to DP and split loops.
+    // Space complexity: O(n * m), for storing DP bounding rectangle areas.
     public int minimumSum(int[][] grid) {
-        this.grid = grid;
-        rows = grid.length;
-        cols = grid[0].length;
-
-        int best = Integer.MAX_VALUE / 3;
-
-        // Try cutting horizontally (top vs bottom)
-        for (int i = 0; i < rows - 1; i++) {
-            best = Math.min(best,
-                Math.min(
-                    oneRectMaxArea(0, 0, i, cols - 1) + twoRectMaxArea(i + 1, 0, rows - 1, cols - 1),
-                    twoRectMaxArea(0, 0, i, cols - 1) + oneRectMaxArea(i + 1, 0, rows - 1, cols - 1)
-                )
-            );
-        }
-
-        // Try cutting vertically (left vs right)
-        for (int j = 0; j < cols - 1; j++) {
-            best = Math.min(best,
-                Math.min(
-                    oneRectMaxArea(0, 0, rows - 1, j) + twoRectMaxArea(0, j + 1, rows - 1, cols - 1),
-                    twoRectMaxArea(0, 0, rows - 1, j) + oneRectMaxArea(0, j + 1, rows - 1, cols - 1)
-                )
-            );
-        }
-
-        return best;
+        // Try original grid and rotated grid (to cover vertical/horizontal symmetry)
+        return Math.min(process(grid), process(rotate(grid)));
     }
 
-    // Finds minimum sum of two rectangles within the given bounds
-    public int twoRectMaxArea(int x1, int y1, int x2, int y2) {
-        int best = Integer.MAX_VALUE / 2;
+    // Compute minimal sum for a given orientation
+    private int process(int[][] mat) {
+        int rows = mat.length;
+        int cols = mat[0].length;
 
-        // Try horizontal split
-        for (int i = x1; i < x2; i++) {
-            best = Math.min(best,
-                oneRectMaxArea(x1, y1, i, y2) + oneRectMaxArea(i + 1, y1, x2, y2)
-            );
+        // For each row, store leftmost & rightmost column of '1's
+        int[][] rowBounds = new int[rows][2];
+        for (int i = 0; i < rows; i++) {
+            int left = -1, right = 0;
+            for (int j = 0; j < cols; j++) {
+                if (mat[i][j] == 1) {
+                    if (left < 0) left = j;
+                    right = j;
+                }
+            }
+            rowBounds[i][0] = left;
+            rowBounds[i][1] = right;
         }
 
-        // Try vertical split
-        for (int j = y1; j < y2; j++) {
-            best = Math.min(best,
-                oneRectMaxArea(x1, y1, x2, j) + oneRectMaxArea(x1, j + 1, x2, y2)
-            );
-        }
+        // Precompute minimal bounding rectangle areas
+        int[][] topLeft = minimumArea(mat);
+        mat = rotate(mat);
+        int[][] bottomLeft = rotate(rotate(rotate(minimumArea(mat))));
+        mat = rotate(mat);
+        int[][] bottomRight = rotate(rotate(minimumArea(mat)));
+        mat = rotate(mat);
+        int[][] topRight = rotate(minimumArea(mat));
 
-        return best;
-    }
+        int best = Integer.MAX_VALUE;
 
-    // Finds the smallest bounding rectangle covering all 1s in the given bounds
-    public int oneRectMaxArea(int x1, int y1, int x2, int y2) {
-        int minCol = y2, maxCol = y1, minRow = x2, maxRow = x1;
-        boolean found = false;
-
-        for (int i = x1; i <= x2; i++) {
-            for (int j = y1; j <= y2; j++) {
-                if (grid[i][j] == 0) continue;
-                found = true;
-                minCol = Math.min(minCol, j);
-                maxCol = Math.max(maxCol, j);
-                minRow = Math.min(minRow, i);
-                maxRow = Math.max(maxRow, i);
+        // Case 1: Split into 3 horizontal parts
+        if (rows >= 3) {
+            for (int i = 1; i < rows; i++) {
+                int left = cols, right = 0, top = rows, bottom = 0;
+                for (int j = i + 1; j < rows; j++) {
+                    int l = rowBounds[j - 1][0];
+                    if (l >= 0) {
+                        left = Math.min(left, l);
+                        right = Math.max(right, rowBounds[j - 1][1]);
+                        top = Math.min(top, j - 1);
+                        bottom = j - 1;
+                    }
+                    // Combine top + middle + bottom areas
+                    best = Math.min(best,
+                        topLeft[i][cols] +
+                        (right - left + 1) * (bottom - top + 1) +
+                        bottomLeft[j][cols]
+                    );
+                }
             }
         }
 
-        return !found ? Integer.MAX_VALUE / 4 : (maxCol - minCol + 1) * (maxRow - minRow + 1);
+        // Case 2: Split into top-middle-bottom or top-left-right
+        if (rows >= 2 && cols >= 2) {
+            for (int i = 1; i < rows; i++) {
+                for (int j = 1; j < cols; j++) {
+                    // Top-Middle-Bottom split
+                    best = Math.min(best, topLeft[i][cols] + bottomLeft[i][j] + bottomRight[i][j]);
+                    // Top-Right-Bottom split
+                    best = Math.min(best, topLeft[i][j] + topRight[i][j] + bottomLeft[i][cols]);
+                }
+            }
+        }
+        return best;
+    }
+
+    // Precompute minimal bounding rectangle areas
+    private int[][] minimumArea(int[][] mat) {
+        int rows = mat.length, cols = mat[0].length;
+        int[][] dp = new int[rows + 1][cols + 1];
+        int[][] border = new int[cols][3];
+        for (int j = 0; j < cols; j++) border[j][0] = -1;
+
+        for (int i = 0; i < rows; i++) {
+            int left = -1, right = 0;
+            for (int j = 0; j < cols; j++) {
+                if (mat[i][j] == 1) {
+                    if (left < 0) left = j;
+                    right = j;
+                }
+                int[] prev = border[j];
+                if (left < 0) { // this row has no '1's yet
+                    dp[i + 1][j + 1] = dp[i][j + 1];
+                } else if (prev[0] < 0) { // first row containing '1's
+                    dp[i + 1][j + 1] = right - left + 1;
+                    border[j][0] = i;
+                    border[j][1] = left;
+                    border[j][2] = right;
+                } else { // extend existing rectangle
+                    int l = Math.min(prev[1], left);
+                    int r = Math.max(prev[2], right);
+                    dp[i + 1][j + 1] = (r - l + 1) * (i - prev[0] + 1);
+                    border[j][1] = l;
+                    border[j][2] = r;
+                }
+            }
+        }
+        return dp;
+    }
+
+    // Rotate matrix clockwise by 90 degrees
+    private int[][] rotate(int[][] mat) {
+        int rows = mat.length, cols = mat[0].length;
+        int[][] res = new int[cols][rows];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                res[j][rows - 1 - i] = mat[i][j];
+            }
+        }
+        return res;
     }
 }
