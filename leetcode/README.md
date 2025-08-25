@@ -231,6 +231,7 @@ LeetCode
 |684|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/684_redundant-connection.java)|Medium|
 |679|[24 Game](https://leetcode.com/problems/24-game/)|[Java](./algorithms/java/679_24-game.java)|Hard|
 |594|[Longest Harmonious Subsequence](https://leetcode.com/problems/longest-harmonious-subsequence/)|[Java](./algorithms/java/594_longest-harmonious-subsequence.java)|Easy|
+|498|[Diagonal Traverse](https://leetcode.com/problems/diagonal-traverse/)|[Java](./algorithms/java/498_diagonal-traverse.java)|Medium|
 |440|[K-th Smallest in Lexicographical Order](https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/)|[Java](./algorithms/java/440_k-th-smallest-in-lexicographical-order.java)|Hard|
 |416|[Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)|[Java](./algorithms/java/416_partition-equal-subset-sum.java)|Medium|
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
