@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-24
 // At the time of submission:
-//   Runtime 2 ms Beats 99.41%
-//   Memory 46.94 MB Beats 89.54%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 47.50 MB Beats 33.91%
 
 /****************************************
 * 
@@ -29,40 +29,67 @@
 ****************************************/
 
 class Solution {
-    // Traverse the matrix diagonally, alternating up-right and down-left.
-    // Use a boolean flag `ascending` to control direction of movement.
-    // Adjust row/col indices when hitting edges, flipping direction as needed.
-    // Time: O(m*n) since each element is visited once. Space: O(m*n) for result.
+    // This solution traverses the matrix in zig-zag diagonals.
+    // It alternates between moving down-left and up-right, writing
+    // directly into the result array without extra storage.
+    // Edge cases (single row/col) are handled upfront.
+    // Time complexity: O(m*n), where m=rows and n=cols.
+    // Space complexity: O(1) extra space, aside from output array.
     public int[] findDiagonalOrder(int[][] mat) {
-        int row = 0, col = 0, m = mat.length, n = mat[0].length;
-        int[] traversed = new int[m*n];
-        boolean ascending = true;
-        for (int i = 0; i < m*n; i++) {
-            traversed[i] = mat[row][col];
-            if (ascending) {
-                row--;
-                col++;
-                if (col >= n) {
+        // Handle single row directly
+        if (mat.length == 1) {
+            return mat[0];
+        }
+
+        int total = mat.length * mat[0].length; // total number of elements
+        int[] result = new int[total];
+
+        result[0] = mat[0][0]; // first element is always top-left
+
+        // Handle single column directly
+        if (mat[0].length == 1) {
+            for (int r = 1; r < mat.length; r++) {
+                result[r] = mat[r][0];
+            }
+            return result;
+        }
+
+        int pos = 1; // current index in result
+        int row = 0, col = 1;
+        boolean movingDownLeft = true;
+
+        while (pos < total) {
+            if (movingDownLeft) {
+                // Move down-left until hitting bottom or left boundary
+                while (col > 0 && row < mat.length - 1) {
+                    result[pos++] = mat[row][col];
+                    row++;
                     col--;
-                    row+=2;
-                    ascending ^= true;
-                } else if (row < 0) {
-                    row = 0;
-                    ascending ^= true;
                 }
+                result[pos++] = mat[row][col];
+
+                // Try moving down if possible, else move right
+                if (row < mat.length - 1) row++;
+                else col++;
+
+                movingDownLeft = false;
             } else {
-                row++;
-                col--;
-                if (row >= m) {
+                // Move up-right until hitting top or right boundary
+                while (row > 0 && col < mat[0].length - 1) {
+                    result[pos++] = mat[row][col];
                     row--;
-                    col+=2;
-                    ascending ^= true;
-                } else if (col < 0) {
-                    col = 0;
-                    ascending ^= true;
+                    col++;
                 }
+                result[pos++] = mat[row][col];
+
+                // Try moving right if possible, else move down
+                if (col < mat[0].length - 1) col++;
+                else row++;
+
+                movingDownLeft = true;
             }
         }
-        return traversed;
+
+        return result;
     }
 }
