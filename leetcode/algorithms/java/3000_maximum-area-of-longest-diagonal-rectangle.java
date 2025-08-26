@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-26
 // At the time of submission:
-//   Runtime 1 ms Beats 96.00%
-//   Memory 44.36 MB Beats 78.46%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 44.18 MB Beats 96.92%
 
 /****************************************
 * 
@@ -35,22 +35,32 @@
 ****************************************/
 
 class Solution {
-    // Iterate through each rectangle, computing the diagonal length using
-    // Pythagoras' theorem. Track the rectangle with the longest diagonal,
-    // and in case of a tie, choose the one with the larger area. Return
-    // that maximum area. Time complexity is O(n), space complexity O(1).
+    // Iterate over all rectangles, compute diagonal² (l²+w²) and area for each. 
+    // Track the rectangle with the longest diagonal, breaking ties by max area. 
+    // Uses diagonal² avoids sqrt, since square root is a monotonic function 
+    // making comparisons faster and avoiding precision issues.
+    // Time Complexity: O(n), since we check each rectangle once. 
+    // Space Complexity: O(1), using only a few extra variables.
     public int areaOfMaxDiagonal(int[][] dimensions) {
-        int largest = 0;
-        double longest = 0;
-        for (int i = 0; i < dimensions.length; i++) {
-            double current = Math.sqrt((dimensions[i][0]*dimensions[i][0])+(dimensions[i][1]*dimensions[i][1]));
-            if (current > longest) {
-                longest = current;
-                largest = dimensions[i][0]*dimensions[i][1];
-            } else if (current == longest) {
-                largest = Math.max(largest,dimensions[i][0]*dimensions[i][1]);
+        int maxDiagonalSq = 0;  // Track largest diagonal squared
+        int maxArea = 0;        // Track area corresponding to longest diagonal
+
+        for (int[] rect : dimensions) {
+            int length = rect[0];
+            int width = rect[1];
+            int diagonalSq = length * length + width * width;  // l² + w²
+            int area = length * width;
+
+            // Update if this rectangle has a longer diagonal
+            if (diagonalSq > maxDiagonalSq) {
+                maxDiagonalSq = diagonalSq;
+                maxArea = area;
+            }
+            // If diagonals are equal, pick rectangle with larger area
+            else if (diagonalSq == maxDiagonalSq) {
+                maxArea = Math.max(maxArea, area);
             }
         }
-        return largest;
+        return maxArea;
     }
 }
