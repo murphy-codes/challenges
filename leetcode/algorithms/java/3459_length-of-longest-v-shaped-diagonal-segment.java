@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/length-of-longest-v-shaped-diagonal-segment/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-08-26
+// Date: 2025-08-27
 // At the time of submission:
-//   Runtime 433 ms Beats 91.03%
-//   Memory 127.70 MB Beats 14.10%
+//   Runtime 81 ms Beats 97.44%
+//   Memory 83.91 MB Beats 55.13%
 
 /****************************************
 * 
@@ -53,87 +53,71 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Memoized DFS over diagonals. From each '1' cell we try all 4 diagonal
-    // directions, expecting 2 next, then alternating 0/2 thereafter. State is
-    // (row, col, direction, turnUsed) and memo stores the best continuation length
-    // starting from the next cell. We may make at most one clockwise 90° turn.
-    // Time: O(m*n) states with O(1) work each. Space: O(m*n) for memo/stack.
+    // This solution uses DFS with memoization to find the longest "V"-shaped
+    // diagonal path. Each state is defined by position, direction, turn ability,
+    // and the expected alternating cell value (1 or 2). To avoid recomputation,
+    // states are cached using a bitmask. Early pruning skips directions where
+    // not enough space remains to beat the current best. 
+    // Time Complexity: O(m * n * 8) in practice due to memoization.
+    // Space Complexity: O(m * n * 8) for the memo table.
 
-    // Diagonals in clockwise order: ↘, ↙, ↖, ↗
-    private static final int[][] DIRS = {
-        { 1,  1},  // 0: down-right
-        { 1, -1},  // 1: down-left
-        {-1, -1},  // 2: up-left
-        {-1,  1}   // 3: up-right
-    };
-
-    private int[][] grid;
-    private int rows, cols;
-    // memo[r][c][dir][turned] = best length starting AFTER (r,c),
-    // moving in 'dir', with turned=0/1 indicating turn still available/already used
-    private int[][][][] memo;
+    // Directions: down-right, down-left, up-left, up-right
+    private static final int[][] DIRS = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
 
     public int lenOfVDiagonal(int[][] grid) {
-        this.grid = grid;
-        this.rows = grid.length;
-        this.cols = grid[0].length;
-        this.memo = new int[rows][cols][4][2];
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][][] memo = new int[m][n][1 << 3]; // memo[row][col][state mask]
+        int maxLen = 0;
 
-        // init memo to -1 (uncomputed)
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                for (int d = 0; d < 4; d++) {
-                    Arrays.fill(memo[r][c][d], -1);
-                }
-            }
-        }
+        for (int row = 0; row < m; row++) {
+            for (int col = 0; col < n; col++) {
+                if (grid[row][col] != 1) continue;
 
-        int best = 0;
-        // A valid segment must start at a 1; we seed from every 1 in all 4 directions.
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                if (grid[r][c] == 1) {
-                    for (int d = 0; d < 4; d++) {
-                        // We are at a '1'; the next expected value is '2'.
-                        best = Math.max(best, 1 + dfs(r, c, d, true, 2));
+                // maxs[k] = maximum possible steps in each direction from (row,col)
+                int[] maxs = { m - row, col + 1, row + 1, n - col };
+
+                for (int dir = 0; dir < 4; dir++) {
+                    if (maxs[dir] > maxLen) {
+                        maxLen = Math.max(maxLen,
+                                dfs(row, col, dir, 1, 2, grid, memo) + 1);
                     }
                 }
             }
         }
-        return best;
+        return maxLen;
     }
 
-    // DFS from (r,c): try to step to the next cell in 'dir' expecting 'target'.
-    // 'turnAvailable' indicates whether we may still make one clockwise 90° turn.
-    private int dfs(int r, int c, int dir, boolean turnAvailable, int target) {
-        int nr = r + DIRS[dir][0];
-        int nc = c + DIRS[dir][1];
+    private int dfs(int row, int col, int dir, int canTurn, int target,
+                    int[][] grid, int[][][] memo) {
+        row += DIRS[dir][0];
+        col += DIRS[dir][1];
 
-        // If out of bounds or value mismatch, we cannot extend further.
-        if (nr < 0 || nr >= rows || nc < 0 || nc >= cols || grid[nr][nc] != target) {
+        // Stop if out of bounds or not matching the target number
+        if (row < 0 || row >= grid.length ||
+            col < 0 || col >= grid[row].length ||
+            grid[row][col] != target) {
             return 0;
         }
 
-        int turned = turnAvailable ? 1 : 0;
-        if (memo[nr][nc][dir][turned] != -1) {
-            // Memo stores the max continuation length from (nr,nc) going forward.
-            return memo[nr][nc][dir][turned];
+        int mask = (dir << 1) | canTurn;
+        if (memo[row][col][mask] > 0) {
+            return memo[row][col][mask];
         }
 
-        // Continue straight, next expected value alternates: 2 -> 0 -> 2 -> ...
-        int best = dfs(nr, nc, dir, turnAvailable, 2 - target);
+        int maxLen = dfs(row, col, dir, canTurn, 2 - target, grid, memo);
 
-        // Optionally take a single clockwise turn (dir -> (dir+1)%4) if still available.
-        if (turnAvailable) {
-            int ndir = (dir + 1) % 4;
-            best = Math.max(best, dfs(nr, nc, ndir, false, 2 - target));
+        // Optionally turn once (if allowed) to the next direction
+        if (canTurn == 1) {
+            int[] maxs = { grid.length - row - 1, col, row, grid[row].length - col - 1 };
+            int nextDir = (dir + 1) % 4;
+            if (maxs[nextDir] > maxLen) {
+                maxLen = Math.max(maxLen,
+                        dfs(row, col, nextDir, 0, 2 - target, grid, memo));
+            }
         }
 
-        // +1 for the step just taken into (nr,nc).
-        memo[nr][nc][dir][turned] = best + 1;
-        return best + 1;
+        return memo[row][col][mask] = maxLen + 1;
     }
 }
