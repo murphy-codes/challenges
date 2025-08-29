@@ -60,6 +60,7 @@ LeetCode
 |3066|[Minimum Operations to Exceed Threshold Value II](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
 |3042|[Count Prefix and Suffix Pairs I](https://leetcode.com/problems/count-prefix-and-suffix-pairs-i/)|[Java](./algorithms/java/3042_count-prefix-and-suffix-pairs-i.java)|Easy|
 |3024|[Type of Triangle](https://leetcode.com/problems/type-of-triangle/)|[Java](./algorithms/java/3024_type-of-triangle.java)|Easy|
+|3021|[Alice and Bob Playing Flower Game](https://leetcode.com/problems/alice-and-bob-playing-flower-game/)|[Java](./algorithms/java/3021_alice-and-bob-playing-flower-game.java)|Medium|
 |3000|[Maximum Area of Longest Diagonal Rectangle](https://leetcode.com/problems/maximum-area-of-longest-diagonal-rectangle/)|[Java](./algorithms/java/3000_maximum-area-of-longest-diagonal-rectangle.java)|Easy|
 |2999|[Count the Number of Powerful Integers](https://leetcode.com/problems/count-the-number-of-powerful-integers/)|[Java](./algorithms/java/2999_count-the-number-of-powerful-integers.java)|Hard|
 |2966|[Divide Array Into Arrays With Max Difference](https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/)|[Java](./algorithms/java/2966_divide-array-into-arrays-with-max-difference.java)|Medium|
