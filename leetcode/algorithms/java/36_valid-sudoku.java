@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-29
 // At the time of submission:
-//   Runtime 6 ms Beats 28.73%
-//   Memory 45.24 MB Beats 7.50%
+//   Runtime 1 ms Beats 99.87%
+//   Memory 44.51 MB Beats 56.61%
 
 /****************************************
 * 
@@ -53,67 +53,27 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // This solution checks all rows, columns, and 3x3 sub-boxes separately.
-    // For each, we use a fresh HashSet of digits 1–9 and ensure no duplicate
-    // appears in that unit. If a duplicate is found, we return false early.
-    // Time complexity: O(243) ≈ O(1), since board is fixed at 9x9.
-    // Space complexity: O(243) ≈ O(1), for HashSets reused per unit.
-    private static final int[][] squareOffsets = {
-        {0, 0}, {0, 3}, {0, 6},{3, 0}, {3, 3}, {3, 6},{6, 0}, {6, 3}, {6, 6}
-    };
-    private static final Set<Character> digits = new HashSet<>();
-
-    static {
-        digits.add('1');
-        digits.add('2');
-        digits.add('3');
-        digits.add('4');
-        digits.add('5');
-        digits.add('6');
-        digits.add('7');
-        digits.add('8');
-        digits.add('9');
-    }
-
+    // This solution tracks digits seen in each row, column, and 3x3 box.
+    // For every filled cell, we check if that digit already exists in any
+    // of the corresponding structures. If so, the board is invalid.
+    // Time complexity: O(81) ≈ O(1), since we scan all cells once.
+    // Space complexity: O(9*9) ≈ O(1), using fixed boolean arrays.
     public boolean isValidSudoku(char[][] board) {
-        for (int i = 0; i < 9; i++) {
-            Set<Character> row = new HashSet<>(digits);
-            for (int j = 0; j < 9; j++) {
-                if(board[i][j]!='.'){
-                    if(row.contains(board[i][j])) {row.remove(board[i][j]);}
-                    else {return false;}
-                }
-            }
-        }
+        boolean[][] rows = new boolean[9][9];
+        boolean[][] cols = new boolean[9][9];
+        boolean[][] boxes = new boolean[9][9];
 
-        for (int j = 0; j < 9; j++) {
-            Set<Character> column = new HashSet<>(digits);
-            for (int i = 0; i < 9; i++) {
-                if(board[i][j]!='.'){
-                    if(column.contains(board[i][j])) {column.remove(board[i][j]);}
-                    else {return false;}
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char c = board[i][j];
+                if (c == '.') continue;
+                int num = c - '1'; // map '1'..'9' → 0..8
+                int boxIndex = (i / 3) * 3 + (j / 3);
+                if (rows[i][num] || cols[j][num] || boxes[boxIndex][num]) {
+                    return false;
                 }
-            }
-        }
-        
-        for (int k = 0; k < 9; k++) {
-            Set<Character> square = new HashSet<>(digits);
-            int rowOff = squareOffsets[k][0];
-            int colOff = squareOffsets[k][1];
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if(board[i+rowOff][j+colOff]!='.'){
-                        if(square.contains(board[i+rowOff][j+colOff])) {
-                            square.remove(board[i+rowOff][j+colOff]);
-                        } else {
-                            return false;
-                        }
-                    }
-                }
+                rows[i][num] = cols[j][num] = boxes[boxIndex][num] = true;
             }
         }
         return true;
