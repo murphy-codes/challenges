@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-31
 // At the time of submission:
-//   Runtime 61 ms Beats 95.20%
-//   Memory 41.10 MB Beats 56.80%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 41.07 MB Beats 71.90%
 
 /****************************************
 * 
@@ -31,57 +31,110 @@
 ****************************************/
 
 class Solution {
-    // This solution uses backtracking with constraint tracking to solve Sudoku.
-    // Each row, column, and 3x3 box is tracked using boolean arrays for O(1) checks.
-    // We recursively fill cells with digits 1–9, backtracking on invalid choices.
-    // Time complexity is roughly O(9^(n)) in the worst case, but pruned heavily
-    // by constraints, making it efficient in practice. Space is O(1) (fixed size).
+    // This solution uses backtracking with bitmasks and the MRV heuristic.
+    // Each row, column, and 3x3 box is tracked by a 9-bit mask for O(1) checks.
+    // At each step we pick the empty cell with the fewest valid options (MRV),
+    // then try each candidate digit using efficient bitwise operations.
+    // Time complexity is exponential in the worst case, but MRV + pruning makes
+    // it extremely fast in practice. Space is O(1), fixed for 9x9 Sudoku.
 
-    // helper arrays to track used digits
-    private boolean[][] rows = new boolean[9][10];
-    private boolean[][] cols = new boolean[9][10];
-    private boolean[][] boxes = new boolean[9][10];
+    // Bitmasks for digits 1-9 used in each row, column, and 3x3 box.
+    // Bit (d) = 1 means digit (d+1) is already placed.
+    private final int[] rowMask = new int[9];
+    private final int[] colMask = new int[9];
+    private final int[] boxMask = new int[9];
+
+    // Stores positions of empty cells as single integers (r*9 + c).
+    private final int[] emptyCells = new int[81];
+    private int totalEmpty = 0;
 
     public void solveSudoku(char[][] board) {
-        // initialize helper arrays with given board
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (board[i][j] != '.') {
-                    int num = board[i][j] - '0';
-                    rows[i][num] = true;
-                    cols[j][num] = true;
-                    boxes[(i / 3) * 3 + j / 3][num] = true;
+        // Initialize masks and record empty cell positions
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                char ch = board[r][c];
+                if (ch == '.') {
+                    emptyCells[totalEmpty++] = r * 9 + c;
+                } else {
+                    int digit = ch - '1';        // 0..8
+                    int bit = 1 << digit;
+                    rowMask[r] |= bit;
+                    colMask[c] |= bit;
+                    boxMask[getBoxIndex(r, c)] |= bit;
                 }
             }
         }
-        backtrack(board, 0, 0);
+        backtrack(board, 0);
     }
 
-    private boolean backtrack(char[][] board, int i, int j) {
-        // move to next row
-        if (i == 9) return true;
-        // move to next column
-        if (j == 9) return backtrack(board, i + 1, 0);
+    // Backtracking with MRV: always pick the cell with fewest choices.
+    private boolean backtrack(char[][] board, int k) {
+        if (k == totalEmpty) return true; // Solved
 
-        if (board[i][j] != '.') {
-            return backtrack(board, i, j + 1); // skip filled cell
-        }
+        // Step 1: Find best candidate cell (MRV heuristic)
+        int bestIndex = k;
+        int bestChoicesMask = 0;
+        int minChoices = 10; // more than max possible (9)
 
-        for (int num = 1; num <= 9; num++) {
-            int boxIndex = (i / 3) * 3 + j / 3;
-            if (!rows[i][num] && !cols[j][num] && !boxes[boxIndex][num]) {
-                // place num
-                board[i][j] = (char)(num + '0');
-                rows[i][num] = cols[j][num] = boxes[boxIndex][num] = true;
+        for (int i = k; i < totalEmpty; i++) {
+            int pos = emptyCells[i];
+            int r = pos / 9, c = pos % 9, b = getBoxIndex(r, c);
+            int usedMask = rowMask[r] | colMask[c] | boxMask[b];
+            int availableMask = (~usedMask) & 0x1FF; // mask of possible digits
+            int count = Integer.bitCount(availableMask);
 
-                if (backtrack(board, i, j + 1)) return true;
-
-                // undo (backtrack)
-                board[i][j] = '.';
-                rows[i][num] = cols[j][num] = boxes[boxIndex][num] = false;
+            if (count < minChoices) {
+                minChoices = count;
+                bestChoicesMask = availableMask;
+                bestIndex = i;
+                if (count == 1) break; // best possible
             }
+            if (count == 0) return false; // dead end
         }
 
-        return false; // no valid number found
+        // Step 2: Swap chosen cell into slot k
+        swap(emptyCells, k, bestIndex);
+
+        int pos = emptyCells[k];
+        int r = pos / 9, c = pos % 9, b = getBoxIndex(r, c);
+        int choices = bestChoicesMask == 0
+                ? ((~(rowMask[r] | colMask[c] | boxMask[b])) & 0x1FF)
+                : bestChoicesMask;
+
+        // Step 3: Try each digit by iterating set bits
+        while (choices != 0) {
+            int bit = choices & -choices; // lowest set bit
+            int digit = Integer.numberOfTrailingZeros(bit); // 0..8
+
+            place(board, r, c, b, digit, bit);
+            if (backtrack(board, k + 1)) return true;
+            unplace(board, r, c, b, digit, bit);
+
+            choices -= bit; // remove tried digit
+        }
+
+        return false; // backtrack
+    }
+
+    private void place(char[][] board, int r, int c, int b, int d, int bit) {
+        board[r][c] = (char) ('1' + d);
+        rowMask[r] |= bit;
+        colMask[c] |= bit;
+        boxMask[b] |= bit;
+    }
+
+    private void unplace(char[][] board, int r, int c, int b, int d, int bit) {
+        board[r][c] = '.';
+        rowMask[r] ^= bit;
+        colMask[c] ^= bit;
+        boxMask[b] ^= bit;
+    }
+
+    private static int getBoxIndex(int r, int c) {
+        return (r / 3) * 3 + (c / 3);
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
     }
 }
