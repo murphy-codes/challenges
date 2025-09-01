@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-08-31
 // At the time of submission:
-//   Runtime 363 ms Beats 49.22%
-//   Memory 95.89 MB Beats 51.30%
+//   Runtime 315 ms Beats 93.78%
+//   Memory 95.32 MB Beats 69.43%
 
 /****************************************
 * 
@@ -42,46 +42,45 @@
 * 
 ****************************************/
 
-import java.util.PriorityQueue;
-
 class Solution {
-    // Greedy + heap solution. Each time, assign an extra student to the
-    // class that provides the maximum marginal gain in pass ratio.
-    // We maintain a max heap keyed by gain(p, t) = (p+1)/(t+1) - p/t.
-    // Each assignment updates that class and pushes it back in the heap.
-    // Time complexity: O((n + extraStudents) log n), Space: O(n).
+    // Greedy solution using a max-heap (priority queue).
+    // At each step, assign an extra student to the class that yields
+    // the largest gain in average pass ratio. Gain is computed as the
+    // difference between new and old ratios. This ensures maximum benefit.
+    // Time complexity: O(n log n + extraStudents log n). Space: O(n).
+    
     public double maxAverageRatio(int[][] classes, int extraStudents) {
-        // Max heap based on gain in pass ratio when adding a student
-        PriorityQueue<double[]> pq = new PriorityQueue<>(
-            (a, b) -> Double.compare(b[0], a[0])
-        );
+        // Max-heap based on gain (largest gain first)
+        PriorityQueue<double[]> maxHeap = new PriorityQueue<>(new Comparator<double[]>() {
+            public int compare(double[] a, double[] b) {
+                return Double.compare(b[0], a[0]); // sort by gain descending
+            }
+        });
 
-        // Initialize heap with [gain, pass, total] for each class
-        for (int[] c : classes) {
-            int pass = c[0], total = c[1];
-            pq.offer(new double[] { gain(pass, total), pass, total });
+        // Initialize heap with (gain, pass, total) for each class
+        for (int i = 0; i < classes.length; i++) {
+            double pass = classes[i][0];
+            double total = classes[i][1];
+            double gain = (pass + 1.0) / (total + 1.0) - pass / total;
+            maxHeap.offer(new double[]{gain, pass, total});
         }
 
-        // Assign extra students
-        for (int i = 0; i < extraStudents; i++) {
-            double[] top = pq.poll();
-            int pass = (int) top[1] + 1;
-            int total = (int) top[2] + 1;
-            pq.offer(new double[] { gain(pass, total), pass, total });
+        // Assign extra students greedily to maximize average ratio
+        while (extraStudents > 0) {
+            double[] top = maxHeap.poll();
+            double pass = top[1] + 1;
+            double total = top[2] + 1;
+            double gain = (pass + 1.0) / (total + 1.0) - pass / total;
+            maxHeap.offer(new double[]{gain, pass, total});
+            extraStudents--;
         }
 
-        // Compute final average
+        // Compute final average pass ratio
         double sum = 0.0;
-        while (!pq.isEmpty()) {
-            double[] cur = pq.poll();
-            sum += cur[1] / cur[2];
+        for (double[] c : maxHeap) {
+            sum += c[1] / c[2];
         }
 
         return sum / classes.length;
-    }
-
-    // Helper to compute the gain of adding a student
-    private double gain(int pass, int total) {
-        return (double)(pass + 1) / (total + 1) - (double)pass / total;
     }
 }
