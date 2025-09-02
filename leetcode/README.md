@@ -59,6 +59,7 @@ LeetCode
 |3068|[Find the Maximum Sum of Node Values](https://leetcode.com/problems/find-the-maximum-sum-of-node-values/)|[Java](./algorithms/java/3068_find-the-maximum-sum-of-node-values.java)|Hard|
 |3066|[Minimum Operations to Exceed Threshold Value II](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
 |3042|[Count Prefix and Suffix Pairs I](https://leetcode.com/problems/count-prefix-and-suffix-pairs-i/)|[Java](./algorithms/java/3042_count-prefix-and-suffix-pairs-i.java)|Easy|
+|3025|[Find the Number of Ways to Place People I](https://leetcode.com/problems/find-the-number-of-ways-to-place-people-i/)|[Java](./algorithms/java/3025_find-the-number-of-ways-to-place-people-i.java)|Medium|
 |3024|[Type of Triangle](https://leetcode.com/problems/type-of-triangle/)|[Java](./algorithms/java/3024_type-of-triangle.java)|Easy|
 |3021|[Alice and Bob Playing Flower Game](https://leetcode.com/problems/alice-and-bob-playing-flower-game/)|[Java](./algorithms/java/3021_alice-and-bob-playing-flower-game.java)|Medium|
 |3000|[Maximum Area of Longest Diagonal Rectangle](https://leetcode.com/problems/maximum-area-of-longest-diagonal-rectangle/)|[Java](./algorithms/java/3000_maximum-area-of-longest-diagonal-rectangle.java)|Easy|
