@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-06
 // At the time of submission:
-//   Runtime 14 ms Beats 91.67%
-//   Memory 100.52 MB Beats 94.44%
+//   Runtime 11 ms Beats 100.00%
+//   Memory 101.28 MB Beats 41.67%
 
 /****************************************
 * 
@@ -54,40 +54,44 @@
 ****************************************/
 
 class Solution {
-    // Precompute powers of 4 since any number x in [4^k, 4^(k+1)-1]
-    // always requires exactly (k+1) divisions by 4 to reach zero.
-    // For each query [l, r], count how many numbers fall into each
-    // such range, multiply by (k+1), and sum. Each operation reduces
-    // two numbers, so the answer is ceil(totalOps / 2).
-    // Time complexity: O(Q * logN), where Q = queries.length,
-    // N = max(r). Space complexity: O(logN).
+    // This solution groups numbers in [l, r] by powers of 4, since all values
+    // within the same "power bucket" need the same number of divisions to reach 0.
+    // By counting how many numbers fall into each bucket and summing their costs,
+    // we avoid iterating through every number. Each operation reduces 2 numbers,
+    // so the final result is (sum + 1) / 2. Time complexity is O(log r) per query
+    // due to the power-of-4 progression, and space complexity is O(1).
     public long minOperations(int[][] queries) {
-        // Precompute powers of 4 up to > 1e9
-        long[] pow4 = new long[16]; // since 4^15 > 1e9
-        pow4[0] = 1;
-        for (int i = 1; i < pow4.length; i++) {
-            pow4[i] = pow4[i - 1] * 4;
+        long totalOps = 0;
+        for (int[] query : queries) {
+            totalOps += minOperations(query);
+        }
+        return totalOps;
+    }
+
+    public static long minOperations(int[] query) {
+        long initialSteps = 0;   // number of divisions needed to reach query[0]
+        long power = 1;          // tracks powers of 4
+
+        // Find how many steps are needed before reaching the lower bound
+        while (power < query[0]) {
+            initialSteps++;
+            power *= 4;
         }
 
+        long steps = initialSteps; 
         long total = 0;
-        for (int[] q : queries) {
-            int l = q[0], r = q[1];
-            long ops = 0;
+        long prev = query[0];    // track range start
 
-            // Traverse blocks of [4^k, 4^(k+1)-1]
-            for (int k = 0; k < pow4.length - 1; k++) {
-                long left = Math.max(l, pow4[k]);
-                long right = Math.min(r, pow4[k + 1] - 1);
-
-                if (left <= right) {
-                    long count = right - left + 1;
-                    ops += count * (k + 1); // each needs k+1 operations
-                }
-            }
-
-            // Each operation reduces 2 numbers → ceil division
-            total += (ops + 1) / 2;
+        // Iterate through buckets of size power-of-4 until covering query[1]
+        while (power <= (long) query[1] * 4) {
+            long rangeEnd = Math.min(power, query[1] + 1);
+            total += steps * (rangeEnd - prev);  // count contribution
+            prev = power;
+            steps++;
+            power *= 4;
         }
-        return total;
+
+        // Divide by 2 since each operation reduces 2 numbers simultaneously
+        return (total + 1) / 2;
     }
 }
