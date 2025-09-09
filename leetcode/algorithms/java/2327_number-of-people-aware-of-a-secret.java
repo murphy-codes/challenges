@@ -3,7 +3,7 @@
 // Date: 2025-09-07
 // At the time of submission:
 //   Runtime 3 ms Beats 85.45%
-//   Memory 40.97 MB Beats 50.91%
+//   Memory 40.52 MB Beats 90.91%
 
 /****************************************
 * 
@@ -34,37 +34,34 @@
 ****************************************/
 
 class Solution {
-    // We use dynamic programming to track how many new people learn the secret 
-    // on each day. A rolling sum keeps track of people eligible to share (from 
-    // day-delay to day-forget). Each day we update the sum by adding those who 
-    // become eligible and removing those who forget. Finally, we total those 
-    // still remembering on day n. Time complexity is O(n), and space is O(n).
-
-    private static final int MOD = 1_000_000_007;
-
+    // Dynamic programming with rolling sum optimization.
+    // dp[day] stores the number of people who first learn the secret on that day.
+    // A rolling sum tracks who can share (from delay to forget - 1 days old).
+    // We update daily by adding new sharers and removing those who forget.
+    // Time complexity: O(n), Space complexity: O(n).
     public int peopleAwareOfSecret(int n, int delay, int forget) {
-        long[] dp = new long[n + 1]; 
-        // dp[i] = number of new people who learn the secret on day i
-        dp[1] = 1;
+        final int MOD = 1_000_000_007;
+        int[] learned = new int[n + 1]; // learned[day] = people who learn on this day
+        learned[1] = 1; // day 1, one person knows the secret
 
-        long shareable = 0; // rolling sum of people eligible to share
+        long canShare = 0; // rolling sum of people eligible to share
         for (int day = 2; day <= n; day++) {
-            // Add people who just became eligible to share
+            // Add those who just became eligible to share
             if (day - delay >= 1) {
-                shareable = (shareable + dp[day - delay]) % MOD;
+                canShare = (canShare + learned[day - delay]) % MOD;
             }
-            // Remove people who just forgot
+            // Remove those who just forgot
             if (day - forget >= 1) {
-                shareable = (shareable - dp[day - forget] + MOD) % MOD;
+                canShare = (canShare - learned[day - forget] + MOD) % MOD;
             }
-            dp[day] = shareable; // new learners today
+            learned[day] = (int) canShare; // new learners today
         }
 
-        // Sum people still remembering the secret on day n
         long result = 0;
+        // Count people who still remember on day n
         for (int day = n - forget + 1; day <= n; day++) {
             if (day >= 1) {
-                result = (result + dp[day]) % MOD;
+                result = (result + learned[day]) % MOD;
             }
         }
         return (int) result;
