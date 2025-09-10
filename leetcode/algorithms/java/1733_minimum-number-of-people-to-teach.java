@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-09
 // At the time of submission:
-//   Runtime 51 ms Beats 67.24%
-//   Memory 59.74 MB Beats 50.00%
+//   Runtime 15 ms Beats 100.00%
+//   Memory 55.65 MB Beats 100.00%
 
 /****************************************
 * 
@@ -44,57 +44,48 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
+// import java.util.BitSet;
+// import java.util.HashSet;
+// import java.util.Set;
+// import java.util.Arrays;
+// import java.util.stream.IntStream;
 
 class Solution {
-    // For each friendship, check if the two users share a language.
-    // If not, mark both as candidates to be taught. Then, for each
-    // language, count how many of these users would need to learn it.
-    // The minimum across all languages is the result.
-    // Time complexity: O(m * n + friendships * n) ~ O(m * n), 
-    // Space complexity: O(m * n) in the worst case.
+    // For each friendship, check if the two users share a language using BitSet.
+    // If not, mark both users as needing teaching. Then, count for each language
+    // how many of these users already know it. The minimum required teaches is
+    // the number of problematic users minus the max overlap with one language.
+    // Time complexity: O(m * n + friendships * n) ~ O(m * n), Space: O(m * n).
     public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
-        int m = languages.length;
-        // Convert each user's known languages into a set for quick lookup
-        Set<Integer>[] userLangs = new HashSet[m + 1]; 
-        for (int i = 0; i < m; i++) {
-            userLangs[i + 1] = new HashSet<>();
+        // Step 1: Store each user's known languages in a BitSet
+        BitSet[] userLanguages = new BitSet[languages.length];
+        Arrays.setAll(userLanguages, i -> new BitSet(n + 1));
+        for (int i = 0; i < languages.length; i++) {
             for (int lang : languages[i]) {
-                userLangs[i + 1].add(lang);
+                userLanguages[i].set(lang);
             }
         }
 
-        // Step 1: Find all users in friendships that cannot currently communicate
-        Set<Integer> needTeach = new HashSet<>();
+        // Step 2: Find all users involved in friendships where no shared language exists
+        Set<Integer> toTeach = new HashSet<>();
         for (int[] f : friendships) {
-            int u = f[0], v = f[1];
-            // Check if they share a language
-            boolean canTalk = false;
-            for (int lang : userLangs[u]) {
-                if (userLangs[v].contains(lang)) {
-                    canTalk = true;
-                    break;
-                }
-            }
-            if (!canTalk) {
-                needTeach.add(u);
-                needTeach.add(v);
+            BitSet common = (BitSet) userLanguages[f[0] - 1].clone();
+            common.and(userLanguages[f[1] - 1]);
+            if (common.isEmpty()) {
+                toTeach.add(f[0] - 1);
+                toTeach.add(f[1] - 1);
             }
         }
 
-        // Step 2: For each language, count how many of these users need to learn it
-        int minTeach = m; // worst case: teach all
-        for (int lang = 1; lang <= n; lang++) {
-            int count = 0;
-            for (int user : needTeach) {
-                if (!userLangs[user].contains(lang)) {
-                    count++;
-                }
+        // Step 3: Count, for each language, how many of these users already know it
+        int[] languageCount = new int[n + 1];
+        for (int person : toTeach) {
+            for (int lang : languages[person]) {
+                languageCount[lang]++;
             }
-            minTeach = Math.min(minTeach, count);
         }
 
-        return minTeach;
+        // Step 4: Minimum teaches = total problem users - best language coverage
+        return toTeach.size() - Arrays.stream(languageCount).max().getAsInt();
     }
 }
