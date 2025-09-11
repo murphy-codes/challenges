@@ -84,6 +84,7 @@ LeetCode
 |2818|[Apply Operations to Maximize Score](https://leetcode.com/problems/apply-operations-to-maximize-score/)|[Java](./algorithms/java/2818_apply-operations-to-maximize-score.java)|Hard|
 |2799|[Count Complete Subarrays in an Array](https://leetcode.com/problems/count-complete-subarrays-in-an-array/)|[Java](./algorithms/java/2799_count-complete-subarrays-in-an-array.java)|Medium|
 |2787|[Ways to Express an Integer as Sum of Powers](https://leetcode.com/problems/ways-to-express-an-integer-as-sum-of-powers/)|[Java](./algorithms/java/2787_ways-to-express-an-integer-as-sum-of-powers.java)|Medium|
+|2785|[Sort Vowels in a String](https://leetcode.com/problems/sort-vowels-in-a-string/)|[Java](./algorithms/java/2785_sort-vowels-in-a-string.java)|Medium|
 |2780|[Minimum Index of a Valid Split](https://leetcode.com/problems/minimum-index-of-a-valid-split/)|[Java](./algorithms/java/2780_minimum-index-of-a-valid-split.java)|Medium|
 |2749|[Minimum Operations to Make the Integer Zero](https://leetcode.com/problems/minimum-operations-to-make-the-integer-zero/)|[Java](./algorithms/java/2749_minimum-operations-to-make-the-integer-zero.java)|Medium|
 |2698|[Find the Punishment Number of an Integer](https://leetcode.com/problems/find-the-punishment-number-of-an-integer/)|[Java](./algorithms/java/2698_find-the-punishment-number-of-an-integer.java)|Medium|
