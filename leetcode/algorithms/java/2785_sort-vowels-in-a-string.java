@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-10
 // At the time of submission:
-//   Runtime 21 ms Beats 86.82%
-//   Memory 46.10 MB Beats 78.03%
+//   Runtime 5 ms Beats 99.89%
+//   Memory 45.68 MB Beats 94.75%
 
 /****************************************
 * 
@@ -39,47 +39,46 @@
 ****************************************/
 
 class Solution {
-    // This solution counts all vowels (10 possible chars) and stores their
-    // positions. It then reconstructs the string by placing sorted vowels
-    // (by ASCII order) back into their recorded indices while leaving
-    // consonants untouched. Time complexity is O(n) for scanning the string
-    // and rebuilding, and space complexity is O(n) for storing indices.
-
-    private static final Map<Character, Integer> VOWELS_TO_INT;
-    private static final Map<Integer, Character> INT_TO_VOWELS;
-    static {
-        VOWELS_TO_INT = new HashMap<>();
-        INT_TO_VOWELS = new HashMap<>();
-        char[] chars = {'A','E','I','O','U','a','e','i','o','u'};
-        for (int i = 0; i < chars.length; i++) {
-            VOWELS_TO_INT.put(chars[i], i);
-            INT_TO_VOWELS.put(i, chars[i]);
-        }
-    }
-    
+    // This solution sorts only vowels by using ASCII frequency counts. It first
+    // counts all characters, then replaces vowels in ascending ASCII order while
+    // leaving consonants untouched. Early exit is used if no vowels exist.
+    // Time complexity: O(n + A), where n = length of string, A = 128 ASCII size.
+    // Space complexity: O(A), using fixed arrays for frequency and vowel checks.
     public String sortVowels(String s) {
-        int[] vowelCount = new int[10];
-        List<Integer> indexes = new ArrayList<>();
-        char[] chars = s.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            if (VOWELS_TO_INT.containsKey(chars[i])) {
-                vowelCount[VOWELS_TO_INT.get(chars[i])]++;
-                indexes.add(i);
+        // Vowels ordered by ASCII value
+        char[] vowels = {'A','E','I','O','U','a','e','i','o','u'};
+        
+        // Frequency count for all ASCII chars
+        int[] charFreq = new int[128];
+        char[] sChars = s.toCharArray();
+        for (char ch : sChars) {
+            charFreq[ch]++;
+        }
+        
+        // Check if any vowel exists at all
+        boolean hasVowel = false;
+        for (char v : vowels) {
+            hasVowel |= charFreq[v] > 0;
+        }
+        if (!hasVowel) return s;
+        
+        // Mark which ASCII chars are vowels present in string
+        boolean[] isVowel = new boolean[128];
+        for (char v : vowels) {
+            if (charFreq[v] > 0) isVowel[v] = true;
+        }
+        
+        // Rebuild string: replace vowels in sorted ASCII order
+        int pos = 0;
+        for (char v : vowels) {
+            while (charFreq[v] > 0) {
+                char ch = sChars[pos];
+                charFreq[v] -= isVowel[ch] ? 1 : 0;
+                sChars[pos] = isVowel[ch] ? v : ch;
+                pos++;
             }
         }
-        if (indexes.size()==0) return s;
-        StringBuilder sb = new StringBuilder();
-        sb.append(s);
-        int j = 0;
-        for (int i = 0; i < indexes.size(); i++) {
-            if (vowelCount[j]>0) {
-                sb.setCharAt(indexes.get(i), INT_TO_VOWELS.get(j));
-                vowelCount[j]--;
-            } else {
-                j++; // move to next vowel
-                i--; // do not count this iteration
-            }
-        }
-        return sb.toString();
+        
+        return new String(sChars);
     }
 }
