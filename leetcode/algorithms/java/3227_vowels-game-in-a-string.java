@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-12
 // At the time of submission:
-//   Runtime 19 ms Beats 16.80%
-//   Memory 45.64 MB Beats 45.41%
+//   Runtime 4 ms Beats 80.36%
+//   Memory 45.42 MB Beats 82.91%
 
 /****************************************
 * 
@@ -46,11 +46,11 @@ class Solution {
     // can always remove a substring with an odd number of vowels on 
     // her first move. Exits early once a vowel is found
     // Runs in O(n) time, where n = s.length(), uses O(1) space but exit early.
-    private static final Set<Character> chars = Set.of('a', 'e', 'i', 'o', 'u');
     public boolean doesAliceWin(String s) {
-        int count = 0;
         for (char ch : s.toCharArray()) {
-            if (chars.contains(ch)) return true;
+            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+                return true;
+            }
         }
         return false;
     }
