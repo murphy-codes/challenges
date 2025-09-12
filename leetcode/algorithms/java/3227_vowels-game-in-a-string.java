@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-12
 // At the time of submission:
-//   Runtime 4 ms Beats 80.36%
-//   Memory 45.42 MB Beats 82.91%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 45.70 MB Beats 45.15%
 
 /****************************************
 * 
@@ -42,16 +42,18 @@
 ****************************************/
 
 class Solution {
-    // Alice wins if the string contains at least one vowel, since she 
-    // can always remove a substring with an odd number of vowels on 
-    // her first move. Exits early once a vowel is found
-    // Runs in O(n) time, where n = s.length(), uses O(1) space but exit early.
-    public boolean doesAliceWin(String s) {
-        for (char ch : s.toCharArray()) {
-            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
-                return true;
+    // This solution checks each character in the string directly using
+    // charAt() and a switch statement. If a vowel is found, we return
+    // true immediately since Alice can make a valid move. If no vowels
+    // exist, Alice loses and we return false. Time complexity is O(n)
+    // since we may scan the whole string, and space complexity is O(1).
+    public boolean doesAliceWin(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            switch (str.charAt(i)) { // If we encounter any vowel, Alice wins immediately
+                case 'a', 'e', 'i', 'o', 'u': return true; 
             }
         }
+        // No vowels found → Alice cannot move → she loses
         return false;
     }
 }
