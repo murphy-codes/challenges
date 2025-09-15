@@ -42,8 +42,24 @@
 * 
 ****************************************/
 
-// This solution counts the frequency of all 26 lowercase letters using
-// an integer array. It then scans through the counts, tracking the max
-// frequency among vowels and consonants separately. The final result
-// is their sum. Time complexity is O(n + 26) ≈ O(n), and space is O(1)
-// since the count array size is fixed at 26 regardless of input length.
+class Solution {
+    // This solution counts the frequency of all 26 lowercase letters using
+    // an integer array. It then scans through the counts, tracking the max
+    // frequency among vowels and consonants separately. The final result
+    // is their sum. Time complexity is O(n + 26) ≈ O(n), and space is O(1)
+    // since the count array size is fixed at 26 regardless of input length.
+    public int maxFreqSum(String s) {
+        int[] count = new int[26];
+        for (char c : s.toCharArray())
+            count[c - 'a']++;
+        int vowelFreq = 0, consFreq = 0;
+        for (int i = 0; i < 26; i++) {
+            if ( i == 0 || i == 4 || i == 8 || i == 14 || i == 20 ) {
+                vowelFreq = Math.max(count[i],vowelFreq);
+            } else { 
+                consFreq = Math.max(count[i],consFreq);
+            }
+        }
+        return vowelFreq + consFreq;
+    }
+}
