@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-14
 // At the time of submission:
-//   Runtime 21 ms Beats 78.95%
-//   Memory 47.46 MB Beats 81.82%
+//   Runtime 19 ms Beats 92.82%
+//   Memory 48.50 MB Beats 56.46%
 
 /****************************************
 * 
@@ -49,58 +49,70 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.HashMap;
-
 class Solution {
-    // Build three structures: a set for exact matches, a map for lowercase
-    // matches, and a map for vowel-normalized matches (first occurrence kept).
+    // Build three maps: exact words, lowercase words, and vowel-normalized words.
+    // Vowel normalization replaces every vowel with 'a' to unify all variations.
+    // Iterate wordlist backward so earlier words are preserved as first matches.
     // For each query, check exact > lowercase > vowel-normalized precedence.
-    // Normalization replaces vowels with '*' to unify vowel errors. 
-    // Time complexity: O(N * L + Q * L), where L ≤ 7. Space: O(N * L).
+    // Time complexity: O((N + Q) * L), where L ≤ 7. Space: O(N * L).
     public String[] spellchecker(String[] wordlist, String[] queries) {
-        HashSet<String> exact = new HashSet<>();
-        HashMap<String, String> caseInsensitive = new HashMap<>();
-        HashMap<String, String> vowelInsensitive = new HashMap<>();
+        int m = wordlist.length, n = queries.length;
+        String[] result = new String[n];
 
-        for (String word : wordlist) {
-            exact.add(word);
+        // Maps for exact, case-insensitive, and vowel-insensitive lookups
+        Map<String, Integer> exactMatch = new HashMap<>();
+        Map<String, Integer> caseInsensitive = new HashMap<>();
+        Map<String, Integer> vowelInsensitive = new HashMap<>();
+
+        // Build maps from wordlist (iterate backwards so first occurrence is kept)
+        for (int wordIndex = m - 1; wordIndex >= 0; wordIndex--) {
+            String word = wordlist[wordIndex];
+            exactMatch.put(word, wordIndex);
+
             String lower = word.toLowerCase();
-            caseInsensitive.putIfAbsent(lower, word);
-            vowelInsensitive.putIfAbsent(normalize(lower), word);
-        }
+            caseInsensitive.put(lower, wordIndex);
 
-        String[] result = new String[queries.length];
-        for (int i = 0; i < queries.length; i++) {
-            String query = queries[i];
-            if (exact.contains(query)) {
-                result[i] = query;
-            } else {
-                String lower = query.toLowerCase();
-                if (caseInsensitive.containsKey(lower)) {
-                    result[i] = caseInsensitive.get(lower);
-                } else {
-                    String norm = normalize(lower);
-                    result[i] = vowelInsensitive.getOrDefault(norm, "");
+            char[] normalized = lower.toCharArray();
+            for (int charIndex = 0; charIndex < normalized.length; charIndex++) {
+                if (normalized[charIndex] == 'e' || normalized[charIndex] == 'i' ||
+                    normalized[charIndex] == 'o' || normalized[charIndex] == 'u') {
+                    normalized[charIndex] = 'a';
                 }
             }
+            vowelInsensitive.put(new String(normalized), wordIndex);
         }
-        return result;
-    }
 
-    private String normalize(String word) {
-        StringBuilder sb = new StringBuilder();
-        for (char c : word.toCharArray()) {
-            if (isVowel(c)) {
-                sb.append('*');
-            } else {
-                sb.append(c);
+        // Process each query
+        for (int queryIndex = 0; queryIndex < n; queryIndex++) {
+            String query = queries[queryIndex];
+
+            if (exactMatch.containsKey(query)) {
+                result[queryIndex] = query;
+                continue;
             }
-        }
-        return sb.toString();
-    }
 
-    private boolean isVowel(char c) {
-        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+            String lower = query.toLowerCase();
+            if (caseInsensitive.containsKey(lower)) {
+                result[queryIndex] = wordlist[caseInsensitive.get(lower)];
+                continue;
+            }
+
+            char[] normalized = lower.toCharArray();
+            for (int charIndex = 0; charIndex < normalized.length; charIndex++) {
+                if (normalized[charIndex] == 'e' || normalized[charIndex] == 'i' ||
+                    normalized[charIndex] == 'o' || normalized[charIndex] == 'u') {
+                    normalized[charIndex] = 'a';
+                }
+            }
+            String normalizedQuery = new String(normalized);
+            if (vowelInsensitive.containsKey(normalizedQuery)) {
+                result[queryIndex] = wordlist[vowelInsensitive.get(normalizedQuery)];
+                continue;
+            }
+
+            result[queryIndex] = "";
+        }
+
+        return result;
     }
 }
