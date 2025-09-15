@@ -3,7 +3,7 @@
 // Date: 2025-09-14
 // At the time of submission:
 //   Runtime 2 ms Beats 91.65%
-//   Memory 41.42 MB Beats 100.00%
+//   Memory 41.52 MB Beats 99.07%
 
 /****************************************
 * 
@@ -39,14 +39,15 @@
 ****************************************/
 
 class Solution {
-    // This solution checks each word in the text sequentially while tracking
-    // whether it can be typed. A HashSet stores the broken letters for O(1)
-    // membership checks. As we iterate, we mark a word untypeable if any broken
-    // letter appears. After each word boundary (space or end of string), we add
-    // to the count if the word was typeable. Time complexity is O(n + m), where
-    // n = text.length and m = brokenLetters.length. Space complexity is O(m).
+    // This solution first handles two quick cases: if all 26 keys are broken,
+    // return 0; if no keys are broken, count words directly in O(n). Otherwise,
+    // store broken keys in a HashSet for O(1) lookups. Iterate through the text,
+    // marking words as untypeable if a broken char is found. At word boundaries
+    // (spaces or end), increment the count if typeable. Time complexity is O(n+m),
+    // where n = text.length and m = brokenLetters.length. Space complexity is O(m).
     public int canBeTypedWords(String text, String brokenLetters) {
         if (brokenLetters.length() == 26) return 0;
+        if (brokenLetters.length() == 0) countWords(text);
         int typeableWords = 0;
         boolean isTypeable = true;
         Set<Character> broken = new HashSet<>();
@@ -63,5 +64,11 @@ class Solution {
         }
         typeableWords = typeableWords + (isTypeable ? 1 : 0);
         return typeableWords;
+    }
+
+    public int countWords(String s) {
+        int result = 1;
+        for (char c : s.toCharArray()) if (c == ' ') result++;
+        return result;
     }
 }
