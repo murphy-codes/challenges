@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-15
 // At the time of submission:
-//   Runtime 0 ms Beats 100.00%
-//   Memory 41.82 MB Beats 96.29%
+//   Runtime 16 ms Beats 97.94%
+//   Memory 63.79 MB Beats 49.48%
 
 /****************************************
 * 
@@ -52,40 +52,35 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
-    // This solution uses a stack to greedily merge adjacent non-coprime nums.
-    // Each number is pushed, and while the top two share GCD > 1, we replace
-    // them with their LCM and repeat. Order of merges does not matter, so this
-    // greedy approach always yields the correct result. Time: O(n log M) where
-    // M = max(nums[i]) due to GCD. Space: O(n) for the stack.
+    // This solution simulates merging with an explicit stack. Each number
+    // is pushed, but while it shares a GCD > 1 with the stack top, we pop
+    // and replace with their LCM. Since order of merges does not matter,
+    // this greedy left-merge strategy guarantees correctness. Time: O(n log M)
+    // where M is the max value (due to GCD). Space: O(n) for the stack.
     public List<Integer> replaceNonCoprimes(int[] nums) {
-        List<Integer> stack = new ArrayList<>();
-        for (int num : nums) {
-            stack.add(num);
-            // Try merging with previous numbers as long as GCD > 1
-            while (stack.size() > 1) {
-                int a = stack.get(stack.size() - 2);
-                int b = stack.get(stack.size() - 1);
-                int g = gcd(a, b);
-                if (g == 1) break; // coprime → stop merging
-                stack.remove(stack.size() - 1);
-                stack.remove(stack.size() - 1);
-                long lcm = (long)a / g * b; // safe from overflow
-                stack.add((int)lcm);
+        int n = nums.length;
+        int[] mergedStack = new int[n];  // stack to hold merged numbers
+        int stackTop = -1;
+
+        for (int currentNum : nums) {
+            // Try merging with previous numbers while GCD > 1
+            while (stackTop != -1) {
+                int gcdValue = gcd(mergedStack[stackTop], currentNum);
+                if (gcdValue == 1) break; // stop if coprime
+                currentNum *= mergedStack[stackTop--] / gcdValue;
             }
+            mergedStack[++stackTop] = currentNum;
         }
-        return stack;
+
+        List<Integer> result = new ArrayList<>(stackTop + 1);
+        for (int i = 0; i <= stackTop; ++i) {
+            result.add(mergedStack[i]);
+        }
+        return result;
     }
 
     private int gcd(int a, int b) {
-        while (b != 0) {
-            int tmp = a % b;
-            a = b;
-            b = tmp;
-        }
-        return a;
+        return b == 0 ? a : gcd(b, a % b);
     }
 }
