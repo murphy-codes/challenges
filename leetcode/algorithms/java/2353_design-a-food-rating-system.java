@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-16
 // At the time of submission:
-//   Runtime 196 ms Beats 60.61%
-//   Memory 73.92 MB Beats 61.21%
+//   Runtime 155 ms Beats 100.00%
+//   Memory 81.20 MB Beats 9.09%
 
 /****************************************
 * 
@@ -60,20 +60,14 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
-
 class FoodRatings {
-    // This solution uses two maps for efficient updates & lookups:
-    // 1) foodMap: maps food name → Food object (cuisine + rating).
-    // 2) cuisineMap: maps cuisine → TreeSet of foods sorted by rating
-    //    (higher first, then lexicographically smaller if tied).
-    // changeRating removes & reinserts in O(log n). highestRated
-    // retrieves the top food in O(1). Overall complexity: O(log n)
-    // per update, O(1) per query. Space: O(n).
+    // This solution maps each food → current Food object, and each cuisine →
+    // a max heap of Food objects ordered by rating (desc), then name (asc).
+    // changeRating adds a new Food with updated rating in O(log n) using lazy
+    // deletion (old versions are discarded later). highestRated runs in O(1)
+    // amortized time since each stale entry is removed at most once. Space is O(n).
 
-    private static class Food {
+    static class Food {
         String name;
         String cuisine;
         int rating;
@@ -85,42 +79,58 @@ class FoodRatings {
         }
     }
 
-    private Map<String, Food> foodMap;                   // food → details
-    private Map<String, TreeSet<Food>> cuisineMap;       // cuisine → sorted foods
+    // Map from food name → latest Food object (reflects current rating)
+    private Map<String, Food> foodMap;
+
+    // Map from cuisine → max heap of foods (ordered by rating, then name)
+    private Map<String, PriorityQueue<Food>> cuisineToHeap;
 
     public FoodRatings(String[] foods, String[] cuisines, int[] ratings) {
         foodMap = new HashMap<>();
-        cuisineMap = new HashMap<>();
+        cuisineToHeap = new HashMap<>();
 
         for (int i = 0; i < foods.length; i++) {
             Food food = new Food(foods[i], cuisines[i], ratings[i]);
             foodMap.put(foods[i], food);
 
-            cuisineMap.computeIfAbsent(cuisines[i], k -> new TreeSet<>(
-                (a, b) -> a.rating == b.rating
-                        ? a.name.compareTo(b.name)
-                        : b.rating - a.rating
-            )).add(food);
+            cuisineToHeap
+                .computeIfAbsent(cuisines[i], k -> new PriorityQueue<>(
+                    (a, b) -> {
+                        if (a.rating != b.rating) {
+                            return b.rating - a.rating; // higher rating first
+                        }
+                        return a.name.compareTo(b.name); // smaller name first
+                    }
+                ))
+                .add(food);
         }
     }
 
-    public void changeRating(String food, int newRating) {
-        Food f = foodMap.get(food);
-        TreeSet<Food> set = cuisineMap.get(f.cuisine);
+    public void changeRating(String foodName, int newRating) {
+        Food prevFood = foodMap.get(foodName);
+        Food updatedFood = new Food(foodName, prevFood.cuisine, newRating);
 
-        set.remove(f);       // O(log n)
-        f.rating = newRating;
-        set.add(f);          // O(log n)
+        // Replace in foodMap with updated rating
+        foodMap.put(foodName, updatedFood);
+
+        // Insert new entry; old entries remain but will be ignored later
+        cuisineToHeap.get(prevFood.cuisine).add(updatedFood);
     }
 
     public String highestRated(String cuisine) {
-        return cuisineMap.get(cuisine).first().name; // O(1)
+        PriorityQueue<Food> heap = cuisineToHeap.get(cuisine);
+
+        // Remove stale entries until top matches the latest rating
+        while (!heap.isEmpty()) {
+            Food top = heap.peek();
+            Food latest = foodMap.get(top.name);
+
+            if (top.rating == latest.rating) {
+                return top.name; // valid top
+            } else {
+                heap.poll(); // discard outdated entry
+            }
+        }
+        return "";
     }
 }
-
-/**
- * Your FoodRatings object will be instantiated and called as such:
- * FoodRatings obj = new FoodRatings(foods, cuisines, ratings);
- * obj.changeRating(food,newRating);
- * String param_2 = obj.highestRated(cuisine);
- */
