@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-17
 // At the time of submission:
-//   Runtime 280 ms Beats 91.72%
-//   Memory 172.20 MB Beats 36.69%
+//   Runtime 253 ms Beats 100.00%
+//   Memory 197.45 MB Beats 8.29%
 
 /****************************************
 * 
@@ -56,88 +56,65 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-
 class TaskManager {
-    // This solution maps taskId → current Task object, and stores all tasks in
-    // a max heap ordered by (priority desc, taskId desc). For add/edit, new
-    // tasks are inserted into the heap in O(log n). Removals are lazy, only
-    // deleting from the map (O(1)), with stale entries skipped later. execTop
-    // polls until finding a valid task in O(log n) amortized. Space is O(n).
+    // TaskManager uses arrays for O(1) lookups by taskId and a max-heap for
+    // retrieving highest-priority tasks. Each heap entry encodes (priority,
+    // taskId) into a single long, avoiding object overhead. Lazy deletion is
+    // applied: old or removed entries are skipped in execTop(). Time: O(log n)
+    // per add/edit, O(log n) amortized for execTop. Space: O(n).
 
-    static class Task {
-        int userId;
-        int taskId;
-        int priority;
+    private static final int MAX_TASK_ID = 100001;
 
-        Task(int userId, int taskId, int priority) {
-            this.userId = userId;
-            this.taskId = taskId;
-            this.priority = priority;
-        }
-    }
+    // Arrays indexed by taskId → latest priority and userId
+    private int[] priorities = new int[MAX_TASK_ID];
+    private int[] userIds = new int[MAX_TASK_ID];
 
-    // Map from taskId → latest Task object (with current priority)
-    private Map<Integer, Task> taskMap;
-
-    // Max heap ordered by priority desc, then taskId desc
-    private PriorityQueue<Task> maxHeap;
+    // Max-heap storing encoded (priority, taskId) pairs
+    private PriorityQueue<Long> maxHeap = new PriorityQueue<>((a, b) -> Long.compare(b, a));
 
     public TaskManager(List<List<Integer>> tasks) {
-        taskMap = new HashMap<>();
-        maxHeap = new PriorityQueue<>(
-            (a, b) -> {
-                if (a.priority != b.priority) {
-                    return b.priority - a.priority; // higher priority first
-                }
-                return b.taskId - a.taskId; // higher taskId first
-            }
-        );
+        for (List<Integer> task : tasks) {
+            int userId = task.get(0);
+            int taskId = task.get(1);
+            int priority = task.get(2);
 
-        for (List<Integer> t : tasks) {
-            int userId = t.get(0), taskId = t.get(1), priority = t.get(2);
-            Task task = new Task(userId, taskId, priority);
-            taskMap.put(taskId, task);
-            maxHeap.add(task);
+            priorities[taskId] = priority;
+            userIds[taskId] = userId;
+
+            // Encode priority & taskId into one long for heap ordering
+            maxHeap.offer((long) priority * MAX_TASK_ID + taskId);
         }
     }
 
     public void add(int userId, int taskId, int priority) {
-        Task task = new Task(userId, taskId, priority);
-        taskMap.put(taskId, task);
-        maxHeap.add(task);
+        if (priorities[taskId] > 0) return; // already exists
+        priorities[taskId] = priority;
+        userIds[taskId] = userId;
+        maxHeap.offer((long) priority * MAX_TASK_ID + taskId);
     }
 
     public void edit(int taskId, int newPriority) {
-        Task oldTask = taskMap.get(taskId);
-        Task updatedTask = new Task(oldTask.userId, taskId, newPriority);
-
-        // Update taskMap
-        taskMap.put(taskId, updatedTask);
-
-        // Insert new version (lazy deletion handles old version)
-        maxHeap.add(updatedTask);
+        priorities[taskId] = newPriority;
+        maxHeap.offer((long) newPriority * MAX_TASK_ID + taskId);
     }
 
     public void rmv(int taskId) {
-        // Remove from taskMap (heap entry will be lazily skipped later)
-        taskMap.remove(taskId);
+        priorities[taskId] = -1; // mark as removed
     }
 
     public int execTop() {
         while (!maxHeap.isEmpty()) {
-            Task top = maxHeap.poll();
-            Task latest = taskMap.get(top.taskId);
+            long encoded = maxHeap.poll();
+            int taskId = (int) (encoded % MAX_TASK_ID);
+            int priority = (int) (encoded / MAX_TASK_ID);
 
-            if (latest == top) { // ensure exact match
-                taskMap.remove(top.taskId);
-                return top.userId;
-            }
-            // Else stale entry → skip
+            // Skip stale entries
+            if (priorities[taskId] != priority) continue;
+
+            // Valid → consume it
+            priorities[taskId] = -1;
+            return userIds[taskId];
         }
-        return -1;
+        return -1; // no tasks
     }
 }
