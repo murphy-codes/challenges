@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-18
 // At the time of submission:
-//   Runtime 120 ms Beats 59.15%
-//   Memory 55.66 MB Beats 95.42%
+//   Runtime 102 ms Beats 98.24%
+//   Memory 55.64 MB Beats 95.42%
 
 /****************************************
 * 
@@ -51,36 +51,60 @@
 ****************************************/
 
 class Spreadsheet {
-    private Map<String, Integer> sheet;
+    // Spreadsheet stores explicitly set cells in a HashMap keyed by cell name.
+    // Unset cells default to 0 using getOrDefault(). Formulas are guaranteed
+    // to be in the form "=X+Y" where X and Y are either numbers or cell refs.
+    // indexOf and substring avoid regex overhead for parsing. Each operation
+    // runs in O(1) expected time. Space usage is O(k), where k is set cells.
+
+    // Map to store explicitly set cell values.
+    // Key = cell reference (e.g., "A1"), Value = integer value.
+    private Map<String, Integer> cellMap = new HashMap<>();
 
     public Spreadsheet(int rows) {
-        sheet = new HashMap<>();
-        int numRows = rows;
+        // rows are not directly used since we only track cells that are set
     }
-    
+
+    // Set the value of a specific cell
     public void setCell(String cell, int value) {
-        sheet.put(cell, value);
+        cellMap.put(cell, value);
     }
-    
-    public int getCell(String cell) {
-        if (sheet.containsKey(cell)) return sheet.get(cell);
-        return 0;
-    }
-    
+
+    // Reset a cell (remove it, default value becomes 0)
     public void resetCell(String cell) {
-        sheet.remove(cell);
+        cellMap.remove(cell);
     }
-    
+
+    // Evaluate a formula of the form "=X+Y", where X and Y are either
+    // integers or cell references.
     public int getValue(String formula) {
-        String x = formula.split("\\+")[0].substring(1), y = formula.split("\\+")[1];
-        int addendX = 0, addendY = 0;
-        if (Character.isUpperCase(x.charAt(0))) addendX = getCell(x);
-        else addendX = Integer.parseInt(x);
-        if (Character.isUpperCase(y.charAt(0))) addendY = getCell(y);
-        else addendY = Integer.parseInt(y);
-        return addendX + addendY;
+        int plusIndex = formula.indexOf('+');
+
+        // Extract operands (skip the leading '=' in the first one)
+        String leftOperand = formula.substring(1, plusIndex);
+        String rightOperand = formula.substring(plusIndex + 1);
+
+        // Resolve first operand: either number or cell value
+        int leftValue;
+        if (leftOperand.charAt(0) > '9') { // If starts with a letter, it's a cell reference
+            leftValue = cellMap.getOrDefault(leftOperand, 0);
+        } else {
+            leftValue = Integer.parseInt(leftOperand);
+        }
+
+        // Resolve second operand
+        int rightValue;
+        if (rightOperand.charAt(0) > '9') {
+            rightValue = cellMap.getOrDefault(rightOperand, 0);
+        } else {
+            rightValue = Integer.parseInt(rightOperand);
+        }
+
+        // Return computed sum
+        return leftValue + rightValue;
     }
 }
+
 
 /**
  * Your Spreadsheet object will be instantiated and called as such:
