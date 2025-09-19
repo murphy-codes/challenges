@@ -9,6 +9,7 @@ LeetCode
 |3516|[Find Closest Person](https://leetcode.com/problems/find-closest-person/)|[Java](./algorithms/java/3516_find-closest-person.java)|Easy|
 |3495|[Minimum Operations to Make Array Elements Zero](https://leetcode.com/problems/minimum-operations-to-make-array-elements-zero/)|[Java](./algorithms/java/3495_minimum-operations-to-make-array-elements-zero.java)|Hard|
 |3487|[Maximum Unique Subarray Sum After Deletion](https://leetcode.com/problems/maximum-unique-subarray-sum-after-deletion/)|[Java](./algorithms/java/3487_maximum-unique-subarray-sum-after-deletion.java)|Easy|
+|3484|[Design Spreadsheet](https://leetcode.com/problems/design-spreadsheet/)|[Java](./algorithms/java/3484_design-spreadsheet.java)|Medium|
 |3480|[Maximize Subarrays After Removing One Conflicting Pair](https://leetcode.com/problems/maximize-subarrays-after-removing-one-conflicting-pair/)|[Java](./algorithms/java/3480_maximize-subarrays-after-removing-one-conflicting-pair.java)|Hard|
 |3479|[Fruits Into Baskets III](https://leetcode.com/problems/fruits-into-baskets-iii/)|[Java](./algorithms/java/3479_fruits-into-baskets-iii.java)|Medium|
 |3477|[Fruits Into Baskets II](https://leetcode.com/problems/fruits-into-baskets-ii/)|[Java](./algorithms/java/3477_fruits-into-baskets-ii.java)|Easy|
