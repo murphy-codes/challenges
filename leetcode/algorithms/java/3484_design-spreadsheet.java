@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-18
 // At the time of submission:
-//   Runtime 102 ms Beats 98.24%
-//   Memory 55.64 MB Beats 95.42%
+//   Runtime 101 ms Beats 98.94%
+//   Memory 56.51 MB Beats 19.37%
 
 /****************************************
 * 
@@ -57,54 +57,39 @@ class Spreadsheet {
     // indexOf and substring avoid regex overhead for parsing. Each operation
     // runs in O(1) expected time. Space usage is O(k), where k is set cells.
 
-    // Map to store explicitly set cell values.
-    // Key = cell reference (e.g., "A1"), Value = integer value.
-    private Map<String, Integer> cellMap = new HashMap<>();
+    private Map<String, Integer> sheet = new HashMap<>();
 
     public Spreadsheet(int rows) {
-        // rows are not directly used since we only track cells that are set
+        // rows are unnecessary,… superfluous
     }
-
-    // Set the value of a specific cell
+    
     public void setCell(String cell, int value) {
-        cellMap.put(cell, value);
+        sheet.put(cell, value);
     }
-
-    // Reset a cell (remove it, default value becomes 0)
+    
     public void resetCell(String cell) {
-        cellMap.remove(cell);
+        sheet.remove(cell);
     }
-
-    // Evaluate a formula of the form "=X+Y", where X and Y are either
-    // integers or cell references.
+    
     public int getValue(String formula) {
-        int plusIndex = formula.indexOf('+');
-
-        // Extract operands (skip the leading '=' in the first one)
-        String leftOperand = formula.substring(1, plusIndex);
-        String rightOperand = formula.substring(plusIndex + 1);
-
-        // Resolve first operand: either number or cell value
-        int leftValue;
-        if (leftOperand.charAt(0) > '9') { // If starts with a letter, it's a cell reference
-            leftValue = cellMap.getOrDefault(leftOperand, 0);
+        int iOP = formula.indexOf('+');
+        String leftOperand = formula.substring(1, iOP);
+        String rightOperand = formula.substring(iOP + 1);
+        int left;
+        if (leftOperand.charAt(0) > '9') {
+            left = sheet.getOrDefault(leftOperand, 0);
         } else {
-            leftValue = Integer.parseInt(leftOperand);
+            left = Integer.parseInt(leftOperand);
         }
-
-        // Resolve second operand
-        int rightValue;
+        int right;
         if (rightOperand.charAt(0) > '9') {
-            rightValue = cellMap.getOrDefault(rightOperand, 0);
+            right = sheet.getOrDefault(rightOperand, 0);
         } else {
-            rightValue = Integer.parseInt(rightOperand);
+            right = Integer.parseInt(rightOperand);
         }
-
-        // Return computed sum
-        return leftValue + rightValue;
+        return left + right;
     }
 }
-
 
 /**
  * Your Spreadsheet object will be instantiated and called as such:
