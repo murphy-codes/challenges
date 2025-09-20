@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-19
 // At the time of submission:
-//   Runtime 189 ms Beats 49.09%
-//   Memory 149.15 MB Beats 58.18%
+//   Runtime 150 ms Beats 100.00%
+//   Memory 114.20 MB Beats 84.55%
 
 /****************************************
 * 
@@ -76,113 +76,90 @@
 ****************************************/
 
 import java.util.Deque;
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 
 class Router {
-    // This Router stores packets with FIFO order while supporting duplicate checks
-    // and range queries by destination + timestamp. A deque manages packet order,
-    // a hash set tracks duplicates, and a map of destination → timestamps supports
-    // binary search for fast getCount queries. Each add/forward/edit is O(log n)
-    // due to binary search/remove, and overall space is O(memoryLimit).
-    
-    private int memoryLimit;
-    private Deque<int[]> packetQueue; // stores [source, destination, timestamp]
-    private Set<String> packetSet;    // detects duplicates
-    private Map<Integer, List<Integer>> destToTimestamps; // dest → sorted timestamps
+    // Router uses a queue for FIFO forwarding and a map of destination -> packets.
+    // Each destination keeps a sorted list of [source, timestamp] to allow O(log n)
+    // binary search for range queries and duplicates. Adding/removing packets is O(1)
+    // amortized (queue ops), getCount is O(log n). Memory is O(N), bounded by limit.
+
+    Deque<int[]> packetQueue;  // FIFO queue: stores packets in [source, dest, time]
+    HashMap<Integer, List<int[]>> destToPackets;  // Maps destination -> list of [source, time]
+    int capacity;
 
     public Router(int memoryLimit) {
-        this.memoryLimit = memoryLimit;
-        this.packetQueue = new ArrayDeque<>();
-        this.packetSet = new HashSet<>();
-        this.destToTimestamps = new HashMap<>();
+        packetQueue = new LinkedList<>();
+        destToPackets = new HashMap<>();
+        this.capacity = memoryLimit;
     }
-
+    
     public boolean addPacket(int source, int destination, int timestamp) {
-        String key = source + "|" + destination + "|" + timestamp;
-        if (packetSet.contains(key)) return false; // duplicate
+        // Ensure a list exists for this destination
+        destToPackets.putIfAbsent(destination, new ArrayList<>());
+        List<int[]> packetList = destToPackets.get(destination);
 
-        // Evict oldest if over memory limit
-        if (packetQueue.size() == memoryLimit) {
-            int[] oldest = packetQueue.pollFirst();
-            String oldKey = oldest[0] + "|" + oldest[1] + "|" + oldest[2];
-            packetSet.remove(oldKey);
+        // Binary search for insertion index of this timestamp
+        int left = lowerBound(packetList, timestamp);
 
-            // remove timestamp from destination list
-            List<Integer> list = destToTimestamps.get(oldest[1]);
-            if (list != null) {
-                int idx = Collections.binarySearch(list, oldest[2]);
-                if (idx >= 0) list.remove(idx);
-            }
+        // Check if duplicate (same source, same timestamp)
+        for (int i = left; i < packetList.size() && packetList.get(i)[1] == timestamp; i++) {
+            if (packetList.get(i)[0] == source) return false;
         }
 
-        // Add new packet
-        packetQueue.offerLast(new int[]{source, destination, timestamp});
-        packetSet.add(key);
-        destToTimestamps.computeIfAbsent(destination, k -> new ArrayList<>()).add(timestamp);
+        // Add packet to both global queue and destination list
+        packetList.add(new int[]{source, timestamp});
+        packetQueue.addLast(new int[]{source, destination, timestamp});
+
+        // If capacity exceeded, evict oldest packet
+        if (packetQueue.size() > capacity) {
+            forwardPacket();
+        }
         return true;
     }
-
+    
     public int[] forwardPacket() {
         if (packetQueue.isEmpty()) return new int[0];
 
         int[] packet = packetQueue.pollFirst();
-        String key = packet[0] + "|" + packet[1] + "|" + packet[2];
-        packetSet.remove(key);
-
-        // remove timestamp from destination list
-        List<Integer> list = destToTimestamps.get(packet[1]);
-        if (list != null) {
-            int idx = Collections.binarySearch(list, packet[2]);
-            if (idx >= 0) list.remove(idx);
-        }
-
+        // Remove from destination-specific list as well
+        destToPackets.get(packet[1]).remove(0);
         return packet;
     }
-
+    
     public int getCount(int destination, int startTime, int endTime) {
-        List<Integer> list = destToTimestamps.get(destination);
-        if (list == null || list.isEmpty()) return 0;
+        if (!destToPackets.containsKey(destination)) return 0;
+        List<int[]> packetList = destToPackets.get(destination);
 
-        // binary search for range
-        int left = lowerBound(list, startTime);
-        int right = upperBound(list, endTime);
-        return Math.max(0, right - left);
+        int left = lowerBound(packetList, startTime);
+        int right = upperBound(packetList, endTime);
+
+        if (left > right) return 0;
+        return right - left + 1;
     }
 
-    // first index >= target
-    private int lowerBound(List<Integer> list, int target) {
-        int lo = 0, hi = list.size();
-        while (lo < hi) {
-            int mid = (lo + hi) / 2;
-            if (list.get(mid) < target) lo = mid + 1;
-            else hi = mid;
+    // Binary search: first index where timestamp >= start
+    private int lowerBound(List<int[]> list, int start) {
+        int left = 0, right = list.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (list.get(mid)[1] >= start) right = mid - 1;
+            else left = mid + 1;
         }
-        return lo;
+        return left;
     }
 
-    // first index > target
-    private int upperBound(List<Integer> list, int target) {
-        int lo = 0, hi = list.size();
-        while (lo < hi) {
-            int mid = (lo + hi) / 2;
-            if (list.get(mid) <= target) lo = mid + 1;
-            else hi = mid;
+    // Binary search: last index where timestamp <= end
+    private int upperBound(List<int[]> list, int end) {
+        int left = 0, right = list.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (list.get(mid)[1] > end) right = mid - 1;
+            else left = mid + 1;
         }
-        return lo;
+        return right;
     }
 }
-
-/**
- * Your Router object will be instantiated and called as such:
- * Router obj = new Router(memoryLimit);
- * boolean param_1 = obj.addPacket(source,destination,timestamp);
- * int[] param_2 = obj.forwardPacket();
- * int param_3 = obj.getCount(destination,startTime,endTime);
- */
