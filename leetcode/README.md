@@ -180,6 +180,7 @@ LeetCode
 |1930|[Unique Length-3 Palindromic Subsequences](https://leetcode.com/problems/unique-length-3-palindromic-subsequences/)|[Java](./algorithms/java/1930_unique-length-3-palindromic-subsequences.java)|Medium|
 |1922|[Count Good Numbers](https://leetcode.com/problems/count-good-numbers/)|[Java](./algorithms/java/1922_count-good-numbers.java)|Medium|
 |1920|[Build Array from Permutation](https://leetcode.com/problems/build-array-from-permutation/)|[Java](./algorithms/java/1920_build-array-from-permutation.java)|Easy|
+|1912|[Design Movie Rental System](https://leetcode.com/problems/design-movie-rental-system/)|[Java](./algorithms/java/1912_design-movie-rental-system.java)|Hard|
 |1910|[Remove All Occurrences of a Substring](https://leetcode.com/problems/remove-all-occurrences-of-a-substring/)|[Java](./algorithms/java/1910_remove-all-occurrences-of-a-substring.java)|Medium|
 |1900|[The Earliest and Latest Rounds Where Players Compete](https://leetcode.com/problems/the-earliest-and-latest-rounds-where-players-compete/)|[Java](./algorithms/java/1900_the-earliest-and-latest-rounds-where-players-compete.java)|Hard|
 |1865|[Finding Pairs With a Certain Sum](https://leetcode.com/problems/finding-pairs-with-a-certain-sum/)|[Java](./algorithms/java/1865_finding-pairs-with-a-certain-sum.java)|Medium|
