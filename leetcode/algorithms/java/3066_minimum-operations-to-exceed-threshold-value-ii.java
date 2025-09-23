@@ -1,16 +1,22 @@
 // Source: https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-02-12
+// Date: 2025-09-23
+// At the time of submission:
+//   Runtime 24 ms Beats 99.67%
+//   Memory 64.44 MB Beats 99.33%
 
 /****************************************
 * 
 * You are given a 0-indexed integer array `nums`, and an integer `k`.
-* You are allowed to perform some operations on `nums`, where in a single operation, you can:
+* You are allowed to perform some operations on `nums`, where in a single 
+* _ operation, you can:
 * • Select the two smallest integers `x` and `y` from nums.
 * • Remove `x` and `y` from nums.
 * • Insert `(min(x, y) * 2 + max(x, y))` at any position in the array.
-* Note that you can only apply the described operation if `nums` contains at least two elements.
-* Return the minimum number of operations needed so that all elements of the array are greater than or equal to `k`.
+* Note that you can only apply the described operation if `nums` contains at 
+* _ least two elements.
+* Return the minimum number of operations needed so that all elements of the 
+* _ array are greater than or equal to `k`.
 * 
 * Example 1:
 * Input: nums = [2,11,10,1,3], k = 10
@@ -40,37 +46,29 @@
 * 
 ****************************************/
 
-import java.util.PriorityQueue;
-import java.util.Arrays;
-
 class Solution {
-    // This solution uses a min-heap (PriorityQueue) to efficiently extract
-    // the two smallest elements and combine them iteratively until all
-    // elements are at least k. Each heap operation (poll/add) takes O(logN),
-    // and in the worst case, we perform O(N) operations, leading to O(NlogN)
-    // time complexity. The space complexity is O(N) due to heap storage.
+    // Solution uses sorting + merge technique to avoid a heap. The array is
+    // sorted once, then two "streams" are merged: (1) original sorted nums,
+    // (2) newly generated values stored back into nums. At each step the
+    // two smallest values are combined. Time: O(n log n), Space: O(1).
     public int minOperations(int[] nums, int k) {
-        // Convert nums to a min-heap with long values to prevent overflow
-        PriorityQueue<Long> minHeap = new PriorityQueue<>(
-            Arrays.stream(nums)
-                .mapToLong(i -> (long) i) // Convert int to long
-                .boxed() // Convert to Long wrapper type for PriorityQueue
-                .toList() // Create a list
-        );
-
-        int numOperations = 0;
-
-        // Continue until the smallest element in heap is >= k
-        while (minHeap.peek() < k) {
-            long x = minHeap.poll(); // Smallest element
-            long y = minHeap.poll(); // Second smallest element
-
-            // Perform the given operation and add the new element back
-            minHeap.add(Math.min(x, y) * 2 + Math.max(x, y));
-
-            numOperations++;
+        Arrays.sort(nums); // sort input first
+        // i -> index for original sorted nums
+        // j -> index for newly formed numbers (stored back into nums)
+        // count -> number of operations performed
+        for (int i = 0, j = 0, count = 0, first, second; ; ++count) {
+            // Select smaller between next original and next generated
+            if (i < nums.length && (j >= count || nums[i] <= nums[j])) first = nums[i++];
+            else first = nums[j++];
+            // If the smallest element already >= k, we are done
+            if (first >= k) return count;
+            // Select the second smallest
+            if (i < nums.length && (j >= count || nums[i] <= nums[j])) second = nums[i++];
+            else second = nums[j++];
+            // Combine them into a new value
+            long combined = 2L * first + second; // use long to check overflow
+            // Store result back into nums as part of "generated stream"
+            nums[count] = combined < k ? (int) combined : k;
         }
-
-        return numOperations;
     }
 }
