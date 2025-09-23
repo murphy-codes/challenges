@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/compare-version-numbers/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-09-21
+// Date: 2025-09-22
 // At the time of submission:
-//   Runtime 1 ms Beats 76.03%
-//   Memory 41.48 MB Beats 83.19%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.75 MB Beats 32.01%
 
 /****************************************
 * 
@@ -45,20 +45,39 @@
 ****************************************/
 
 class Solution {
-    // Split both version strings by '.' into revision arrays. Compare revisions
-    // one by one as integers, padding with 0 if one version is shorter. Return
-    // -1, 1, or 0 depending on the first unequal pair. If all are equal, return 0.
-    // Time complexity: O(n + m) where n, m are lengths of version1 and version2.
-    // Space complexity: O(n + m) for storing the split revision arrays.
+    // This solution parses version numbers in-place without splitting,
+    // comparing each revision as integers until a difference is found.
+    // Time complexity: O(n + m), where n and m are the lengths of the
+    // version strings (each scanned once). Space complexity: O(1).
     public int compareVersion(String version1, String version2) {
-        String[] reV1 = version1.split("\\.");
-        String[] reV2 = version2.split("\\.");
-        for (int i = 0; i < Math.max(reV1.length, reV2.length); i++) {
-            int v1 = i < reV1.length ? Integer.parseInt(reV1[i]) : 0;
-            int v2 = i < reV2.length ? Integer.parseInt(reV2[i]) : 0;
-            if (v1 < v2) return -1;
-            if (v1 > v2) return 1;
+        int idx1 = 0, idx2 = 0;
+        int len1 = version1.length(), len2 = version2.length();
+
+        // Process both version strings until the end
+        while (idx1 < len1 || idx2 < len2) {
+            long rev1 = 0, rev2 = 0; // revision numbers for this segment
+
+            // Parse next revision number from version1
+            while (idx1 < len1 && version1.charAt(idx1) != '.') {
+                rev1 = rev1 * 10 + (version1.charAt(idx1) - '0');
+                idx1++;
+            }
+
+            // Parse next revision number from version2
+            while (idx2 < len2 && version2.charAt(idx2) != '.') {
+                rev2 = rev2 * 10 + (version2.charAt(idx2) - '0');
+                idx2++;
+            }
+
+            // Compare revision numbers
+            if (rev1 > rev2) return 1;
+            if (rev1 < rev2) return -1;
+
+            // Skip the '.' delimiter if present
+            if (idx1 < len1 && version1.charAt(idx1) == '.') idx1++;
+            if (idx2 < len2 && version2.charAt(idx2) == '.') idx2++;
         }
+
         return 0;
     }
 }
