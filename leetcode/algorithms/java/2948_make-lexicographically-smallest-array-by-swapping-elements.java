@@ -1,16 +1,23 @@
 // Source: https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-01-24
+// Date: 2025-09-23
+// At the time of submission:
+//   Runtime 40 ms Beats 100.00%
+//   Memory 56.16 MB Beats 99.30%
 
 /****************************************
 * 
-* You are given a 0-indexed array of positive integers `nums` and a positive integer `limit`.
-* 
-* In one operation, you can choose any two indices `i` and `j` and swap `nums[i]` and `nums[j]` if `|nums[i] - nums[j]| <= limit`.
-* 
-* Return the lexicographically smallest array that can be obtained by performing the operation any number of times.
-* 
-* An array `a` is lexicographically smaller than an array `b` if in the first position where `a` and `b` differ, array `a` has an element that is less than the corresponding element in `b`. For example, the array `[2,10,3]` is lexicographically smaller than the array `[10,2,3]` because they differ at index `0` and `2 < 10`.
+* You are given a 0-indexed array of positive integers `nums` and a positive
+* _ integer `limit`.
+* In one operation, you can choose any two indices `i` and `j` and swap `nums[i]`
+* _ and `nums[j]` if `nums[i] - nums[j]| <= limit`.
+* Return the lexicographically smallest array that can be obtained by performing
+* _ the operation any number of times.
+* An array `a` is lexicographically smaller than an array `b` if in the first
+* _ position where `a` and `b` differ, array `a` has an element that is less than
+* _ the corresponding element in `b`. For example, the array `[2,10,3]` is
+* _ lexicographically smaller than the array `[10,2,3]` because they differ at
+* _ index `0` and `2 < 10`.
 * 
 * Example 1:
 * Input: nums = [1,5,3,9,8], limit = 2
@@ -42,70 +49,69 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class Solution {
-    // Approach: Sorting + Grouping
-    // Elements can be swapped if their absolute difference ≤ limit, forming transitive groups. 
-    // 1. Sort a copy of the array and group elements based on the limit.
-    // 2. Sort each group and map elements in the original array to the smallest available in their group.
-    // Time Complexity: O(n log n) (sorting + traversal)
-    // Space Complexity: O(n) (group mappings and storage)
+class Solution {
+    // Approach: Sort nums, then split into groups where consecutive values
+    // differ by more than limit. Within each group, elements can be freely
+    // swapped. Use binary search to find the correct group for each original
+    // element, and assign the next available smallest value. Time: O(n log n)
+    // for sorting + searches, Space: O(n) for arrays.
     public int[] lexicographicallySmallestArray(int[] nums, int limit) {
-        // Step 1: Sort a copy of the original array to identify groups
         int n = nums.length;
-        int[] numsSorted = nums.clone();
-        Arrays.sort(numsSorted);
 
-        // Step 2: Create mappings for groups and elements
-        Map<Integer, Integer> numToGroup = new HashMap<>(); // Map number to group ID
-        Map<Integer, List<Integer>> groupToList = new HashMap<>(); // Map group ID to list of elements
-        int currGroup = 0;
-        groupToList.put(currGroup, new ArrayList<>());
-        groupToList.get(currGroup).add(numsSorted[0]);
-        numToGroup.put(numsSorted[0], currGroup);
+        // Step 1: Sort a copy of nums to help form groups
+        int[] sorted = Arrays.copyOf(nums, n);
+        Arrays.sort(sorted);
 
-        // Step 3: Identify groups based on `limit`
+        // Step 2: Record the start indices of groups (breaks where diff > limit)
+        List<Integer> groupStarts = new ArrayList<>();
+        groupStarts.add(0);
         for (int i = 1; i < n; i++) {
-            if (numsSorted[i] - numsSorted[i - 1] > limit) {
-                // Start a new group
-                currGroup++;
-                groupToList.put(currGroup, new ArrayList<>());
+            if (sorted[i] - sorted[i - 1] > limit) {
+                groupStarts.add(i);
             }
-            groupToList.get(currGroup).add(numsSorted[i]);
-            numToGroup.put(numsSorted[i], currGroup);
         }
 
-        // Step 4: Sort each group (already sorted in numsSorted, but still store)
-        for (int group : groupToList.keySet()) {
-            groupToList.put(group, groupToList.get(group));
-        }
+        // Convert list of group starts into array form
+        int[] groupIndices = toIntArray(groupStarts);
 
-        // Step 5: Build the result array using sorted groups
-        Map<Integer, Integer> groupIndex = new HashMap<>(); // Track indices for each group
-        for (int group : groupToList.keySet()) {
-            groupIndex.put(group, 0);
-        }
+        // For each group, store its representative starting value
+        int[] groupValues = groupStartValues(groupIndices, sorted);
 
         int[] result = new int[n];
+
+        // Step 3: Build the result array
         for (int i = 0; i < n; i++) {
-            int group = numToGroup.get(nums[i]);
-            List<Integer> sortedGroup = groupToList.get(group);
-            result[i] = sortedGroup.get(groupIndex.get(group));
-            groupIndex.put(group, groupIndex.get(group) + 1);
+            int originalVal = nums[i];
+
+            // Find which group this value belongs to (binary search by value)
+            int groupIdx = Arrays.binarySearch(groupValues, originalVal);
+            if (groupIdx < 0) {
+                groupIdx = -(groupIdx + 1) - 1;
+            }
+
+            // Place the next available sorted value from this group
+            result[i] = sorted[groupIndices[groupIdx]];
+            groupIndices[groupIdx]++; // consume that group element
         }
 
         return result;
     }
 
-    public static void main(String[] args) {
-        Solution solver = new Solution();
-        int[] nums = {20, 40, 60, 80, 100, 34, 54, 74, 94, 114};
-        int limit = 10;
-        int[] result = solver.lexicographicallySmallestArray(nums, limit);
-        System.out.println(Arrays.toString(result));
+    // Convert a List<Integer> to int[]
+    private int[] toIntArray(List<Integer> list) {
+        int[] arr = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            arr[i] = list.get(i);
+        }
+        return arr;
+    }
+
+    // Extract representative values of each group from sorted array
+    private int[] groupStartValues(int[] groupIndices, int[] sorted) {
+        int[] values = new int[groupIndices.length];
+        for (int i = 0; i < groupIndices.length; i++) {
+            values[i] = sorted[groupIndices[i]];
+        }
+        return values;
     }
 }
