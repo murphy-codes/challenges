@@ -1,14 +1,19 @@
 // Source: https://leetcode.com/problems/find-missing-and-repeated-values/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-03-05
+// At the time of submission:
+//   Runtime 1 ms Beats 100.00%
+//   Memory 45.78 MB Beats 26.93%
 
 /****************************************
 * 
-* You are given a 0-indexed 2D integer matrix `grid` of size `n * n` with values in the range `[1, n2]`.
-* Each integer appears exactly once except `a` which appears twice and `b` which is missing.
+* You are given a 0-indexed 2D integer matrix `grid` of size `n * n` with 
+* _ values in the range `[1, n2]`.
+* Each integer appears exactly once except `a` which appears twice and `b` 
+* _ which is missing.
 * The task is to find the repeating and missing numbers `a` and `b`.
-*
-* Return a 0-indexed integer array `ans` of size `2` where `ans[0]` equals to `a` and `ans[1]` equals to `b`.
+* Return a 0-indexed integer array `ans` of size `2` where `ans[0]` equals to 
+* _ `a` and `ans[1]` equals to `b`.
 *
 * Example 1:
 * Input: grid = [[1,3],[2,2]]
