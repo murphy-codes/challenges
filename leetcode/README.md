@@ -265,6 +265,7 @@ LeetCode
 |342|[Power of Four](https://leetcode.com/problems/power-of-four/)|[Java](./algorithms/java/342_power-of-four.java)|Easy|
 |326|[Power of Three](https://leetcode.com/problems/power-of-three/)|[Java](./algorithms/java/326_power-of-three.java)|Easy|
 |231|[Power of Two](https://leetcode.com/problems/power-of-two/)|[Java](./algorithms/java/231_power-of-two.java)|Easy|
+|166|[Fraction to Recurring Decimal](https://leetcode.com/problems/fraction-to-recurring-decimal/)|[Java](./algorithms/java/166_fraction-to-recurring-decimal.java)|Medium|
 |165|[Compare Version Numbers](https://leetcode.com/problems/compare-version-numbers/)|[Java](./algorithms/java/165_compare-version-numbers.java)|Medium|
 |135|[Candy](https://leetcode.com/problems/candy/)|[Java](./algorithms/java/135_candy.java)|Hard|
 |118|[Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)|[Java](./algorithms/java/118_pascals-triangle.java)|Easy|
