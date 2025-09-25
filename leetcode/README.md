@@ -268,6 +268,7 @@ LeetCode
 |166|[Fraction to Recurring Decimal](https://leetcode.com/problems/fraction-to-recurring-decimal/)|[Java](./algorithms/java/166_fraction-to-recurring-decimal.java)|Medium|
 |165|[Compare Version Numbers](https://leetcode.com/problems/compare-version-numbers/)|[Java](./algorithms/java/165_compare-version-numbers.java)|Medium|
 |135|[Candy](https://leetcode.com/problems/candy/)|[Java](./algorithms/java/135_candy.java)|Hard|
+|120|[Triangle](https://leetcode.com/problems/triangle/)|[Java](./algorithms/java/120_triangle.java)|Medium|
 |118|[Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)|[Java](./algorithms/java/118_pascals-triangle.java)|Easy|
 |75|[Sort Colors](https://leetcode.com/problems/sort-colors/)|[Java](./algorithms/java/75_sort-colors.java)|Medium|
 |73|[Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)|[Java](./algorithms/java/73_set-matrix-zeroes.java)|Medium|
