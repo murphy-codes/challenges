@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-23
 // At the time of submission:
-//   Runtime 3 ms Beats 79.02%
-//   Memory 45.34 MB Beats 69.84%
+//   Runtime 1 ms Beats 99.85%
+//   Memory 45.72 MB Beats 20.70%
 
 /****************************************
 * 
@@ -38,27 +38,35 @@
 * 
 ****************************************/
 
-import java.util.List;
-
 class Solution {
-    // This solution uses bottom-up dynamic programming. Starting from the
-    // last row, we compute the minimum path sum to each element by adding
-    // the current value with the smaller of its two children. We reuse a
-    // 1D array for space efficiency. The final answer is stored at dp[0].
-    // Time: O(n^2), visiting each element once; Space: O(n), for dp array.
+    // This solution uses top-down recursion with memoization. From each
+    // position, we choose the smaller path between moving down or down-right.
+    // Results are cached in a 2D array to avoid recomputation of overlapping
+    // subproblems. Time complexity: O(n^2), visiting each cell once. Space
+    // complexity: O(n^2) for memo plus recursion stack of depth n.
+
+    int rows;
+    Integer[][] memo;
+
     public int minimumTotal(List<List<Integer>> triangle) {
-        int n = triangle.size();
-        int[] dp = new int[n];
-        // Initialize dp with the last row
-        for (int j = 0; j < n; j++) {
-            dp[j] = triangle.get(n - 1).get(j);
+        rows = triangle.size();
+        memo = new Integer[rows][rows];
+        return dfs(triangle, 0, 0);
+    }
+
+    // Recursive helper: minimum path sum from (row, col) to bottom
+    private int dfs(List<List<Integer>> triangle, int row, int col) {
+        if (row == rows) {
+            return 0; // reached beyond last row
         }
-        // Build upwards from the second to last row
-        for (int i = n - 2; i >= 0; i--) {
-            for (int j = 0; j <= i; j++) {
-                dp[j] = triangle.get(i).get(j) + Math.min(dp[j], dp[j + 1]);
-            }
+        if (memo[row][col] != null) {
+            return memo[row][col]; // return cached result
         }
-        return dp[0]; // The minimum path sum from top to bottom
+
+        int leftPath = dfs(triangle, row + 1, col);
+        int rightPath = dfs(triangle, row + 1, col + 1);
+
+        memo[row][col] = triangle.get(row).get(col) + Math.min(leftPath, rightPath);
+        return memo[row][col];
     }
 }
