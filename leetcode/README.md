@@ -255,6 +255,7 @@ LeetCode
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |684|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/684_redundant-connection.java)|Medium|
 |679|[24 Game](https://leetcode.com/problems/24-game/)|[Java](./algorithms/java/679_24-game.java)|Hard|
+|611|[Valid Triangle Number](https://leetcode.com/problems/valid-triangle-number/)|[Java](./algorithms/java/611_valid-triangle-number.java)|Medium|
 |594|[Longest Harmonious Subsequence](https://leetcode.com/problems/longest-harmonious-subsequence/)|[Java](./algorithms/java/594_longest-harmonious-subsequence.java)|Easy|
 |498|[Diagonal Traverse](https://leetcode.com/problems/diagonal-traverse/)|[Java](./algorithms/java/498_diagonal-traverse.java)|Medium|
 |440|[K-th Smallest in Lexicographical Order](https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/)|[Java](./algorithms/java/440_k-th-smallest-in-lexicographical-order.java)|Hard|
