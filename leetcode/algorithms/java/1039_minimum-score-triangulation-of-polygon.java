@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-29
 // At the time of submission:
-//   Runtime 5 ms Beats 37.38%
-//   Memory 41.06 MB Beats 94.70%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 41.48 MB Beats 38.32%
 
 /****************************************
 * 
@@ -44,29 +44,38 @@
 ****************************************/
 
 class Solution {
-    // Dynamic Programming on intervals: dp[i][j] is the minimum triangulation
-    // cost of the polygon slice between vertices i and j. For each middle
-    // vertex k between i and j, we form triangle (i,k,j) and add costs of
-    // sub-polygons (i..k) and (k..j). Bottom-up filling ensures correctness.
-    // Time Complexity: O(n^3), Space Complexity: O(n^2), with n ≤ 50.
+    // This uses recursive DP with memoization to find the minimum
+    // triangulation score. For each pair of vertices (i, j), we try all
+    // possible third vertices k to form triangle (i, k, j). The triangle's
+    // cost is added to the optimal sub-solutions on each side. Results are
+    // memoized in dp[i][j]. Time complexity: O(n^3). Space: O(n^2).
+
+    private int[][] dp;
+
     public int minScoreTriangulation(int[] values) {
         int n = values.length;
-        int[][] dp = new int[n][n];
+        dp = new int[n][n];
+        return solve(values, 0, n - 1);
+    }
 
-        // dp[i][j] = min triangulation cost for sub-polygon from i to j
-        for (int len = 2; len < n; len++) { // interval length
-            for (int i = 0; i + len < n; i++) {
-                int j = i + len;
-                dp[i][j] = Integer.MAX_VALUE;
-                // Try all possible middle points k
-                for (int k = i + 1; k < j; k++) {
-                    int cost = values[i] * values[j] * values[k] 
-                             + dp[i][k] + dp[k][j];
-                    dp[i][j] = Math.min(dp[i][j], cost);
-                }
-            }
+    private int solve(int[] values, int left, int right) {
+        // Base case: fewer than 3 vertices -> no triangle possible
+        if (right - left < 2) return 0;
+
+        // Return memoized result if already computed
+        if (dp[left][right] != 0) return dp[left][right];
+
+        int minScore = Integer.MAX_VALUE;
+
+        // Try every possible middle vertex 'k' between 'left' and 'right'
+        for (int k = left + 1; k < right; k++) {
+            int cost = values[left] * values[k] * values[right]
+                     + solve(values, left, k)
+                     + solve(values, k, right);
+            minScore = Math.min(minScore, cost);
         }
 
-        return dp[0][n - 1];
+        // Memoize and return result
+        return dp[left][right] = minScore;
     }
 }
