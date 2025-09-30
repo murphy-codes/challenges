@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-09-29
 // At the time of submission:
-//   Runtime 42 ms Beats 86.32%
-//   Memory 44.55 MB Beats 70.44%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 44.50 MB Beats 70.44%
 
 /****************************************
 * 
@@ -38,17 +38,79 @@
 * 
 ****************************************/
 
+import java.util.Arrays;
+
 class Solution {
-    // Iteratively simulate the triangular sum by updating nums in place.
-    // After each pass, nums[0..size-2] becomes the new row of reduced size.
-    // Continue until only one element remains, which is the triangular sum.
-    // Time complexity: O(n^2) due to nested loops; Space complexity: O(1).
+    // This solution computes the triangular sum using binomial coefficients
+    // modulo 10, instead of simulating the O(n^2) summing process. It uses
+    // Lucas' theorem for mod 5, a bitwise trick for mod 2, and the Chinese
+    // Remainder Theorem to combine results into mod 10. Time complexity is
+    // O(n log n), space complexity is O(1) (ignoring the fixed C5 table).
+
+    // Precompute Pascal's triangle mod 5 for values up to 4
+    private static final int[][] C5 = buildPascalMod5();
+
     public int triangularSum(int[] nums) {
-        for (int size = nums.length; size > 1; size--) {
-            for (int i = 0; i < size - 1; i++) {
-                nums[i] = (nums[i] + nums[i + 1]) % 10;
+        int n = nums.length;
+        int N = n - 1;
+        int result = 0;
+
+        // Each element contributes with binomial coefficient C(N, i) mod 10
+        for (int i = 0; i < n; i++) {
+            int mod2 = combMod2(N, i);    // C(N, i) mod 2
+            int mod5 = combMod5(N, i);    // C(N, i) mod 5
+            int mod10 = combineCRT(mod2, mod5); // C(N, i) mod 10
+            result = (result + mod10 * nums[i]) % 10;
+        }
+        return result;
+    }
+
+    // Compute C(N, i) mod 2: odd iff no carries in i + (N - i)
+    private static int combMod2(int N, int i) {
+        return ((i & (N - i)) == 0) ? 1 : 0;
+    }
+
+    // Compute C(N, i) mod 5 using Lucas' theorem
+    private static int combMod5(int N, int i) {
+        int result = 1;
+        int n = N, k = i;
+        while (n > 0 || k > 0) {
+            int nd = n % 5, kd = k % 5;
+            if (kd > nd) return 0;
+            result = (result * C5[nd][kd]) % 5;
+            n /= 5;
+            k /= 5;
+        }
+        return result;
+    }
+
+    // Combine residues using Chinese Remainder Theorem
+    private static int combineCRT(int r2, int r5) {
+        int r = r5;                  // Candidate in [0..4]
+        if ((r & 1) != r2) r += 5;   // Adjust to match parity
+        return r;                    // Final result in [0..9]
+    }
+
+    // Build Pascal's triangle mod 5 for a,b <= 4
+    private static int[][] buildPascalMod5() {
+        int[][] c = new int[5][5];
+        for (int a = 0; a < 5; a++) {
+            c[a][0] = c[a][a] = 1;
+            for (int b = 1; b < a; b++) {
+                c[a][b] = (c[a - 1][b - 1] + c[a - 1][b]) % 5;
             }
         }
-        return nums[0];
+        return c;
+    }
+
+    // Reference O(n^2) check (slower, not used in final solution)
+    static int triangularSumSlow(int[] nums) {
+        int[] arr = Arrays.copyOf(nums, nums.length);
+        for (int len = arr.length; len > 1; len--) {
+            for (int j = 0; j < len - 1; j++) {
+                arr[j] = (arr[j] + arr[j + 1]) % 10;
+            }
+        }
+        return arr[0];
     }
 }
