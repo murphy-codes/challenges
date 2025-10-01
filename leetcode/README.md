@@ -204,6 +204,7 @@ LeetCode
 |1550|[Three Consecutive Odds](https://leetcode.com/problems/three-consecutive-odds/)|[Java](./algorithms/java/1550_three-consecutive-odds.java)|Easy|
 |1534|[Count Good Triplets](https://leetcode.com/problems/count-good-triplets/)|[Java](./algorithms/java/1534_count-good-triplets.java)|Easy|
 |1524|[Number of Sub-arrays With Odd Sum](https://leetcode.com/problems/number-of-sub-arrays-with-odd-sum/)|[Java](./algorithms/java/1524_number-of-sub-arrays-with-odd-sum.java)|Medium|
+|1518|[Water Bottles](https://leetcode.com/problems/water-bottles/)|[Java](./algorithms/java/1518_water-bottles.java)|Easy|
 |1504|[Count Submatrices With All Ones](https://leetcode.com/problems/count-submatrices-with-all-ones/)|[Java](./algorithms/java/1504_count-submatrices-with-all-ones.java)|Medium|
 |1498|[Number of Subsequences That Satisfy the Given Sum Condition](https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/)|[Java](./algorithms/java/1498_number-of-subsequences-that-satisfy-the-given-sum-condition.java)|Medium|
 |1493|[Longest Subarray of 1's After Deleting One Element](https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/)|[Java](./algorithms/java/1493_longest-subarray-of-1s-after-deleting-one-element.java)|Medium|
