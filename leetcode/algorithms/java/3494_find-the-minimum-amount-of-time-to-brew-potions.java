@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-09
 // At the time of submission:
-//   Runtime 139 ms Beats 50.00%
-//   Memory 44.98 MB Beats 33.33%
+//   Runtime 80 ms Beats 98.61%
+//   Memory 44.02 MB Beats 97.22%
 
 /****************************************
 * 
@@ -62,36 +62,36 @@
 ****************************************/
 
 class Solution {
-    // Simulates sequential potion brewing with n wizards and m potions. Each potion
-    // passes through all wizards in order, with no waiting between them. Tracks each
-    // wizard's earliest free time (f[i]) and updates it per potion using two passes:
-    // a forward pass for synchronization and a backward pass to realign start times.
+    // Computes the minimum total brewing time using prefix sums of wizard skill.
+    // Each potion’s brewing time depends on synchronization between sequential
+    // wizards and cumulative skill × mana effects. Iteratively adjusts the total
+    // time to ensure each potion starts only when all wizards are ready.
     // Time complexity: O(n * m); Space complexity: O(n).
     public long minTime(int[] skill, int[] mana) {
-        int n = skill.length;
-        int m = mana.length;
-        long[] f = new long[n]; // earliest free times per wizard (initialized as 0s)
-
-        for (int j = 0; j < m; j++) {
-            long x = mana[j];      // current potion mana (use long)
-            long now = f[0];       // starting lower bound
-
-            // left-to-right: compute earliest "now" that respects pipeline + availability
-            for (int i = 1; i < n; i++) {
-                now = Math.max(now + (long) skill[i-1] * x, f[i]);
-            }
-
-            // finish time of this potion on last wizard
-            long finish = now + (long) skill[n-1] * x;
-            f[n-1] = finish;
-
-            // right-to-left: set earlier wizards' free times consistent with no-wait constraint
-            for (int i = n - 2; i >= 0; i--) {
-                f[i] = f[i+1] - (long) skill[i+1] * x;
-            }
+        int n = skill.length, m = mana.length;
+        
+        // Prefix sum of skill levels: prefixSkill[i] = sum(skill[0..i-1])
+        long[] prefixSkill = new long[n + 1];
+        for (int i = 0; i < n; i++) {
+            prefixSkill[i + 1] = prefixSkill[i] + skill[i];
         }
-
-        // answer is time when last wizard finishes last potion
-        return f[n-1];
+        
+        long prevTotalTime = 0;  // total time after previous potion batch
+        long currTotalTime = 0;  // temporary time for current potion batch
+        
+        for (int potion = 1; potion < m; potion++) {
+            currTotalTime = 0;
+            for (int wizard = 0; wizard < n; wizard++) {
+                // Calculate the earliest start time adjustment for synchronization
+                currTotalTime = Math.max(currTotalTime,
+                    prevTotalTime 
+                    + mana[potion - 1] * prefixSkill[wizard + 1]
+                    - mana[potion] * prefixSkill[wizard]);
+            }
+            prevTotalTime = currTotalTime;
+        }
+        
+        // Add final potion brewing time for all wizards
+        return prevTotalTime + mana[m - 1] * prefixSkill[n];
     }
 }
