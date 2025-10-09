@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-05
 // At the time of submission:
-//   Runtime 9 ms Beats 87.79%
-//   Memory 44.34 MB Beats 73.74%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 44.12 MB Beats 92.63%
 
 /****************************************
 * 
@@ -44,38 +44,55 @@
 * 
 ****************************************/
 
-import java.util.PriorityQueue;
-
 class Solution {
-    // Directions for 4-way movement
-    private static final int[][] DIRS = {{1,0},{-1,0},{0,1},{0,-1}};
+    // Binary search the minimum time 't' such that (n-1,n-1) is reachable
+    // via DFS, only moving through cells ≤ t. Each DFS checks connectivity
+    // under the current water level. Once reachable, search for smaller t.
+    // Time: O(n² log n), Space: O(n²) due to recursion and visited tracking.
+
+    private int n;
+    private static final int[][] DIRS = {{1,0},{0,1},{-1,0},{0,-1}};
     
     public int swimInWater(int[][] grid) {
-        int n = grid.length;
-        boolean[][] visited = new boolean[n][n];
+        n = grid.length;
         
-        // Min-heap: [time, row, col], ordered by smallest time
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        pq.offer(new int[]{grid[0][0], 0, 0});
-        visited[0][0] = true;
+        // Binary search over possible time values (water levels)
+        int left = Math.max(grid[0][0], grid[n - 1][n - 1]);
+        int right = n * n - 1;
+        int result = 0;
         
-        while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
-            int time = cur[0], r = cur[1], c = cur[2];
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            boolean[] visited = new boolean[n * n];
             
-            // If reached destination, this is the minimum possible time
-            if (r == n - 1 && c == n - 1) return time;
-            
-            // Explore 4-directional neighbors
-            for (int[] d : DIRS) {
-                int nr = r + d[0], nc = c + d[1];
-                if (nr >= 0 && nr < n && nc >= 0 && nc < n && !visited[nr][nc]) {
-                    visited[nr][nc] = true;
-                    pq.offer(new int[]{Math.max(time, grid[nr][nc]), nr, nc});
-                }
+            // If destination is reachable at this time, try smaller time
+            if (dfs(0, 0, grid, mid, visited)) {
+                result = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
         
-        return -1; // unreachable, should never happen per constraints
+        return result;
+    }
+    
+    private boolean dfs(int x, int y, int[][] grid, int waterLevel, boolean[] visited) {
+        int index = x * n + y;
+        visited[index] = true;
+        
+        // If reached destination, path is valid under current water level
+        if (x == n - 1 && y == n - 1) return true;
+        
+        // Explore 4-directionally adjacent cells
+        for (int[] dir : DIRS) {
+            int nx = x + dir[0], ny = y + dir[1];
+            if (nx >= 0 && nx < n && ny >= 0 && ny < n &&
+                !visited[nx * n + ny] && grid[nx][ny] <= waterLevel) {
+                
+                if (dfs(nx, ny, grid, waterLevel, visited)) return true;
+            }
+        }
+        return false;
     }
 }
