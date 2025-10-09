@@ -210,6 +210,7 @@ LeetCode
 |1504|[Count Submatrices With All Ones](https://leetcode.com/problems/count-submatrices-with-all-ones/)|[Java](./algorithms/java/1504_count-submatrices-with-all-ones.java)|Medium|
 |1498|[Number of Subsequences That Satisfy the Given Sum Condition](https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/)|[Java](./algorithms/java/1498_number-of-subsequences-that-satisfy-the-given-sum-condition.java)|Medium|
 |1493|[Longest Subarray of 1's After Deleting One Element](https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/)|[Java](./algorithms/java/1493_longest-subarray-of-1s-after-deleting-one-element.java)|Medium|
+|1488|[Avoid Flood in The City](https://leetcode.com/problems/avoid-flood-in-the-city/)|[Java](./algorithms/java/1488_avoid-flood-in-the-city.java)|Medium|
 |1462|[Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)|[Java](./algorithms/java/1462_course-schedule-iv.java)|Medium|
 |1432|[Max Difference You Can Get From Changing an Integer](https://leetcode.com/problems/max-difference-you-can-get-from-changing-an-integer/)|[Java](./algorithms/java/1432_max-difference-you-can-get-from-changing-an-integer.java)|Medium|
 |1422|[Maximum Score After Splitting a String](https://leetcode.com/problems/maximum-score-after-splitting-a-string/)|[Java](./algorithms/java/1422_maximum-score-after-splitting-a-string.java)|Easy|
