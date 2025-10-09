@@ -142,6 +142,7 @@ LeetCode
 |2322|[Minimum Score After Removals on a Tree](https://leetcode.com/problems/minimum-score-after-removals-on-a-tree/)|[Java](./algorithms/java/2322_minimum-score-after-removals-on-a-tree.java)|Hard|
 |2311|[Longest Binary Subsequence Less Than or Equal to K](https://leetcode.com/problems/longest-binary-subsequence-less-than-or-equal-to-k/)|[Java](./algorithms/java/2311_longest-binary-subsequence-less-than-or-equal-to-k.java)|Medium|
 |2302|[Count Subarrays With Score Less Than K](https://leetcode.com/problems/count-subarrays-with-score-less-than-k/)|[Java](./algorithms/java/2302_count-subarrays-with-score-less-than-k.java)|Hard|
+|2300|[Successful Pairs of Spells and Potions](https://leetcode.com/problems/successful-pairs-of-spells-and-potions/)|[Java](./algorithms/java/2300_successful-pairs-of-spells-and-potions.java)|Medium|
 |2294|[Partition Array Such That Maximum Difference Is K](https://leetcode.com/problems/partition-array-such-that-maximum-difference-is-k/)|[Java](./algorithms/java/2294_partition-array-such-that-maximum-difference-is-k.java)|Medium|
 |2270|[Number of Ways to Split Array](https://leetcode.com/problems/number-of-ways-to-split-array/)|[Java](./algorithms/java/2270_number-of-ways-to-split-array.java)|Medium|
 |2264|[Largest 3-Same-Digit Number in String](https://leetcode.com/problems/largest-3-same-digit-number-in-string/)|[Java](./algorithms/java/2264_largest-3-same-digit-number-in-string.java)|Easy|
