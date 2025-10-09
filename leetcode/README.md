@@ -258,6 +258,7 @@ LeetCode
 |802|[Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/)|[Java](./algorithms/java/802_find-eventual-safe-states.java)|Medium|
 |790|[Domino and Tromino Tiling](https://leetcode.com/problems/domino-and-tromino-tiling/)|[Java](./algorithms/java/790_domino-and-tromino-tiling.java)|Medium|
 |781|[Rabbits in Forest](https://leetcode.com/problems/rabbits-in-forest/)|[Java](./algorithms/java/781_rabbits-in-forest.java)|Medium|
+|778|[Swim in Rising Water](https://leetcode.com/problems/swim-in-rising-water/)|[Java](./algorithms/java/778_swim-in-rising-water.java)|Hard|
 |763|[Partition Labels](https://leetcode.com/problems/partition-labels/)|[Java](./algorithms/java/763_partition-labels.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |684|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/684_redundant-connection.java)|Medium|
