@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-06
 // At the time of submission:
-//   Runtime 63 ms Beats 94.52%
-//   Memory 61.02 MB Beats 89.50%
+//   Runtime 24 ms Beats 99.09%
+//   Memory 63.49 MB Beats 19.18%
 
 /****************************************
 * 
@@ -56,42 +56,61 @@
 * 
 ****************************************/
 
-import java.util.Map;
 import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.Map;
 
 class Solution {
-    // Greedy + TreeSet solution.
-    // We track full lakes using a map (lake → last rain day), and keep a TreeSet
-    // of available dry days. When a lake rains again, we find the next dry day
-    // after its last rain to dry it beforehand. If none exist, flooding is
-    // unavoidable. Runs in O(n log n) time and O(n) space.
+    // Greedy + Union-Find solution.
+    // Tracks last rain day per lake and uses Union-Find to quickly locate the
+    // next available dry day after that rain. When a lake rains again, we must
+    // find and assign an earlier unused dry day to empty it; otherwise, flood
+    // occurs. Runs in O(n) amortized time and O(n) space.
     public int[] avoidFlood(int[] rains) {
         int n = rains.length;
-        int[] ans = new int[n];
-        Map<Integer, Integer> fullLakes = new HashMap<>();  // lake -> last rain day
-        TreeSet<Integer> dryDays = new TreeSet<>();         // indices of dry days
-        
-        for (int i = 0; i < n; i++) {
-            if (rains[i] == 0) {
-                dryDays.add(i);
-                ans[i] = 1; // temporary default, will update if we choose to dry a specific lake
-            } else {
-                int lake = rains[i];
-                ans[i] = -1; // raining day
-                
-                if (fullLakes.containsKey(lake)) {
-                    int lastRainDay = fullLakes.get(lake);
-                    Integer dryDay = dryDays.higher(lastRainDay); // find earliest dry day after last rain
-                    if (dryDay == null) {
-                        return new int[0]; // impossible to avoid flood
-                    }
-                    ans[dryDay] = lake; // dry this lake on that dry day
-                    dryDays.remove(dryDay);
-                }
-                fullLakes.put(lake, i); // mark lake as full today
-            }
+        int[] parent = new int[n + 1]; // Union-Find parent array
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
         }
+
+        int[] ans = new int[n];
+        Map<Integer, Integer> lastRainDay = new HashMap<>(); // lake -> last rain index
+
+        for (int i = 0; i < n; i++) {
+            int lake = rains[i];
+            if (lake == 0) {
+                // Arbitrary default value; may be updated later when assigned
+                ans[i] = 1;
+                continue;
+            }
+
+            Integer prevRainDay = lastRainDay.get(lake);
+            if (prevRainDay != null) {
+                // Find earliest available dry day after last rain of this lake
+                int dryDay = find(prevRainDay + 1, parent);
+                if (dryDay >= i) {
+                    // No available dry day to prevent flood
+                    return new int[0];
+                }
+
+                // Assign the found dry day to dry this lake
+                ans[dryDay] = lake;
+                parent[dryDay] = find(dryDay + 1, parent); // mark dryDay as used
+            }
+
+            // Mark today as raining day (no drying)
+            ans[i] = -1;
+            parent[i] = i + 1; // mark current day as used
+            lastRainDay.put(lake, i);
+        }
+
         return ans;
+    }
+
+    // Union-Find 'find' function with path compression
+    private int find(int x, int[] parent) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x], parent);
+        }
+        return parent[x];
     }
 }
