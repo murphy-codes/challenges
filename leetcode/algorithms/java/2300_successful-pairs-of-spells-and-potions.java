@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-07
 // At the time of submission:
-//   Runtime 46 ms Beats 69.51%
-//   Memory 65.34 MB Beats 32.65%
+//   Runtime 45 ms Beats 83.02%
+//   Memory 65.25 MB Beats 94.32%
 
 /****************************************
 * 
@@ -42,7 +42,9 @@
 * 
 ****************************************/
 
-// import java.util.Arrays;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
     // Sort potions, then for each spell use binary search to find the
@@ -53,26 +55,36 @@ class Solution {
         Arrays.sort(potions);
         int n = spells.length, m = potions.length;
         int[] result = new int[n];
-        
+        Map<Integer, Integer> memo = new HashMap<>();
+
         for (int i = 0; i < n; i++) {
             int spell = spells[i];
-            // Find first potion such that (long)spell * potion >= success
-            int idx = binarySearch(potions, spell, success);
-            result[i] = m - idx;
-        }
-        return result;
-    }
 
-    private int binarySearch(int[] potions, int spell, long success) {
-        int left = 0, right = potions.length - 1;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if ((long) spell * potions[mid] >= success) {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
+            // Use cached result if already computed
+            if (memo.containsKey(spell)) {
+                result[i] = memo.get(spell);
+                continue;
             }
+
+            // Early exit: even strongest potion fails
+            if ((long) spell * potions[m - 1] < success) {
+                memo.put(spell, 0);
+                result[i] = 0;
+                continue;
+            }
+
+            // Compute minimum required potion strength for success
+            long required = (success + spell - 1) / spell;
+
+            // Find first potion >= required using binary search
+            int idx = Arrays.binarySearch(potions, (int) required);
+            if (idx < 0) idx = -idx - 1;
+
+            int count = m - idx;
+            memo.put(spell, count);
+            result[i] = count;
         }
-        return left; // first successful index
+
+        return result;
     }
 }
