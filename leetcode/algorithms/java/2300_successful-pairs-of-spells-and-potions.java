@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-07
 // At the time of submission:
-//   Runtime 45 ms Beats 83.02%
-//   Memory 65.25 MB Beats 94.32%
+//   Runtime 5 ms Beats 100.00%
+//   Memory 65.47 MB Beats 29.13%
 
 /****************************************
 * 
@@ -42,47 +42,46 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
-    // Sort potions, then for each spell use binary search to find the
-    // first potion making spell*potion ≥ success. All stronger potions
-    // also work, so count = m - index. Time: O(n log m + m log m),
-    // Space: O(1) extra.
+    // Uses counting + prefix-sum instead of sorting & binary search.
+    // Builds freq[i] = number of potions with strength >= i.
+    // For each spell, computes the minimum required potion value
+    // via ceil(success / spell) and looks it up in O(1) time.
+    // Time: O(n + M), Space: O(M), where M = max potion value.
     public int[] successfulPairs(int[] spells, int[] potions, long success) {
-        Arrays.sort(potions);
-        int n = spells.length, m = potions.length;
-        int[] result = new int[n];
-        Map<Integer, Integer> memo = new HashMap<>();
+        int m = spells.length;
+        int n = potions.length;
 
-        for (int i = 0; i < n; i++) {
-            int spell = spells[i];
+        // Step 1: Find maximum potion strength to size our frequency map
+        int maxPotion = 0;
+        for (int p : potions) {
+            maxPotion = Math.max(maxPotion, p);
+        }
 
-            // Use cached result if already computed
-            if (memo.containsKey(spell)) {
-                result[i] = memo.get(spell);
-                continue;
+        // Step 2: Build frequency map for potion strengths
+        int[] freq = new int[maxPotion + 1];
+        for (int p : potions) {
+            freq[p]++;
+        }
+
+        // Step 3: Convert frequency map to suffix sum:
+        // freq[i] = number of potions with strength >= i
+        int cumulative = 0;
+        for (int i = maxPotion; i >= 0; i--) {
+            cumulative += freq[i];
+            freq[i] = cumulative;
+        }
+
+        // Step 4: For each spell, compute minimum potion needed and look up result
+        int[] result = new int[m];
+        for (int i = 0; i < m; i++) {
+            int spellPower = spells[i];
+            long requiredPotion = (success + spellPower - 1) / spellPower; // ceil(success / spell)
+
+            if (requiredPotion <= maxPotion) {
+                result[i] = freq[(int) requiredPotion];
             }
-
-            // Early exit: even strongest potion fails
-            if ((long) spell * potions[m - 1] < success) {
-                memo.put(spell, 0);
-                result[i] = 0;
-                continue;
-            }
-
-            // Compute minimum required potion strength for success
-            long required = (success + spell - 1) / spell;
-
-            // Find first potion >= required using binary search
-            int idx = Arrays.binarySearch(potions, (int) required);
-            if (idx < 0) idx = -idx - 1;
-
-            int count = m - idx;
-            memo.put(spell, count);
-            result[i] = count;
+            // else result[i] stays 0 (no potion strong enough)
         }
 
         return result;
