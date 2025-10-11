@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-11
 // At the time of submission:
-//   Runtime 2 ms Beats 98.14%
-//   Memory 59.35 MB Beats 89.44%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 60.05 MB Beats 70.19%
 
 /****************************************
 * 
@@ -38,28 +38,24 @@
 * 
 ****************************************/
 
-class Solution {
+class Solution { 
     // Iterate backward in steps of size k from each of the last k positions.  
     // Accumulate energy along each backward path and track the max total.  
     // This covers all valid paths ending at or beyond index n - k.  
     // Runs in O(n) time and O(1) space using simple running sums.  
-    // Finds the highest possible energy that can be collected efficiently.  
+    // Finds the highest possible energy that can be collected efficiently. 
     public int maximumEnergy(int[] energy, int k) {
-        int n = energy.length;
-        int startIndex = n - k; // Start checking from last k positions
-        int maxEnergy = Integer.MIN_VALUE;
-
+        int maxE = -1000;
         // Traverse each possible starting position from the last segment
-        for (int i = startIndex; i < n; i++) {
-            int currentEnergy = 0;
+        for (int i = energy.length-k; i < energy.length; i++) {
             // Walk backwards in steps of size k
-            for (int j = i; j >= 0; j -= k) {
-                currentEnergy += energy[j];
-                maxEnergy = Math.max(maxEnergy, currentEnergy);
+            for (int j = i, currE = 0; j > -1; j -= k) {
+                currE += energy[j];
+                if (maxE < currE) maxE = currE;
             }
         }
-
-        return maxEnergy;
+        return maxE;
     }
 }
+
 
