@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/maximum-total-damage-with-spell-casting/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-10-10
+// Date: 2025-10-11
 // At the time of submission:
-//   Runtime 169 ms Beats 76.58%
-//   Memory 65.06 MB Beats 45.49%
+//   Runtime 53 ms Beats 100.00%
+//   Memory 61.35 MB Beats 79.73%
 
 /****************************************
 * 
@@ -34,53 +34,40 @@
 * 
 ****************************************/
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Arrays;
-
 class Solution {
-    // Group spells by power and sum their total damage.
-    // Use dynamic programming on sorted unique power values.
-    // If powers are within 2 of each other, they conflict; otherwise, we can combine them.
-    // Transition: dp[i] = max(dp[i-1], dp[i-2] + totalDamage[i]) if close.
-    // Runs in O(n log n) time and O(n) space due to sorting and DP.
+    // Sort powers and use DP + two-pointer window to accumulate max damage.
+    // dp[i] = best total using power[i], skipping any power within 2 units.
+    // Track the running max (maxPrevDamage) of valid previous states.
+    // This ensures O(n log n) time (from sorting) and O(n) space overall.
+    // Efficiently finds the optimal sum of non-conflicting potion powers.
     public long maximumTotalDamage(int[] power) {
-        // Aggregate total damage per unique power
-        Map<Integer, Long> totalDamage = new HashMap<>();
-        for (int p : power) {
-            totalDamage.put(p, totalDamage.getOrDefault(p, 0L) + p);
-        }
+        Arrays.sort(power); // Sort powers for sequential comparison
 
-        int[] keys = totalDamage.keySet().stream().mapToInt(Integer::intValue).toArray();
-        Arrays.sort(keys);
+        long[] dp = new long[power.length];
+        dp[0] = power[0];
+        long maxPrevDamage = 0; // Tracks max damage from non-conflicting powers
+        int left = 0;           // Left pointer for the valid range window
 
-        int m = keys.length;
-        if (m == 0) return 0L;
-
-        long[] dp = new long[m];
-        dp[0] = totalDamage.get(keys[0]);
-
-        for (int i = 1; i < m; i++) {
-            long cur = totalDamage.get(keys[i]);
-
-            // find largest j < i with keys[i] - keys[j] > 2  (i.e. keys[j] <= keys[i]-3)
-            int lo = 0, hi = i - 1, j = -1;
-            int target = keys[i] - 3;
-            while (lo <= hi) {
-                int mid = (lo + hi) >>> 1;
-                if (keys[mid] <= target) {
-                    j = mid;
-                    lo = mid + 1;
-                } else {
-                    hi = mid - 1;
+        for (int i = 1; i < power.length; i++) {
+            if (power[i] == power[i - 1]) {
+                // Same power — add to cumulative damage
+                dp[i] = dp[i - 1] + power[i];
+            } else {
+                // Move left pointer while ensuring power difference >= 3
+                while (power[left] + 2 < power[i]) {
+                    maxPrevDamage = Math.max(maxPrevDamage, dp[left]);
+                    left++;
                 }
+                dp[i] = maxPrevDamage + power[i];
             }
-
-            long take = cur + (j >= 0 ? dp[j] : 0L);
-            long skip = dp[i - 1];
-            dp[i] = Math.max(skip, take);
         }
 
-        return dp[m - 1];
+        long result = 0;
+        for (long total : dp) {
+            result = Math.max(result, total);
+        }
+        return result;
     }
 }
+
+
