@@ -6,6 +6,7 @@ LeetCode
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
 |3541|[Find Most Frequent Vowel and Consonant](https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/)|[Java](./algorithms/java/3541_find-most-frequent-vowel-and-consonant.java)|Easy|
+|3539|[Find Sum of Array Product of Magical Sequences](https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/)|[Java](./algorithms/java/3539_find-sum-of-array-product-of-magical-sequences.java)|Hard|
 |3516|[Find Closest Person](https://leetcode.com/problems/find-closest-person/)|[Java](./algorithms/java/3516_find-closest-person.java)|Easy|
 |3508|[Implement Router](https://leetcode.com/problems/implement-router/)|[Java](./algorithms/java/3508_implement-router.java)|Medium|
 |3495|[Minimum Operations to Make Array Elements Zero](https://leetcode.com/problems/minimum-operations-to-make-array-elements-zero/)|[Java](./algorithms/java/3495_minimum-operations-to-make-array-elements-zero.java)|Hard|
