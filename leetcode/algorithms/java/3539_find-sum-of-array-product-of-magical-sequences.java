@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-10-11
+// Date: 2025-10-12
 // At the time of submission:
-//   Runtime 76 ms Beats 24.32%
-//   Memory 56.80 MB Beats 48.65%
+//   Runtime 19 ms Beats 100.00%
+//   Memory 46.77 MB Beats 70.27%
 
 /****************************************
 * 
@@ -45,85 +45,81 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // We use a DP over indices, remaining picks, and carry bits. For each index i,
-    // we choose cnt times to pick it; that increments the carry and may produce a
-    // set bit in the current position. We propagate to next index with updated carry.
-    // We multiply by combinatorial count and nums[i]^cnt. 
-    // Time is roughly O(n * m^2 * carryStates).
-    // Space: O(n * m * carryStates) for memoization.
-    static final int MOD = 1_000_000_007;
-    int m, k;
-    int n;
-    int[] nums;
-    int[][] comb; // combinatorial binomial coefficients
-    Integer[][][][] memo; // dp cache
+    // DP + memoization over index, remaining picks, carry bits, and bits left.
+    // For each num, choose how many times to include it, updating the binary sum
+    // and carry propagation. Multiply by num^count and divide by count! to handle
+    // duplicates; multiply final result by m! for all permutations. Runs in about
+    // O(n * m^2 * k) time and O(n * m^2 * k) space; all mod 1e9+7.
+    
+    private static final int MOD = 1_000_000_007;
+    private static final int MAX_M = 31;
+    private static final long[] FACT = new long[MAX_M];
+    private static final long[] INV_FACT = new long[MAX_M];
+
+    // Precompute factorials and modular inverses
+    static {
+        FACT[0] = 1;
+        for (int i = 1; i < MAX_M; i++) {
+            FACT[i] = FACT[i - 1] * i % MOD;
+        }
+        INV_FACT[MAX_M - 1] = modPow(FACT[MAX_M - 1], MOD - 2);
+        for (int i = MAX_M - 1; i > 0; i--) {
+            INV_FACT[i - 1] = INV_FACT[i] * i % MOD;
+        }
+    }
+
+    private static long modPow(long base, int exp) {
+        long res = 1;
+        while (exp > 0) {
+            if ((exp & 1) == 1) res = res * base % MOD;
+            base = base * base % MOD;
+            exp >>= 1;
+        }
+        return res;
+    }
 
     public int magicalSum(int m, int k, int[] nums) {
-        this.m = m;
-        this.k = k;
-        this.n = nums.length;
-        this.nums = nums;
-
-        // Precompute binomial coefficients up to m
-        comb = new int[m + 1][m + 1];
-        for (int i = 0; i <= m; i++) {
-            comb[i][0] = 1;
-            for (int j = 1; j <= i; j++) {
-                comb[i][j] = (comb[i - 1][j - 1] + comb[i - 1][j]) % MOD;
+        int n = nums.length;
+        int[][] powCache = new int[n][m + 1];
+        for (int i = 0; i < n; i++) {
+            powCache[i][0] = 1;
+            for (int j = 1; j <= m; j++) {
+                powCache[i][j] = (int) ((long) powCache[i][j - 1] * nums[i] % MOD);
             }
         }
 
-        // dp state: dp[remainingSlots][bitsNeeded][i][carryValue]
-        memo = new Integer[m + 1][k + 1][n + 1][m + 1];
+        int[][][][] memo = new int[n][m + 1][m / 2 + 1][k + 1];
+        for (int[][][] a : memo)
+            for (int[][] b : a)
+                for (int[] c : b)
+                    Arrays.fill(c, -1);
 
-        return dp(m, k, 0, 0);
+        return (int) (dfs(0, m, 0, k, powCache, memo) * FACT[m] % MOD);
     }
 
-    // returns sum of array products (mod MOD) for sequences using
-    // remaining = rem, bits still to fill = bitsNeeded, starting at index i,
-    // and with carry = carryValue (carry from lower bits).
-    private int dp(int rem, int bitsNeeded, int i, int carry) {
-        // base / pruning
-        if (rem < 0 || bitsNeeded < 0) return 0;
-        // If no more to pick
-        if (rem == 0) {
-            // Check if carry’s bit count equals bitsNeeded
-            return (Integer.bitCount(carry) == bitsNeeded) ? 1 : 0;
-        }
-        if (i == n) {
-            return 0;
-        }
-        if (memo[rem][bitsNeeded][i][carry] != null) {
-            return memo[rem][bitsNeeded][i][carry];
+    // DFS with memoization
+    private long dfs(int idx, int remaining, int carry, int bitsLeft,
+                     int[][] powCache, int[][][][] memo) {
+
+        int currentBits = Integer.bitCount(carry);
+        if (currentBits + remaining < bitsLeft) return 0; // prune impossible
+        if (idx == powCache.length)
+            return (remaining == 0 && currentBits == bitsLeft) ? 1 : 0;
+
+        if (memo[idx][remaining][carry][bitsLeft] != -1)
+            return memo[idx][remaining][carry][bitsLeft];
+
+        long total = 0;
+        for (int pick = 0; pick <= remaining; pick++) {
+            int bit = (carry + pick) & 1;
+            if (bit <= bitsLeft) {
+                long sub = dfs(idx + 1, remaining - pick, (carry + pick) >> 1,
+                               bitsLeft - bit, powCache, memo);
+                total = (total + sub * powCache[idx][pick] % MOD * INV_FACT[pick]) % MOD;
+            }
         }
 
-        long ans = 0;
-        // Try picking count = 0..rem of nums[i]
-        for (int cnt = 0; cnt <= rem; cnt++) {
-            // contribution from nums[i]^cnt * comb[rem][cnt]
-            long contribution = modPow(nums[i], cnt) * comb[rem][cnt] % MOD;
-
-            int newSum = carry + cnt;  // partial sum at bit i
-            int bitsHere = newSum & 1;  // least significant bit
-            int nextCarry = newSum >>> 1;
-
-            ans = (ans + contribution * dp(rem - cnt, bitsNeeded - bitsHere, i + 1, nextCarry)) % MOD;
-        }
-        memo[rem][bitsNeeded][i][carry] = (int) ans;
-        return (int) ans;
-    }
-
-    private long modPow(long x, int e) {
-        long res = 1;
-        x %= MOD;
-        while (e > 0) {
-            if ((e & 1) == 1) res = (res * x) % MOD;
-            x = (x * x) % MOD;
-            e >>= 1;
-        }
-        return res;
+        return memo[idx][remaining][carry][bitsLeft] = (int) total;
     }
 }
