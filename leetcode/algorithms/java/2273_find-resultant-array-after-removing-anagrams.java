@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-12
 // At the time of submission:
-//   Runtime 2 ms Beats 93.48%
-//   Memory 44.96 MB Beats 33.97%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 44.82 MB Beats 48.48%
 
 /****************************************
 * 
@@ -46,31 +46,57 @@
 * 
 ****************************************/
 
-class Solution {
-    // Iterate through the words list, keeping only those that are not anagrams
-    // of the last kept word. Uses a frequency count (int[26]) to detect anagrams
-    // efficiently in O(k) time per comparison, where k is word length. (max 10)
-    // Overall complexity: O(n * k) time and O(1) extra space, since k ≤ 10 and
-    // the counting array is reused for each comparison.
-    public List<String> removeAnagrams(String[] words) {
-        List<String> res = new ArrayList<>();
-        res.add(words[0]);
-        int[] count = new int[26];
-        for (char c : words[0].toCharArray()) count[c - 'a']++;
+import java.util.AbstractList;
+// import java.util.ArrayList;
+// import java.util.Arrays;
+// import java.util.List;
 
-        for (int i = 1; i < words.length; i++) {
-            if (!areAnagrams(count, words[i])) {
-                res.add(words[i]);
-                count = new int[26];
-                for (char c : words[i].toCharArray()) count[c - 'a']++;
+class Solution {
+    // Builds a lazy-evaluated list that removes consecutive anagrams.
+    // Uses sorted-character "signatures" to compare adjacent words quickly.
+    // Defers computation until list access via AbstractList methods.
+    // Time: O(N × L log L) for sorting each word; Space: O(N × L) for results.
+    // Efficient and clean, though uses an unconventional AbstractList approach.
+
+    List<String> result;
+
+    public List<String> removeAnagrams(String[] words) {
+        return new AbstractList<String>() {
+            @Override
+            public int size() {
+                initialize();
+                return result.size();
             }
-        }
-        return res;
+
+            @Override
+            public String get(int index) {
+                initialize();
+                return result.get(index);
+            }
+
+            // Lazily initializes result list on first access
+            protected void initialize() {
+                if (result != null) return;
+
+                result = new ArrayList<>();
+                result.add(words[0]);
+
+                String prevSignature = canonicalForm(words[0]);
+                for (int i = 1; i < words.length; i++) {
+                    String currentSignature = canonicalForm(words[i]);
+                    if (!currentSignature.equals(prevSignature)) {
+                        result.add(words[i]);
+                        prevSignature = currentSignature;
+                    }
+                }
+            }
+        };
     }
-    private boolean areAnagrams(int[] count, String word) {
-        int[] temp = count.clone(); // make a copy to preserve the original
-        for (char c : word.toCharArray()) temp[c - 'a']--;
-        for (int n : temp) if (n != 0) return false;
-        return true;
+
+    // Returns canonical sorted form of word (for anagram comparison)
+    private static String canonicalForm(String s) {
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+        return new String(chars);
     }
 }
