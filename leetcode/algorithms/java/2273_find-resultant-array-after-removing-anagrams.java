@@ -3,7 +3,7 @@
 // Date: 2025-10-12
 // At the time of submission:
 //   Runtime 2 ms Beats 93.48%
-//   Memory 44.94 MB Beats 33.97%
+//   Memory 44.96 MB Beats 33.97%
 
 /****************************************
 * 
@@ -49,24 +49,28 @@
 class Solution {
     // Iterate through the words list, keeping only those that are not anagrams
     // of the last kept word. Uses a frequency count (int[26]) to detect anagrams
-    // efficiently in O(k) time per comparison, where k is word length.
+    // efficiently in O(k) time per comparison, where k is word length. (max 10)
     // Overall complexity: O(n * k) time and O(1) extra space, since k ≤ 10 and
     // the counting array is reused for each comparison.
     public List<String> removeAnagrams(String[] words) {
         List<String> res = new ArrayList<>();
         res.add(words[0]);
+        int[] count = new int[26];
+        for (char c : words[0].toCharArray()) count[c - 'a']++;
+
         for (int i = 1; i < words.length; i++) {
-            if (!areAnagrams(res.get(res.size() - 1), words[i])) {
+            if (!areAnagrams(count, words[i])) {
                 res.add(words[i]);
+                count = new int[26];
+                for (char c : words[i].toCharArray()) count[c - 'a']++;
             }
         }
         return res;
     }
-    private boolean areAnagrams(String word1, String word2) {
-        int[] count = new int[26];
-        for (char c : word1.toCharArray()) count[c - 'a']++;
-        for (char c : word2.toCharArray()) count[c - 'a']--;
-        for (int n : count) if (n != 0) return false;
+    private boolean areAnagrams(int[] count, String word) {
+        int[] temp = count.clone(); // make a copy to preserve the original
+        for (char c : word.toCharArray()) temp[c - 'a']--;
+        for (int n : temp) if (n != 0) return false;
         return true;
     }
 }
