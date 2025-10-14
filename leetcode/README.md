@@ -37,6 +37,7 @@ LeetCode
 |3362|[Zero Array Transformation III](https://leetcode.com/problems/zero-array-transformation-iii/)|[Java](./algorithms/java/3362_zero-array-transformation-iii.java)|Medium|
 |3356|[Zero Array Transformation II](https://leetcode.com/problems/zero-array-transformation-ii/)|[Java](./algorithms/java/3356_zero-array-transformation-ii.java)|Medium|
 |3355|[Zero Array Transformation I](https://leetcode.com/problems/zero-array-transformation-i/)|[Java](./algorithms/java/3355_zero-array-transformation-i.java)|Medium|
+|3349|[Adjacent Increasing Subarrays Detection I](https://leetcode.com/problems/adjacent-increasing-subarrays-detection-i/)|[Java](./algorithms/java/3349_adjacent-increasing-subarrays-detection-i.java)|Easy|
 |3343|[Count Number of Balanced Permutations](https://leetcode.com/problems/count-number-of-balanced-permutations/)|[Java](./algorithms/java/3343_count-number-of-balanced-permutations.java)|Hard|
 |3342|[Find Minimum Time to Reach Last Room II](https://leetcode.com/problems/find-minimum-time-to-reach-last-room-ii/)|[Java](./algorithms/java/3342_find-minimum-time-to-reach-last-room-ii.java)|Medium|
 |3341|[Find Minimum Time to Reach Last Room I](https://leetcode.com/problems/find-minimum-time-to-reach-last-room-i/)|[Java](./algorithms/java/3341_find-minimum-time-to-reach-last-room-i.java)|Medium|
