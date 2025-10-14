@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-13
 // At the time of submission:
-//   Runtime 2 ms Beats 47.79%
-//   Memory 44.38 MB Beats 80.88%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.48 MB Beats 67.65%
 
 /****************************************
 * 
@@ -36,21 +36,32 @@
 * 
 ****************************************/
 
+import java.util.List;
+
 class Solution {
-    // Build an array tracking each index's current increasing run length.
-    // Two adjacent subarrays of size k exist if both runs reach length k
-    // at their respective endpoints k apart. Check each possible start.
-    // Time: O(n) since each element is visited once. Space: O(n) for inc[].
+    // Check each pair of adjacent subarrays of size k for strict increase.
+    // Uses a helper to confirm both subarrays are strictly increasing.
+    // Stops early when a valid pair is found. Time: O(n * k), Space: O(1).
     public boolean hasIncreasingSubarrays(List<Integer> nums, int k) {
         int n = nums.size();
-        int[] inc = new int[n];
-        inc[0] = 1;
-        for (int i = 1; i < n; i++)
-            inc[i] = (nums.get(i) > nums.get(i - 1)) ? inc[i - 1] + 1 : 1;
-        for (int a = 0; a + 2 * k <= n; a++) {
-            if (inc[a + k - 1] >= k && inc[a + 2 * k - 1] >= k)
+
+        // Try every possible starting index of the first subarray
+        for (int i = 0; i + 2 * k <= n; i++) {
+            // Check both adjacent subarrays of length k
+            if (isStrictlyIncreasing(nums, i, i + k - 1) &&
+                isStrictlyIncreasing(nums, i + k, i + 2 * k - 1)) {
                 return true;
+            }
         }
+
         return false;
+    }
+
+    // Helper to verify nums[start..end] is strictly increasing
+    private boolean isStrictlyIncreasing(List<Integer> nums, int start, int end) {
+        for (int i = start; i < end; i++) {
+            if (nums.get(i) >= nums.get(i + 1)) return false;
+        }
+        return true;
     }
 }
