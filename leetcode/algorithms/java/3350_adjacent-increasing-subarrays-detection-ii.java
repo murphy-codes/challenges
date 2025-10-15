@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-14
 // At the time of submission:
-//   Runtime 18 ms Beats 54.26%
-//   Memory 77.73 MB Beats 75.53%
+//   Runtime 7 ms Beats 100.00%
+//   Memory 91.79 MB Beats 7.45%
 
 /****************************************
 * 
@@ -39,38 +39,34 @@
 * 
 ****************************************/
 
-import java.util.List;
-
 class Solution {
-    // Time: O(n) — single pass to build runs, two short passes over runs.
-    // Space: O(r) where r = number of runs (≤ n). Could be considered O(n) worst-case.
-    public int maxIncreasingSubarrays(List<Integer> nums) {
-        int n = nums.size();
-        if (n < 2) return 0;
+    // Scans nums to find lengths of all strictly increasing segments.
+    // For each segment, compute the best possible k using either:
+    //   - currLen / 2 if two subarrays fit within one segment, or
+    //   - min(currLen, prevLen) if spanning two adjacent segments.
+    // Time: O(n), Space: O(1). Single linear pass over nums.
+    public int maxIncreasingSubarrays(List<Integer> numsList) {
+        Integer[] nums = numsList.toArray(Integer[]::new);
+        int n = nums.length;
+        int i = 0, maxK = 0;
+        int prevLen = 0;
 
-        // Build list of increasing run lengths
-        int maxK = 0;
-        int run = 1;
-        java.util.ArrayList<Integer> runs = new java.util.ArrayList<>();
+        while (i < n) {
+            int start = i;
 
-        for (int i = 1; i < n; i++) {
-            if (nums.get(i) > nums.get(i - 1)) {
-                run++;
-            } else {
-                runs.add(run);
-                run = 1;
+            // Move i to the end of the current strictly increasing run
+            while (i + 1 < n && nums[i] < nums[i + 1]) {
+                i++;
             }
-        }
-        runs.add(run);
 
-        // Case A: both subarrays lie inside a single run -> floor(run/2)
-        for (int r : runs) {
-            maxK = Math.max(maxK, r / 2);
-        }
+            int currLen = i - start + 1;
 
-        // Case B: one subarray from run i, the adjacent one from run i+1
-        for (int i = 0; i + 1 < runs.size(); i++) {
-            maxK = Math.max(maxK, Math.min(runs.get(i), runs.get(i + 1)));
+            // Update maxK based on possible adjacent increasing subarrays
+            maxK = Math.max(maxK, Math.max(currLen / 2, Math.min(currLen, prevLen)));
+
+            // Prepare for next segment
+            prevLen = currLen;
+            i++;
         }
 
         return maxK;
