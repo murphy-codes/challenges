@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-16
 // At the time of submission:
-//   Runtime 61 ms Beats 34.01%
-//   Memory 63.82 MB Beats 21.83%
+//   Runtime 7 ms Beats 68.53%
+//   Memory 58.56 MB Beats 51.78%
 
 /****************************************
 * 
@@ -39,34 +39,27 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-
 class Solution {
-    // Counts nums by remainder mod value, since we can shift by ±value.
-    // Each remainder can fill positions r, r+value, r+2*value, etc.
-    // Build mex greedily using available remainders until one is missing.
-    // Time O(n), Space O(value).
+    // Use modular arithmetic: each num can become any int ≡ num % value.
+    // Count freq of each residue (0..value-1). Then test x = 0,1,2,... :
+    // if freq[x % value] > 0, use one; else x is the smallest missing int.
+    // Time: O(n + MEX) ≈ O(n), Space: O(value) for frequency array.
     public int findSmallestInteger(int[] nums, int value) {
-        HashMap<Integer, Integer> freq = new HashMap<>();
+        int[] freq = new int[value];
         
-        // Count frequencies of remainders
+        // Count frequency of normalized remainders
         for (int num : nums) {
-            int r = ((num % value) + value) % value;  // safe mod for negatives
-            freq.put(r, freq.getOrDefault(r, 0) + 1);
+            int r = ((num % value) + value) % value; // ensure positive remainder
+            freq[r]++;
         }
 
-        // Build MEX
-        int mex = 0;
-        while (true) {
-            int r = mex % value;
-            if (freq.getOrDefault(r, 0) > 0) {
-                freq.put(r, freq.get(r) - 1);
-                mex++;
-            } else {
-                break;
+        // Incrementally find smallest missing non-negative integer
+        for (int x = 0; ; x++) {
+            int r = x % value;
+            if (freq[r] == 0) {
+                return x; // MEX found
             }
+            freq[r]--; // use one instance of this residue
         }
-
-        return mex;
     }
 }
