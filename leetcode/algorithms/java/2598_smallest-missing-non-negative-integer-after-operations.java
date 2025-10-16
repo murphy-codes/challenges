@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-16
 // At the time of submission:
-//   Runtime 7 ms Beats 68.53%
-//   Memory 58.56 MB Beats 51.78%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 58.52 MB Beats 51.78%
 
 /****************************************
 * 
@@ -40,26 +40,33 @@
 ****************************************/
 
 class Solution {
-    // Use modular arithmetic: each num can become any int ≡ num % value.
-    // Count freq of each residue (0..value-1). Then test x = 0,1,2,... :
-    // if freq[x % value] > 0, use one; else x is the smallest missing int.
-    // Time: O(n + MEX) ≈ O(n), Space: O(value) for frequency array.
+    // This solution uses modular arithmetic to find the max possible MEX.
+    // Each number can be changed to any integer with the same remainder mod `value`.
+    // We count how many numbers fall into each remainder bucket, then find the one
+    // with the smallest frequency. The result is derived as (minFreq * value + remainder).
+    // Time Complexity: O(n + value), Space Complexity: O(value).
     public int findSmallestInteger(int[] nums, int value) {
-        int[] freq = new int[value];
+        // Array to count frequency of each possible remainder (mod class)
+        int[] remainderFreq = new int[value];
         
-        // Count frequency of normalized remainders
+        // Step 1: Compute normalized remainder frequencies
         for (int num : nums) {
-            int r = ((num % value) + value) % value; // ensure positive remainder
-            freq[r]++;
+            int remainder = num % value;
+            if (remainder < 0) remainder += value; // normalize negative mods
+            remainderFreq[remainder]++;
         }
 
-        // Incrementally find smallest missing non-negative integer
-        for (int x = 0; ; x++) {
-            int r = x % value;
-            if (freq[r] == 0) {
-                return x; // MEX found
+        // Step 2: Find the remainder bucket with the smallest frequency
+        int minFreq = remainderFreq[0];
+        int targetRemainder = 0;
+        for (int i = 0; i < value; i++) {
+            if (remainderFreq[i] < minFreq) {
+                minFreq = remainderFreq[i];
+                targetRemainder = i;
             }
-            freq[r]--; // use one instance of this residue
         }
+
+        // Step 3: Calculate the final result based on frequency pattern
+        return value * minFreq + targetRemainder;
     }
 }
