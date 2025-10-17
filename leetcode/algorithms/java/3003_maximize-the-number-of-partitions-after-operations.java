@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/maximize-the-number-of-partitions-after-operations/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-10-16
+// Date: 2025-10-17
 // At the time of submission:
-//   Runtime 518 ms Beats 21.43%
-//   Memory 114.95 MB Beats 7.14%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 42.39 MB Beats 92.86%
 
 /****************************************
 * 
@@ -48,68 +48,101 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
-    // Use DP + bitmasking: dfs(i, mask, canChange) = max partitions from i-th char
-    // with current partition’s letters `mask` and ability to change 1 char.
-    // At each step, either include current char (if mask bit count ≤ k) or break partition.
-    // If change is unused, try changing to each letter. Memoize to avoid recomputation.
-    // Time ≈ O(n * 2^k * 26), Space ≈ O(n * 2^k).
+    // Uses two linear passes with bitmask tracking to count partitions and test
+    // one allowed character change. The first (right→left) precomputes partitions
+    // and used-letter masks; the second (left→right) simulates merges and splits.
+    // Bit operations replace sets for O(1) updates. Overall time O(n), space O(n),
+    // since only constant-size masks and per-index arrays are stored.
 
-    private String s;
-    private int n, K;
-    private Map<String, Integer> memo;  // or use a better encoded key
+    static final int ALPHABET_SIZE = 26; // 'z' - 'a' + 1
 
     public int maxPartitionsAfterOperations(String s, int k) {
-        this.s = s;
-        this.n = s.length();
-        this.K = k;
-        this.memo = new HashMap<>();
-        // +1 to count first partition
-        return dfs(0, 0, true) + 1;
-    }
-
-    // i = current index, mask = letters used so far in current partition,
-    // canChange = whether we still can change a char
-    private int dfs(int i, int mask, boolean canChange) {
-        if (i == n) {
-            return 0;
-        }
-        String key = i + "," + mask + "," + (canChange ? 1 : 0);
-        if (memo.containsKey(key)) {
-            return memo.get(key);
-        }
-        int result = 0;
-
-        // Option 1: use the current letter as is
-        int bit = 1 << (s.charAt(i) - 'a');
-        int newMask = mask | bit;
-        if (Integer.bitCount(newMask) > K) {
-            // must start a new partition
-            result = dfs(i + 1, bit, canChange) + 1;
-        } else {
-            // we can continue in the same partition
-            result = dfs(i + 1, newMask, canChange);
+        if (k == ALPHABET_SIZE) {
+            return 1; // whole string fits into one partition
         }
 
-        // Option 2: change the current letter (if possible)
-        if (canChange) {
-            for (int c = 0; c < 26; c++) {
-                int changeBit = 1 << c;
-                int candidateMask = mask | changeBit;
-                if (Integer.bitCount(candidateMask) > K) {
-                    // starting a new partition with changed letter
-                    result = Math.max(result, dfs(i + 1, changeBit, false) + 1);
-                } else {
-                    // staying in same partition
-                    result = Math.max(result, dfs(i + 1, candidateMask, false));
+        int n = s.length();
+        int[] rightPartitions = new int[n];
+        int[] rightUsedMasks = new int[n];
+
+        // ----- Pass 1: preprocess from right to left -----
+        int usedMask = 0, distinctCount = 0, partitions = 1;
+        for (int i = n - 1; i >= 0; --i) {
+            int chBit = 1 << (s.charAt(i) - 'a');
+            if ((usedMask & chBit) == 0) {
+                if (distinctCount == k) {
+                    // start new partition
+                    distinctCount = 0;
+                    usedMask = 0;
+                    partitions++;
+                }
+                usedMask |= chBit;
+                distinctCount++;
+            }
+            rightPartitions[i] = partitions;
+            rightUsedMasks[i] = usedMask;
+        }
+
+        // ----- Pass 2: scan left to right, testing one possible change -----
+        int leftPartitions = 0;
+        int best = rightPartitions[0];
+        for (int l = 0; l < n; ) {
+            usedMask = 0;
+            distinctCount = 0;
+            int maskBeforeLastNew = 0;
+            int repeatedBeforeLast = 0;
+            int lastNewIdx = -1;
+            int r = l;
+
+            // build current partition until distincts exceed k
+            while (r < n) {
+                int chBit = 1 << (s.charAt(r) - 'a');
+                if ((usedMask & chBit) == 0) {
+                    if (distinctCount == k) break;
+                    maskBeforeLastNew = usedMask;
+                    lastNewIdx = r;
+                    usedMask |= chBit;
+                    distinctCount++;
+                } else if (distinctCount < k) {
+                    repeatedBeforeLast |= chBit;
+                }
+                r++;
+            }
+
+            // evaluate possible benefit from a single character change
+            if (distinctCount == k) {
+                if (lastNewIdx - l > Integer.bitCount(maskBeforeLastNew)) {
+                    // change one letter before lastNewIdx to start a new partition at lastNewIdx
+                    best = Math.max(best, leftPartitions + 1 + rightPartitions[lastNewIdx]);
+                }
+                if (lastNewIdx + 1 < r) {
+                    // try changing s[lastNewIdx + 1]
+                    if (lastNewIdx + 2 >= n) {
+                        best = Math.max(best, leftPartitions + 2);
+                    } else if (Integer.bitCount(rightUsedMasks[lastNewIdx + 2]) == k) {
+                        int canUse =
+                            ((1 << ALPHABET_SIZE) - 1) &
+                            ~usedMask & ~rightUsedMasks[lastNewIdx + 2];
+                        if (canUse > 0) {
+                            best = Math.max(best, leftPartitions + 1 + 1 + rightPartitions[lastNewIdx + 2]);
+                        } else {
+                            best = Math.max(best, leftPartitions + 1 + rightPartitions[lastNewIdx + 2]);
+                        }
+                        int nextCharBit = 1 << (s.charAt(lastNewIdx + 1) - 'a');
+                        if ((repeatedBeforeLast & nextCharBit) == 0) {
+                            best = Math.max(best, leftPartitions + 1 + rightPartitions[lastNewIdx + 1]);
+                        }
+                    } else {
+                        best = Math.max(best, leftPartitions + 1 + rightPartitions[lastNewIdx + 2]);
+                    }
                 }
             }
+
+            l = r;          // move to next partition
+            leftPartitions++;
         }
 
-        memo.put(key, result);
-        return result;
+        return best;
     }
 }
