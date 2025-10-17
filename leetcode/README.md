@@ -77,6 +77,8 @@ LeetCode
 |3025|[Find the Number of Ways to Place People I](https://leetcode.com/problems/find-the-number-of-ways-to-place-people-i/)|[Java](./algorithms/java/3025_find-the-number-of-ways-to-place-people-i.java)|Medium|
 |3024|[Type of Triangle](https://leetcode.com/problems/type-of-triangle/)|[Java](./algorithms/java/3024_type-of-triangle.java)|Easy|
 |3021|[Alice and Bob Playing Flower Game](https://leetcode.com/problems/alice-and-bob-playing-flower-game/)|[Java](./algorithms/java/3021_alice-and-bob-playing-flower-game.java)|Medium|
+|3005|[Count Elements With Maximum Frequency](https://leetcode.com/problems/count-elements-with-maximum-frequency/)|[Java](./algorithms/java/3005_count-elements-with-maximum-frequency.java)|Easy|
+|3003|[Maximize the Number of Partitions After Operations](https://leetcode.com/problems/maximize-the-number-of-partitions-after-operations/)|[Java](./algorithms/java/3003_maximize-the-number-of-partitions-after-operations.java)|Hard|
 |3000|[Maximum Area of Longest Diagonal Rectangle](https://leetcode.com/problems/maximum-area-of-longest-diagonal-rectangle/)|[Java](./algorithms/java/3000_maximum-area-of-longest-diagonal-rectangle.java)|Easy|
 |2999|[Count the Number of Powerful Integers](https://leetcode.com/problems/count-the-number-of-powerful-integers/)|[Java](./algorithms/java/2999_count-the-number-of-powerful-integers.java)|Hard|
 |2966|[Divide Array Into Arrays With Max Difference](https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/)|[Java](./algorithms/java/2966_divide-array-into-arrays-with-max-difference.java)|Medium|
