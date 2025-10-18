@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-17
 // At the time of submission:
-//   Runtime 20 ms Beats 47.59%
-//   Memory 58.61 MB Beats 31.72%
+//   Runtime 6 ms Beats 100.00%
+//   Memory 58.25 MB Beats 53.79%
 
 /****************************************
 * 
@@ -33,28 +33,31 @@
 * 
 ****************************************/
 
+import java.util.Arrays;
+
 class Solution {
-    // Greedy + sorting approach: sort nums and assign each element the smallest
-    // available integer within its allowed range [num - k, num + k]. Track the
-    // current smallest unused value and increment when used. Ensures all chosen
-    // values are distinct. Time complexity O(n log n) from sorting; space O(1).
+    // Sort nums and greedily assign each element the smallest possible value
+    // within its allowed range [num - k, num + k] that is larger than the last
+    // used distinct number. This ensures all chosen values are distinct.
+    // Time Complexity: O(n log n) due to sorting; Space Complexity: O(1).
+    // The (k << 1) + 1 check handles small arrays that can all be made distinct.
     public int maxDistinctElements(int[] nums, int k) {
-        Arrays.sort(nums);
-        long nextAvailable = Long.MIN_VALUE;
-        int distinct = 0;
+        // Quick check: if all elements can be made distinct within range
+        if (nums.length <= (k << 1) + 1) return nums.length;
 
-        for (int x : nums) {
-            long low = (long)x - k;
-            long high = (long)x + k;
+        Arrays.sort(nums); // Sort to process from smallest to largest
+        int distinctCount = 0;
+        int lastUsed = Integer.MIN_VALUE; // Last distinct number assigned
 
-            // Choose the smallest valid number ≥ nextAvailable
-            long chosen = Math.max(nextAvailable, low);
-            if (chosen <= high) {
-                distinct++;
-                nextAvailable = chosen + 1;
+        for (int num : nums) {
+            // Choose smallest possible available number within [num - k, num + k]
+            int candidate = Math.max(lastUsed + 1, num - k);
+            if (candidate <= num + k) {
+                distinctCount++;
+                lastUsed = candidate; // Update last used value
             }
         }
 
-        return distinct;
+        return distinctCount;
     }
 }
