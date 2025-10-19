@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-19
 // At the time of submission:
-//   Runtime 64 ms Beats 77.78%
-//   Memory 47.63 MB Beats 73.33%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 41.92 MB Beats 97.78%
 
 /****************************************
 * 
@@ -63,47 +63,60 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-
 class Solution {
-    // Use BFS to explore all reachable strings by applying two operations:
-    // (1) Add 'a' to all digits at odd indices (mod 10), and (2) rotate right by 'b'.
-    // Maintain a visited set to avoid reprocessing states. Track the smallest
-    // lexicographic string encountered. Time: O(n * 100) from limited state space;
-    // Space: O(n * 100) for storing visited configurations.
-    public String findLexSmallestString(String s, int a, int b) {
-        HashSet<String> visited = new HashSet<>();
-        Queue<String> queue = new LinkedList<>();
-        String smallest = s;
+    // This solution uses math-based optimization with gcd to reduce state space.
+    // Rotations repeat every gcd(b, n), and digit additions cycle every gcd(a, 10).
+    // For each unique rotation, we simulate valid digit additions to minimize lexic.
+    // Time Complexity: O(n^2) due to rotation & modification checks.
+    // Space Complexity: O(n) for character arrays and string copies.
+    public String findLexSmallestString(String original, int addStep, int rotateStep) {
+        char[] chars = original.toCharArray();
+        int n = chars.length;
+        char[] rotated = new char[n];
+        int rotationCycle = gcd(rotateStep, n);
+        int addCycle = gcd(addStep, 10);
+        String smallest = null;
 
-        queue.offer(s);
-        visited.add(s);
+        // Try each unique rotation based on gcd(b, n)
+        for (int i = 0; i < n; i += rotationCycle) {
+            // Rotate the string by i positions to the right
+            System.arraycopy(chars, i, rotated, 0, n - i);
+            System.arraycopy(chars, 0, rotated, n - i, i);
 
-        while (!queue.isEmpty()) {
-            String curr = queue.poll();
-            if (curr.compareTo(smallest) < 0) {
-                smallest = curr;
+            // Modify odd indices (1, 3, 5...) by addStep cyclically
+            applyAddOperation(rotated, 1, addCycle);
+            
+            // If rotation step is odd, even indices (0, 2, 4...) can also vary
+            if (rotationCycle % 2 == 1) {
+                applyAddOperation(rotated, 0, addCycle);
             }
 
-            // Operation 1: Add 'a' to all odd indices
-            char[] chars = curr.toCharArray();
-            for (int i = 1; i < chars.length; i += 2) {
-                chars[i] = (char) ((chars[i] - '0' + a) % 10 + '0');
-            }
-            String addOp = new String(chars);
-            if (visited.add(addOp)) {
-                queue.offer(addOp);
-            }
-
-            // Operation 2: Rotate string to the right by 'b' positions
-            String rotateOp = curr.substring(curr.length() - b) + curr.substring(0, curr.length() - b);
-            if (visited.add(rotateOp)) {
-                queue.offer(rotateOp);
+            // Check if this rotation yields a smaller string
+            String candidate = new String(rotated);
+            if (smallest == null || candidate.compareTo(smallest) < 0) {
+                smallest = candidate;
             }
         }
 
         return smallest;
+    }
+
+    // Applies the addition operation to every other digit starting at index 'start'
+    private void applyAddOperation(char[] arr, int start, int addCycle) {
+        int currentDigit = arr[start] - '0';
+        int increment = currentDigit % addCycle - currentDigit + 10;
+        for (int i = start; i < arr.length; i += 2) {
+            arr[i] = (char) ('0' + (arr[i] - '0' + increment) % 10);
+        }
+    }
+
+    // Helper: Compute greatest common divisor (GCD)
+    private int gcd(int a, int b) {
+        while (a != 0) {
+            int tmp = a;
+            a = b % a;
+            b = tmp;
+        }
+        return b;
     }
 }
