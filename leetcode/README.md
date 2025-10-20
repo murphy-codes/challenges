@@ -185,6 +185,7 @@ LeetCode
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
 |2016|[Maximum Difference Between Increasing Elements](https://leetcode.com/problems/maximum-difference-between-increasing-elements/)|[Java](./algorithms/java/2016_maximum-difference-between-increasing-elements.java)|Easy|
 |2014|[Longest Subsequence Repeated k Times](https://leetcode.com/problems/longest-subsequence-repeated-k-times/)|[Java](./algorithms/java/2014_longest-subsequence-repeated-k-times.java)|Hard|
+|2011|[Final Value of Variable After Performing Operations](https://leetcode.com/problems/final-value-of-variable-after-performing-operations/)|[Java](./algorithms/java/2011_final-value-of-variable-after-performing-operations.java)|Easy|
 |1980|[Find Unique Binary String](https://leetcode.com/problems/find-unique-binary-string/)|[Java](./algorithms/java/1980_find-unique-binary-string.java)|Medium|
 |1976|[Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)|[Java](./algorithms/java/1976_number-of-ways-to-arrive-at-destination.java)|Medium|
 |1957|[Delete Characters to Make Fancy String](https://leetcode.com/problems/delete-characters-to-make-fancy-string/)|[Java](./algorithms/java/1957_delete-characters-to-make-fancy-string.java)|Easy|
