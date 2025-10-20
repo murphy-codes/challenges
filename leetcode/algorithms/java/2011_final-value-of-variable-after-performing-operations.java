@@ -3,7 +3,7 @@
 // Date: 2025-10-19
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 43.14 MB Beats 14.72%
+//   Memory 43.07 MB Beats 24.22%
 
 /****************************************
 * 
@@ -49,17 +49,14 @@
 ****************************************/
 
 class Solution {
-    // Loop through each operation and check its middle char ('+' or '-').
-    // If it's '+', increment x; otherwise, decrement x. Both ++X and X++
-    // yield the same effect (+1), as do --X and X-- (-1). Simple scan.
-    // Time Complexity: O(n), where n is operations.length.
-    // Space Complexity: O(1), using constant extra space.
+    // Iterate through all operations using an enhanced for-loop. 
+    // For each op, +1 if the middle char is '+', else -1 if it's '-'. 
+    // Compact, efficient, & functionally identical to my previous version.
+    // Time Complexity: O(n), scanning all operations once.
+    // Space Complexity: O(1), requiring no additional data structures.
     public int finalValueAfterOperations(String[] operations) {
         int x = 0;
-        for (int i = 0; i < operations.length; i++) {
-            if (operations[i].charAt(1) == '+') x++;
-            else x--;
-        }
+        for (String op : operations) x += (op.charAt(1) == '+') ? 1 : -1;
         return x;
     }
 }
