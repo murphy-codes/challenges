@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-20
 // At the time of submission:
-//   Runtime 459 ms Beats 24.34%
-//   Memory 76.31 MB Beats 17.10%
+//   Runtime 5 ms Beats 100.00%
+//   Memory 58.66 MB Beats 68.42%
 
 /****************************************
 * 
@@ -38,52 +38,48 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.TreeMap;
-
 class Solution {
-    // Use difference‐array / sweep‐line approach: each element x defines an 
-    // interval [x − k, x + k] of values it can become. We mark +1 at start and 
-    // −1 after end, sort all events, and sweep to track how many elements’  
-    // intervals are activeat each target value x. Then max frequency at 
-    // x = freqMap[x] + min(numOperations, active-freqMap[x]).
-    // Time Complexity: O(n log n) for sorting the events. Space Complexity: O(n).
+    // Compute max achievable frequency using prefix sums for fast range queries.
+    // For each possible value i, count elements within [i−k, i+k] via prefix sums.
+    // Add up to numOperations elements from this range to match i, maximizing freq.
+    // Time Complexity: O(n + range), where range = max(nums) − min(nums).
+    // Space Complexity: O(range), for frequency and prefix arrays.
     public int maxFrequency(int[] nums, int k, int numOperations) {
-        int n = nums.length;
-        // Map to count how many elements are exactly value x
-        Map<Integer, Integer> freqMap = new HashMap<>();
-        // TreeMap for the difference‐array / sweep events: position → delta
-        TreeMap<Integer, Integer> events = new TreeMap<>();
+        int maxVal = 0, minVal = Integer.MAX_VALUE;
 
-        for (int x : nums) {
-            // count original frequency
-            freqMap.put(x, freqMap.getOrDefault(x, 0) + 1);
-            // ensure x appears in events (so we check that point)
-            events.putIfAbsent(x, 0);
-
-            // mark range [x – k, x + k] where x’s value can be made equal to
-            int start = x - k;
-            int end   = x + k;   // inclusive range
-            events.merge(start, +1, Integer::sum);
-            events.merge(end + 1, -1, Integer::sum);
+        // Find global min and max values in nums
+        for (int num : nums) {
+            maxVal = Math.max(maxVal, num);
+            minVal = Math.min(minVal, num);
         }
 
-        int active = 0;
-        int best  = 1;  // at least one element
-        for (Map.Entry<Integer, Integer> e : events.entrySet()) {
-            active += e.getValue();
-            int x     = e.getKey();
-            int cntX  = freqMap.getOrDefault(x, 0);
-            // At value x, `active` = number of intervals (elements) that can reach x
-            // We can form frequency = cntX + min(numOperations, active – cntX)
-            int convertible = active - cntX;
-            if (convertible < 0) convertible = 0;
-            int candidate = cntX + Math.min(numOperations, convertible);
-            if (candidate > best) best = candidate;
+        // Frequency array and prefix sum array
+        int[] freq = new int[maxVal + 1];
+        int[] prefix = new int[maxVal + 1];
+        for (int num : nums) {
+            freq[num]++;
         }
 
-        return best;
+        // Build prefix sum array for fast range queries
+        for (int i = minVal; i <= maxVal; i++) {
+            prefix[i] = prefix[i - 1] + freq[i];
+        }
+
+        int maxFreq = 0;
+
+        // For each possible value i, compute max achievable frequency
+        for (int i = minVal; i <= maxVal; i++) {
+            int leftBound = Math.max(0, i - k - 1);
+            int rightBound = Math.min(maxVal, i + k);
+
+            int rangeCount = prefix[rightBound] - prefix[leftBound];
+            int changeable = rangeCount - freq[i];
+
+            // Use up to numOperations changes, but not more than available
+            int totalFreq = freq[i] + Math.min(numOperations, changeable);
+            maxFreq = Math.max(maxFreq, totalFreq);
+        }
+
+        return maxFreq;
     }
 }
