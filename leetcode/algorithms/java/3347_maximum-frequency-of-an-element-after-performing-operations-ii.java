@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-21
 // At the time of submission:
-//   Runtime 227 ms Beats 54.17%
-//   Memory 64.79 MB Beats 62.50%
+//   Runtime 30 ms Beats 98.61%
+//   Memory 56.47 MB Beats 98.61%
 
 /****************************************
 * 
@@ -39,62 +39,58 @@
 ****************************************/
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 class Solution {
-    // Sort nums and use a sliding window to find the largest group that can be
-    // equalized within numOperations operations. Each operation allows changing
-    // an element by at most k, so the total allowable adjustment is numOps * k.
-    // Expand right, tracking cost to match nums[right]; shrink left when exceeded.
-    // Time: O(n log n) from sorting; Space: O(1) auxiliary.
-    public int maxFrequency(int[] nums, int k, int numOperations) {
-        int n = nums.length;
+    // This solution handles two cases using two-pointer sliding windows:
+    // (1) When the target number already exists in the array — it finds how many
+    //     values lie within [val - k, val + k] and combines them with available ops.
+    // (2) When the target number is not in the array — it checks intervals where
+    //     numbers can converge to a midpoint within ±k adjustments.
+    // Time Complexity: O(n) after sorting, as each pointer moves at most n times.
+    // Space Complexity: O(1) extra space beyond the input array.
+    public int maxFrequency(int[] nums, int k, int numOps) {
         Arrays.sort(nums);
+        int n = nums.length;
+        int maxFreq = 0;
 
-        // Frequency map for exact equals
-        Map<Integer, Integer> freq = new HashMap<>();
-        for (int x : nums) freq.put(x, freq.getOrDefault(x, 0) + 1);
+        int left = 0, right = 0, i = 0;
 
-        int ans = 1;
+        // ===== Case 1: Target number already exists in the array =====
+        while (i < n) {
+            int val = nums[i];
+            int sameCount = 0;
 
-        // Helper: binary search lower bound
-        java.util.function.IntUnaryOperator lb = target -> {
-            int l = 0, r = n;
-            while (l < r) {
-                int m = (l + r) >>> 1;
-                if (nums[m] < target) l = m + 1;
-                else r = m;
+            // Count how many equal elements (nums[i] == val)
+            while (i < n && nums[i] == val) {
+                sameCount++;
+                i++;
             }
-            return l;
-        };
 
-        // Helper: binary search upper bound
-        java.util.function.IntUnaryOperator ub = target -> {
-            int l = 0, r = n;
-            while (l < r) {
-                int m = (l + r) >>> 1;
-                if (nums[m] <= target) l = m + 1;
-                else r = m;
-            }
-            return l;
-        };
+            // Expand right boundary: values within [val - k, val + k]
+            while (right < n && nums[right] <= val + k) right++;
 
-        // For each index, consider candidates nums[i] - k, nums[i], nums[i] + k
-        for (int x : nums) {
-            int[] candidates = new int[] { x - k, x, x + k };
-            for (int t : candidates) {
-                // Number of elements v with |v - t| <= k  => v in [t-k, t+k]
-                int L = lb.applyAsInt(t - k);
-                int R = ub.applyAsInt(t + k);
-                int reachable = R - L;
+            // Shrink left boundary: exclude values below [val - k]
+            while (left < n && nums[left] < val - k) left++;
 
-                int equal = freq.getOrDefault(t, 0);
-                int canConvert = Math.min(numOperations, Math.max(0, reachable - equal));
-                ans = Math.max(ans, equal + canConvert);
-            }
+            // Potential frequency: existing same values + operations
+            maxFreq = Math.max(maxFreq, Math.min(sameCount + numOps, right - left));
         }
 
-        return ans;
+        // ===== Case 2: Target number does NOT exist in the array =====
+        left = 0;
+        right = 0;
+
+        // Expand window where difference between nums[right] and nums[left] <= 2k
+        while (right < n) {
+            while (right < n && (long) nums[left] + 2L * k >= nums[right]) {
+                right++;
+            }
+
+            // You can only modify up to numOps distinct indices
+            maxFreq = Math.max(maxFreq, Math.min(right - left, numOps));
+            left++;
+        }
+
+        return maxFreq;
     }
 }
