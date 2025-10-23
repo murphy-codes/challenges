@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/check-if-digits-are-equal-in-string-after-operations-i/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-10-22
+// Date: 2025-10-23
 // At the time of submission:
-//   Runtime 24 ms Beats 12.86%
-//   Memory 45.94 MB Beats 7.4%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 42.13 MB Beats 94.19%
 
 /****************************************
 * 
@@ -48,20 +48,23 @@
 ****************************************/
 
 class Solution {
-    // Simulates the digit-pair reduction process as described in the problem.
-    // Repeatedly replaces the string with the pairwise (sum mod 10) digits until
-    // only two remain, then compares them. Each round processes one fewer digit.
-    // Time Complexity: O(n^2) due to repeated O(n) scans on decreasing string sizes.
-    // Space Complexity: O(n), though repeated string concatenation adds overhead.
+    // Converts the input string into an array of ints, then repeatedly updates
+    // each int to be the sum (mod 10) of itself and the next int until only
+    // two ints remain. The result is true if the final two ints are equal.
+    // Time Complexity: O(n^2), since each pass processes one fewer element.
+    // Space Complexity: O(n), for storing the digits array in memory.
     public boolean hasSameDigits(String s) {
-        String tmp;
-        while (s.length() > 2) {
-            tmp = "";
-            for (int i = 1; i < s.length(); i++) {
-                tmp += ((s.charAt(i-1) - '0') + (s.charAt(i) - '0')) % 10;
+        int[] digits = new int[s.length()];
+
+        for (int i = 0; i < digits.length; i++)
+            digits[i] = s.charAt(i) - '0';
+
+        for (int len = digits.length; len > 2; len--) {
+            for (int i = 0; i < len - 1; i++) {
+                digits[i] = (digits[i] + digits[i + 1]) % 10;
             }
-            s = tmp;
         }
-        return s.charAt(0)==s.charAt(1);
+
+        return digits[0] == digits[1];
     }
 }
