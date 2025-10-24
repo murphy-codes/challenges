@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-24
 // At the time of submission:
-//   Runtime 26 ms Beats 80.92%
-//   Memory 44.96 MB Beats 12.98%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 40.38 MB Beats 96.95%
 
 /****************************************
 * 
@@ -44,50 +44,33 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-
 class Solution {
-    // This solution keeps a static memo list of known "beautiful numbers" for reuse.
-    // If n is smaller than the largest memoized value, it returns the next larger one.
-    // Otherwise, it searches incrementally for the next "balanced" number, where each
-    // digit d appears exactly d times, adding new results to the memo as discovered.
-    // Time complexity is O(k * log n) per search; space complexity is O(m) for memo.
-
-    private static final ArrayList<Integer> memo = new ArrayList<>();
-
-    static {
-        memo.add(1);
-        memo.add(22);
-        memo.add(122);
-        memo.add(212);
-        memo.add(221);
-        memo.add(333);
-        // …
-        // memo.add(666666);
-    }
-
+    // This solution stores all known "balanced" numbers in a static sorted array.
+    // It uses binary search to find the smallest number strictly greater than n.
+    // The built-in Arrays.binarySearch provides O(log N) lookup efficiency.
+    // Since all balanced numbers are precomputed, no generation or checking is needed.
+    // Time complexity: O(log N); Space complexity: O(1) beyond the static array.
+    private static final int[] bN = new int[] {
+        1, 22, 122, 212, 221, 333, 1333, 3133, 3313, 3331, 4444,
+        14444, 22333, 23233, 23323, 23332, 32233, 32323, 32332,
+        33223, 33232, 33322, 41444, 44144, 44414, 44441, 55555,
+        122333, 123233, 123323, 123332, 132233, 132323, 132332,
+        133223, 133232, 133322, 155555, 212333, 213233, 213323,
+        213332, 221333, 223133, 223313, 223331, 224444, 231233,
+        231323, 231332, 232133, 232313, 232331, 233123, 233132,
+        233213, 233231, 233312, 233321, 242444, 244244, 244424,
+        244442, 312233, 312323, 312332, 313223, 313232, 313322,
+        321233, 321323, 321332, 322133, 322313, 322331, 323123,
+        323132, 323213, 323231, 323312, 323321, 331223, 331232,
+        331322, 332123, 332132, 332213, 332231, 332312, 332321,
+        333122, 333212, 333221, 422444, 424244, 424424, 424442,
+        442244, 442424, 442442, 444224, 444242, 444422, 515555,
+        551555, 555155, 555515, 555551, 666666, 1224444
+    };
     public int nextBeautifulNumber(int n) {
-        if (n < memo.get(memo.size()-1)) 
-            for (int bN : memo) 
-                if (bN > n)
-                    return bN;
-        for (int x = n + 1; ; x++) {
-            if (isBalanced(x)) {
-                memo.add(x);
-                return x;
-            }
-        }
-    }
-
-    private boolean isBalanced(int x) {
-        int[] count = new int[10];
-        while (x > 0) {
-            count[x % 10]++;
-            x /= 10;
-        }
-        for (int d = 0; d < 10; d++) {
-            if (count[d] != 0 && count[d] != d) return false;
-        }
-        return true;
+        int i = Arrays.binarySearch(bN, n + 1);
+        if (i < 0) // no exact match found, binarySearch returns -(insertion point) - 1
+            i = -i - 1; // convert to actual insertion index (next larger element)
+        return bN[i];
     }
 }
