@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-24
 // At the time of submission:
-//   Runtime 15 ms Beats 82.44%
-//   Memory 44.76 MB Beats 23.66%
+//   Runtime 26 ms Beats 80.92%
+//   Memory 44.96 MB Beats 12.98%
 
 /****************************************
 * 
@@ -47,12 +47,14 @@
 import java.util.ArrayList;
 
 class Solution {
-    // This solution precomputes and memoizes known "beautiful numbers" in a static list
-    // for fast lookup of small inputs. If n is larger than the prefilled range, it 
-    // iteratively checks each subsequent number until finding the next "balanced" one, 
-    // where each digit d appears exactly d times. Time complexity is O(k * log n) for 
-    // larger inputs (k digits checked), and space complexity is O(m) for memoized values.
+    // This solution keeps a static memo list of known "beautiful numbers" for reuse.
+    // If n is smaller than the largest memoized value, it returns the next larger one.
+    // Otherwise, it searches incrementally for the next "balanced" number, where each
+    // digit d appears exactly d times, adding new results to the memo as discovered.
+    // Time complexity is O(k * log n) per search; space complexity is O(m) for memo.
+
     private static final ArrayList<Integer> memo = new ArrayList<>();
+
     static {
         memo.add(1);
         memo.add(22);
@@ -60,116 +62,15 @@ class Solution {
         memo.add(212);
         memo.add(221);
         memo.add(333);
-        memo.add(1333);
-        memo.add(3133);
-        memo.add(3313);
-        memo.add(3331);
-        memo.add(4444);
-        memo.add(14444);
-        memo.add(22333);
-        memo.add(23233);
-        memo.add(23323);
-        memo.add(23332);
-        memo.add(32233);
-        memo.add(32323);
-        memo.add(32332);
-        memo.add(33223);
-        memo.add(33232);
-        memo.add(33322);
-        memo.add(41444);
-        memo.add(44144);
-        memo.add(44414);
-        memo.add(44441);
-        memo.add(55555);
-        memo.add(122333);
-        memo.add(123233);
-        memo.add(123323);
-        memo.add(123332);
-        memo.add(132233);
-        memo.add(132323);
-        memo.add(132332);
-        memo.add(133223);
-        memo.add(133232);
-        memo.add(133322);
-        memo.add(155555);
-        memo.add(212333);
-        memo.add(213233);
-        memo.add(213323);
-        memo.add(213332);
-        memo.add(221333);
-        memo.add(223133);
-        memo.add(223313);
-        memo.add(223331);
-        memo.add(224444);
-        memo.add(231233);
-        memo.add(231323);
-        memo.add(231332);
-        memo.add(232133);
-        memo.add(232313);
-        memo.add(232331);
-        memo.add(233123);
-        memo.add(233132);
-        memo.add(233213);
-        memo.add(233231);
-        memo.add(233312);
-        memo.add(233321);
-        memo.add(242444);
-        memo.add(244244);
-        memo.add(244424);
-        memo.add(244442);
-        memo.add(312233);
-        memo.add(312323);
-        memo.add(312332);
-        memo.add(313223);
-        memo.add(313232);
-        memo.add(313322);
-        memo.add(321233);
-        memo.add(321323);
-        memo.add(321332);
-        memo.add(322133);
-        memo.add(322313);
-        memo.add(322331);
-        memo.add(323123);
-        memo.add(323132);
-        memo.add(323213);
-        memo.add(323231);
-        memo.add(323312);
-        memo.add(323321);
-        memo.add(331223);
-        memo.add(331232);
-        memo.add(331322);
-        memo.add(332123);
-        memo.add(332132);
-        memo.add(332213);
-        memo.add(332231);
-        memo.add(332312);
-        memo.add(332321);
-        memo.add(333122);
-        memo.add(333212);
-        memo.add(333221);
-        memo.add(422444);
-        memo.add(424244);
-        memo.add(424424);
-        memo.add(424442);
-        memo.add(442244);
-        memo.add(442424);
-        memo.add(442442);
-        memo.add(444224);
-        memo.add(444242);
-        memo.add(444422);
-        memo.add(515555);
-        memo.add(551555);
-        memo.add(555155);
-        memo.add(555515);
-        memo.add(555551);
-        memo.add(666666);
+        // …
+        // memo.add(666666);
     }
+
     public int nextBeautifulNumber(int n) {
         if (n < memo.get(memo.size()-1)) 
             for (int bN : memo) 
                 if (bN > n)
                     return bN;
-        // START HERE
         for (int x = n + 1; ; x++) {
             if (isBalanced(x)) {
                 memo.add(x);
@@ -177,6 +78,7 @@ class Solution {
             }
         }
     }
+
     private boolean isBalanced(int x) {
         int[] count = new int[10];
         while (x > 0) {
