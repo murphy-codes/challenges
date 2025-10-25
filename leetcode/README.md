@@ -218,6 +218,7 @@ LeetCode
 |1726|[Tuple with Same Product](https://leetcode.com/problems/tuple-with-same-product/)|[Java](./algorithms/java/1726_tuple-with-same-product.java)|Medium|
 |1718|[Construct the Lexicographically Largest Valid Sequence](https://leetcode.com/problems/construct-the-lexicographically-largest-valid-sequence/)|[Java](./algorithms/java/1718_construct-the-lexicographically-largest-valid-sequence.java)|Medium|
 |1717|[Maximum Score From Removing Substrings](https://leetcode.com/problems/maximum-score-from-removing-substrings/)|[Java](./algorithms/java/1717_maximum-score-from-removing-substrings.java)|Medium|
+|1716|[Calculate Money in Leetcode Bank](https://leetcode.com/problems/calculate-money-in-leetcode-bank/)|[Java](./algorithms/java/1716_calculate-money-in-leetcode-bank.java)|Easy|
 |1695|[Maximum Erasure Value](https://leetcode.com/problems/maximum-erasure-value/)|[Java](./algorithms/java/1695_maximum-erasure-value.java)|Medium|
 |1625|[Lexicographically Smallest String After Applying Operations](https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/)|[Java](./algorithms/java/1625_lexicographically-smallest-string-after-applying-operations.java)|Medium|
 |1550|[Three Consecutive Odds](https://leetcode.com/problems/three-consecutive-odds/)|[Java](./algorithms/java/1550_three-consecutive-odds.java)|Easy|
