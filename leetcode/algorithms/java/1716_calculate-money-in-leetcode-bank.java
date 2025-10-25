@@ -3,7 +3,7 @@
 // Date: 2025-10-25
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 40.84 MB Beats 15.30%
+//   Memory 40.67 MB Beats 32.47%
 
 /****************************************
 * 
@@ -36,14 +36,12 @@
 ****************************************/
 
 class Solution {
-    // Each full week contributes 28 + 7*(week index) total dollars.
-    // We compute total for full weeks using a summation formula,
-    // then iterate through remaining days (<=7) to add final partial week.
-    // Time Complexity: O(1) since loop runs ≤ 7 times; Space: O(1).
+    // Each week adds 28 + 7*(week index); full weeks use closed form sum.
+    // Final partial week is also computed with summation formulas:
+    // (d*w) + (d*(d+1))/2. No iteration is required.
+    // Time Complexity: O(1); Space Complexity: O(1).
     public int totalMoney(int n) {
         int d = n % 7, w = n / 7;
-        int total = (w * 28) + 7*((w*(w-1))/2);
-        for (int i = 1; i <= d; i++) total += w+i;
-        return total;
+        return (w * 28) + 7*((w*(w-1))/2) + (d*w) + ((d*(d+1))/2);
     }
 }
