@@ -184,6 +184,7 @@ LeetCode
 |2071|[Maximum Number of Tasks You Can Assign](https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/)|[Java](./algorithms/java/2071_maximum-number-of-tasks-you-can-assign.java)|Hard|
 |2048|[Next Greater Numerically Balanced Number](https://leetcode.com/problems/next-greater-numerically-balanced-number/)|[Java](./algorithms/java/2048_next-greater-numerically-balanced-number.java)|Medium|
 |2044|[Count Number of Maximum Bitwise-OR Subsets](https://leetcode.com/problems/count-number-of-maximum-bitwise-or-subsets/)|[Java](./algorithms/java/2044_count-number-of-maximum-bitwise-or-subsets.java)|Medium|
+|2043|[Simple Bank System](https://leetcode.com/problems/simple-bank-system/)|[Java](./algorithms/java/2043_simple-bank-system.java)|Medium|
 |2040|[Kth Smallest Product of Two Sorted Arrays](https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/)|[Java](./algorithms/java/2040_kth-smallest-product-of-two-sorted-arrays.java)|Hard|
 |2033|[Minimum Operations to Make a Uni-Value Grid](https://leetcode.com/problems/minimum-operations-to-make-a-uni-value-grid)|[Java](./algorithms/java/2033_minimum-operations-to-make-a-uni-value-grid.java)|Medium|
 |2017|[Grid Game](https://leetcode.com/problems/grid-game/)|[Java](./algorithms/java/2017_grid-game.java)|Medium|
