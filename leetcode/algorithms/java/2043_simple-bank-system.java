@@ -3,7 +3,7 @@
 // Date: 2025-10-26
 // At the time of submission:
 //   Runtime 95 ms Beats 97.49%
-//   Memory 101.42 MB Beats 37.83%
+//   Memory 101.40 MB Beats 47.46%
 
 /****************************************
 * 
@@ -57,47 +57,39 @@
 ****************************************/
 
 class Bank {
-    // Simulates a simple banking system supporting deposit, withdraw, and transfer.
-    // Each transaction checks for valid account numbers and sufficient funds.
-    // Updates are applied directly to an internal balance array in O(1) time.
-    // Time Complexity: O(1) per operation. Space Complexity: O(n) for balances.
+    // Implements a simple bank system supporting deposit, withdraw, and transfer.
+    // Each operation validates account existence and sufficient funds before
+    // applying changes directly to a long[] array of balances. Uses O(1) time
+    // and space per operation since no extra structures or loops are required.
 
-    private long[] balance;
+    private long[] balances;
 
     public Bank(long[] balance) {
-        this.balance = balance;
+        this.balances = balance;
     }
 
+    // Transfers money between two valid accounts
     public boolean transfer(int account1, int account2, long money) {
-        if (!isValid(account1) || !isValid(account2)) return false;
-        if (balance[account1 - 1] < money) return false;
-        balance[account1 - 1] -= money;
-        balance[account2 - 1] += money;
-        return true;
+        // Check if either account index is invalid (1-based -> 0-based)
+        if (account1 - 1 >= balances.length || account2 - 1 >= balances.length)
+            return false;
+        // Withdraw first; if successful, deposit into destination
+        if (withdraw(account1, money)) return deposit(account2, money);
+        return false;
     }
 
+    // Deposits money into the specified account
     public boolean deposit(int account, long money) {
-        if (!isValid(account)) return false;
-        balance[account - 1] += money;
+        if (account - 1 >= balances.length) return false;
+        balances[account - 1] += money;
         return true;
     }
 
+    // Withdraws money if account exists and has sufficient balance
     public boolean withdraw(int account, long money) {
-        if (!isValid(account) || balance[account - 1] < money) return false;
-        balance[account - 1] -= money;
+        if (account - 1 >= balances.length) return false;
+        if (balances[account - 1] < money) return false;
+        balances[account - 1] -= money;
         return true;
-    }
-
-    // Helper method to validate account number
-    private boolean isValid(int account) {
-        return account >= 1 && account <= balance.length;
     }
 }
-
-/**
- * Your Bank object will be instantiated and called as such:
- * Bank obj = new Bank(balance);
- * boolean param_1 = obj.transfer(account1,account2,money);
- * boolean param_2 = obj.deposit(account,money);
- * boolean param_3 = obj.withdraw(account,money);
- */
