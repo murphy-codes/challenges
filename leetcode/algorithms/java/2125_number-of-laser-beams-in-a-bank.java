@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-10-26
 // At the time of submission:
-//   Runtime 11 ms Beats 80.94%
-//   Memory 45.28 MB Beats 45.58%
+//   Runtime 6 ms Beats 100.00%
+//   Memory 45.23 MB Beats 45.58%
 
 /****************************************
 * 
@@ -49,29 +49,30 @@
 ****************************************/
 
 class Solution {
-    // Counts total laser beams between rows with security devices. Each row's
-    // beam count equals devices_in_prev_nonempty_row * devices_in_current_row.
-    // Skips rows without devices. Traverses the grid once using O(m·n) time
-    // and O(1) extra space for an efficient and clean linear solution.
+    // Counts total laser beams by multiplying device counts of consecutive
+    // non-empty rows. Skips rows with no devices. Uses a helper to count '1's
+    // per row efficiently. Runs in O(m·n) time since each char is checked once,
+    // and uses O(1) space with only a few integer variables for tracking state.
     public int numberOfBeams(String[] bank) {
         int totalBeams = 0;
-        int prevCount = 0;
+        int prevDevices = countDevices(bank[0]);
 
-        for (String row : bank) {
-            int currCount = 0;
-
-            // Count devices ('1's) in the current row
-            for (char c : row.toCharArray()) {
-                if (c == '1') currCount++;
-            }
-
-            // If this row has devices, multiply with previous non-empty row
-            if (currCount > 0) {
-                totalBeams += prevCount * currCount;
-                prevCount = currCount;
-            }
+        for (int i = 1; i < bank.length; i++) {
+            int currDevices = countDevices(bank[i]);
+            if (currDevices == 0) continue;
+            // Add beams between previous and current non-empty rows
+            totalBeams += prevDevices * currDevices;
+            prevDevices = currDevices; // update for next iteration
         }
 
         return totalBeams;
+    }
+
+    // Helper to count number of '1' devices in a row
+    int countDevices(String row) {
+        int count = 0;
+        for (int i = 0; i < row.length(); i++)
+            count += (row.charAt(i) - '0');
+        return count;
     }
 }
