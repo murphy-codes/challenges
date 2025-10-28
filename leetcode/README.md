@@ -39,6 +39,7 @@ LeetCode
 |3362|[Zero Array Transformation III](https://leetcode.com/problems/zero-array-transformation-iii/)|[Java](./algorithms/java/3362_zero-array-transformation-iii.java)|Medium|
 |3356|[Zero Array Transformation II](https://leetcode.com/problems/zero-array-transformation-ii/)|[Java](./algorithms/java/3356_zero-array-transformation-ii.java)|Medium|
 |3355|[Zero Array Transformation I](https://leetcode.com/problems/zero-array-transformation-i/)|[Java](./algorithms/java/3355_zero-array-transformation-i.java)|Medium|
+|3354|[Make Array Elements Equal to Zero](https://leetcode.com/problems/make-array-elements-equal-to-zero/)|[Java](./algorithms/java/3354_make-array-elements-equal-to-zero.java)|Easy|
 |3350|[Adjacent Increasing Subarrays Detection II](https://leetcode.com/problems/adjacent-increasing-subarrays-detection-ii/)|[Java](./algorithms/java/3350_adjacent-increasing-subarrays-detection-ii.java)|Medium|
 |3349|[Adjacent Increasing Subarrays Detection I](https://leetcode.com/problems/adjacent-increasing-subarrays-detection-i/)|[Java](./algorithms/java/3349_adjacent-increasing-subarrays-detection-i.java)|Easy|
 |3347|[Maximum Frequency of an Element After Performing Operations II](https://leetcode.com/problems/maximum-frequency-of-an-element-after-performing-operations-ii/)|[Java](./algorithms/java/3347_maximum-frequency-of-an-element-after-performing-operations-ii.java)|Hard|
