@@ -35,6 +35,7 @@ LeetCode
 |3375|[Minimum Operations to Make Array Values Equal to K](https://leetcode.com/problems/minimum-operations-to-make-array-values-equal-to-k/)|[Java](./algorithms/java/3375_minimum-operations-to-make-array-values-equal-to-k.java)|Easy|
 |3373|[Maximize the Number of Target Nodes After Connecting Trees II](https://leetcode.com/problems/maximize-the-number-of-target-nodes-after-connecting-trees-ii/)|[Java](./algorithms/java/3373_maximize-the-number-of-target-nodes-after-connecting-trees-ii.java)|Hard|
 |3372|[Maximize the Number of Target Nodes After Connecting Trees I](https://leetcode.com/problems/maximize-the-number-of-target-nodes-after-connecting-trees-i/)|[Java](./algorithms/java/3372_maximize-the-number-of-target-nodes-after-connecting-trees-i.java)|Medium|
+|3370|[Smallest Number With All Set Bits](https://leetcode.com/problems/smallest-number-with-all-set-bits/)|[Java](./algorithms/java/3370_smallest-number-with-all-set-bits.java)|Easy|
 |3363|[Find the Maximum Number of Fruits Collected](https://leetcode.com/problems/find-the-maximum-number-of-fruits-collected/)|[Java](./algorithms/java/3363_find-the-maximum-number-of-fruits-collected.java)|Hard|
 |3362|[Zero Array Transformation III](https://leetcode.com/problems/zero-array-transformation-iii/)|[Java](./algorithms/java/3362_zero-array-transformation-iii.java)|Medium|
 |3356|[Zero Array Transformation II](https://leetcode.com/problems/zero-array-transformation-ii/)|[Java](./algorithms/java/3356_zero-array-transformation-ii.java)|Medium|
