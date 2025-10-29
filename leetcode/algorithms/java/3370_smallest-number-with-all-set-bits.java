@@ -3,7 +3,7 @@
 // Date: 2025-10-28
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 40.53 MB Beats 87.17%
+//   Memory 41.05 MB Beats 26.18%
 
 /****************************************
 * 
@@ -35,16 +35,14 @@
 ****************************************/
 
 class Solution {
-    // Precompute all numbers whose binary form is all 1's (1, 3, 7, 15, ...).
-    // Iterate through this small fixed array and return the first number ≥ n.
-    // Since the array is constant-sized (≤ 10 elements for n ≤ 1000), runtime is O(1).
-    // Space complexity is also O(1) since only a small static array is used.
-    private static final int[] setBits = new int[] {1, 3, 7, 15, 31, 63, 127, 255, 511, 1023};
+    // Start from 1 ("1" in binary), then repeatedly left-shift and set the
+    // lowest bit to 1 until the number is >= n. Each step doubles the value
+    // and adds 1, effectively building numbers like 1, 3, 7, 15, 31, etc.
+    // Time Complexity: O(log n), since each shift adds one binary digit.
+    // Space Complexity: O(1), as only a few integer variables are used.
     public int smallestNumber(int n) {
-        for (int i = 0; i < setBits.length; i++) {
-            if (setBits[i] == n) return n;
-            if (setBits[i] > n) return setBits[i];
-        }
-        return 2047; // should never hit this due to constraints
+        int x = 1;
+        while (x < n) x = (x << 1) | 1; // left-shift and fill with 1
+        return x;
     }
 }
