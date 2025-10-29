@@ -3,7 +3,7 @@
 // Date: 2025-10-28
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 41.05 MB Beats 26.18%
+//   Memory 40.79 MB Beats 56.68%
 
 /****************************************
 * 
@@ -35,14 +35,38 @@
 ****************************************/
 
 class Solution {
+    private static final Random rand = new Random();
+    public int smallestNumber(int n) {
+        switch (rand.nextInt(2)) {
+            case 0:
+                return precompSmallestN(n);
+            default: // case 1
+                return bitshiftSmallestN(n);
+        }
+    }
+
+    // Precomputed all possible "all set bit" numbers (1, 3, 7, 15, ... , 1023).
+    // Iterate to find the smallest number >= n. Since n ≤ 1000, array covers all.
+    // Time Complexity: O(1) due to fixed-size iteration (10 elements).
+    // Space Complexity: O(1) since array is constant-sized and not input-dependent.
+    private static final int[] setBits = new int[] {1, 3, 7, 15, 31, 63, 127, 255, 511, 1023};
+    public int precompSmallestN(int n) {
+        for (int i = 0; i < setBits.length; i++) {
+            if (setBits[i] == n) return n;
+            if (setBits[i] > n) return setBits[i];
+        }
+        return 2047; // should never hit this due to constraints
+    }
+
     // Start from 1 ("1" in binary), then repeatedly left-shift and set the
     // lowest bit to 1 until the number is >= n. Each step doubles the value
     // and adds 1, effectively building numbers like 1, 3, 7, 15, 31, etc.
     // Time Complexity: O(log n), since each shift adds one binary digit.
     // Space Complexity: O(1), as only a few integer variables are used.
-    public int smallestNumber(int n) {
+    public int bitshiftSmallestN(int n) {
         int x = 1;
         while (x < n) x = (x << 1) | 1; // left-shift and fill with 1
         return x;
     }
 }
+
