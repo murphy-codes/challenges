@@ -227,6 +227,7 @@ LeetCode
 |1625|[Lexicographically Smallest String After Applying Operations](https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/)|[Java](./algorithms/java/1625_lexicographically-smallest-string-after-applying-operations.java)|Medium|
 |1550|[Three Consecutive Odds](https://leetcode.com/problems/three-consecutive-odds/)|[Java](./algorithms/java/1550_three-consecutive-odds.java)|Easy|
 |1534|[Count Good Triplets](https://leetcode.com/problems/count-good-triplets/)|[Java](./algorithms/java/1534_count-good-triplets.java)|Easy|
+|1526|[Minimum Number of Increments on Subarrays to Form a Target Array](https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/)|[Java](./algorithms/java/1526_minimum-number-of-increments-on-subarrays-to-form-a-target-array.java)|Hard|
 |1524|[Number of Sub-arrays With Odd Sum](https://leetcode.com/problems/number-of-sub-arrays-with-odd-sum/)|[Java](./algorithms/java/1524_number-of-sub-arrays-with-odd-sum.java)|Medium|
 |1518|[Water Bottles](https://leetcode.com/problems/water-bottles/)|[Java](./algorithms/java/1518_water-bottles.java)|Easy|
 |1504|[Count Submatrices With All Ones](https://leetcode.com/problems/count-submatrices-with-all-ones/)|[Java](./algorithms/java/1504_count-submatrices-with-all-ones.java)|Medium|
