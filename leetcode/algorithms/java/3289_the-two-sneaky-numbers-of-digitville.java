@@ -3,6 +3,11 @@
 // Date: 2025-10-31
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
+//   Memory 45.94 MB Beats 7.71%
+//
+// Or Constant Memory approach, Solution2:
+// At the time of submission:
+//   Runtime 0 ms Beats 100.00%
 //   Memory 45.69 MB Beats 7.71%
 
 /****************************************
@@ -47,6 +52,21 @@ class Solution {
     // small counting array is simple and efficient. Time Complexity: O(n),
     // Space Complexity: O(n), dominated by the count array of fixed size 101.
     public int[] getSneakyNumbers(int[] nums) {
+        int[] sneaky = new int[2];
+        int[] count = new int[101];
+        for (int n : nums) count[n]++;
+        for (int i = 0; i < 101; i++) 
+            if (count[i]>1) sneaky[(sneaky[0] > 0) ? 1 : 0] = i;
+        return sneaky;
+    }
+}
+
+class Solution2 {
+    // Count occurrences of each number using an auxiliary array, then record
+    // the two numbers that appear more than once. Since n ≤ 100, using a
+    // small counting array is simple and efficient. Time Complexity: O(n),
+    // Space Complexity: O(n), dominated by the count array of fixed size 101.
+    public int[] getSneakyNumbers2(int[] nums) {
         int[] sneaky = new int[2];
         int[] count = new int[101];
         for (int n : nums) count[n]++;
