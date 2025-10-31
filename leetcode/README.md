@@ -55,6 +55,7 @@ LeetCode
 |3307|[Find the K-th Character in String Game II](https://leetcode.com/problems/find-the-k-th-character-in-string-game-ii/)|[Java](./algorithms/java/3307_find-the-k-th-character-in-string-game-ii.java)|Hard|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
 |3304|[Find the K-th Character in String Game I](https://leetcode.com/problems/find-the-k-th-character-in-string-game-i/)|[Java](./algorithms/java/3304_find-the-k-th-character-in-string-game-i.java)|Easy|
+|3289|[The Two Sneaky Numbers of Digitville](https://leetcode.com/problems/the-two-sneaky-numbers-of-digitville/)|[Java](./algorithms/java/3289_the-two-sneaky-numbers-of-digitville.java)|Easy|
 |3272|[Find the Count of Good Integers](https://leetcode.com/problems/find-the-count-of-good-integers/)|[Java](./algorithms/java/3272_find-the-count-of-good-integers.java)|Hard|
 |3227|[Vowels Game in a String0](https://leetcode.com/problems/vowels-game-in-a-string/)|[Java](./algorithms/java/3227_vowels-game-in-a-string.java)|Medium|
 |3223|[Minimum Length of String After Operations](https://leetcode.com/problems/minimum-length-of-string-after-operations/)|[Java](./algorithms/java/3223_minimum-length-of-string-after-operations.java)|Medium|
