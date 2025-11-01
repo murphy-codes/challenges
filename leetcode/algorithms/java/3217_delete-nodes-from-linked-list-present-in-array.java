@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-01
 // At the time of submission:
-//   Runtime 32 ms Beats 5.29%
-//   Memory 147.10 MB Beats 5.52%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 147.13 MB Beats 5.52%
 
 /****************************************
 * 
@@ -53,14 +53,35 @@
  * }
  */
 class Solution {
-  public ListNode modifiedList(int[] nums, ListNode head) {
-    ListNode temp = new ListNode(0, head);
-    Set<Integer> numsSet = Arrays.stream(nums).boxed().collect(Collectors.toSet());
-    for (ListNode curr = temp; curr.next != null;)
-      if (numsSet.contains(curr.next.val))
-        curr.next = curr.next.next;
-      else
-        curr = curr.next;
-    return temp.next;
-  }
+    // This solution removes nodes whose values appear in nums[] using a boolean
+    // lookup table for O(1) value checks. First, it finds the max value in nums
+    // to size the boolean array, then flags all nums[i] = true. While traversing
+    // the linked list, nodes whose values are not flagged are linked forward.
+    // Runs in O(n + m) time and O(max(nums)) space, where n=list size, m=nums.length.
+    public ListNode modifiedList(int[] nums, ListNode head) {
+        // Find the maximum value in nums to size our boolean lookup array
+        int maxVal = -1;
+        for (int num : nums) if (num > maxVal) maxVal = num;
+
+        // Mark all values that should be deleted
+        boolean[] toDelete = new boolean[maxVal + 1];
+        for (int num : nums) toDelete[num] = true;
+
+        // Use a dummy head to handle possible deletions at the list start
+        ListNode dummyHead = new ListNode();
+        ListNode current = dummyHead;
+
+        // Traverse and rebuild list with nodes NOT in 'toDelete'
+        while (head != null) {
+            if (head.val >= toDelete.length || !toDelete[head.val]) {
+                current.next = head;
+                current = current.next;
+            }
+            head = head.next;
+        }
+
+        // Terminate the rebuilt list
+        current.next = null;
+        return dummyHead.next;
+    }
 }
