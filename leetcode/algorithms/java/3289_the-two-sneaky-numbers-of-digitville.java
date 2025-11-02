@@ -9,6 +9,11 @@
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
 //   Memory 45.69 MB Beats 7.71%
+//
+// Or Boolean approach, Solution3:
+// At the time of submission:
+//   Runtime 1 ms Beats 99.99%
+//   Memory 45.52 MB Beats 6.96%
 
 /****************************************
 * 
@@ -72,6 +77,23 @@ class Solution2 {
         for (int n : nums) count[n]++;
         for (int i = 0; i < 101; i++) 
             if (count[i]>1) sneaky[(sneaky[0] > 0) ? 1 : 0] = i;
+        return sneaky;
+    }
+}
+
+class Solution3  {
+    // Iterate through nums, marking each value as seen in a boolean array.
+    // If a number has already been seen, record it as one of the duplicates.
+    // Since nums[i] < n, we safely index into a flag array of size n.
+    // Runs in O(n) time and uses O(n) space for the boolean tracking array.
+    public int[] getSneakyNumbers(int[] nums) {
+        int[] sneaky = new int[2];    // stores the two duplicate numbers
+        int idx = 0;                  // index for inserting into sneaky[]
+        boolean[] seen = new boolean[nums.length - 1]; // tracks seen numbers
+        for (int n : nums) {
+            if (seen[n]) sneaky[idx++] = n; // if already seen, is duplicate
+            seen[n] = true;           // mark number as seen
+        }
         return sneaky;
     }
 }
