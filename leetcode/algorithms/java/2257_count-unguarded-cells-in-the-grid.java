@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/count-unguarded-cells-in-the-grid/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-11-01
+// Date: 2025-11-02
 // At the time of submission:
-//   Runtime 25 ms Beats 56.93%
-//   Memory 147.24 MB Beats 5.11%
+//   Runtime 20 ms Beats 83.45%
+//   Memory 146.65 MB Beats 5.52%
 
 /****************************************
 * 
@@ -43,45 +43,65 @@
 * 
 ****************************************/
 
-import java.util.List;
-
 class Solution {
-    // This solution marks visibility for each guard in four directions until blocked.
-    // Each guard "sweeps" its row/column, marking visible cells as guarded.
-    // The grid is scanned once more to count unguarded empty cells.
-    // Time Complexity: O(m * n) — each cell processed at most once per direction.
-    // Space Complexity: O(m * n) — to store the grid state.
+    // For each guard, sweep in 4 directions until blocked by wall/guard.
+    // Mark all visible cells as guarded and count them on the fly.
+    // The total unguarded cells = total - (guards + walls + guarded).
+    // Time Complexity: O(m * n) — each cell visited at most once per direction.
+    // Space Complexity: O(m * n) — for the grid storage.
     public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
-        int[][] grid = new int[m][n];
+        int[][] grid = new int[m][n];  // 0 = empty, 1 = guarded, 2 = blocked
+        int guardedCount = 0;
+        int guardCount = guards.length;
+        int wallCount = walls.length;
 
-        // 1 = wall, 2 = guard, 3 = guarded
+        // Mark all wall positions as blocked
         for (int[] wall : walls)
-            grid[wall[0]][wall[1]] = 1;
+            grid[wall[0]][wall[1]] = 2;
+
+        // Mark all guard positions as blocked
         for (int[] guard : guards)
             grid[guard[0]][guard[1]] = 2;
 
-        // Directions: up, down, left, right
-        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        // Sweep in 4 directions from each guard
+        for (int g = 0; g < guardCount; g++) {
+            int row = guards[g][0];
+            int col = guards[g][1];
 
-        for (int[] g : guards) {
-            int r = g[0], c = g[1];
-            for (int[] d : dirs) {
-                int nr = r + d[0], nc = c + d[1];
-                while (nr >= 0 && nr < m && nc >= 0 && nc < n && grid[nr][nc] != 1 && grid[nr][nc] != 2) {
-                    if (grid[nr][nc] == 0)
-                        grid[nr][nc] = 3;  // Mark as guarded
-                    nr += d[0];
-                    nc += d[1];
-                }
+            // Downward
+            for (int r = row + 1; r < m; r++) {
+                if (grid[r][col] == 2) break;          // stop at wall/guard
+                if (grid[r][col] == 1) continue;       // already guarded
+                grid[r][col] = 1;
+                guardedCount++;
+            }
+
+            // Rightward
+            for (int c = col + 1; c < n; c++) {
+                if (grid[row][c] == 2) break;
+                if (grid[row][c] == 1) continue;
+                grid[row][c] = 1;
+                guardedCount++;
+            }
+
+            // Leftward
+            for (int c = col - 1; c >= 0; c--) {
+                if (grid[row][c] == 2) break;
+                if (grid[row][c] == 1) continue;
+                grid[row][c] = 1;
+                guardedCount++;
+            }
+
+            // Upward
+            for (int r = row - 1; r >= 0; r--) {
+                if (grid[r][col] == 2) break;
+                if (grid[r][col] == 1) continue;
+                grid[r][col] = 1;
+                guardedCount++;
             }
         }
 
-        int unguarded = 0;
-        for (int i = 0; i < m; i++)
-            for (int j = 0; j < n; j++)
-                if (grid[i][j] == 0)
-                    unguarded++;
-
-        return unguarded;
+        // Total unguarded = total cells - (guards + walls + guarded)
+        return (m * n) - (guardCount + wallCount + guardedCount);
     }
 }
