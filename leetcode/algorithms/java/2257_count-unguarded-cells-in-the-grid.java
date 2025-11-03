@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-02
 // At the time of submission:
-//   Runtime 20 ms Beats 83.45%
-//   Memory 146.65 MB Beats 5.52%
+//   Runtime 17 ms Beats 100.00%
+//   Memory 147.00 MB Beats 5.52%
 
 /****************************************
 * 
@@ -44,64 +44,52 @@
 ****************************************/
 
 class Solution {
-    // For each guard, sweep in 4 directions until blocked by wall/guard.
-    // Mark all visible cells as guarded and count them on the fly.
-    // The total unguarded cells = total - (guards + walls + guarded).
-    // Time Complexity: O(m * n) — each cell visited at most once per direction.
-    // Space Complexity: O(m * n) — for the grid storage.
+    // Sweep in 4 directions from each guard until blocked by wall/guard.
+    // Mark visible cells as guarded and count them directly.
+    // Result = total cells - (guards + walls + guarded).
+    // Time: O(m*n), Space: O(m*n).
     public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
-        int[][] grid = new int[m][n];  // 0 = empty, 1 = guarded, 2 = blocked
-        int guardedCount = 0;
-        int guardCount = guards.length;
-        int wallCount = walls.length;
+        int[][] visit = new int[m][n]; // 0 = empty, 1 = guarded, 2 = blocked
+        int count = 0;
+        int gr = guards.length;
+        int wr = walls.length;
 
-        // Mark all wall positions as blocked
-        for (int[] wall : walls)
-            grid[wall[0]][wall[1]] = 2;
+        for (int[] w : walls) visit[w[0]][w[1]] = 2;
+        for (int[] g : guards) visit[g[0]][g[1]] = 2;
 
-        // Mark all guard positions as blocked
-        for (int[] guard : guards)
-            grid[guard[0]][guard[1]] = 2;
+        for (int i = 0; i < gr; i++) {
+            int dx = guards[i][0], dy = guards[i][1];
 
-        // Sweep in 4 directions from each guard
-        for (int g = 0; g < guardCount; g++) {
-            int row = guards[g][0];
-            int col = guards[g][1];
-
-            // Downward
-            for (int r = row + 1; r < m; r++) {
-                if (grid[r][col] == 2) break;          // stop at wall/guard
-                if (grid[r][col] == 1) continue;       // already guarded
-                grid[r][col] = 1;
-                guardedCount++;
+            // ↓ DOWN
+            for (int r = dx + 1; r < m; r++) {
+                if (visit[r][dy] == 2) break;
+                if (visit[r][dy] == 1) continue;
+                visit[r][dy] = 1;
+                count++;
             }
-
-            // Rightward
-            for (int c = col + 1; c < n; c++) {
-                if (grid[row][c] == 2) break;
-                if (grid[row][c] == 1) continue;
-                grid[row][c] = 1;
-                guardedCount++;
+            // → RIGHT
+            for (int c = dy + 1; c < n; c++) {
+                if (visit[dx][c] == 2) break;
+                if (visit[dx][c] == 1) continue;
+                visit[dx][c] = 1;
+                count++;
             }
-
-            // Leftward
-            for (int c = col - 1; c >= 0; c--) {
-                if (grid[row][c] == 2) break;
-                if (grid[row][c] == 1) continue;
-                grid[row][c] = 1;
-                guardedCount++;
+            // ← LEFT
+            for (int c = dy - 1; c >= 0; c--) {
+                if (visit[dx][c] == 2) break;
+                if (visit[dx][c] == 1) continue;
+                visit[dx][c] = 1;
+                count++;
             }
-
-            // Upward
-            for (int r = row - 1; r >= 0; r--) {
-                if (grid[r][col] == 2) break;
-                if (grid[r][col] == 1) continue;
-                grid[r][col] = 1;
-                guardedCount++;
+            // ↑ UP
+            for (int r = dx - 1; r >= 0; r--) {
+                if (visit[r][dy] == 2) break;
+                if (visit[r][dy] == 1) continue;
+                visit[r][dy] = 1;
+                count++;
             }
         }
 
-        // Total unguarded = total cells - (guards + walls + guarded)
-        return (m * n) - (guardCount + wallCount + guardedCount);
+        return (m * n) - (gr + wr + count);
     }
 }
