@@ -163,6 +163,7 @@ LeetCode
 |2273|[Find Resultant Array After Removing Anagrams](https://leetcode.com/problems/find-resultant-array-after-removing-anagrams/)|[Java](./algorithms/java/2273_find-resultant-array-after-removing-anagrams.java)|Easy|
 |2270|[Number of Ways to Split Array](https://leetcode.com/problems/number-of-ways-to-split-array/)|[Java](./algorithms/java/2270_number-of-ways-to-split-array.java)|Medium|
 |2264|[Largest 3-Same-Digit Number in String](https://leetcode.com/problems/largest-3-same-digit-number-in-string/)|[Java](./algorithms/java/2264_largest-3-same-digit-number-in-string.java)|Easy|
+|2257|[Count Unguarded Cells in the Grid](https://leetcode.com/problems/count-unguarded-cells-in-the-grid/)|[Java](./algorithms/java/2257_count-unguarded-cells-in-the-grid.java)|Medium|
 |2226|[Maximum Candies Allocated to K Children](https://leetcode.com/problems/maximum-candies-allocated-to-k-children/)|[Java](./algorithms/java/2226_maximum-candies-allocated-to-k-children.java)|Medium|
 |2221|[Find Triangular Sum of an Array](https://leetcode.com/problems/find-triangular-sum-of-an-array/)|[Java](./algorithms/java/2221_find-triangular-sum-of-an-array.java)|Medium|
 |2210|[Count Hills and Valleys in an Array](https://leetcode.com/problems/count-hills-and-valleys-in-an-array/)|[Java](./algorithms/java/2210_count-hills-and-valleys-in-an-array.java)|Easy|
