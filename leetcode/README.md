@@ -52,6 +52,7 @@ LeetCode
 |3335|[Total Characters in String After Transformations I](https://leetcode.com/problems/total-characters-in-string-after-transformations-i/)|[Java](./algorithms/java/3335_total-characters-in-string-after-transformations-i.java)|Medium|
 |3333|[Find the Original Typed String II](https://leetcode.com/problems/find-the-original-typed-string-ii/)|[Java](./algorithms/java/3333_find-the-original-typed-string-ii.java)|Hard|
 |3330|[Find the Original Typed String I](https://leetcode.com/problems/find-the-original-typed-string-i/)|[Java](./algorithms/java/3330_find-the-original-typed-string-i.java)|Easy|
+|3321|[Find X-Sum of All K-Long Subarrays II](https://leetcode.com/problems/find-x-sum-of-all-k-long-subarrays-ii/)|[Java](./algorithms/java/3321_find-x-sum-of-all-k-long-subarrays-ii.java)|Hard|
 |3318|[Find X-Sum of All K-Long Subarrays I](https://leetcode.com/problems/find-x-sum-of-all-k-long-subarrays-i/)|[Java](./algorithms/java/3318_find-x-sum-of-all-k-long-subarrays-i.java)|Easy|
 |3307|[Find the K-th Character in String Game II](https://leetcode.com/problems/find-the-k-th-character-in-string-game-ii/)|[Java](./algorithms/java/3307_find-the-k-th-character-in-string-game-ii.java)|Hard|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
