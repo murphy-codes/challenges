@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-04
 // At the time of submission:
-//   Runtime 442 ms Beats 87.50%
-//   Memory 179.78 MB Beats 6.25%
+//   Runtime 399 ms Beats 96.88%
+//   Memory 191.45 MB Beats 6.25%
 
 /****************************************
 * 
@@ -41,111 +41,94 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NavigableSet;
-import java.util.TreeSet;
-
 class Solution {
-    // Uses a sliding window with frequency counting to track the top-x
-    // most frequent (and largest on tie) elements across subarrays of size k.
-    // Two ordered sets maintain top-x and remaining elements; balancing
-    // occurs as elements enter or leave the window. Time O(n log x),
-    // space O(n) for frequency maps and ordered sets.
-    
-    // Pair ordered by (freq, num) ascending so largest is last()
-    private static class Pair implements Comparable<Pair> {
-        final int freq;
-        final int num;
-        Pair(int f, int v) { freq = f; num = v; }
-        public int compareTo(Pair o) {
-            if (freq != o.freq) return Integer.compare(freq, o.freq);
-            return Integer.compare(num, o.num);
-        }
-    }
+    // This solution maintains two balanced TreeSets: topSet (top x freq,num pairs)
+    // and restSet (the remaining). Each slide updates element frequencies, rebalances
+    // between sets, and keeps a running sum of freq*num for the top x elements.
+    // All operations (add/remove) take O(log D), where D is the distinct count.
+    // Overall complexity: O(n log D) time and O(D) space for each window pass.
 
-    // Mutable fields used by helper methods
-    private Map<Integer, Integer> freq;
-    private NavigableSet<Pair> top;  // holds up to x best elements
-    private NavigableSet<Pair> rest; // holds the rest
-    private long topSum;             // sum of freq * num over elements in 'top'
-    private int xTarget;
+    private int x; // number of top (freq,num) pairs to include in sum
+    private long sum = 0L; // running sum of top-x (freq * num)
+    private Map<Integer, Integer> freq; // frequency map per number
+
+    // TreeSets ordered by (freq ascending, num ascending)
+    // topSet = top x elements; restSet = remaining elements
+    private final TreeSet<int[]> topSet = new TreeSet<>(
+        (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]
+    );
+    private final TreeSet<int[]> restSet = new TreeSet<>(
+        (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]
+    );
 
     public long[] findXSum(int[] nums, int k, int x) {
         int n = nums.length;
+        this.x = x;
+        freq = new HashMap<>(n);
         long[] ans = new long[n - k + 1];
 
-        freq = new HashMap<>();
-        top = new TreeSet<>();
-        rest = new TreeSet<>();
-        topSum = 0;
-        xTarget = x;
+        for (int i = 0; i < n; i++) {
+            // Add incoming number
+            int count = freq.merge(nums[i], 1, Integer::sum);
+            remove(count - 1, nums[i]); // remove old freq pair
+            add(count, nums[i]);        // add new freq pair
 
-        // initialize first window
-        for (int i = 0; i < k; i++) {
-            addNum(nums[i], +1);
-        }
-        balanceSets();
-        ans[0] = topSum;
-
-        for (int i = k; i < n; i++) {
-            addNum(nums[i - k], -1); // remove outgoing
-            addNum(nums[i], +1);     // add incoming
-            balanceSets();
-            ans[i - k + 1] = topSum;
+            // Once window is full, record result and slide
+            if (i + 1 >= k) {
+                ans[i - k + 1] = sum;
+                count = freq.merge(nums[i - k + 1], -1, Integer::sum);
+                remove(count + 1, nums[i - k + 1]); // remove outgoing old freq
+                add(count, nums[i - k + 1]);        // add updated freq (may be 0)
+            }
         }
         return ans;
     }
 
-    // Add or remove a value from freq and appropriate set
-    private void addNum(int num, int delta) {
-        int old = freq.getOrDefault(num, 0);
-        if (old > 0) {
-            // remove old Pair from whichever set contains it
-            Pair oldPair = new Pair(old, num);
-            if (top.remove(oldPair)) {
-                topSum -= (long) old * num;
-            } else {
-                rest.remove(oldPair);
-            }
-        }
+    // Add or rebalance an element with given count and value
+    private void add(int count, int num) {
+        if (count == 0) return;
+        int[] val = new int[]{count, num};
 
-        int nw = old + delta;
-        if (nw == 0) {
-            freq.remove(num);
+        // If topSet not yet filled, add directly
+        if (topSet.size() < x) {
+            topSet.add(val);
+            sum += (long) count * num;
             return;
         }
-        freq.put(num, nw);
-        // new pair goes to rest initially; balancing will move if needed
-        Pair newPair = new Pair(nw, num);
-        rest.add(newPair);
+
+        // Otherwise, compare with smallest in topSet
+        int[] smallestTop = topSet.first();
+        if (smallestTop[0] > count || (smallestTop[0] == count && smallestTop[1] >= num)) {
+            // new element not good enough, goes to restSet
+            restSet.add(val);
+            return;
+        }
+
+        // new element belongs in topSet; swap out smallestTop
+        sum += (long) count * num - (long) smallestTop[0] * smallestTop[1];
+        restSet.add(topSet.pollFirst());
+        topSet.add(val);
     }
 
-    // Ensure top has up to xTarget best elements (largest by freq then num).
-    private void balanceSets() {
-        // Move from rest -> top until top.size == xTarget or rest empty
-        while (top.size() < xTarget && !rest.isEmpty()) {
-            Pair p = rest.pollLast();
-            top.add(p);
-            topSum += (long) p.freq * p.num;
+    // Remove or rebalance an element with given count and value
+    private void remove(int count, int num) {
+        if (count == 0) return;
+        int[] val = new int[]{count, num};
+
+        // If present in restSet, just remove it
+        if (restSet.contains(val)) {
+            restSet.remove(val);
+            return;
         }
 
-        // If top too large, move smallest from top -> rest
-        while (top.size() > xTarget) {
-            Pair p = top.pollFirst();
-            topSum -= (long) p.freq * p.num;
-            rest.add(p);
-        }
+        // Otherwise, it was in topSet
+        topSet.remove(val);
+        sum -= (long) count * num;
 
-        // Now ensure every element in top is >= every element in rest (by compare)
-        // If not, swap extremes until order holds
-        while (!rest.isEmpty() && !top.isEmpty() && rest.last().compareTo(top.first()) > 0) {
-            Pair smallTop = top.pollFirst();
-            Pair bigRest = rest.pollLast();
-            topSum -= (long) smallTop.freq * smallTop.num;
-            topSum += (long) bigRest.freq * bigRest.num;
-            top.add(bigRest);
-            rest.add(smallTop);
-        }
+        // Refill topSet if possible
+        if (restSet.isEmpty()) return;
+        int[] biggestRest = restSet.pollLast();
+        sum += (long) biggestRest[0] * biggestRest[1];
+        topSet.add(biggestRest);
     }
 }
