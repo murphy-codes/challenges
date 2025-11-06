@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3607|[Power Grid Maintenance](https://leetcode.com/problems/power-grid-maintenance/)|[Java](./algorithms/java/3607_power-grid-maintenance.java)|Medium|
 |3541|[Find Most Frequent Vowel and Consonant](https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/)|[Java](./algorithms/java/3541_find-most-frequent-vowel-and-consonant.java)|Easy|
 |3539|[Find Sum of Array Product of Magical Sequences](https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/)|[Java](./algorithms/java/3539_find-sum-of-array-product-of-magical-sequences.java)|Hard|
 |3516|[Find Closest Person](https://leetcode.com/problems/find-closest-person/)|[Java](./algorithms/java/3516_find-closest-person.java)|Easy|
