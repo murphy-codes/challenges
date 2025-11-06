@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-06
 // At the time of submission:
-//   Runtime 190 ms Beats 19.67%
-//   Memory 277.63 MB Beats 5.02%
+//   Runtime 19 ms Beats 99.58%
+//   Memory 246.06 MB Beats 8.79%
 
 /****************************************
 * 
@@ -60,84 +60,87 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Arrays;
 
 class Solution {
-    // Precompute connected components (O(c + n)) and store all nodes of each
-    // component in a TreeSet (sorted, O(c log c)). Each query runs in O(log n):
-    //   - Type 1: If x is online, return x; else smallest online node in component.
-    //   - Type 2: Mark x offline and remove it from its component’s TreeSet.
-    // Overall time complexity: O((c + n + q) * log n); space: O(c + n).
-    public int[] processQueries(int c, int[][] connections, int[][] queries) {
-        // Step 1: Build adjacency list
-        List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i <= c; i++) graph.add(new ArrayList<>());
+    // Uses a Union-Find (DSU) to group stations into connected components in O(c + n).
+    // Each component’s members are flattened contiguously into an array, allowing O(1)
+    // access to its online stations. Queries are processed in O(log n) amortized time:
+    //   - [1, x]: if x offline, scan its component range for the next online station.
+    //   - [2, x]: mark x offline in O(1).
+    // Total time: O(c + n + q); space: O(c + n).
+
+    public int[] processQueries(int n, int[][] connections, int[][] queries) {
+        n++; // Use 1-based indexing for convenience
+
+        // Union-Find parent array: l[i] gives the representative of i
+        final int[] parent = new int[n];
+        for (int i = 1; i < n; i++) parent[i] = i;
+
+        // Union all connected nodes
         for (int[] edge : connections) {
-            int u = edge[0], v = edge[1];
-            graph.get(u).add(v);
-            graph.get(v).add(u);
+            parent[getLabel(parent, edge[0])] = parent[getLabel(parent, edge[1])];
         }
 
-        // Step 2: Find connected components using DFS
-        int[] compId = new int[c + 1];
-        int compCount = 0;
-        for (int i = 1; i <= c; i++) {
-            if (compId[i] == 0) {
-                compCount++;
-                dfs(i, compCount, graph, compId);
-            }
+        // Count number of nodes per component
+        final int[] compCount = new int[n];
+        for (int i = 0; i < n; i++) compCount[getLabel(parent, i)]++;
+
+        // Compute prefix sums to mark starting indices of each component
+        updateCounts(compCount);
+
+        // Make a copy to preserve original starts
+        final int[] compStart = compCount.clone();
+
+        // Flatten components: group nodes of same component contiguously
+        final int[] flat = new int[n];
+        for (int i = 0; i < n; i++) {
+            flat[compCount[parent[i]]++] = i;
         }
 
-        // Step 3: Initialize TreeSets for each component (all online initially)
-        Map<Integer, TreeSet<Integer>> compToOnline = new HashMap<>();
-        for (int i = 1; i <= c; i++) {
-            int comp = compId[i];
-            compToOnline.computeIfAbsent(comp, k -> new TreeSet<>()).add(i);
-        }
+        // Process queries
+        final int[] result = new int[queries.length];
+        int resLen = 0;
+        final boolean[] offline = new boolean[n];
 
-        // Step 4: Process queries
-        List<Integer> result = new ArrayList<>();
-        Set<Integer> offline = new HashSet<>();
-
-        for (int[] q : queries) {
+        for (var q : queries) {
             int type = q[0], x = q[1];
-            int comp = compId[x];
-            TreeSet<Integer> onlineSet = compToOnline.get(comp);
+            if (type == 1) { // Maintenance check
+                if (offline[x]) {
+                    int label = parent[x];
+                    int start = compStart[label];
+                    int end = compCount[label];
 
-            if (type == 1) {
-                // Maintenance check query
-                if (!offline.contains(x)) {
-                    result.add(x); // x itself handles it
-                } else if (!onlineSet.isEmpty()) {
-                    result.add(onlineSet.first()); // smallest online in component
+                    // Advance start pointer to first online station
+                    while (start < end && offline[flat[start]]) start++;
+                    compStart[label] = start;
+
+                    result[resLen++] = (start == end) ? -1 : flat[start];
                 } else {
-                    result.add(-1); // no online station
+                    result[resLen++] = x; // Station handles its own query
                 }
             } else {
-                // Station x goes offline
-                if (!offline.contains(x)) {
-                    offline.add(x);
-                    onlineSet.remove(x);
-                }
+                offline[x] = true; // Station goes offline
             }
         }
 
-        // Convert result list to array
-        int[] ans = new int[result.size()];
-        for (int i = 0; i < result.size(); i++) ans[i] = result.get(i);
-        return ans;
+        return Arrays.copyOf(result, resLen);
     }
 
-    private void dfs(int node, int comp, List<List<Integer>> graph, int[] compId) {
-        compId[node] = comp;
-        for (int nei : graph.get(node)) {
-            if (compId[nei] == 0) dfs(nei, comp, graph, compId);
+    // Path compression for Union-Find
+    static int getLabel(int[] parent, int i) {
+        return (parent[i] == i || parent[i] < 0)
+            ? i
+            : (parent[i] = getLabel(parent, parent[i]));
+    }
+
+    // Convert counts to prefix-sum form for flattened indexing
+    private static void updateCounts(int[] count) {
+        int sum = 0;
+        for (int i = 0; i < count.length; i++) {
+            int next = sum + count[i];
+            count[i] = sum;
+            sum = next;
         }
     }
 }
