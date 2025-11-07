@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-07
 // At the time of submission:
-//   Runtime 29 ms Beats 92.13%
-//   Memory 89.48 MB Beats 5.62%
+//   Runtime 26 ms Beats 97.75%
+//   Memory 89.21 MB Beats 5.62%
 
 /****************************************
 * 
@@ -52,69 +52,60 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Binary search + line sweep solution.
-    // Each city’s initial power is computed via prefix sums, then we binary
-    // search the maximum minimum achievable power. For each guess, we greedily
-    // simulate adding stations to maintain ≥ target power using a sliding window.
-    // Time: O(n log M), Space: O(n), where M is the maximum possible power value.
+    // Uses prefix sums + binary search + rolling difference technique to find
+    // the maximum achievable minimum power across cities. For each candidate
+    // target, checks feasibility with ≤ k added stations using a lazy range
+    // update array. Runs in O(n log M) time and O(n) space, where M ≈ 1e18.
     public long maxPower(int[] stations, int r, int k) {
         int n = stations.length;
-        long[] power = new long[n];
+        // Prefix sum array
         long[] prefix = new long[n + 1];
-
-        // Precompute prefix sums for efficient range power computation
         for (int i = 0; i < n; i++) {
             prefix[i + 1] = prefix[i] + stations[i];
         }
-
-        // Compute initial power for each city using the range [i - r, i + r]
+        // Compute initial power of each city within distance r
+        long[] power = new long[n];
         for (int i = 0; i < n; i++) {
             int left = Math.max(0, i - r);
             int right = Math.min(n - 1, i + r);
             power[i] = prefix[right + 1] - prefix[left];
         }
-
-        long low = 0, high = (long) 1e18, ans = 0;
-
-        // Binary search to maximize the minimum power
+        // Binary search for the maximum achievable minimum power
+        long low = 0, high = (long)1e18;
+        long ans = 0;
         while (low <= high) {
             long mid = (low + high) / 2;
-            if (canAchieve(mid, power, r, k, n)) {
-                ans = mid;
-                low = mid + 1; // try for higher
+            if (canAchieve(mid, power, r, k)) {
+                ans = mid;       // mid is achievable, try for more
+                low = mid + 1;
             } else {
-                high = mid - 1; // too high, lower it
+                high = mid - 1;  // mid too high, reduce search space
             }
         }
 
         return ans;
     }
 
-    private boolean canAchieve(long target, long[] power, int r, long k, int n) {
-        long[] added = new long[n];
-        long used = 0, currAdd = 0;
+    // Check if every city can reach at least 'target' power using ≤ k stations
+    private boolean canAchieve(long target, long[] power, int r, long k) {
+        int n = power.length;
+        long[] added = new long[n];  // added[i] = stations added affecting city i
+        long used = 0;               // total stations used so far
+        long extra = 0;              // rolling sum of active added stations
 
         for (int i = 0; i < n; i++) {
-            // Remove influence of a station that’s now out of range
-            if (i - r - 1 >= 0) currAdd -= added[i - r - 1];
-
-            long currPower = power[i] + currAdd;
-
-            // If this city’s power < target, we must add stations
-            if (currPower < target) {
-                long need = target - currPower;
+            // Remove effects of stations whose range no longer includes i
+            if (i - r - 1 >= 0) extra -= added[i - r - 1];
+            // If power is below target, add needed stations optimally
+            if (power[i] + extra < target) {
+                long need = target - (power[i] + extra);
+                if (need > k - used) return false;    // not enough stations left
                 used += need;
-                if (used > k) return false; // not feasible
-
-                currAdd += need; // new stations affect forward range
-                int pos = (int) Math.min(n - 1, i + r);
-                added[pos] += need;
+                added[Math.min(n - 1, i + r)] = need; // schedule end of effect
+                extra += need;                        // update current window
             }
         }
-
         return true;
     }
 }
