@@ -131,6 +131,7 @@ LeetCode
 |2551|[Put Marbles in Bags](https://leetcode.com/problems/put-marbles-in-bags/)|[Java](./algorithms/java/2551_put-marbles-in-bags.java)|Hard|
 |2537|[Count the Number of Good Subarrays](https://leetcode.com/problems/count-the-number-of-good-subarrays/)|[Java](./algorithms/java/2537_count-the-number-of-good-subarrays.java)|Medium|
 |2529|[Maximum Count of Positive Integer and Negative Integer](https://leetcode.com/problems/maximum-count-of-positive-integer-and-negative-integer/)|[Java](./algorithms/java/2529_maximum-count-of-positive-integer-and-negative-integer.java)|Easy|
+|2528|[Maximize the Minimum Powered City](https://leetcode.com/problems/maximize-the-minimum-powered-city/)|[Java](./algorithms/java/2528_maximize-the-minimum-powered-city.java)|Hard|
 |2523|[Closest Prime Numbers in Range](https://leetcode.com/problems/closest-prime-numbers-in-range/)|[Java](./algorithms/java/2523_closest-prime-numbers-in-range.java)|Medium|
 |2503|[Maximum Number of Points From Grid Queries](https://leetcode.com/problems/maximum-number-of-points-from-grid-queries/)|[Java](./algorithms/java/2503_maximum-number-of-points-from-grid-queries.java)|Hard|
 |2493|[Divide Nodes Into the Maximum Number of Groups](https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/)|[Java](./algorithms/java/2493_divide-nodes-into-the-maximum-number-of-groups.java)|Hard|
