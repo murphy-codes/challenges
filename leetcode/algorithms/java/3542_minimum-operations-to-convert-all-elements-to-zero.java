@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-09
 // At the time of submission:
-//   Runtime 35 ms Beats 64.08%
-//   Memory 123.06 MB Beats 23.24%
+//   Runtime 11 ms Beats 100.00%
+//   Memory 137.54 MB Beats 5.63%
 
 /****************************************
 * 
@@ -14,6 +14,10 @@
 * _ (where `0 <= i <= j < n`) and set all occurrences of the minimum
 * _ non-negative integer in that subarray to 0.
 * Return the minimum number of operations required to make all elements in the array 0.
+* 
+* THE PROBLEM'S DESCRIPTION DOESN'T MENTION THIS, BUT THE SUBARRAY YOU CHOOSE 
+* CANNOT CONTAIN A ZERO-VALUE. SO RATHER THAN SAYING 'set all occurrences of the minimum
+* non-negative integer non-negative integer' IT SHOULD SAY 'the minimum POSITIVE integer.
 *
 * Example 1:
 * Input: nums = [0,2]
@@ -48,24 +52,31 @@
 ****************************************/
 
 class Solution {
-    // Time: O(n) amortized — each element is pushed/popped at most once.
-    // Space: O(n) worst-case for the stack (but typically much less).
+    // This solution uses a monotonic increasing stack to track "height layers" 
+    // representing distinct positive values that must be zeroed out. Whenever a 
+    // lower value appears, higher layers are popped and counted as completed. 
+    // Remaining layers after traversal also require one operation each.
+    // Time Complexity: O(n) — each element is pushed and popped at most once.
+    // Space Complexity: O(n) — for the stack array storing up to n values.
     public int minOperations(int[] nums) {
-        Deque<Integer> stack = new ArrayDeque<>();
-        int ops = 0;
+        int[] stack = new int[nums.length + 1]; // Monotonic stack (stores increasing heights)
+        int top = 0; // Stack pointer
+        int ops = 0; // Operation counter
 
-        for (int v : nums) {
-            // pop values greater than current (their segments end here)
-            while (!stack.isEmpty() && stack.peekLast() > v) {
-                stack.removeLast();
-            }
-            // if current value is positive and not equal to current last, it's a new layer
-            if (v > 0 && (stack.isEmpty() || stack.peekLast() < v)) {
-                stack.addLast(v);
+        for (int i = 0; i < nums.length; i++) {
+            // Pop higher layers that end before nums[i]
+            while (stack[top] > nums[i]) {
+                top--;
                 ops++;
             }
-            // if v == 0 or v == stack.last, do nothing
+
+            // Push new layer if different from current top
+            if (stack[top] != nums[i]) {
+                stack[++top] = nums[i];
+            }
         }
-        return ops;
+
+        // Add remaining active layers (each needs one final operation)
+        return ops + top;
     }
 }
