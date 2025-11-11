@@ -301,6 +301,7 @@ LeetCode
 |611|[Valid Triangle Number](https://leetcode.com/problems/valid-triangle-number/)|[Java](./algorithms/java/611_valid-triangle-number.java)|Medium|
 |594|[Longest Harmonious Subsequence](https://leetcode.com/problems/longest-harmonious-subsequence/)|[Java](./algorithms/java/594_longest-harmonious-subsequence.java)|Easy|
 |498|[Diagonal Traverse](https://leetcode.com/problems/diagonal-traverse/)|[Java](./algorithms/java/498_diagonal-traverse.java)|Medium|
+|474|[Ones and Zeroes](https://leetcode.com/problems/ones-and-zeroes/)|[Java](./algorithms/java/474_ones-and-zeroes.java)|Medium|
 |440|[K-th Smallest in Lexicographical Order](https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/)|[Java](./algorithms/java/440_k-th-smallest-in-lexicographical-order.java)|Hard|
 |417|[Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/)|[Java](./algorithms/java/417_pacific-atlantic-water-flow.java)|Medium|
 |416|[Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)|[Java](./algorithms/java/416_partition-equal-subset-sum.java)|Medium|
