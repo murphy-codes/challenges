@@ -61,6 +61,7 @@ LeetCode
 |3304|[Find the K-th Character in String Game I](https://leetcode.com/problems/find-the-k-th-character-in-string-game-i/)|[Java](./algorithms/java/3304_find-the-k-th-character-in-string-game-i.java)|Easy|
 |3289|[The Two Sneaky Numbers of Digitville](https://leetcode.com/problems/the-two-sneaky-numbers-of-digitville/)|[Java](./algorithms/java/3289_the-two-sneaky-numbers-of-digitville.java)|Easy|
 |3272|[Find the Count of Good Integers](https://leetcode.com/problems/find-the-count-of-good-integers/)|[Java](./algorithms/java/3272_find-the-count-of-good-integers.java)|Hard|
+|3228|[Maximum Number of Operations to Move Ones to the End](https://leetcode.com/problems/maximum-number-of-operations-to-move-ones-to-the-end/)|[Java](./algorithms/java/3228_maximum-number-of-operations-to-move-ones-to-the-end.java)|Medium|
 |3227|[Vowels Game in a String0](https://leetcode.com/problems/vowels-game-in-a-string/)|[Java](./algorithms/java/3227_vowels-game-in-a-string.java)|Medium|
 |3223|[Minimum Length of String After Operations](https://leetcode.com/problems/minimum-length-of-string-after-operations/)|[Java](./algorithms/java/3223_minimum-length-of-string-after-operations.java)|Medium|
 |3217|[Delete Nodes From Linked List Present in Array](https://leetcode.com/problems/delete-nodes-from-linked-list-present-in-array/)|[Java](./algorithms/java/3217_delete-nodes-from-linked-list-present-in-array.java)|Medium|
