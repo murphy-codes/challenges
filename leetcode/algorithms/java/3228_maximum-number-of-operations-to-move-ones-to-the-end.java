@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-12
 // At the time of submission:
-//   Runtime 7 ms Beats 78.52%
-//   Memory 47.49 MB Beats 20.74%
+//   Runtime 6 ms Beats 100.00%
+//   Memory 47.57 MB Beats 17.78%
 
 /****************************************
 * 
@@ -37,32 +37,27 @@
 ****************************************/
 
 class Solution {
-    // Greedy + Counting approach.
-    // Traverse the string left-to-right, tracking how many '1's have appeared.
-    // For each group of consecutive '0's, every previous '1' contributes one
-    // operation (since it can be "blocked" by these zeros). Sum these up as ans.
-    // Time complexity: O(n), scanning the string once.
-    // Space complexity: O(1), using only a few integer variables.
+    // Greedy reverse traversal approach.
+    // Scan from right to left, counting how many zero-groups lie to the right.
+    // Each '1' adds that count to the total, since it can move past all such groups.
+    // This efficiently accumulates all valid operations in one pass.
+    // Time complexity: O(n); Space complexity: O(1).
     public int maxOperations(String s) {
-        int countOne = 0;  // number of '1's seen so far
-        int ans = 0;       // total operations count
-        int i = 0;
-
-        while (i < s.length()) {
-            if (s.charAt(i) == '0') {
-                // Skip through this run of consecutive zeros
-                while (i + 1 < s.length() && s.charAt(i + 1) == '0') {
-                    i++;
-                }
-                // Each zero-run adds one operation per '1' seen before it
-                ans += countOne;
-            } else {
-                // Count another '1' that may contribute to future operations
-                countOne++;
+        int i = s.length() - 1; // start from the end of the string
+        int totalOps = 0;       // total number of operations
+        int zeroGroups = 0;     // number of zero-groups to the right
+        while (i >= 0) {
+            while (i >= 0 && s.charAt(i) == '1') { // Process all consecutive '1's
+                totalOps += zeroGroups; // each '1' contributes for all zero-groups to its right
+                i--;
+                if (i < 0) return totalOps;
             }
-            i++;
+            while (i >= 0 && s.charAt(i) == '0') { // Process all consecutive '0's
+                i--;
+                if (i < 0) return totalOps;
+            }
+            zeroGroups++; // One full zero-group was passed
         }
-
-        return ans;
+        return totalOps;
     }
 }
