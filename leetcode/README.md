@@ -133,6 +133,7 @@ LeetCode
 |2559|[Count Vowel Strings in Ranges](https://leetcode.com/problems/count-vowel-strings-in-ranges/)|[Java](./algorithms/java/2559_count-vowel-strings-in-ranges.java)|Medium|
 |2551|[Put Marbles in Bags](https://leetcode.com/problems/put-marbles-in-bags/)|[Java](./algorithms/java/2551_put-marbles-in-bags.java)|Hard|
 |2537|[Count the Number of Good Subarrays](https://leetcode.com/problems/count-the-number-of-good-subarrays/)|[Java](./algorithms/java/2537_count-the-number-of-good-subarrays.java)|Medium|
+|2536|[Increment Submatrices by One](https://leetcode.com/problems/increment-submatrices-by-one/)|[Java](./algorithms/java/2536_increment-submatrices-by-one.java)|Medium|
 |2529|[Maximum Count of Positive Integer and Negative Integer](https://leetcode.com/problems/maximum-count-of-positive-integer-and-negative-integer/)|[Java](./algorithms/java/2529_maximum-count-of-positive-integer-and-negative-integer.java)|Easy|
 |2528|[Maximize the Minimum Powered City](https://leetcode.com/problems/maximize-the-minimum-powered-city/)|[Java](./algorithms/java/2528_maximize-the-minimum-powered-city.java)|Hard|
 |2523|[Closest Prime Numbers in Range](https://leetcode.com/problems/closest-prime-numbers-in-range/)|[Java](./algorithms/java/2523_closest-prime-numbers-in-range.java)|Medium|
