@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-14
 // At the time of submission:
-//   Runtime 20 ms Beats 57.47%
-//   Memory 83.37 MB Beats 5.43%
+//   Runtime 8 ms Beats 98.64%
+//   Memory 77.22 MB Beats 17.19%
 
 /****************************************
 * 
@@ -38,30 +38,40 @@
 ****************************************/
 
 class Solution {
-    // We treat each row as an independent 1D difference array. For every
-    // query, we add +1 at col1 and -1 at col2+1 for all affected rows.
-    // After processing all queries, each row is prefix-summed to produce
-    // its final values. This avoids n^2 updates per query and runs in
-    // O(n^2 + q*n) time with O(n^2) space, optimal for the constraints.
+    // We use a 2D difference array to mark each rectangle update in O(1)
+    // by adding +1/-1 at its four corners. After processing all queries,
+    // we run horizontal and then vertical prefix sums to convert the diff
+    // matrix into the final values. This yields O(n^2 + q) time and O(n^2)
+    // space, optimal for performing many submatrix increments efficiently.
     public int[][] rangeAddQueries(int n, int[][] queries) {
-        int[][] diff = new int[n][n + 1]; // n+1 so we can safely subtract at col2+1
-        // Apply difference increments row by row
-        for (int[] q : queries) {
-            int r1 = q[0], c1 = q[1], r2 = q[2], c2 = q[3];
-            for (int r = r1; r <= r2; r++) {
-                diff[r][c1] += 1;
-                diff[r][c2 + 1] -= 1; // safe because diff has n+1 columns
+        int[][] diff = new int[n][n];
+        // Apply 2D difference array rectangle updates
+        for (var q : queries) {
+            int r0 = q[0], c0 = q[1];
+            int r1 = q[2] + 1, c1 = q[3] + 1;
+            // +1 at top-left
+            diff[r0][c0]++;
+            // -1 at top-right+1
+            if (c1 < n) diff[r0][c1]--;
+            // -1 at bottom-left+1
+            if (r1 < n) {
+                diff[r1][c0]--;
+                // +1 at bottom-right+1
+                if (c1 < n) diff[r1][c1]++;
             }
         }
-        // Build final matrix using prefix sums per row
-        int[][] result = new int[n][n];
+        // Horizontal prefix sums
         for (int r = 0; r < n; r++) {
-            int running = 0;
-            for (int c = 0; c < n; c++) {
-                running += diff[r][c];
-                result[r][c] = running;
+            for (int c = 1; c < n; c++) {
+                diff[r][c] += diff[r][c - 1];
             }
         }
-        return result;
+        // Vertical prefix sums
+        for (int r = 1; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                diff[r][c] += diff[r - 1][c];
+            }
+        }
+        return diff;
     }
 }
