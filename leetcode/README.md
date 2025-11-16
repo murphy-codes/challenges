@@ -245,6 +245,7 @@ LeetCode
 |1526|[Minimum Number of Increments on Subarrays to Form a Target Array](https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/)|[Java](./algorithms/java/1526_minimum-number-of-increments-on-subarrays-to-form-a-target-array.java)|Hard|
 |1524|[Number of Sub-arrays With Odd Sum](https://leetcode.com/problems/number-of-sub-arrays-with-odd-sum/)|[Java](./algorithms/java/1524_number-of-sub-arrays-with-odd-sum.java)|Medium|
 |1518|[Water Bottles](https://leetcode.com/problems/water-bottles/)|[Java](./algorithms/java/1518_water-bottles.java)|Easy|
+|1513|[Number of Substrings With Only 1s](https://leetcode.com/problems/number-of-substrings-with-only-1s/)|[Java](./algorithms/java/1513_number-of-substrings-with-only-1s.java)|Medium|
 |1504|[Count Submatrices With All Ones](https://leetcode.com/problems/count-submatrices-with-all-ones/)|[Java](./algorithms/java/1504_count-submatrices-with-all-ones.java)|Medium|
 |1498|[Number of Subsequences That Satisfy the Given Sum Condition](https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/)|[Java](./algorithms/java/1498_number-of-subsequences-that-satisfy-the-given-sum-condition.java)|Medium|
 |1493|[Longest Subarray of 1's After Deleting One Element](https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/)|[Java](./algorithms/java/1493_longest-subarray-of-1s-after-deleting-one-element.java)|Medium|
