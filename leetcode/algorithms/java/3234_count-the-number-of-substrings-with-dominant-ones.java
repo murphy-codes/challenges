@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-15
 // At the time of submission:
-//   Runtime 323 ms Beats 75.00%
-//   Memory 46.88 MB Beats 31.48%
+//   Runtime 57 ms Beats 91.67%
+//   Memory 47.04 MB Beats 26.85%
 
 /****************************************
 * 
@@ -43,73 +43,57 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
-    // This solution uses a sqrt optimization based on the fact that a valid
-    // substring can contain at most sqrt(n) zeros. For each starting index, we
-    // count substrings with no zeros, then consider up to sqrt(n) zero positions
-    // as candidates for the rightmost zero. For each case we determine the
-    // earliest ending index that satisfies ones >= zeros^2. Time: O(n*sqrt(n)).
-    // Space: O(sqrt(n) + number_of_zeros).
-    public int numberOfSubstrings(String s) {
-        int n = s.length();
-        char[] a = s.toCharArray();
-        List<Integer> zeros = new ArrayList<>();
+    // This solution enumerates all substrings ending at each index using a
+    // prefix-based scan over zero positions. A substring with dominant ones
+    // contains at most sqrt(n) zeros, so for each endpoint we walk backward
+    // only through this limited set. Counts of valid starts are computed in
+    // constant time using zero gaps and needed ones. Time: O(n*sqrt(n)).
+    // Space: O(n) to store zero positions.
+  public int numberOfSubstrings(String s) {
+    int n = s.length();
 
-        // Collect all zero positions
-        for (int i = 0; i < n; i++) {
-            if (a[i] == '0') zeros.add(i);
-        }
+    // zerosIdx[i] = the index (in s) of the i-th zero; zerosIdx[0] = -1 sentinel
+    int[] zerosIdx = new int[n + 1];
+    zerosIdx[0] = -1;
 
-        int m = zeros.size();
-        int limit = (int) Math.sqrt(n) + 2;
-        long ans = 0;
+    int zeroCount = 1;          // next slot to write zero index
+    int totalOnes = 0;          // total number of ones seen so far
+    int result = 0;
 
-        for (int l = 0; l < n; l++) {
+    for (int right = 0; right < n; right++) {
 
-            // Handle substrings with NO zeros
-            int firstZero = firstZeroAtLeast(zeros, l);
-            int rightBound = (firstZero == m ? n : zeros.get(firstZero));
-            ans += (rightBound - l);
+      // Case 1: s[right] == '0' → record zero position
+      if (s.charAt(right) == '0') {
+        zerosIdx[zeroCount++] = right;
+      }
 
-            // Handle substrings with k zeros
-            int ones = 0;
-            int prev = l;
+      // Case 2: s[right] == '1' → all substrings ending here with no zeros are valid
+      else {
+        result += right - zerosIdx[zeroCount - 1];
+        totalOnes++;
+      }
 
-            for (int k = 1; k <= limit; k++) {
-                int idx = firstZero + k - 1;
-                if (idx >= m) break;
+      // Now consider substrings ending at 'right' with k zeros (k >= 1)
+      // Walk backward through previous zeros until k^2 > totalOnes
+      for (int zp = zeroCount - 1;
+           zp > 0 && (zeroCount - zp) * (zeroCount - zp) <= totalOnes;
+           zp--) {
 
-                int z = zeros.get(idx);
-                ones += (z - prev);    // count ones between these zeros
-                prev = z + 1;
+        int zerosInSub = zeroCount - zp;                // number of zeros in substring
+        int onesInSub = (right - zerosIdx[zp] + 1)      // substring length
+                        - zerosInSub;                    // minus zeros
+        int neededOnes = zerosInSub * zerosInSub;        // ones >= zeros^2
+        int onesDeficit = neededOnes - onesInSub;        // how many ones missing
 
-                int requiredOnes = k * k;
-                int need = requiredOnes - ones; // how many more ones needed
+        // Extendable region: how many possible left positions exist before this zero
+        int extendableStarts = zerosIdx[zp] - zerosIdx[zp - 1];
 
-                int minR = z + need;  
-                if (minR < z) minR = z;
-
-                int nextZero = (idx + 1 < m ? zeros.get(idx + 1) : n);
-                if (minR < nextZero) {
-                    ans += (nextZero - minR);
-                }
-            }
-        }
-
-        return (int) ans;
+        // Valid starts = extendable - those too close to the right (lack ones)
+        result += Math.max(extendableStarts - Math.max(onesDeficit, 0), 0);
+      }
     }
 
-    // binary search: first zero at index >= x
-    private int firstZeroAtLeast(List<Integer> zeros, int x) {
-        int lo = 0, hi = zeros.size();
-        while (lo < hi) {
-            int mid = (lo + hi) >>> 1;
-            if (zeros.get(mid) >= x) hi = mid;
-            else lo = mid + 1;
-        }
-        return lo;
-    }
+    return result;
+  }
 }
