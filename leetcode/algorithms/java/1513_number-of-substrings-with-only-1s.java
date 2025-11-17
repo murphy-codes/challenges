@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/problems/maximum-total-damage-with-spell-casting/
+// Source: https://leetcode.com/problems/number-of-substrings-with-only-1s/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-15
 // At the time of submission:
