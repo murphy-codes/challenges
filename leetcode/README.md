@@ -251,6 +251,7 @@ LeetCode
 |1493|[Longest Subarray of 1's After Deleting One Element](https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/)|[Java](./algorithms/java/1493_longest-subarray-of-1s-after-deleting-one-element.java)|Medium|
 |1488|[Avoid Flood in The City](https://leetcode.com/problems/avoid-flood-in-the-city/)|[Java](./algorithms/java/1488_avoid-flood-in-the-city.java)|Medium|
 |1462|[Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)|[Java](./algorithms/java/1462_course-schedule-iv.java)|Medium|
+|1437|[Check If All 1's Are at Least Length K Places Away](https://leetcode.com/problems/check-if-all-1s-are-at-least-length-k-places-away/)|[Java](./algorithms/java/1437_check-if-all-1s-are-at-least-length-k-places-away.java)|Easy|
 |1432|[Max Difference You Can Get From Changing an Integer](https://leetcode.com/problems/max-difference-you-can-get-from-changing-an-integer/)|[Java](./algorithms/java/1432_max-difference-you-can-get-from-changing-an-integer.java)|Medium|
 |1422|[Maximum Score After Splitting a String](https://leetcode.com/problems/maximum-score-after-splitting-a-string/)|[Java](./algorithms/java/1422_maximum-score-after-splitting-a-string.java)|Easy|
 |1415|[The k-th Lexicographical String of All Happy Strings of Length n](https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/)|[Java](./algorithms/java/1415_the-k-th-lexicographical-string-of-all-happy-strings-of-length-n.java)|Medium|
