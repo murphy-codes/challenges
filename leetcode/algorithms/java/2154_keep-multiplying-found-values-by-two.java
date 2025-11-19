@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-18
 // At the time of submission:
-//   Runtime 6 ms Beats 13.81%
-//   Memory 46.73 MB Beats 7.36%
+//   Runtime 1 ms Beats 93.95%
+//   Memory 45.68 MB Beats 19.66%
 
 /****************************************
 * 
@@ -37,17 +37,17 @@
 ****************************************/
 
 class Solution {
-    // Sort the array so we can binary search for the current value of 'original'.
-    // Repeatedly check whether 'original' exists; if found, double the value.
-    // Binary search runs in log(n) time and we do at most O(log(max(nums))) loops.
-    // Overall time complexity is O(n log n) due to sort; memory usage is O(1).
     public int findFinalValue(int[] nums, int original) {
-        Arrays.sort(nums);
-        boolean found = true;
-        while (found) {
-            int i = Arrays.binarySearch(nums, original);
-            if (i >= 0) original *= 2;
-            else found = false;
+        while (true) {
+            boolean found = false;
+            for (int v : nums) {
+                if (v == original) {
+                    original *= 2;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) break;
         }
         return original;
     }
