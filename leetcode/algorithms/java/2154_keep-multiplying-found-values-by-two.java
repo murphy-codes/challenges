@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-18
 // At the time of submission:
-//   Runtime 1 ms Beats 93.95%
-//   Memory 45.68 MB Beats 19.66%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 45.57 MB Beats 21.57%
 
 /****************************************
 * 
@@ -37,18 +37,25 @@
 ****************************************/
 
 class Solution {
+    // Scans through all of nums on each iteration, doubling when found.
+    // Due to small constraints, this linear scan is efficient in practice.
+    // Time complexity is O(n * k), Space complexity is O(1).
+    // Where k is the number of doublings (at most ~10). 
     public int findFinalValue(int[] nums, int original) {
-        while (true) {
-            boolean found = false;
-            for (int v : nums) {
-                if (v == original) {
-                    original *= 2;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) break;
+        boolean keepSearching = true;
+        while (keepSearching) {            
+            keepSearching = existsInArray(nums, original); // Check if cur val exists
+            original *= 2; // If so, double it for next iteration
         }
-        return original;
+        return original / 2; // We undo last, extra doubling
+    }
+    // Returns true if target value is found in nums
+    public boolean existsInArray(int[] nums, int target) {
+        for (int value : nums) {
+            if (value == target) {
+                return true;
+            }
+        }
+        return false;
     }
 }
