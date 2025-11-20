@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-19
 // At the time of submission:
-//   Runtime 9 ms Beats 93.20%
-//   Memory 47.57 MB Beats 19.05%
+//   Runtime 7 ms Beats 97.96%
+//   Memory 47.79 MB Beats 11.56%
 
 /****************************************
 * 
@@ -43,49 +43,57 @@
 import java.util.Arrays;
 
 class Solution {
-    // Greedy solution: sort intervals by end asc, start desc. For each interval,
-    // ensure it has at least two chosen numbers. Keep track of the two largest
-    // previously chosen values and add minimal new values (near interval end) to
-    // satisfy the requirement. Time: O(n log n) for sorting; space: O(1) extra.
+    // Pack each interval as {end, -start} and sort by end asc, start desc. Maintain
+    // the last two chosen numbers ensuring each interval contains at least two. If
+    // both already inside, skip; if one inside, add one; otherwise add two. This
+    // greedy choice keeps future intervals flexible. Time O(n log n), space O(1).
     public int intersectionSizeTwo(int[][] intervals) {
+        int m = intervals.length;
 
-        // Sort intervals by end asc, start desc
-        Arrays.sort(intervals, (a, b) ->
-            a[1] != b[1] ? Integer.compare(a[1], b[1]) 
-                         : Integer.compare(b[0], a[0])
-        );
-
-        int count = 0;
-
-        // p1 = largest selected element so far
-        // p2 = second largest selected element
-        int p1 = -1;
-        int p2 = -1;
+        // Pack each interval into a single long:
+        // high 32 bits = end, low 32 bits = -start
+        long[] packed = new long[m];
+        int idx = 0;
 
         for (int[] interval : intervals) {
-            int start = interval[0];
-            int end   = interval[1];
+            long end = (long) interval[1] << 32;
+            long negStart = -(long) interval[0] & 0xFFFFFFFFL;
+            packed[idx++] = end | negStart;
+        }
 
-            // Case 1: both already inside interval
-            if (p2 >= start) {
+        // Sort by end asc, and if tie, start desc
+        Arrays.sort(packed);
+
+        int secondLast = -2; // second most recent chosen value
+        int last = -1;       // most recent chosen value
+        int answer = 0;
+
+        for (long packedValue : packed) {
+
+            // Unpack (low 32 bits = -start)
+            int start = -(int) packedValue;
+            int end = (int) (packedValue >> 32);
+
+            // Case 1: this interval already has two chosen values
+            if (start <= secondLast) {
                 continue;
             }
 
-            // Case 2: only p1 is inside, add one number
-            if (p1 >= start) {
-                count += 1;
-                p2 = p1;
-                p1 = end;
+            // Case 2: exactly one chosen value fits
+            if (start <= last) {
+                answer += 1;
+                secondLast = last;
+                last = end;
             }
 
-            // Case 3: none inside, add two numbers
+            // Case 3: none fit → must choose two values
             else {
-                count += 2;
-                p2 = end - 1;
-                p1 = end;
+                answer += 2;
+                secondLast = end - 1;
+                last = end;
             }
         }
 
-        return count;
+        return answer;
     }
 }
