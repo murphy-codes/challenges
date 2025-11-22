@@ -1,77 +1,93 @@
 // Source: https://leetcode.com/problems/unique-length-3-palindromic-subsequences/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-03
+// At the time of submission:
+//   Runtime 35 ms Beats 97.54%
+//   Memory 47.18 MB Beats 13.85%
 
 /****************************************
 * 
-* You are given a 0-indexed integer array nums of length n.
-* nums contains a valid split at index i if the following are true:
-* • The sum of the first i + 1 elements is greater than or equal to the sum of the last n - i - 1 elements.
-* • There is at least one element to the right of i. That is, 0 <= i < n - 1.
-* Return the number of valid splits in nums.
-* 
+* Given a string `s`, return the number of unique palindromes of length three
+* _ that are a subsequence of `s`.
+* Note that even if there are multiple ways to obtain the same subsequence,
+* _ it is still only counted once.
+* A palindrome is a string that reads the same forwards and backwards.
+* A subsequence of a string is a new string generated from the original string
+* _ with some characters (can be none) deleted without changing the relative
+* _ order of the remaining characters.
+* • For example, `"ace"` is a subsequence of `"abcde"`.
+*
 * Example 1:
-* Input: nums = [10,4,-8,7]
-* Output: 2
-* Explanation: 
-* There are three ways of splitting nums into two non-empty parts:
-* - Split nums at index 0. Then, the first part is [10], and its sum is 10. The second part is [4,-8,7], and its sum is 3. Since 10 >= 3, i = 0 is a valid split.
-* - Split nums at index 1. Then, the first part is [10,4], and its sum is 14. The second part is [-8,7], and its sum is -1. Since 14 >= -1, i = 1 is a valid split.
-* - Split nums at index 2. Then, the first part is [10,4,-8], and its sum is 6. The second part is [7], and its sum is 7. Since 6 < 7, i = 2 is not a valid split.
-* Thus, the number of valid splits in nums is 2.
-* 
+* Input: s = "aabca"
+* Output: 3
+* Explanation: The 3 palindromic subsequences of length 3 are:
+* - "aba" (subsequence of "aabca")
+* - "aaa" (subsequence of "aabca")
+* - "aca" (subsequence of "aabca")
+*
 * Example 2:
-* Input: nums = [2,3,1,0]
-* Output: 2
-* Explanation: 
-* There are two valid splits in nums:
-* - Split nums at index 1. Then, the first part is [2,3], and its sum is 5. The second part is [1,0], and its sum is 1. Since 5 >= 1, i = 1 is a valid split. 
-* - Split nums at index 2. Then, the first part is [2,3,1], and its sum is 6. The second part is [0], and its sum is 0. Since 6 >= 0, i = 2 is a valid split.
-* 
+* Input: s = "adc"
+* Output: 0
+* Explanation: There are no palindromic subsequences of length 3 in "adc".
+*
+* Example 3:
+* Input: s = "bbcbaba"
+* Output: 4
+* Explanation: The 4 palindromic subsequences of length 3 are:
+* - "bbb" (subsequence of "bbcbaba")
+* - "bcb" (subsequence of "bbcbaba")
+* - "bab" (subsequence of "bbcbaba")
+* - "aba" (subsequence of "bbcbaba")
+*
 * Constraints:
-* • 2 <= nums.length <= 10^5
-* • -10^5 <= nums[i] <= 10^5
+* • `3 <= s.length <= 10^5`
+* • `s` consists of only lowercase English letters.
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // Solution: Two-pass approach with O(n) complexity. (O(26n), simplified)
-    // 1. Treat each character as the middle of a potential palindrome.
-    // 2. Use arrays to track seen characters on the left and count characters on the right.
-    // 3. For each middle, check all possible outer characters ('a' to 'z').
-    // 4. Add valid palindromes to a HashSet to avoid duplicates.
-    // 5. Return the size of the set as the result.
+    // For each char 'x', find first and last occurrence in s. Any unique char
+    // between them can be the middle of a palindrome x y x. Count distinct middle
+    // letters for all 26 chars. Runs in O(26*n) time with O(1) extra space.
     public int countPalindromicSubsequence(String s) {
         int n = s.length();
-        Set<String> uniquePalindromes = new HashSet<>();
-
-        // Array to store right set of characters for each position
-        int[] rightCount = new int[26];
-        for (char c : s.toCharArray()) {
-            rightCount[c - 'a']++;
+        int[][] pos = new int[26][2]; // [char][0]=first, [1]=last
+        
+        // Initialize
+        for (int i = 0; i < 26; i++) {
+            pos[i][0] = Integer.MAX_VALUE;
+            pos[i][1] = Integer.MIN_VALUE;
         }
 
-        boolean[] leftSeen = new boolean[26]; // Set of characters seen on the left
-
-        // Traverse the string
+        // Track first and last occurrence of each character
         for (int i = 0; i < n; i++) {
-            char middle = s.charAt(i);
-            rightCount[middle - 'a']--; // Remove the current character from the right
+            int c = s.charAt(i) - 'a';
+            pos[c][0] = Math.min(pos[c][0], i);
+            pos[c][1] = Math.max(pos[c][1], i);
+        }
 
-            // Check all possible outer characters
-            for (char outer = 'a'; outer <= 'z'; outer++) {
-                if (leftSeen[outer - 'a'] && rightCount[outer - 'a'] > 0) {
-                    // Form a valid palindrome and add to the set
-                    uniquePalindromes.add("" + outer + middle + outer);
+        int result = 0;
+
+        // For each character as the outer letter
+        for (int c = 0; c < 26; c++) {
+            int left = pos[c][0];
+            int right = pos[c][1];
+
+            if (left < right) {
+                boolean[] seen = new boolean[26];
+
+                // Count how many distinct letters appear in the middle
+                for (int i = left + 1; i < right; i++) {
+                    seen[s.charAt(i) - 'a'] = true;
+                }
+
+                // Add the number of unique inner characters
+                for (boolean b : seen) {
+                    if (b) result++;
                 }
             }
-
-            leftSeen[middle - 'a'] = true; // Add current character to the left set
         }
 
-        return uniquePalindromes.size();
+        return result;
     }
 }
