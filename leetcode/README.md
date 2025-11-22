@@ -72,6 +72,7 @@ LeetCode
 |3197|[Find the Minimum Area to Cover All Ones II](https://leetcode.com/problems/find-the-minimum-area-to-cover-all-ones-ii/)|[Java](./algorithms/java/3197_find-the-minimum-area-to-cover-all-ones-ii.java)|Hard|
 |3195|[Find the Minimum Area to Cover All Ones I](https://leetcode.com/problems/find-the-minimum-area-to-cover-all-ones-i/)|[Java](./algorithms/java/3195_find-the-minimum-area-to-cover-all-ones-i.java)|Medium|
 |3191|[Minimum Operations to Make Binary Array Elements Equal to One I](https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/)|[Java](./algorithms/java/3191_minimum-operations-to-make-binary-array-elements-equal-to-one-i.java)|Medium|
+|3190|[Find Minimum Operations to Make All Elements Divisible by Three](https://leetcode.com/problems/find-minimum-operations-to-make-all-elements-divisible-by-three/)|[Java](./algorithms/java/3190_find-minimum-operations-to-make-all-elements-divisible-by-three.java)|Easy|
 |3186|[Maximum Total Damage With Spell Casting](https://leetcode.com/problems/maximum-total-damage-with-spell-casting/)|[Java](./algorithms/java/3186_maximum-total-damage-with-spell-casting.java)|Medium|
 |3174|[Clear Digits](https://leetcode.com/problems/clear-digits/)|[Java](./algorithms/java/3174_clear-digits.java)|Easy|
 |3170|[Lexicographically Minimum String After Removing Stars](https://leetcode.com/problems/lexicographically-minimum-string-after-removing-stars/)|[Java](./algorithms/java/3170_lexicographically-minimum-string-after-removing-stars.java)|Medium|
