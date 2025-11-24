@@ -283,6 +283,7 @@ LeetCode
 |1061|[Lexicographically Smallest Equivalent String](https://leetcode.com/problems/lexicographically-smallest-equivalent-string/)|[Java](./algorithms/java/1061_lexicographically-smallest-equivalent-string.java)|Medium|
 |1039|[Minimum Score Triangulation of Polygon](https://leetcode.com/problems/minimum-score-triangulation-of-polygon/)|[Java](./algorithms/java/1039_minimum-score-triangulation-of-polygon.java)|Medium|
 |1028|[Recover a Tree From Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/)|[Java](./algorithms/java/1028_recover-a-tree-from-preorder-traversal.java)|Hard|
+|1018|[Binary Prefix Divisible By 5](https://leetcode.com/problems/binary-prefix-divisible-by-5/)|[Java](./algorithms/java/1018_binary-prefix-divisible-by-5.java)|Easy|
 |1007|[Minimum Domino Rotations For Equal Row](https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/)|[Java](./algorithms/java/1007_minimum-domino-rotations-for-equal-row.java)|Medium|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |976|[Largest Perimeter Triangle](https://leetcode.com/problems/largest-perimeter-triangle/)|[Java](./algorithms/java/976_largest-perimeter-triangle.java)|Easy|
