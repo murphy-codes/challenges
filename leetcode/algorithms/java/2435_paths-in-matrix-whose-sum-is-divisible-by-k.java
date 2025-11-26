@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-26
 // At the time of submission:
-//   Runtime 66 ms Beats 66.81%
-//   Memory 83.30 MB Beats 54.87%
+//   Runtime 30 ms Beats 98.67%
+//   Memory 82.66 MB Beats 58.85%
 
 /****************************************
 * 
@@ -40,61 +40,70 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // We use DP where dp[j][r] counts paths to column j with sum%k == r.
-    // Each cell combines paths from above (previous row) and left (same row).
-    // New remainder is (r + grid[i][j] % k) % k for each transition.
-    // Only two rows of DP are stored to reduce space to O(n*k).
-    // Total time is O(m*n*k) and space is O(n*k), both feasible since m*n<=5e4.
+    // This solution uses DP where each cell tracks k remainders of path sums.
+    // Only two rows of DP are stored at once (rolling array), reducing space
+    // from O(m*n*k) to O(n*k). For each cell, we update all k remainders by
+    // combining paths from the top and left. Total time is O(m*n*k) and the
+    // final answer is the count of paths to the bottom-right with remainder 0.
 
-    private static final int MOD = 1_000_000_007;
+    private static final int MOD = (int) 1e9 + 7;
 
     public int numberOfPaths(int[][] grid, int k) {
+        return rolling(grid, k);
+    }
+
+    private int rolling(int[][] grid, int k) {
         int m = grid.length;
         int n = grid[0].length;
 
-        // dpPrev: ways from previous row
-        // dpNext: ways for current row
-        int[][] dpPrev = new int[n][k];
-        int[][] dpNext = new int[n][k];
+        // DP arrays: prev[row][remainder], curr[row][remainder]
+        int[][] prev = new int[n][k];
+        int[][] curr = new int[n][k];
 
-        for (int i = 0; i < m; i++) {
-            Arrays.stream(dpNext).forEach(row -> Arrays.fill(row, 0));
+        // Initialize first row (moving only right)
+        int runningSum = 0;
+        for (int col = 0; col < n; col++) {
+            runningSum += grid[0][col];
+            prev[col][runningSum % k] = 1;
+        }
 
-            for (int j = 0; j < n; j++) {
-                int cell = grid[i][j] % k;
+        runningSum = grid[0][0]; // reset to start first column accumulation
 
-                // 1. Start of grid: only one path (starting point)
-                if (i == 0 && j == 0) {
-                    dpNext[0][cell] = 1;
-                    continue;
-                }
+        // Process rows 1..m-1
+        for (int row = 1; row < m; row++) {
 
-                // Add ways from above (dpPrev)
-                if (i > 0) {
-                    for (int r = 0; r < k; r++) {
-                        int newR = (r + cell) % k;
-                        dpNext[j][newR] = (dpNext[j][newR] + dpPrev[j][r]) % MOD;
-                    }
-                }
+            // First column for this row (moving only down)
+            runningSum += grid[row][0];
 
-                // Add ways from left (dpNext[j - 1])
-                if (j > 0) {
-                    for (int r = 0; r < k; r++) {
-                        int newR = (r + cell) % k;
-                        dpNext[j][newR] = (dpNext[j][newR] + dpNext[j - 1][r]) % MOD;
-                    }
+            // Reset curr[0] completely (ensures no stale data)
+            Arrays.fill(curr[0], 0);
+
+            // Set base case for first column in current row
+            curr[0][runningSum % k] = 1;
+
+            // Process columns 1..n-1
+            for (int col = 1; col < n; col++) {
+                int cellVal = grid[row][col];
+
+                // For every possible previous remainder
+                for (int prevRem = 0; prevRem < k; prevRem++) {
+                    int newRem = (prevRem + cellVal) % k;
+
+                    // Ways = (from above) + (from left)
+                    curr[col][newRem] =
+                        (int) (((long) prev[col][prevRem] +
+                                curr[col - 1][prevRem]) % MOD);
                 }
             }
 
-            // Move next → prev
-            int[][] temp = dpPrev;
-            dpPrev = dpNext;
-            dpNext = temp;
+            // Swap references: prev <- curr, curr <- prev
+            int[][] swap = prev;
+            prev = curr;
+            curr = swap;
         }
 
-        return dpPrev[n - 1][0];
+        // The answer is the number of paths whose remainder is 0 at bottom-right
+        return prev[n - 1][0];
     }
 }
