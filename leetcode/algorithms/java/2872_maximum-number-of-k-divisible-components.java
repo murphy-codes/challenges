@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-27
 // At the time of submission:
-//   Runtime 28 ms Beats 55.91%
-//   Memory 90.06 MB Beats 34.41%
+//   Runtime 25 ms Beats 78.49%
+//   Memory 89.12 MB Beats 35.48%
 
 /****************************************
 * 
@@ -51,52 +51,52 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
-    // We run a DFS that returns each subtree's sum modulo k. If a child's
-    // subtree sum is divisible by k, it forms an independent component and
-    // is not merged upward; otherwise its remainder is added to the parent.
-    // This correctly counts the maximum number of k-divisible components.
-    // The DFS visits each node once, giving O(n) time and O(n) space.
+    // DFS computes each subtree's sum modulo k in-place by accumulating child
+    // remainders directly into the parent's value. When a node's subtree sum
+    // is divisible by k, it forms its own component and is counted. Each node
+    // is visited once, giving O(n) time and O(n) space for the adjacency list.
 
-    private int count;  // tracks number of K-divisible components found
+    int ans;  // counts number of subtree components divisible by k
 
-    public int maxKDivisibleComponents(int n, int[][] edges, int[] values, int k) {
+    public int maxKDivisibleComponents(int n, int[][] edges,
+                                       int[] values, int k) {
+
         // Build adjacency list
-        List<List<Integer>> graph = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
-
+        List<Integer>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
+        }
         for (int[] e : edges) {
-            graph.get(e[0]).add(e[1]);
-            graph.get(e[1]).add(e[0]);
+            int u = e[0], v = e[1];
+            graph[u].add(v);
+            graph[v].add(u);
         }
 
-        count = 0;
-        dfs(0, -1, graph, values, k);
-        return count + 1;  // each divisible-cut subtree + the final remaining component
+        ans = 0;
+        dfs(values, k, graph, 0, -1);
+        return ans;
     }
 
-    private long dfs(int node, int parent, List<List<Integer>> graph,
-                     int[] values, int k) {
+    private void dfs(int[] values, int k,
+                     List<Integer>[] graph, int node, int parent) {
 
-        long sum = values[node];
+        // Visit all children except parent
+        for (int child : graph[node]) {
+            if (child != parent) {
 
-        for (int nei : graph.get(node)) {
-            if (nei == parent) continue;
+                dfs(values, k, graph, child, node);
 
-            long childSum = dfs(nei, node, graph, values, k);
-
-            if (childSum % k == 0) {
-                // Child subtree forms its own valid component
-                count++;
-            } else {
-                // Otherwise accumulate upward
-                sum += childSum;
+                // Add child's subtree remainder into this node
+                values[node] += values[child];
+                values[node] %= k;
             }
         }
 
-        return sum % k;
+        // Check if this node's full subtree sum is divisible by k
+        values[node] %= k;
+        if (values[node] == 0) {
+            ans++;
+        }
     }
 }
