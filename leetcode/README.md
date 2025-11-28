@@ -109,6 +109,7 @@ LeetCode
 |2894|[Divisible and Non-divisible Sums Difference](https://leetcode.com/problems/divisible-and-non-divisible-sums-difference/)|[Java](./algorithms/java/2894_divisible-and-non-divisible-sums-difference.java)|Easy|
 |2874|[Maximum Value of an Ordered Triplet II](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/)|[Java](./algorithms/java/2874_maximum-value-of-an-ordered-triplet-ii.java)|Medium|
 |2873|[Maximum Value of an Ordered Triplet I](https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-i/)|[Java](./algorithms/java/2873_maximum-value-of-an-ordered-triplet-i.java)|Easy|
+|2872|[Maximum Number of K-Divisible Components](https://leetcode.com/problems/maximum-number-of-k-divisible-components/)|[Java](./algorithms/java/2872_maximum-number-of-k-divisible-components.java)|Hard|
 |2845|[Count of Interesting Subarrays](https://leetcode.com/problems/count-of-interesting-subarrays/)|[Java](./algorithms/java/2845_count-of-interesting-subarrays.java)|Medium|
 |2843|[Count Symmetric Integers](https://leetcode.com/problems/count-symmetric-integers/)|[Java](./algorithms/java/2843_count-symmetric-integers.java)|Easy|
 |2818|[Apply Operations to Maximize Score](https://leetcode.com/problems/apply-operations-to-maximize-score/)|[Java](./algorithms/java/2818_apply-operations-to-maximize-score.java)|Hard|
