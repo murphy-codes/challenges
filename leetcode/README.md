@@ -245,6 +245,7 @@ LeetCode
 |1695|[Maximum Erasure Value](https://leetcode.com/problems/maximum-erasure-value/)|[Java](./algorithms/java/1695_maximum-erasure-value.java)|Medium|
 |1625|[Lexicographically Smallest String After Applying Operations](https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/)|[Java](./algorithms/java/1625_lexicographically-smallest-string-after-applying-operations.java)|Medium|
 |1611|[Minimum One Bit Operations to Make Integers Zero](https://leetcode.com/problems/minimum-one-bit-operations-to-make-integers-zero/)|[Java](./algorithms/java/1611_minimum-one-bit-operations-to-make-integers-zero.java)|Hard|
+|1590|[Make Sum Divisible by P](https://leetcode.com/problems/make-sum-divisible-by-p/)|[Java](./algorithms/java/1590_make-sum-divisible-by-p.java)|Medium|
 |1578|[Minimum Time to Make Rope Colorful](https://leetcode.com/problems/minimum-time-to-make-rope-colorful/)|[Java](./algorithms/java/1578_minimum-time-to-make-rope-colorful.java)|Medium|
 |1550|[Three Consecutive Odds](https://leetcode.com/problems/three-consecutive-odds/)|[Java](./algorithms/java/1550_three-consecutive-odds.java)|Easy|
 |1534|[Count Good Triplets](https://leetcode.com/problems/count-good-triplets/)|[Java](./algorithms/java/1534_count-good-triplets.java)|Easy|
