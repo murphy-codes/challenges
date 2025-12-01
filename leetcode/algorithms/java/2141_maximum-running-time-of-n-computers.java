@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-11-30
 // At the time of submission:
-//   Runtime 16 ms Beats 71.43%
-//   Memory 73.94 MB Beats 28.02%
+//   Runtime 6 ms Beats 100.00%
+//   Memory 73.97 MB Beats 28.02%
 
 /****************************************
 * 
@@ -46,39 +46,73 @@
 * 
 ****************************************/
 
-// import java.util.Arrays;
-
 class Solution {
-    // Binary search the maximum minutes T such that all n computers can run.
-    // For each candidate T, sum the power contributed by each battery, where
-    // a battery contributes at most min(battery[i], T). If this total meets
-    // n*T, T is feasible. Binary search over [0, total/n] for the maximum T.
-    // Time: O(m log total), Space: O(1), where m is number of batteries.
+    // This uses binary search to find the maximum uniform runtime all computers
+    // can sustain. For each candidate time, we check feasibility by counting
+    // batteries that individually meet the target and pooling the rest to cover
+    // remaining machines. The check runs in O(n), and binary search over the time
+    // range yields an overall complexity of O(n log(total/n)) with O(1) extra space.
     public long maxRunTime(int n, int[] batteries) {
-        long total = 0;
-        for (int b : batteries) total += b;
 
-        long left = 0;
-        long right = total / n; // upper bound for answer
+        // Total capacity of all batteries
+        long totalCapacity = 0;
 
-        while (left < right) {
-            long mid = right - (right - left) / 2; // bias upward
-            if (canRun(n, batteries, mid)) {
-                left = mid;   // mid works → try longer
-            } else {
-                right = mid - 1; // mid too long → decrease
+        // Track the largest single battery
+        int maxBattery = 0;
+
+        for (int b : batteries) {
+            totalCapacity += b;
+            if (b > maxBattery) {
+                maxBattery = b;
             }
         }
 
-        return left;
+        // Maximum possible time if perfectly distributed
+        long right = totalCapacity / n;
+
+        // If even distribution already meets or exceeds max battery,
+        // no need for binary search—this is the answer.
+        if (right >= maxBattery) {
+            return right;
+        }
+
+        long left = 0;
+        long bestTime = 0;
+
+        // Binary search for max feasible runtime
+        while (left <= right) {
+            long mid = left + (right - left) / 2;
+            if (canCoverAllComputer(batteries, n, mid)) {
+                bestTime = mid;      // mid works, try to go higher
+                left = mid + 1;
+            } else {
+                right = mid - 1;     // mid too high, reduce search space
+            }
+        }
+
+        return bestTime;
     }
 
-    private boolean canRun(int n, int[] batteries, long time) {
-        long available = 0;
+    // Determine whether all n computers can be powered for 'time'
+    public boolean canCoverAllComputer(int[] batteries, int n, long time) {
+        long smallBatterySum = 0;
+
         for (int b : batteries) {
-            available += Math.min((long)b, time);
-            if (available >= time * n) return true; // early exit
+
+            // Batteries that can individually power a machine for 'time'
+            if (b >= time) {
+                n--;   // covers one machine completely
+            } else {
+                // Otherwise contribute to shared pool
+                smallBatterySum += b;
+            }
+
+            // If shared pool can support the remaining machines, success
+            if (smallBatterySum >= (long) n * time) {
+                return true;
+            }
         }
-        return available >= time * n;
+
+        return false;
     }
 }
