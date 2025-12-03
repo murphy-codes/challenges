@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-02
 // At the time of submission:
-//   Runtime 213 ms Beats 100.00%
-//   Memory 120.14 MB Beats 86.72%
+//   Runtime 383 ms Beats 96.09%
+//   Memory 275.09 MB Beats 70.31%
 
 /****************************************
 * 
@@ -41,97 +41,101 @@
 
 class Solution {
 
+    // Computes the number of valid trapezoids formed by all O(n^2) segments.
+    // Segments are grouped by slope to count parallel but non-collinear pairs,
+    // and by midpoint to subtract parallelograms (same midpoint, diff slopes).
+    // Uses hash maps to collect groups, then small TreeMaps to count pairs
+    // efficiently. Overall time is O(n^2) and space is also O(n^2).
+
     public int countTrapezoids(int[][] points) {
-        if(points[0][0]==-733 && points[0][1]==792) return 80757; // not 80592 // TC 545
-        if(points[0][0]==-26 && points[0][1]==-825) return 141420; // not 141267 // TC 546
-        if(points[0][0]==-960 && points[0][1]==-311) return 104348; // not 104187 // TC 547
-        if(points[0][0]==773 && points[0][1]==621) return 125886; // not 125684 // TC 548
-        if(points[0][0]==-147 && points[0][1]==-706) return 154997; // not 154651 // TC 549
-        if(points[0][0]==-739 && points[0][1]==313) return 256969; // not 256456 // TC 550
+
         int n = points.length;
+        double INF_SLOPE = 1e9 + 7;   // sentinel slope for vertical lines
 
-        // slope -> list of line identifiers (one per segment)
-        HashMap<Long, ArrayList<Long>> slopeToLine = new HashMap<>();
-        // midpoint -> list of slopes
-        HashMap<Long, ArrayList<Long>> midToSlope = new HashMap<>();
+        // slope → list of intercepts (for grouping parallel segments)
+        Map<Double, List<Double>> slopeToIntercepts = new HashMap<>();
 
+        // midpoint-hash → list of slopes (for grouping potential parallelograms)
+        Map<Integer, List<Double>> midpointToSlopes = new HashMap<>();
+
+        int result = 0;
+
+        // Build all O(n^2) segments
         for (int i = 0; i < n; i++) {
-            int x1 = points[i][0], y1 = points[i][1];
+            int x1 = points[i][0];
+            int y1 = points[i][1];
+
             for (int j = i + 1; j < n; j++) {
-                int x2 = points[j][0], y2 = points[j][1];
 
-                // --- Compute normalized slope (dy,dx) ---
-                int dx = x2 - x1;
-                int dy = y2 - y1;
+                int x2 = points[j][0];
+                int y2 = points[j][1];
+                int dx = x1 - x2;
+                int dy = y1 - y2;
 
-                int g = gcd(Math.abs(dx), Math.abs(dy));
-                dx /= g;
-                dy /= g;
+                double slope;
+                double intercept;
 
-                // ensure unique direction (no ambiguity between (1,-1) vs (-1,1))
-                if (dx < 0 || (dx == 0 && dy < 0)) {
-                    dx = -dx;
-                    dy = -dy;
+                // Vertical line: infinite slope, b = x-intercept
+                if (x1 == x2) {
+                    slope = INF_SLOPE;
+                    intercept = x1;
+                } else {
+                    slope = (double) (y2 - y1) / (x2 - x1);
+                    intercept = (double) (y1 * dx - x1 * dy) / dx;
                 }
 
-                long slopeKey = (((long) dx) << 32) | (dy & 0xffffffffL);
+                // Normalize -0.0 to 0.0
+                if (slope == -0.0) slope = 0.0;
+                if (intercept == -0.0) intercept = 0.0;
 
-                // --- Compute line key: store using dx*y - dy*x to identify parallel lines ---
-                long lineKey = (long) dx * y1 - (long) dy * x1;
+                // Unique midpoint hash (safe because coordinates are ≤ 1e4)
+                int midHash = (x1 + x2) * 10000 + (y1 + y2);
 
-                slopeToLine
-                    .computeIfAbsent(slopeKey, k -> new ArrayList<>())
-                    .add(lineKey);
+                slopeToIntercepts
+                        .computeIfAbsent(slope, key -> new ArrayList<>())
+                        .add(intercept);
 
-                // --- Compute midpoint key (integer, unique) ---
-                // multiply x-midpoint by large constant to avoid collisions
-                long midKey = ((long) (x1 + x2)) * 2001L + (y1 + y2);
-
-                midToSlope
-                    .computeIfAbsent(midKey, k -> new ArrayList<>())
-                    .add(slopeKey);
+                midpointToSlopes
+                        .computeIfAbsent(midHash, key -> new ArrayList<>())
+                        .add(slope);
             }
         }
 
-        long ans = 0;
+        // Count trapezoids: pairs of parallel, non-collinear segments
+        for (List<Double> intercepts : slopeToIntercepts.values()) {
+            if (intercepts.size() == 1) continue;
 
-        // --- Count trapezoids by slope groups ---
-        for (ArrayList<Long> lines : slopeToLine.values()) {
-            if (lines.size() == 1) continue;
+            Map<Double, Integer> freq = new TreeMap<>();
 
-            TreeMap<Long, Integer> freq = new TreeMap<>();
-            for (long b : lines) freq.put(b, freq.getOrDefault(b, 0) + 1);
+            for (double b : intercepts) {
+                freq.put(b, freq.getOrDefault(b, 0) + 1);
+            }
 
-            long sum = 0;
+            int prefix = 0;
             for (int count : freq.values()) {
-                ans += sum * count;  // Cumulative combinations across distinct lines
-                sum += count;
+                result += prefix * count;
+                prefix += count;
             }
         }
 
-        // --- Subtract parallelograms (midpoint groups) ---
-        for (ArrayList<Long> slopes : midToSlope.values()) {
+        // Subtract parallelograms: segments with same midpoint but different slopes
+        for (List<Double> slopes : midpointToSlopes.values()) {
             if (slopes.size() == 1) continue;
 
-            TreeMap<Long, Integer> freq = new TreeMap<>();
-            for (long s : slopes) freq.put(s, freq.getOrDefault(s, 0) + 1);
+            Map<Double, Integer> freq = new TreeMap<>();
 
-            long sum = 0;
+            for (double k : slopes) {
+                freq.put(k, freq.getOrDefault(k, 0) + 1);
+            }
+
+            int prefix = 0;
             for (int count : freq.values()) {
-                ans -= sum * count;  // opposite-side pairs with same midpoint
-                sum += count;
+                result -= prefix * count;
+                prefix += count;
             }
         }
 
-        return (int) ans;
-    }
-
-    private int gcd(int a, int b) {
-        while (b != 0) {
-            int t = a % b;
-            a = b;
-            b = t;
-        }
-        return a;
+        return result;
     }
 }
+
