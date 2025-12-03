@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3623|[Count Number of Trapezoids I](https://leetcode.com/problems/count-number-of-trapezoids-i/)|[Java](./algorithms/java/3623_count-number-of-trapezoids-i.java)|Medium|
 |3607|[Power Grid Maintenance](https://leetcode.com/problems/power-grid-maintenance/)|[Java](./algorithms/java/3607_power-grid-maintenance.java)|Medium|
 |3542|[Minimum Operations to Convert All Elements to Zero](https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/)|[Java](./algorithms/java/3542_minimum-operations-to-convert-all-elements-to-zero.java)|Medium|
 |3541|[Find Most Frequent Vowel and Consonant](https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/)|[Java](./algorithms/java/3541_find-most-frequent-vowel-and-consonant.java)|Easy|
