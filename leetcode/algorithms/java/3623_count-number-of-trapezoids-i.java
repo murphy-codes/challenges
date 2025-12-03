@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-02
 // At the time of submission:
-//   Runtime 33 ms Beats 96.02%
-//   Memory 207.34 MB Beats 10.95%
+//   Runtime 30 ms Beats 100.00%
+//   Memory 206.75 MB Beats 22.39%
 
 /****************************************
 * 
@@ -44,37 +44,35 @@
 // import java.util.Map;
 
 class Solution {
-    // We group points by y-coordinate, since trapezoids require two horizontal
-    // lines. Each group of k points contributes C(k,2) horizontal segments. Any
-    // trapezoid is formed by choosing one segment from each of two distinct
-    // y-levels, giving sum over all pairwise products. We compute this using
-    // (sum^2 - sumSquares)/2. Time O(n log n), space O(n).
+    // Group points by their y-coordinate, since horizontal trapezoids require
+    // selecting two points from one horizontal line and two from another. A
+    // line with k points contributes C(k,2) horizontal segments. For each such
+    // segment count, we multiply it by the accumulated counts from previous
+    // lines to get all cross-line combinations. Time O(n), space O(n).
 
-    static final long MOD = 1_000_000_007L;
+    private static final int MOD = 1_000_000_007;
 
     public int countTrapezoids(int[][] points) {
+
         // Count how many points lie on each horizontal line (group by y)
         Map<Integer, Integer> countByY = new HashMap<>();
-        for (int[] p : points) {
-            countByY.put(p[1], countByY.getOrDefault(p[1], 0) + 1);
+        for (int[] point : points) {
+            countByY.merge(point[1], 1, Integer::sum);
         }
 
-        long totalPairs = 0;      // sum of C(k,2)
-        long sumSqPairs = 0;      // sum of C(k,2)^2
+        long sumOfPairs = 0;  // running total of C(k,2) from prior y-levels
+        long result = 0;      // accumulated trapezoid count
 
         for (int k : countByY.values()) {
-            if (k >= 2) {
-                long pairs = ((long) k * (k - 1) / 2) % MOD;  // C(k,2)
-                totalPairs = (totalPairs + pairs) % MOD;
-                sumSqPairs = (sumSqPairs + (pairs * pairs) % MOD) % MOD;
-            }
+            long pairsHere = (long) k * (k - 1) / 2;  // C(k,2)
+
+            // Each new group forms pairsHere * sumOfPairs trapezoids
+            result += pairsHere * sumOfPairs;
+
+            // Add to running pair total for future groups
+            sumOfPairs += pairsHere;
         }
 
-        // number of combinations across distinct y-levels:
-        // (totalPairs^2 - sumSqPairs) / 2
-        long result = (totalPairs * totalPairs % MOD - sumSqPairs + MOD) % MOD;
-        result = result * ((MOD + 1) / 2) % MOD;  // multiply by modular inverse of 2
-
-        return (int) result;
+        return (int) (result % MOD);
     }
 }
