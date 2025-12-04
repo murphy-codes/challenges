@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-03
 // At the time of submission:
-//   Runtime 14 ms Beats 64.11%
-//   Memory 47.60 MB Beats 33.47%
+//   Runtime 8 ms Beats 100.00%
+//   Memory 47.22 MB Beats 44.35%
 
 /****************************************
 * 
@@ -47,24 +47,30 @@
 ****************************************/
 
 class Solution {
-    // Scans the road from left to right while tracking pending right-moving cars.
-    // Any 'R' may collide with a future 'S' or 'L', causing rCount collisions plus
-    // an extra 1 if the meeting car is 'L'. Cars before the first 'L' never collide.
-    // After a collision, all involved cars stop, so we reset rCount to zero.
-    // Runs in O(n) time using O(1) extra space by processing each car once.
+    // Cars that never collide are leading 'L's on the far left and trailing 'R's
+    // on the far right, so we trim those away. Every remaining 'L' or 'R' between
+    // the trimmed boundaries must eventually collide, while 'S' cars cause no
+    // additional collisions themselves. We count all non-'S' cars in this region.
+    // Runs in O(n) time and O(1) extra space by performing only linear scans.
     public int countCollisions(String directions) {
-        int collisions = 0, rCount = 0;
-        boolean lRisk = false;
-        for (char c : directions.toCharArray()) {
-            if (c!='L') lRisk = true;
-            if (c == 'R') rCount++;
-            else if (c == 'S') {
-                collisions+=rCount;
-                rCount = 0;
-            }
-            else if (lRisk && c == 'L'){
-                collisions+=rCount+1;
-                rCount = 0;
+        int collisions = 0;
+        char[] arr = directions.toCharArray();
+        int n = arr.length;
+        // Skip leading 'L's (cars that move left off the road and never collide)
+        int left = 0;
+        while (left < n && arr[left] == 'L') {
+            left++;
+        }
+        // Skip trailing 'R's (cars that move right off the road and never collide)
+        int right = n - 1;
+        while (right >= 0 && arr[right] == 'R') {
+            right--;
+        }
+        // All remaining 'L' or 'R' cars in the middle zone will definitely collide.
+        // Only 'S' cars do NOT directly add collisions.
+        for (int i = left; i <= right; i++) {
+            if (arr[i] != 'S') {
+                collisions++;
             }
         }
         return collisions;
