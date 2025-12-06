@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-05
 // At the time of submission:
-//   Runtime 44 ms Beats 34.57%
-//   Memory 86.91 MB Beats 6.17%
+//   Runtime 38 ms Beats 95.06%
+//   Memory 68.72 MB Beats 65.43%
 
 /****************************************
 * 
@@ -41,60 +41,65 @@
 * 
 ****************************************/
 
-import java.util.ArrayDeque;
+// import java.util.ArrayDeque;
+// import java.util.Deque;
 
 class Solution {
-    // We use a sliding window with monotonic min/max deques to track when a
-    // segment has max-min ≤ k. For each index i, dp[i] counts all partitions
-    // whose last segment starts between window limits. Prefix sums allow O(1)
-    // range DP queries. The window only moves forward, giving O(n) time and
-    // O(n) space for dp/prefix plus O(n) total deque operations.
+    // Use two monotonic deques to maintain the min and max in a sliding window.
+    // When max–min ≤ k, dp[j+1] equals the sum of all dp[i] for i in the window.
+    // A running accumulator stores this sum and subtracts dp[left] when the
+    // window becomes invalid, keeping all updates O(1). Overall time is O(n)
+    // with O(n) space for dp and O(n) total deque operations.
+
     public int countPartitions(int[] nums, int k) {
-        final int MOD = 1_000_000_007;
         int n = nums.length;
+        int MOD = 1_000_000_007;
 
-        long[] dp = new long[n];
-        long[] prefix = new long[n + 1]; 
-        // prefix[i] = (dp[0] + ... + dp[i-1])
+        // dp[i] = number of ways to partition nums[0 .. i-1]
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
 
-        ArrayDeque<Integer> minD = new ArrayDeque<>();
-        ArrayDeque<Integer> maxD = new ArrayDeque<>();
+        // acc = running sum of dp[i .. j], updated as window moves
+        int acc = 1;
 
-        int start = 0;
+        Deque<Integer> minDeque = new ArrayDeque<>();
+        Deque<Integer> maxDeque = new ArrayDeque<>();
 
-        for (int i = 0; i < n; i++) {
+        int left = 0;
 
-            // Insert nums[i] into min deque
-            while (!minD.isEmpty() && nums[minD.peekLast()] > nums[i]) {
-                minD.pollLast();
+        for (int right = 0; right < n; right++) {
+
+            // Maintain decreasing maxDeque
+            while (!maxDeque.isEmpty() && nums[right] > nums[maxDeque.peekLast()])
+                maxDeque.pollLast();
+            maxDeque.addLast(right);
+
+            // Maintain increasing minDeque
+            while (!minDeque.isEmpty() && nums[right] < nums[minDeque.peekLast()])
+                minDeque.pollLast();
+            minDeque.addLast(right);
+
+            // Shrink window while max-min > k
+            while (nums[maxDeque.peekFirst()] - nums[minDeque.peekFirst()] > k) {
+
+                // Remove dp[left] from running sum
+                acc = (acc - dp[left] + MOD) % MOD;
+                left++;
+
+                // Remove indices that fell out of window
+                if (!minDeque.isEmpty() && minDeque.peekFirst() < left)
+                    minDeque.pollFirst();
+                if (!maxDeque.isEmpty() && maxDeque.peekFirst() < left)
+                    maxDeque.pollFirst();
             }
-            minD.addLast(i);
 
-            // Insert into max deque
-            while (!maxD.isEmpty() && nums[maxD.peekLast()] < nums[i]) {
-                maxD.pollLast();
-            }
-            maxD.addLast(i);
+            // dp[right+1] = total partitions ending at index right
+            dp[right + 1] = acc;
 
-            // Shrink window until valid
-            while (!minD.isEmpty() && !maxD.isEmpty() &&
-                   (nums[maxD.peekFirst()] - nums[minD.peekFirst()] > k)) {
-
-                if (minD.peekFirst() == start) minD.pollFirst();
-                if (maxD.peekFirst() == start) maxD.pollFirst();
-                start++;
-            }
-
-            // dp[i] = number of valid partitions ending at i
-            if (start == 0) {
-                dp[i] = prefix[i] + 1;   // entire prefix counts + single segment
-            } else {
-                dp[i] = (prefix[i] - prefix[start - 1] + MOD) % MOD;
-            }
-
-            prefix[i + 1] = (prefix[i] + dp[i]) % MOD;
+            // Add dp[right+1] to accumulator for next iteration
+            acc = (acc + dp[right + 1]) % MOD;
         }
 
-        return (int)(dp[n - 1] % MOD);
+        return dp[n];  // dp[n] = partitions using entire array
     }
 }
