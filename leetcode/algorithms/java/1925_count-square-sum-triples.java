@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-07
 // At the time of submission:
-//   Runtime 7 ms Beats 88.94%
-//   Memory 41.68 MB Beats 67.22%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 42.01 MB Beats 46.69%
 
 /****************************************
 * 
@@ -28,27 +28,30 @@
 ****************************************/
 
 class Solution {
-    // Iterate over all possible hypotenuses c from 1 to n.  
-    // For each c, iterate a from 1 to c-1, compute b^2 = c^2 - a^2.  
-    // If b is an integer and b <= n, then (a,b,c) forms a valid square triple.  
-    // This counts all valid triples including (a,b,c) and (b,a,c) separately.  
-    // Time complexity: O(n^2), Space complexity: O(1) using only constant extra space.
-    public int countTriples(int n) {
-        int count = 0;
-
-        for (int c = 1; c <= n; c++) {
-            int c2 = c * c;
-            for (int a = 1; a < c; a++) {
-                int b2 = c2 - a * a;
-                int b = (int) Math.sqrt(b2);
-                if (b * b == b2 && b <= n) {
-                    count++;
+    // Generate all primitive Pythagorean triples using Euclid's formula.  
+    // Count all multiples of each primitive triple within the range [1,n].  
+    // Multiply by 2 to account for (a,b,c) and (b,a,c) ordering.  
+    // Time complexity: O(n log n) approximately due to coprime checks in gcd.  
+    // Space complexity: O(1) since only a few integer variables are used.
+    public int countTriples(int limit) {
+        int countTriples = 0;
+        // Generate primitive Pythagorean triples using Euclid's formula
+        for (int m = 3; m * m < limit * 2; m += 2) {           // m is odd
+            for (int n = 1; n < m && m * m + n * n <= limit * 2; n += 2) { // n is odd
+                if (gcd(m, n) == 1) {                          // m and n coprime
+                    countTriples += limit * 2 / (m * m + n * n);
                 }
             }
         }
+        return countTriples * 2; // Count (a,b,c) and (b,a,c) separately
+    }
 
-        return count;
+    private int gcd(int a, int b) {
+        while (a != 0) {
+            int tmp = a;
+            a = b % a;
+            b = tmp;
+        }
+        return b;
     }
 }
-
-
