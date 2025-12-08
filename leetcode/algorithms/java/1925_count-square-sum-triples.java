@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-07
 // At the time of submission:
-//   Runtime 37 ms Beats 29.02%
-//   Memory 42.03 MB Beats 49.69%
+//   Runtime 7 ms Beats 88.94%
+//   Memory 41.68 MB Beats 67.22%
 
 /****************************************
 * 
@@ -28,26 +28,27 @@
 ****************************************/
 
 class Solution {
-    // Iterate over all pairs (a,b) with 1 <= a,b <= n and check if a^2+b^2 is 
-    // a perfect square. If sqrt(a^2+b^2) is an integer ≤ n, increment the count.
-    // This counts both (a,b,c) and (b,a,c) separately when a != b.
-    // Time complexity: O(n^2), since we check all a,b pairs.  
-    // Space complexity: O(1), only constant extra space is used.
+    // Iterate over all possible hypotenuses c from 1 to n.  
+    // For each c, iterate a from 1 to c-1, compute b^2 = c^2 - a^2.  
+    // If b is an integer and b <= n, then (a,b,c) forms a valid square triple.  
+    // This counts all valid triples including (a,b,c) and (b,a,c) separately.  
+    // Time complexity: O(n^2), Space complexity: O(1) using only constant extra space.
     public int countTriples(int n) {
-        int countST = 0;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                double d = Math.sqrt((double) (i*i + j*j));
-                if (isWhole(d)) {
-                    if (d <= n) countST++;
+        int count = 0;
+
+        for (int c = 1; c <= n; c++) {
+            int c2 = c * c;
+            for (int a = 1; a < c; a++) {
+                int b2 = c2 - a * a;
+                int b = (int) Math.sqrt(b2);
+                if (b * b == b2 && b <= n) {
+                    count++;
                 }
             }
         }
-        return countST;
-    }
 
-    public static boolean isWhole(double d) {
-        return d % 1 == 0;
+        return count;
     }
 }
+
 
