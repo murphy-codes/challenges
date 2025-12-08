@@ -28,6 +28,11 @@
 ****************************************/
 
 class Solution {
+    // Iterate over all pairs (a,b) with 1 <= a,b <= n and check if a^2+b^2 is 
+    // a perfect square. If sqrt(a^2+b^2) is an integer ≤ n, increment the count.
+    // This counts both (a,b,c) and (b,a,c) separately when a != b.
+    // Time complexity: O(n^2), since we check all a,b pairs.  
+    // Space complexity: O(1), only constant extra space is used.
     public int countTriples(int n) {
         int countST = 0;
         for (int i = 1; i <= n; i++) {
@@ -45,3 +50,4 @@ class Solution {
         return d % 1 == 0;
     }
 }
+
