@@ -226,6 +226,7 @@ LeetCode
 |1935|[Maximum Number of Words You Can Type](https://leetcode.com/problems/maximum-number-of-words-you-can-type/)|[Java](./algorithms/java/1935_maximum-number-of-words-you-can-type.java)|Easy|
 |1931|[Painting a Grid With Three Different Colors](https://leetcode.com/problems/painting-a-grid-with-three-different-colors/)|[Java](./algorithms/java/1931_painting-a-grid-with-three-different-colors.java)|Hard|
 |1930|[Unique Length-3 Palindromic Subsequences](https://leetcode.com/problems/unique-length-3-palindromic-subsequences/)|[Java](./algorithms/java/1930_unique-length-3-palindromic-subsequences.java)|Medium|
+|1925|[Count Square Sum Triples](https://leetcode.com/problems/count-square-sum-triples/)|[Java](./algorithms/java/1925_count-square-sum-triples.java)|Easy|
 |1922|[Count Good Numbers](https://leetcode.com/problems/count-good-numbers/)|[Java](./algorithms/java/1922_count-good-numbers.java)|Medium|
 |1920|[Build Array from Permutation](https://leetcode.com/problems/build-array-from-permutation/)|[Java](./algorithms/java/1920_build-array-from-permutation.java)|Easy|
 |1912|[Design Movie Rental System](https://leetcode.com/problems/design-movie-rental-system/)|[Java](./algorithms/java/1912_design-movie-rental-system.java)|Hard|
