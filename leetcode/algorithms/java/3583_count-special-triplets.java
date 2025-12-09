@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-08
 // At the time of submission:
-//   Runtime 31 ms Beats 96.90%
-//   Memory 120.50 MB Beats 58.14%
+//   Runtime 17 ms Beats 100.00%
+//   Memory 120.52 MB Beats 58.14%
 
 /****************************************
 * 
@@ -53,42 +53,52 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // For each index j, count how many i<j and k>j satisfy nums[i]=nums[k]=2*nums[j].
-    // Maintain freqPrev for values before j and freqNext for values after j.
-    // Contribution at j is freqPrev[target] * freqNext[target], summed over j.
-    // Frequency arrays allow O(1) lookup, giving overall O(n) time.
-    // Space is O(maxValue) = 100000 for the frequency arrays.
+    // For each value n as the middle index j, we count how many i<j and k>j
+    // satisfy nums[i] = nums[k] = 2*n.  We track counts before j in freqPrev
+    // and counts after j in freqNext.  Each j contributes freqPrev[t] *
+    // freqNext[t], where t = 2*n.  Using static freq arrays avoids allocation
+    // and yields O(n) time and O(1) extra space beyond fixed-size arrays.
+    
+    // Prefix frequency (elements before j)
+    static int[] freqPrev = new int[100001];
+
+    // Suffix frequency (elements after j)
+    static int[] freqNext = new int[100001];
+
+    final int MOD = 1_000_000_007;
+
     public int specialTriplets(int[] nums) {
-        final int MOD = 1_000_000_007;
-        int max = 100000;
 
-        int[] freqPrev = new int[max + 1];
-        int[] freqNext = new int[max + 1];
-
-        // Count all frequencies initially (for freqNext)
+        // Initialize suffix counts with all nums
         for (int x : nums) {
             freqNext[x]++;
         }
 
-        long ans = 0;
+        int result = 0;
 
-        // Iterate j from left to right
-        for (int j = 0; j < nums.length; j++) {
-            int valJ = nums[j];
-            freqNext[valJ]--;       // j is now the "middle" element
+        for (int x : nums) {
+            // x is now serving as the middle element j
+            freqNext[x]--;
 
-            int target = valJ * 2;
-            if (target <= max) {
-                ans += (long) freqPrev[target] * freqNext[target];
-                ans %= MOD;
+            // target = 2 * x
+            int target = x << 1;
+
+            // If target is within bounds, accumulate triplets
+            if (target < freqPrev.length) {
+                long ways = 1L * freqPrev[target] * freqNext[target];
+                result = (result + (int)(ways % MOD)) % MOD;
             }
 
-            freqPrev[valJ]++;       // nums[j] now counts as previous
+            // Now x becomes part of the prefix for future j's
+            freqPrev[x]++;
         }
 
-        return (int) ans;
+        // Reset freqPrev entries used in this testcase
+        for (int x : nums) {
+            freqPrev[x] = 0;
+        }
+
+        return result;
     }
 }
