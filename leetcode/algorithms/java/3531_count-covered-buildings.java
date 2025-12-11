@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-10
 // At the time of submission:
-//   Runtime 175 ms Beats 62.11%
-//   Memory 272.74 MB Beats 38.95 %
+//   Runtime 14 ms Beats 81.05%
+//   Memory 215.08 MB Beats 74.74%
 
 /****************************************
 * 
@@ -54,59 +54,58 @@
 * 
 ****************************************/
 
-// import java.util.HashMap;
-// import java.util.ArrayList;
-// import java.util.Collections;
+// import java.util.Arrays;
 
 class Solution {
-    // We group buildings by row and column, then sort each group so we can
-    // identify which buildings have neighbors on all four sides. A building
-    // is covered if its y-value lies strictly between the min/max y in its
-    // row, and its x-value lies strictly between the min/max x in its column.
-    // This runs in O(n log n) time for sorting, with O(n) extra space.
+    // We track the min and max x for each column and the min and max y for each row.
+    // A building is covered if its x lies strictly between the min/max x in its
+    // column and its y lies strictly between the min/max y in its row. This avoids
+    // sorting and allows the solution to run in O(n) time using O(n) extra space,
+    // since each building is processed twice in simple array lookups.
 
     public int countCoveredBuildings(int n, int[][] buildings) {
 
-        // Group buildings by rows and columns
-        HashMap<Integer, ArrayList<Integer>> rowMap = new HashMap<>();
-        HashMap<Integer, ArrayList<Integer>> colMap = new HashMap<>();
+        // Track min/max x for each column y
+        int[] minXInColumn = new int[n + 1];
+        int[] maxXInColumn = new int[n + 1];
 
-        for (int[] b : buildings) {
-            int x = b[0], y = b[1];
+        // Track min/max y for each row x
+        int[] minYInRow = new int[n + 1];
+        int[] maxYInRow = new int[n + 1];
 
-            rowMap.computeIfAbsent(x, k -> new ArrayList<>()).add(y);
-            colMap.computeIfAbsent(y, k -> new ArrayList<>()).add(x);
-        }
+        // Initialize mins to something larger than any valid coordinate
+        Arrays.fill(minXInColumn, n + 1);
+        Arrays.fill(minYInRow, n + 1);
 
-        // Sort rows and columns
-        for (ArrayList<Integer> list : rowMap.values()) {
-            Collections.sort(list);
-        }
-        for (ArrayList<Integer> list : colMap.values()) {
-            Collections.sort(list);
-        }
-
-        int covered = 0;
-
-        // Check each building
+        // First pass: compute min/max extents for each row/column
         for (int[] b : buildings) {
             int x = b[0];
             int y = b[1];
 
-            ArrayList<Integer> row = rowMap.get(x);
-            ArrayList<Integer> col = colMap.get(y);
+            // Column y: track smallest/largest x
+            minXInColumn[y] = Math.min(minXInColumn[y], x);
+            maxXInColumn[y] = Math.max(maxXInColumn[y], x);
 
-            // A building is covered in its row if y is not min or max
-            boolean coveredRow = y != row.get(0) && y != row.get(row.size() - 1);
+            // Row x: track smallest/largest y
+            minYInRow[x] = Math.min(minYInRow[x], y);
+            maxYInRow[x] = Math.max(maxYInRow[x], y);
+        }
 
-            // Covered in column if x is not min or max
-            boolean coveredCol = x != col.get(0) && x != col.get(col.size() - 1);
+        int coveredCount = 0;
 
-            if (coveredRow && coveredCol) {
-                covered++;
+        // Second pass: check if each building has neighbors in all 4 directions
+        for (int[] b : buildings) {
+            int x = b[0];
+            int y = b[1];
+
+            boolean hasAboveBelow = x > minXInColumn[y] && x < maxXInColumn[y];
+            boolean hasLeftRight  = y > minYInRow[x] && y < maxYInRow[x];
+
+            if (hasAboveBelow && hasLeftRight) {
+                coveredCount++;
             }
         }
 
-        return covered;
+        return coveredCount;
     }
 }
