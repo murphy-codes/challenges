@@ -14,6 +14,7 @@ LeetCode
 |3542|[Minimum Operations to Convert All Elements to Zero](https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/)|[Java](./algorithms/java/3542_minimum-operations-to-convert-all-elements-to-zero.java)|Medium|
 |3541|[Find Most Frequent Vowel and Consonant](https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/)|[Java](./algorithms/java/3541_find-most-frequent-vowel-and-consonant.java)|Easy|
 |3539|[Find Sum of Array Product of Magical Sequences](https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/)|[Java](./algorithms/java/3539_find-sum-of-array-product-of-magical-sequences.java)|Hard|
+|3531|[Count Covered Buildings](https://leetcode.com/problems/count-covered-buildings/)|[Java](./algorithms/java/3531_count-covered-buildings.java)|Medium|
 |3516|[Find Closest Person](https://leetcode.com/problems/find-closest-person/)|[Java](./algorithms/java/3516_find-closest-person.java)|Easy|
 |3512|[Minimum Operations to Make Array Sum Divisible by K](https://leetcode.com/problems/minimum-operations-to-make-array-sum-divisible-by-k/)|[Java](./algorithms/java/3512_minimum-operations-to-make-array-sum-divisible-by-k.java)|Easy|
 |3508|[Implement Router](https://leetcode.com/problems/implement-router/)|[Java](./algorithms/java/3508_implement-router.java)|Medium|
