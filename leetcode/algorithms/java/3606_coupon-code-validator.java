@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-12
 // At the time of submission:
-//   Runtime 19 ms Beats 42.73%
-//   Memory 47.76 MB Beats 32.27%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 47.54 MB Beats 42.27%
 
 /****************************************
 * 
@@ -49,50 +49,50 @@
 * 
 ****************************************/
 
-// import java.util.List;
-// import java.util.ArrayList;
-
 class Solution {
-    // Filter coupons by checking active status, valid business line, and ensuring
-    // the code is non-empty and contains only alphanumeric characters or underscores.
-    // Store valid coupons as (businessLine, code) pairs, then sort them using a fixed
-    // priority order for businessLine and lexicographical order for codes within each
-    // category. Finally, extract the sorted codes. Time complexity is O(n log n) due
-    // to sorting, and space complexity is O(n) for storing valid coupons.
+    // Filter coupons by checking active status, non-empty code, and valid characters.
+    // Valid coupons are placed directly into lists by business line, preserving the
+    // required priority order without using a comparator. Each list is sorted
+    // lexicographically and concatenated in order. Time complexity is O(n log n)
+    // due to sorting, and space complexity is O(n) for storing valid coupon codes.
+    public List<String> validateCoupons(
+            String[] code, String[] businessLine, boolean[] isActive) {
+        List<String> electronicsCodes = new ArrayList<>();
+        List<String> groceryCodes = new ArrayList<>();
+        List<String> pharmacyCodes = new ArrayList<>();
+        List<String> restaurantCodes = new ArrayList<>();
 
-    private static final Map<String, Integer> PRIORITY = Map.of(
-        "electronics", 0, "grocery", 1, "pharmacy", 2, "restaurant", 3
-    );
-
-    public List<String> validateCoupons(String[] code, String[] businessLine, boolean[] isActive) {
-        List<String> valid = new ArrayList<>();
-        List<Coupon> coupons = new ArrayList<>();
-        
         for (int i = 0; i < code.length; i++) {
-            if(isActive[i] && PRIORITY.containsKey(businessLine[i])) {
-                if (code[i] != null && code[i].matches("^[A-Za-z0-9_]+$")) {
-                    coupons.add(new Coupon(businessLine[i], code[i]));
+            if (!isActive[i] || code[i].isEmpty()) continue; 
+            boolean isValidCode = true;
+            for (char ch : code[i].toCharArray()) {
+                if (!Character.isLetterOrDigit(ch) && ch != '_') {
+                    isValidCode = false;
+                    break;
                 }
             }
+            if (!isValidCode) continue;
+
+            // Bucket coupon code by business line
+            if (businessLine[i].equals("electronics")) electronicsCodes.add(code[i]);
+            else if (businessLine[i].equals("grocery")) groceryCodes.add(code[i]);
+            else if (businessLine[i].equals("pharmacy")) pharmacyCodes.add(code[i]);
+            else if (businessLine[i].equals("restaurant")) restaurantCodes.add(code[i]);
         }
 
-        coupons.sort((a, b) -> {
-            int p1 = PRIORITY.get(a.businessLine);
-            int p2 = PRIORITY.get(b.businessLine);
-            if (p1 != p2) return p1 - p2;
-            return a.code.compareTo(b.code);
-        });
+        // Sort each category lexicographically
+        Collections.sort(electronicsCodes);
+        Collections.sort(groceryCodes);
+        Collections.sort(pharmacyCodes);
+        Collections.sort(restaurantCodes);
 
-        for (Coupon c : coupons) valid.add(c.code);
-        return valid;
-    }
-}
+        // Combine results in required priority order
+        List<String> result = new ArrayList<>();
+        result.addAll(electronicsCodes);
+        result.addAll(groceryCodes);
+        result.addAll(pharmacyCodes);
+        result.addAll(restaurantCodes);
 
-class Coupon {
-    String businessLine;
-    String code;
-    Coupon(String businessLine, String code) {
-        this.businessLine = businessLine;
-        this.code = code;
+        return result;
     }
 }
