@@ -53,6 +53,13 @@
 // import java.util.ArrayList;
 
 class Solution {
+    // Filter coupons by checking active status, valid business line, and ensuring
+    // the code is non-empty and contains only alphanumeric characters or underscores.
+    // Store valid coupons as (businessLine, code) pairs, then sort them using a fixed
+    // priority order for businessLine and lexicographical order for codes within each
+    // category. Finally, extract the sorted codes. Time complexity is O(n log n) due
+    // to sorting, and space complexity is O(n) for storing valid coupons.
+
     private static final Map<String, Integer> PRIORITY = Map.of(
         "electronics", 0, "grocery", 1, "pharmacy", 2, "restaurant", 3
     );
