@@ -8,6 +8,7 @@ LeetCode
 |3625|[Count Number of Trapezoids II](https://leetcode.com/problems/count-number-of-trapezoids-ii/)|[Java](./algorithms/java/3625_count-number-of-trapezoids-ii.java)|Hard|
 |3623|[Count Number of Trapezoids I](https://leetcode.com/problems/count-number-of-trapezoids-i/)|[Java](./algorithms/java/3623_count-number-of-trapezoids-i.java)|Medium|
 |3607|[Power Grid Maintenance](https://leetcode.com/problems/power-grid-maintenance/)|[Java](./algorithms/java/3607_power-grid-maintenance.java)|Medium|
+|3606|[Coupon Code Validator](https://leetcode.com/problems/coupon-code-validator/)|[Java](./algorithms/java/3606_coupon-code-validator.java)|Easy|
 |3583|[Count Special Triplets](https://leetcode.com/problems/count-special-triplets/)|[Java](./algorithms/java/3583_count-special-triplets.java)|Medium|
 |3578|[Count Partitions With Max-Min Difference at Most K](https://leetcode.com/problems/count-partitions-with-max-min-difference-at-most-k/)|[Java](./algorithms/java/3578_count-partitions-with-max-min-difference-at-most-k.java)|Medium|
 |3577|[Count the Number of Computer Unlocking Permutations](https://leetcode.com/problems/count-the-number-of-computer-unlocking-permutations/)|[Java](./algorithms/java/3577_count-the-number-of-computer-unlocking-permutations.java)|Medium|
