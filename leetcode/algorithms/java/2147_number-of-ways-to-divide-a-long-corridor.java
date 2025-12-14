@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-14
 // At the time of submission:
-//   Runtime 22 ms Beats 63.20%
-//   Memory 47.76 MB Beats 54.40%
+//   Runtime 13 ms Beats 100.00%
+//   Memory 47.49 MB Beats 68.00%
 
 /****************************************
 * 
@@ -51,35 +51,35 @@
 ****************************************/
 
 class Solution {
-    // Pair seats from left to right so each section contains exactly two seats.
-    // Between adjacent seat pairs, exactly one divider must be placed; if there
-    // are k plants between them, there are k+1 valid divider positions. The total
-    // number of ways is the product of all such choices. Time complexity is O(n),
-    // and space complexity is O(1).
-
-    private static final int MOD = 1_000_000_007;
-
+    // Traverse the corridor from right to left, pairing seats using a parity flag.
+    // Each completed seat pair defines a segment boundary where exactly one divider
+    // must be placed. The number of valid divider positions equals the distance
+    // between paired seats, accounting for plants in between. Multiply all choices
+    // to get the result. Time O(n), space O(1).
     public int numberOfWays(String corridor) {
-        long ways = 1;
-        int seatCount = 0;
-        int plantsBetween = 0;
+        final int n = corridor.length();
+        final byte[] chars = new byte[n];
+        corridor.getBytes(0, n, chars, 0);
 
-        for (char c : corridor.toCharArray()) {
-            if (c == 'S') {
-                seatCount++;
-                // Every time we finish a pair and encounter a new seat,
-                // multiply the number of divider choices.
-                if (seatCount > 2 && seatCount % 2 == 1) {
-                    ways = (ways * (plantsBetween + 1)) % MOD;
-                    plantsBetween = 0;
-                }
-            } else if (seatCount >= 2 && seatCount % 2 == 0) {
-                // Count plants only after completing a seat pair
-                plantsBetween++;
+        long ways = 1;
+        int seatParity = 0;          // toggles between first/second seat
+        int lastSeatIndex = -1;      // index of previous seat seen
+
+        for (int i = n - 1; i >= 0; i--) {
+            if (chars[i] == 'P') continue;
+
+            if (seatParity != 0) {
+                // Found the first seat of a pair
+                lastSeatIndex = i;
+            } else if (lastSeatIndex > 0) {
+                // Completed a pair; multiply divider placement options
+                ways = (ways * (lastSeatIndex - i)) % 1_000_000_007L;
             }
+
+            seatParity ^= 1; // toggle seat state
         }
 
-        // Total seats must be even and non-zero
-        return seatCount >= 2 && seatCount % 2 == 0 ? (int) ways : 0;
+        // Invalid if odd number of seats or no valid pairs found
+        return (lastSeatIndex < 0 || seatParity != 0) ? 0 : (int) ways;
     }
 }
