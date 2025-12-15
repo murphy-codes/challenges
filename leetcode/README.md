@@ -211,6 +211,7 @@ LeetCode
 |2125|[Number of Laser Beams in a Bank](https://leetcode.com/problems/number-of-laser-beams-in-a-bank/)|[Java](./algorithms/java/2125_number-of-laser-beams-in-a-bank.java)|Medium|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
 |2115|[Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)|[Java](./algorithms/java/2115_find-all-possible-recipes-from-given-supplies.java)|Medium|
+|2110|[Number of Smooth Descent Periods of a Stock](https://leetcode.com/problems/number-of-smooth-descent-periods-of-a-stock/)|[Java](./algorithms/java/2110_number-of-smooth-descent-periods-of-a-stock.java)|Medium|
 |2106|[Maximum Fruits Harvested After at Most K Steps](https://leetcode.com/problems/maximum-fruits-harvested-after-at-most-k-steps/)|[Java](./algorithms/java/2106_maximum-fruits-harvested-after-at-most-k-steps.java)|Hard|
 |2099|[Find Subsequence of Length K With the Largest Sum](https://leetcode.com/problems/find-subsequence-of-length-k-with-the-largest-sum/)|[Java](./algorithms/java/2099_find-subsequence-of-length-k-with-the-largest-sum.java)|Easy|
 |2094|[Finding 3-Digit Even Numbers](https://leetcode.com/problems/finding-3-digit-even-numbers/)|[Java](./algorithms/java/2094_finding-3-digit-even-numbers.java)|Easy|
