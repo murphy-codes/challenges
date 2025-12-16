@@ -12,6 +12,7 @@ LeetCode
 |3583|[Count Special Triplets](https://leetcode.com/problems/count-special-triplets/)|[Java](./algorithms/java/3583_count-special-triplets.java)|Medium|
 |3578|[Count Partitions With Max-Min Difference at Most K](https://leetcode.com/problems/count-partitions-with-max-min-difference-at-most-k/)|[Java](./algorithms/java/3578_count-partitions-with-max-min-difference-at-most-k.java)|Medium|
 |3577|[Count the Number of Computer Unlocking Permutations](https://leetcode.com/problems/count-the-number-of-computer-unlocking-permutations/)|[Java](./algorithms/java/3577_count-the-number-of-computer-unlocking-permutations.java)|Medium|
+|3562|[Maximum Profit from Trading Stocks with Discounts](https://leetcode.com/problems/maximum-profit-from-trading-stocks-with-discounts/)|[Java](./algorithms/java/3562_maximum-profit-from-trading-stocks-with-discounts.java)|Hard|
 |3542|[Minimum Operations to Convert All Elements to Zero](https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/)|[Java](./algorithms/java/3542_minimum-operations-to-convert-all-elements-to-zero.java)|Medium|
 |3541|[Find Most Frequent Vowel and Consonant](https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/)|[Java](./algorithms/java/3541_find-most-frequent-vowel-and-consonant.java)|Easy|
 |3539|[Find Sum of Array Product of Magical Sequences](https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/)|[Java](./algorithms/java/3539_find-sum-of-array-product-of-magical-sequences.java)|Hard|
