@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-16
 // At the time of submission:
-//   Runtime 93 ms Beats 63.48%
-//   Memory 47.15 MB Beats 73.40%
+//   Runtime 11 ms Beats 97.52%
+//   Memory 46.16 MB Beats 92.20%
 
 /****************************************
 * 
@@ -45,64 +45,54 @@
 ****************************************/
 
 class Solution {
-    // We use DP over days and completed transactions.
-    // dp[t][0/1/2] tracks max profit with t completed transactions
-    // while holding no position, a long position, or a short position.
-    // Each day transitions allow opening or closing exactly one position.
-    // Time: O(n * k), Space: O(k)
-
+    // We use DP where dp[t][i] is the max profit up to day i with t transactions.
+    // Open long and short states are tracked implicitly via bestBuy and bestShort.
+    // Each day considers doing nothing or closing a long or short transaction.
+    // Time complexity: O(n * k), Space complexity: O(n)
     public long maximumProfit(int[] prices, int k) {
-        final long NEG_INF = Long.MIN_VALUE / 4;
+        int n = prices.length;
+        if (n < 2 || k == 0) return 0;
 
-        // dp[t][0] = no position
-        // dp[t][1] = holding long
-        // dp[t][2] = holding short
-        long[][] dp = new long[k + 1][3];
+        // prev[t-1][i]: max profit up to day i with t-1 transactions
+        // curr[t][i]:   max profit up to day i with t transactions
+        long[] prevProfit = new long[n];
+        long[] currProfit = new long[n];
 
-        for (int t = 0; t <= k; t++) {
-            dp[t][0] = 0;
-            dp[t][1] = NEG_INF;
-            dp[t][2] = NEG_INF;
-        }
+        for (int transaction = 1; transaction <= k; transaction++) {
 
-        for (int price : prices) {
-            long[][] next = new long[k + 1][3];
+            // Best states for opening long or short transactions
+            long bestLongBuy  = -prices[0]; // dp_prev[0] - prices[0]
+            long bestShortSell = prices[0]; // dp_prev[0] + prices[0]
 
-            for (int t = 0; t <= k; t++) {
-                next[t][0] = dp[t][0];
-                next[t][1] = dp[t][1];
-                next[t][2] = dp[t][2];
+            currProfit[0] = 0;
+
+            for (int day = 1; day < n; day++) {
+                long noAction = currProfit[day - 1];
+                long closeLong = bestLongBuy + prices[day];
+                long closeShort = bestShortSell - prices[day];
+
+                currProfit[day] = Math.max(
+                    noAction,
+                    Math.max(closeLong, closeShort)
+                );
+
+                // Update best states using previous transaction layer
+                bestLongBuy = Math.max(
+                    bestLongBuy,
+                    prevProfit[day - 1] - prices[day]
+                );
+                bestShortSell = Math.max(
+                    bestShortSell,
+                    prevProfit[day - 1] + prices[day]
+                );
             }
 
-            for (int t = 0; t <= k; t++) {
-                // Open long or short
-                next[t][1] = Math.max(next[t][1], dp[t][0] - price);
-                next[t][2] = Math.max(next[t][2], dp[t][0] + price);
-
-                // Close positions
-                if (t + 1 <= k) {
-                    if (dp[t][1] != NEG_INF) {
-                        next[t + 1][0] = Math.max(
-                            next[t + 1][0],
-                            dp[t][1] + price
-                        );
-                    }
-                    if (dp[t][2] != NEG_INF) {
-                        next[t + 1][0] = Math.max(
-                            next[t + 1][0],
-                            dp[t][2] - price
-                        );
-                    }
-                }
-            }
-
-            dp = next;
+            // Swap DP layers
+            long[] tmp = prevProfit;
+            prevProfit = currProfit;
+            currProfit = tmp;
         }
 
-        long ans = 0;
-        for (int t = 0; t <= k; t++) {
-            ans = Math.max(ans, dp[t][0]);
-        }
-        return ans;
+        return prevProfit[n - 1];
     }
 }
