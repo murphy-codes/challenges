@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-18
 // At the time of submission:
-//   Runtime 6 ms Beats 50.67%
-//   Memory 102.39 MB Beats 37.25%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 107.37 MB Beats 5.37%
 
 /****************************************
 * 
@@ -53,45 +53,45 @@
 ****************************************/
 
 class Solution {
-    // We compute the base profit and use prefix sums to allow O(1) range queries.
-    // For each length-k window, we remove the original profit of the first k/2 days
-    // and replace the last k/2 days with forced sells at full price.
-    // Sliding the window yields the maximum profit delta in O(n) total time.
-    // Time: O(n), Space: O(n)
+    // We compute base profit while tracking the profit delta of a sliding window.
+    // The window removes profit from the first k/2 days and forces sells on the last.
+    // The delta is updated incrementally in O(1) as the window slides forward.
+    // This avoids prefix arrays and achieves optimal linear time and constant space.
+    // Time: O(n), Space: O(1)
     public long maxProfit(int[] prices, int[] strategy, int k) {
+        long baseProfit = 0;
+        int half = k / 2;
         int n = prices.length;
 
-        // Prefix sums:
-        // origPrefix[i] = sum of strategy[j] * prices[j] for j in [0, i)
-        // pricePrefix[i] = sum of prices[j] for j in [0, i)
-        long[] origPrefix = new long[n + 1];
-        long[] pricePrefix = new long[n + 1];
+        long windowDelta = 0;
+        long bestDelta = 0;
 
-        for (int i = 0; i < n; i++) {
-            origPrefix[i + 1] = origPrefix[i] + (long) strategy[i] * prices[i];
-            pricePrefix[i + 1] = pricePrefix[i] + prices[i];
+        // Build base profit and first half of window
+        for (int i = 0; i < half; i++) {
+            int original = prices[i] * strategy[i];
+            baseProfit += original;
+            windowDelta += prices[i] - original; // removing original contribution
         }
 
-        long baseProfit = origPrefix[n];
-        long bestDelta = 0;
-        int half = k / 2;
+        // Build second half of window (forced sells)
+        for (int i = half; i < k; i++) {
+            int original = prices[i] * strategy[i];
+            baseProfit += original;
+            windowDelta += prices[i] - original - prices[i - half];
+        }
 
-        // Try every window of length k
-        for (int left = 0; left + k <= n; left++) {
-            int mid = left + half;
-            int right = left + k;
+        bestDelta = Math.max(bestDelta, windowDelta);
 
-            // Remove original contribution from first half
-            long removeFirstHalf =
-                origPrefix[mid] - origPrefix[left];
+        // Slide the window forward
+        for (int i = k; i < n; i++) {
+            int original = prices[i] * strategy[i];
+            baseProfit += original;
 
-            // Replace second half with selling at full price
-            long addSecondHalf =
-                pricePrefix[right] - pricePrefix[mid]
-              - (origPrefix[right] - origPrefix[mid]);
+            windowDelta += prices[i] - original
+                         - prices[i - half]
+                         + prices[i - k] * strategy[i - k];
 
-            long delta = -removeFirstHalf + addSecondHalf;
-            bestDelta = Math.max(bestDelta, delta);
+            bestDelta = Math.max(bestDelta, windowDelta);
         }
 
         return baseProfit + bestDelta;
