@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-19
 // At the time of submission:
-//   Runtime 76 ms Beats 48.08%
-//   Memory 196.14 MB Beats 23.72%
+//   Runtime 28 ms Beats 96.15%
+//   Memory 201.93 MB Beats 21.16%
 
 /****************************************
 * 
@@ -62,75 +62,85 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 class Solution {
-    // Meetings are processed by time, treating each timestamp as a temporary graph.
-    // We union participants at the same time so secrets can spread instantly.
-    // After each time batch, components not connected to person 0 are reset.
-    // This prevents secrets from leaking across different times incorrectly.
-    // Time: O(m log m + m α(n)), Space: O(n)
+    // Meetings are processed in chronological order using time buckets.
+    // For each time, all participants are unioned, allowing instant sharing.
+    // Afterward, unions not connected to person 0 are rolled back to prevent
+    // secrets from leaking across time boundaries.
+    // Time complexity: O(m α(n) + T), Space complexity: O(n + m).
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        Arrays.sort(meetings, (a, b) -> Integer.compare(a[2], b[2]));
+        // Union-Find parent array; parent[i] == representative of i
+        // Using n + 1 so root "0" can act as the secret-holder component
+        int[] parent = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+        }
 
-        UnionFind uf = new UnionFind(n);
-        uf.union(0, firstPerson);
+        // Person 0 initially shares the secret with firstPerson
+        parent[firstPerson] = 0;
 
-        int i = 0;
-        while (i < meetings.length) {
-            int time = meetings[i][2];
-            Set<Integer> touched = new HashSet<>();
+        // Find the maximum meeting time to bucket meetings by time
+        int maxTime = 0;
+        for (int[] meeting : meetings) {
+            maxTime = Math.max(maxTime, meeting[2]);
+        }
 
-            // Union all meetings at this same time
-            while (i < meetings.length && meetings[i][2] == time) {
-                int x = meetings[i][0];
-                int y = meetings[i][1];
-                uf.union(x, y);
-                touched.add(x);
-                touched.add(y);
-                i++;
+        // timeBuckets[t] = list of meetings happening at time t
+        List<int[]>[] timeBuckets = new List[maxTime + 1];
+        for (int[] meeting : meetings) {
+            int time = meeting[2];
+            if (timeBuckets[time] == null) {
+                timeBuckets[time] = new ArrayList<>();
+            }
+            timeBuckets[time].add(new int[]{meeting[0], meeting[1]});
+        }
+
+        // Process meetings in increasing time order
+        for (int time = 1; time < timeBuckets.length; time++) {
+            if (timeBuckets[time] == null) continue;
+
+            // Step 1: union all pairs meeting at this time
+            for (int[] pair : timeBuckets[time]) {
+                union(pair[0], pair[1], parent);
             }
 
-            // Roll back connections that are not linked to person 0
-            for (int person : touched) {
-                if (uf.find(person) != uf.find(0)) {
-                    uf.reset(person);
-                }
+            // Step 2: rollback connections that are not connected to root 0
+            for (int[] pair : timeBuckets[time]) {
+                int u = pair[0];
+                int v = pair[1];
+
+                if (find(u, parent) != 0) parent[u] = u;
+                if (find(v, parent) != 0) parent[v] = v;
             }
         }
 
+        // Collect all people connected to root 0
         List<Integer> result = new ArrayList<>();
-        for (int p = 0; p < n; p++) {
-            if (uf.find(p) == uf.find(0)) {
-                result.add(p);
+        for (int i = 0; i < parent.length; i++) {
+            if (parent[i] == 0) {
+                result.add(i);
             }
         }
+
         return result;
     }
 
-    static class UnionFind {
-        int[] parent;
-
-        UnionFind(int n) {
-            parent = new int[n];
-            for (int i = 0; i < n; i++) parent[i] = i;
+    // Union two nodes by representative
+    private void union(int a, int b, int[] parent) {
+        int rootA = find(a, parent);
+        int rootB = find(b, parent);
+        if (rootA < rootB) {
+            parent[rootB] = rootA;
+        } else {
+            parent[rootA] = rootB;
         }
+    }
 
-        int find(int x) {
-            if (parent[x] != x) parent[x] = find(parent[x]);
-            return parent[x];
+    // Find with path compression
+    private int find(int x, int[] parent) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x], parent);
         }
-
-        void union(int a, int b) {
-            parent[find(a)] = find(b);
-        }
-
-        void reset(int x) {
-            parent[x] = x;
-        }
+        return parent[x];
     }
 }
