@@ -313,6 +313,7 @@ LeetCode
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |976|[Largest Perimeter Triangle](https://leetcode.com/problems/largest-perimeter-triangle/)|[Java](./algorithms/java/976_largest-perimeter-triangle.java)|Easy|
 |966|[Vowel Spellchecker](https://leetcode.com/problems/vowel-spellchecker/)|[Java](./algorithms/java/966_vowel-spellchecker.java)|Medium|
+|944|[Delete Columns to Make Sorted](https://leetcode.com/problems/delete-columns-to-make-sorted/)|[Java](./algorithms/java/944_delete-columns-to-make-sorted.java)|Easy|
 |916|[Word Subsets](https://leetcode.com/problems/word-subsets/)|[C++](./algorithms/cpp/916_word-subsets.cpp), [Java](./algorithms/java/916_word-subsets.java), [Python](./algorithms/python/916_word-subsets.py), [Typescript](./algorithms/typescript/916_word-subsets.ts)|Medium|
 |909|[Snakes and Ladders](https://leetcode.com/problems/snakes-and-ladders/)|[Java](./algorithms/java/909_snakes-and-ladders.java)|Medium|
 |904|[Fruit Into Baskets](https://leetcode.com/problems/fruit-into-baskets/)|[Java](./algorithms/java/904_fruit-into-baskets.java)|Medium|
