@@ -218,6 +218,7 @@ LeetCode
 |2106|[Maximum Fruits Harvested After at Most K Steps](https://leetcode.com/problems/maximum-fruits-harvested-after-at-most-k-steps/)|[Java](./algorithms/java/2106_maximum-fruits-harvested-after-at-most-k-steps.java)|Hard|
 |2099|[Find Subsequence of Length K With the Largest Sum](https://leetcode.com/problems/find-subsequence-of-length-k-with-the-largest-sum/)|[Java](./algorithms/java/2099_find-subsequence-of-length-k-with-the-largest-sum.java)|Easy|
 |2094|[Finding 3-Digit Even Numbers](https://leetcode.com/problems/finding-3-digit-even-numbers/)|[Java](./algorithms/java/2094_finding-3-digit-even-numbers.java)|Easy|
+|2092|[Find All People With Secret](https://leetcode.com/problems/find-all-people-with-secret/)|[Java](./algorithms/java/2092_find-all-people-with-secret.java)|Hard|
 |2081|[Sum of k-Mirror Numbers](https://leetcode.com/problems/sum-of-k-mirror-numbers/)|[Java](./algorithms/java/2081_sum-of-k-mirror-numbers.java)|Hard|
 |2071|[Maximum Number of Tasks You Can Assign](https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/)|[Java](./algorithms/java/2071_maximum-number-of-tasks-you-can-assign.java)|Hard|
 |2048|[Next Greater Numerically Balanced Number](https://leetcode.com/problems/next-greater-numerically-balanced-number/)|[Java](./algorithms/java/2048_next-greater-numerically-balanced-number.java)|Medium|
