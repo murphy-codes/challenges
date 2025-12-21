@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-20
 // At the time of submission:
-//   Runtime 1 ms Beats 78.08%
-//   Memory 43.77 MB Beats 27.40%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 43.96 MB Beats 17.81%
 
 /****************************************
 * 
@@ -47,38 +47,41 @@
 ****************************************/
 
 class Solution {
-    // Greedily scan columns left to right, deleting any column that would
-    // violate lexicographic order for unresolved adjacent row pairs.
+    // Greedily process columns left to right, deleting any column that breaks
+    // lexicographic order for unresolved adjacent row pairs.
     // Track which row pairs are already strictly ordered to avoid rechecking.
     // Time: O(n * m), Space: O(n), where n = rows and m = columns.
     public int minDeletionSize(String[] strs) {
-        int n = strs.length;
-        int m = strs[0].length();
-        boolean[] sorted = new boolean[n - 1];
+        int rowCount = strs.length;
+        int colCount = strs[0].length();
+
+        // ordered[i] == true means strs[i] < strs[i+1] is already guaranteed
+        boolean[] ordered = new boolean[rowCount - 1];
         int deletions = 0;
 
-        for (int col = 0; col < m; col++) {
-            boolean bad = false;
+        for (int col = 0; col < colCount; col++) {
+            boolean deleteColumn = false;
 
-            // Check if this column breaks ordering
-            for (int row = 0; row < n - 1; row++) {
-                if (!sorted[row] &&
+            // Check if keeping this column breaks lexicographic order
+            for (int row = 0; row < rowCount - 1; row++) {
+                if (!ordered[row] &&
                     strs[row].charAt(col) > strs[row + 1].charAt(col)) {
-                    bad = true;
+                    deleteColumn = true;
                     break;
                 }
             }
 
-            if (bad) {
+            // If broken, discard this column entirely
+            if (deleteColumn) {
                 deletions++;
                 continue;
             }
 
-            // Update which row pairs are now confirmed sorted
-            for (int row = 0; row < n - 1; row++) {
-                if (!sorted[row] &&
+            // Lock in ordering for row pairs resolved by this column
+            for (int row = 0; row < rowCount - 1; row++) {
+                if (!ordered[row] &&
                     strs[row].charAt(col) < strs[row + 1].charAt(col)) {
-                    sorted[row] = true;
+                    ordered[row] = true;
                 }
             }
         }
