@@ -221,6 +221,7 @@ LeetCode
 |2092|[Find All People With Secret](https://leetcode.com/problems/find-all-people-with-secret/)|[Java](./algorithms/java/2092_find-all-people-with-secret.java)|Hard|
 |2081|[Sum of k-Mirror Numbers](https://leetcode.com/problems/sum-of-k-mirror-numbers/)|[Java](./algorithms/java/2081_sum-of-k-mirror-numbers.java)|Hard|
 |2071|[Maximum Number of Tasks You Can Assign](https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/)|[Java](./algorithms/java/2071_maximum-number-of-tasks-you-can-assign.java)|Hard|
+|2054|[Two Best Non-Overlapping Events](https://leetcode.com/problems/two-best-non-overlapping-events/)|[Java](./algorithms/java/2054_two-best-non-overlapping-events.java)|Medium|
 |2048|[Next Greater Numerically Balanced Number](https://leetcode.com/problems/next-greater-numerically-balanced-number/)|[Java](./algorithms/java/2048_next-greater-numerically-balanced-number.java)|Medium|
 |2044|[Count Number of Maximum Bitwise-OR Subsets](https://leetcode.com/problems/count-number-of-maximum-bitwise-or-subsets/)|[Java](./algorithms/java/2044_count-number-of-maximum-bitwise-or-subsets.java)|Medium|
 |2043|[Simple Bank System](https://leetcode.com/problems/simple-bank-system/)|[Java](./algorithms/java/2043_simple-bank-system.java)|Medium|
