@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-23
 // At the time of submission:
-//   Runtime 4 ms Beats 82.79%
-//   Memory 44.75 MB Beats 13.65%
+//   Runtime 1 ms Beats 98.81%
+//   Memory 44.15 MB Beats 79.53%
 
 /****************************************
 * 
@@ -33,24 +33,41 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sum all apples to get the total amount that must fit into boxes.
-    // Sort box capacities and greedily select the largest boxes first.
-    // Each chosen box reduces the remaining apples until the total fits.
-    // Greedy works because larger capacities always reduce box count.
-    // Time: O(m log m), Space: O(1) extra (sorting in-place)
+    // First sum all apples to know total capacity needed.
+    // Sort box capacities and greedily select the largest boxes.
+    // Each selected box increases available capacity until apples fit.
+    // Greedy is optimal since larger boxes minimize box count.
+    // Time: O(m^2), Space: O(1) extra
     public int minimumBoxes(int[] apple, int[] capacity) {
-        int count = 0;
-        int boxes = 0;
-        Arrays.sort(capacity);
-        for (int a : apple) count+=a;
-        for (int i = capacity.length-1; i >= 0 ; i--) {
-            boxes++;
-            count -= capacity[i];
-            if (count <= 0) break;
+        int totalApples = 0;
+        for (int i = 0; i < apple.length; i++) {
+            totalApples += apple[i];
         }
-        return boxes;
+
+        // Bubble sort capacities in ascending order
+        int tempSwap;
+        for (int i = 0; i < capacity.length; i++) {
+            for (int j = 0; j < capacity.length - i - 1; j++) {
+                if (capacity[j] > capacity[j + 1]) {
+                    tempSwap = capacity[j];
+                    capacity[j] = capacity[j + 1];
+                    capacity[j + 1] = tempSwap;
+                }
+            }
+        }
+
+        int usedCapacity = 0;
+        int boxCount = 0;
+
+        // Select boxes from largest capacity to smallest
+        for (int i = capacity.length - 1; i >= 0; i--) {
+            if (usedCapacity < totalApples) {
+                usedCapacity += capacity[i];
+                boxCount++;
+            }
+        }
+
+        return boxCount;
     }
 }
