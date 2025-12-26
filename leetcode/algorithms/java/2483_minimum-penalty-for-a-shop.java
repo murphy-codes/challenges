@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-26
 // At the time of submission:
-//   Runtime 12 ms Beats 62.70%
-//   Memory 46.74 MB Beats 76.36%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 46.97 MB Beats 50.44%
 
 /****************************************
 * 
@@ -45,26 +45,32 @@
 ****************************************/
 
 class Solution {
-    // Build a suffix array counting future 'Y' visits for each closing hour,
-    // then sweep from left to right tracking past 'N' hours. For every hour i,
-    // the penalty of closing then is: open-without-customers (prefix 'N') +
-    // closed-with-customers (suffix 'Y'). Track the smallest penalty and the
-    // earliest hour achieving it. Time complexity: O(n). Space complexity: O(n).
+    // Single-pass scan computes when closing yields lowest penalty. We track a
+    // running score that rises when customers arrive ('Y') and falls when open
+    // with no customers ('N'). Whenever score turns positive, hour i becomes a
+    // better closing time and score resets. Time: O(n) over string length. Space:
+    // O(1) using only a few counters and byte access to characters.
     public int bestClosingTime(String customers) {
-        int bCT = 0, penalty = Integer.MAX_VALUE, count = 0;
-        int n = customers.length();
-        int[] suffix = new int[n+1];
-        for (int i = n-1; i >= 0; i--) suffix[i] = (customers.charAt(i)=='Y') ? ++count : count;
-        count = 0;
-        for (int i = 0; i < n; i++) {
-            int cur = count + suffix[i];
-            if (cur < penalty) {
-                penalty = cur;
-                bCT = i;
+
+        // Convert string to raw bytes (fast character access)
+        byte[] visits = customers.getBytes(java.nio.charset.Charset.forName("ISO-8859-1"));
+
+        int bestTime = -1;          // latest closing hour index giving best score
+        int score = 0;              // running penalty score (lower is better)
+
+        for (int i = 0; i < visits.length; i++) {
+
+            if (visits[i] == 89) {  // 'Y'
+                score++;
+                if (score > 0) {
+                    bestTime = i;   // better closing time found at hour i
+                    score = 0;      // reset running score
+                }
+            } else {                // 'N'
+                score--;
             }
-            if (customers.charAt(i)=='N') count++;
         }
-        if (count < penalty) return n; // stay open the last hour?
-        return bCT;
+
+        return bestTime + 1;        // convert index to closing hour
     }
 }
