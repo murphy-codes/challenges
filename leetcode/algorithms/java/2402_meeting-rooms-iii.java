@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-07-11
 // At the time of submission:
-//   Runtime 51 ms Beats 95.69%
-//   Memory 101.29 MB Beats 94.59%
+//   Runtime 50 ms Beats 98.30%
+//   Memory 125.74 MB Beats 85.27%
 
 /****************************************
 * 
@@ -56,58 +56,53 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort meetings by start time, then allocate each meeting to a room.
-    // For each meeting, try to assign it to a currently free room.
-    // If none are free, delay the meeting until the earliest room is free.
-    // Track the number of meetings per room and return the most used room.
-    // Time: O(m * n), Space: O(n); where m = # of meetings, n = # of rooms.
-    public int mostBooked(int n, int[][] meetings) {
-        long[] roomAvailableAt = new long[n];
-        int[] roomMeetingCount = new int[n];
+    // Sort meetings by start time, then for each meeting scan rooms to find
+    // the first available room. If one is free by the meeting start, assign it.
+    // Otherwise, delay the meeting and schedule it when the earliest room frees.
+    // Track how many meetings each room hosts, returning the most used room.
+    // Time: O(m * n) where m = #meetings, n = #rooms; Space: O(n)
+    public int mostBooked(int roomCount, int[][] meetings) {
+        int[] meetingUsedCount = new int[roomCount];    // # of meetings per room
+        long[] roomFreeTime = new long[roomCount];      // next available time per room
 
-        // Sort all meetings by start time
-        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
+        Arrays.sort(meetings, (a, b) -> a[0] - b[0]);   // sort by start time
 
-        for (int[] meeting : meetings) {
-            int start = meeting[0], end = meeting[1];
-            int duration = end - start;
+        for (int[] meet : meetings) {
+            int start = meet[0], end = meet[1];
+            long earliestFree = Long.MAX_VALUE;
+            int earliestRoom = -1;
+            boolean scheduled = false;
 
-            int chosenRoom = -1;
-            long earliestFreeTime = Long.MAX_VALUE;
-
-            // Try to find a room available at or before the meeting start
-            for (int i = 0; i < n; i++) {
-                if (roomAvailableAt[i] <= start) {
-                    chosenRoom = i;
+            // try assign room; track earliest busy room fallback
+            for (int room = 0; room < roomCount; room++) {
+                if (roomFreeTime[room] < earliestFree) {
+                    earliestFree = roomFreeTime[room];
+                    earliestRoom = room;
+                }
+                if (roomFreeTime[room] <= start) {
+                    roomFreeTime[room] = end;
+                    meetingUsedCount[room]++;
+                    scheduled = true;
                     break;
-                } else if (roomAvailableAt[i] < earliestFreeTime) {
-                    earliestFreeTime = roomAvailableAt[i];
-                    chosenRoom = i;
                 }
             }
 
-            if (roomAvailableAt[chosenRoom] <= start) {
-                // Room is free, schedule at actual start time
-                roomAvailableAt[chosenRoom] = start + duration;
-            } else {
-                // Room is busy, delay meeting until it's free
-                roomAvailableAt[chosenRoom] += duration;
-            }
-
-            roomMeetingCount[chosenRoom]++;
-        }
-
-        // Find the room with the most meetings
-        int maxRoom = 0;
-        for (int i = 1; i < n; i++) {
-            if (roomMeetingCount[i] > roomMeetingCount[maxRoom]) {
-                maxRoom = i;
+            // if none were free, delay meeting in earliest available room
+            if (!scheduled) {
+                roomFreeTime[earliestRoom] += (end - start);
+                meetingUsedCount[earliestRoom]++;
             }
         }
 
-        return maxRoom;
+        // find room with highest usage (lowest index wins ties)
+        int bestRoom = 0, maxMeetings = 0;
+        for (int room = 0; room < roomCount; room++) {
+            if (meetingUsedCount[room] > maxMeetings) {
+                maxMeetings = meetingUsedCount[room];
+                bestRoom = room;
+            }
+        }
+        return bestRoom;
     }
 }
