@@ -292,6 +292,7 @@ LeetCode
 |1358|[Number of Substrings Containing All Three Characters](https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/)|[Java](./algorithms/java/1358_number-of-substrings-containing-all-three-characters.java)|Medium|
 |1353|[Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)|[Java](./algorithms/java/1353_maximum-number-of-events-that-can-be-attended.java)|Medium|
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
+|1351|[Count Negative Numbers in a Sorted Matrix](https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/)|[Java](./algorithms/java/1351_count-negative-numbers-in-a-sorted-matrix.java)|Easy|
 |1323|[Maximum 69 Number](https://leetcode.com/problems/maximum-69-number/)|[Java](./algorithms/java/1323_maximum-69-number.java)|Easy|
 |1317|[Convert Integer to the Sum of Two No-Zero Integers](https://leetcode.com/problems/convert-integer-to-the-sum-of-two-no-zero-integers/)|[Java](./algorithms/java/1317_convert-integer-to-the-sum-of-two-no-zero-integers.java)|Easy|
 |1304|[Find N Unique Integers Sum up to Zero](https://leetcode.com/problems/find-n-unique-integers-sum-up-to-zero/)|[Java](./algorithms/java/1304_find-n-unique-integers-sum-up-to-zero.java)|Easy|
