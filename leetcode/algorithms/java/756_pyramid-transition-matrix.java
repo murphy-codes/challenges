@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-29
 // At the time of submission:
-//   Runtime 77 ms Beats 82.80%
-//   Memory 49.62 MB Beats 12.10%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 43.97 MB Beats 85.99%
 
 /****************************************
 * 
@@ -50,61 +50,133 @@
 * 
 ****************************************/
 
-// import java.util.Map;
-// import java.util.HashMap;
-// import java.util.List;
-// import java.util.ArrayList;
-// import java.util.Set;
-// import java.util.HashSet;
+import java.util.List;
 
 class Solution {
-    // DFS builds the pyramid row-by-row: for each adjacent pair of chars in a row,
-    // we lookup all valid upper blocks to form the next row. We recursively try each
-    // possible next row until reaching length 1. Memoization stores rows that cannot
-    // reach the top, preventing repeated work. Time is bounded due to short row size,
-    // with effective complexity near O(branch^depth). Space is O(n) for maps & cache.
-
-    private Map<String, List<Character>> next = new HashMap<>();
-    private Set<String> invalidRows = new HashSet<>();
+    // Converts pyramid transitions into a compact numeric DFS with memoization.
+    // Allowed triples stored in fixed 3D arrays allow constant-time lookups.
+    // Each row is encoded as a base-6 integer so partial rows can be memoized.
+    // DFS builds upper layers while pruning invalid partial rows early.
+    // Runtime worst-case exponential but tight pruning and caching keep it fast.
 
     public boolean pyramidTransition(String bottom, List<String> allowed) {
-        // preprocess allowed patterns into adjacency map
-        for (String s : allowed) {
-            String base = s.substring(0, 2);
-            next.computeIfAbsent(base, k -> new ArrayList<>())
-                .add(s.charAt(2));
-        }
-        return canBuild(bottom);
+        return new Solver(allowed, bottom.length()).canDo(bottom);
     }
 
-    private boolean canBuild(String row) {
-        if (row.length() == 1) return true;
-        if (invalidRows.contains(row)) return false;
+    static final class Solver {
+        // allowed[a][b] -> list of possible toppers (as ints 0-5)
+        final int[][][] allowed = new int[6][6][];
+        // cache[length][encodedRow] = 0 (unseen), 1 (true), or 2 (false)
+        final int[][] cache;
 
-        List<String> candidates = new ArrayList<>();
-        generateNextRows(row, 0, new StringBuilder(), candidates);
+        public Solver(List<String> allowedList, int bottomLength) {
+            final int[][] count = new int[6][6];
 
-        for (String nxt : candidates) {
-            if (canBuild(nxt)) return true;
+            // Count how many topper entries each pair will have
+            for (String pattern : allowedList) {
+                int left = pattern.charAt(0) - 'A';
+                int right = pattern.charAt(1) - 'A';
+                count[left][right]++;
+            }
+
+            // Allocate the correct-sized arrays per (left, right) pair
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 6; j++) {
+                    allowed[i][j] = new int[count[i][j]];
+                }
+            }
+
+            // Cache size grows with length; precompute size per layer
+            this.cache = new int[bottomLength][];
+            int size = 36; // 6 * 6
+            for (int length = 3; length < bottomLength; length++) {
+                size *= 6;
+                cache[length] = new int[size];
+            }
+
+            // Fill allowed array with toppers
+            for (String pattern : allowedList) {
+                int left = pattern.charAt(0) - 'A';
+                int right = pattern.charAt(1) - 'A';
+                int top = pattern.charAt(2) - 'A';
+                allowed[left][right][--count[left][right]] = top;
+            }
         }
 
-        invalidRows.add(row);
-        return false;
-    }
+        boolean canDo(String bottomRow) {
+            // Convert row string to 0-5 indices for efficiency
+            final int[] row = new int[bottomRow.length()];
+            for (int i = 0; i < row.length; i++) {
+                row[i] = bottomRow.charAt(i) - 'A';
+            }
 
-    private void generateNextRows(String row, int idx, StringBuilder sb, 
-                                  List<String> result) {
-        if (idx == row.length() - 1) {
-            result.add(sb.toString());
-            return;
+            // Length 2 only needs to check if a topper exists
+            return row.length == 2
+                ? allowed[row[0]][row[1]].length > 0
+                : compute(row, row.length);
         }
-        String base = row.substring(idx, idx + 2);
-        if (!next.containsKey(base)) return;
 
-        for (char c : next.get(base)) {
-            sb.append(c);
-            generateNextRows(row, idx + 1, sb, result);
-            sb.deleteCharAt(sb.length() - 1);
+        boolean canDo(int[] row, int length) {
+            // Base case for length 2
+            if (length == 2) {
+                return allowed[row[0]][row[1]].length > 0;
+            }
+
+            // Check cache
+            final int encoded = encode(row, length);
+            final int cached = cache[length][encoded];
+            if (cached != 0) {
+                return cached == 1;
+            }
+
+            // Otherwise compute & store result
+            final boolean result = compute(row, length);
+            cache[length][encoded] = result ? 1 : 2;
+            return result;
+        }
+
+        // Encode row as base-6 integer for dense memo indexing
+        private int encode(int[] row, int len) {
+            int encoded = row[0];
+            for (int i = 1; i < len; i++) {
+                encoded = encoded * 6 + row[i];
+            }
+            return encoded;
+        }
+
+        // Quick prune: ensure each adjacent pair can produce a topper
+        boolean compute(int[] row, int length) {
+            for (int i = 2; i < length; i++) {
+                if (allowed[row[i - 1]][row[i]].length == 0) {
+                    return false;
+                }
+            }
+            return compute(new int[length], 0, row, 0, length);
+        }
+
+        // DFS to build next row; prefixRow accumulates toppers
+        boolean compute(int[] prefixRow, int prefixLen,
+                        int[] suffixRow, int suffixIdx, int suffixLen) {
+            // Prune: if current prefix can't be completed to a valid pyramid
+            if (prefixLen > 1 && !canDo(prefixRow, prefixLen)) {
+                return false;
+            }
+
+            int nextIdx = suffixIdx + 1;
+
+            // Try all toppers for this adjacent pair
+            if (nextIdx < suffixLen) {
+                for (int top : allowed[suffixRow[suffixIdx]][suffixRow[nextIdx]]) {
+                    prefixRow[prefixLen] = top;
+                    if (compute(prefixRow, prefixLen + 1, suffixRow, nextIdx, suffixLen)) {
+                        return true;
+                    }
+                }
+            } else {
+                // End of level → validate completed row
+                return canDo(prefixRow, prefixLen);
+            }
+            return false;
         }
     }
 }
