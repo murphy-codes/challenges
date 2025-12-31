@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-30
 // At the time of submission:
-//   Runtime 69 ms Beats 58.38%
-//   Memory 75.30 MB Beats 86.80%
+//   Runtime 11 ms Beats 100.00%
+//   Memory 76.40 MB Beats 80.71%
 
 /****************************************
 * 
@@ -53,68 +53,107 @@
 * 
 ****************************************/
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 class Solution {
-    // Binary search the latest day where a path from top to bottom still exists.
-    // For each mid day, flood all cells up to that day and run BFS starting from
-    // the unflooded cells in the top row. If BFS reaches the bottom row, crossing
-    // is still possible on that day. Time: O((row*col) * log(row*col)). Space: O(row*col).
+    // Use DSU on water cells to detect when flooding blocks all top-bottom paths.
+    // Each day adds more water and unions adjacent water cells. Two virtual nodes
+    // represent left and right boundaries; once they connect via water, land paths
+    // from top to bottom no longer exist. Time: O(n * α(n)), Space: O(n).
+
+    private int[] rank;
+    private int[] parent;
+    private int rowCount;
+    private int colCount;
+
+    // 8 directions: horizontal, vertical, and diagonal neighbors
+    private static final int[][] DIRS = {
+        {0,1},{0,-1},{1,0},{-1,0},{1,1},{-1,-1},{1,-1},{-1,1}
+    };
+
+    // Virtual DSU nodes representing leftmost and rightmost water columns
+    private int leftBoundaryWaterId;
+    private int rightBoundaryWaterId;
+
     public int latestDayToCross(int row, int col, int[][] cells) {
-        int left = 0, right = cells.length - 1, answer = 0;
+        this.rowCount = row;
+        this.colCount = col;
 
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (canCross(row, col, cells, mid)) {
-                answer = mid + 1;   // +1 because days are 1-based
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+        // +2 for virtual boundary nodes
+        rank = new int[(row * col) + 2];
+        parent = new int[(row * col) + 2];
+
+        leftBoundaryWaterId = (row * col);
+        rightBoundaryWaterId = (row * col) + 1;
+        parent[leftBoundaryWaterId] = leftBoundaryWaterId;
+        parent[rightBoundaryWaterId] = rightBoundaryWaterId;
+
+        // Initialize each land cell to be its own parent
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < colCount; c++) {
+                parent[toId(r, c)] = toId(r, c);
             }
         }
 
-        return answer;
-    }
+        boolean[][] isWater = new boolean[rowCount][colCount];
 
-    private boolean canCross(int row, int col, int[][] cells, int day) {
-        int[][] grid = new int[row][col];
+        // Flood cells day by day
+        for (int day = 0; day < cells.length; day++) {
+            int x = cells[day][0] - 1;
+            int y = cells[day][1] - 1;
 
-        // Mark flooded cells up to the given day
-        for (int i = 0; i <= day; i++) {
-            int r = cells[i][0] - 1;
-            int c = cells[i][1] - 1;
-            grid[r][c] = 1;
-        }
+            isWater[x][y] = true;
 
-        Queue<int[]> q = new ArrayDeque<>();
-
-        // Push all non-flooded cells in top row
-        for (int c = 0; c < col; c++) {
-            if (grid[0][c] == 0) {
-                q.offer(new int[]{0, c});
-                grid[0][c] = 1; // mark visited by turning into water
+            // Connect flooded cells in left/right boundary columns
+            if (y == 0) {
+                union(toId(x, y), leftBoundaryWaterId);
+            } else if (y == colCount - 1) {
+                union(toId(x, y), rightBoundaryWaterId);
             }
-        }
 
-        int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
-
-        // BFS until we reach bottom
-        while (!q.isEmpty()) {
-            int[] cell = q.poll();
-            int r = cell[0], c = cell[1];
-
-            if (r == row - 1) return true; // reached bottom
-
-            for (int[] d : directions) {
-                int nr = r + d[0], nc = c + d[1];
-                if (nr >= 0 && nr < row && nc >= 0 && nc < col && grid[nr][nc] == 0) {
-                    grid[nr][nc] = 1; // visited
-                    q.offer(new int[]{nr, nc});
+            // Connect adjacent flooded cells
+            for (int[] d : DIRS) {
+                int nx = x + d[0];
+                int ny = y + d[1];
+                if (inBounds(nx, ny) && isWater[nx][ny]) {
+                    union(toId(x, y), toId(nx, ny));
                 }
             }
+
+            // Once boundaries connect via water, crossing becomes impossible
+            if (find(leftBoundaryWaterId) == find(rightBoundaryWaterId)) {
+                return day;  // this is the first day crossing fails
+            }
         }
 
-        return false;
+        return -1; // should never happen given constraints
+    }
+
+    private int toId(int r, int c) {
+        return r * colCount + c;
+    }
+
+    private void union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+
+        if (rank[rootA] == rank[rootB]) {
+            rank[rootA]++;
+            parent[rootB] = rootA;
+        } else if (rank[rootA] > rank[rootB]) {
+            parent[rootB] = rootA;
+        } else {
+            parent[rootA] = rootB;
+        }
+    }
+
+    private int find(int x) {
+        while (parent[x] != x) {
+            parent[x] = parent[parent[x]]; // path compression
+            x = parent[x];
+        }
+        return x;
+    }
+
+    private boolean inBounds(int r, int c) {
+        return r >= 0 && r < rowCount && c >= 0 && c < colCount;
     }
 }
