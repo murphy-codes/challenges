@@ -366,6 +366,7 @@ LeetCode
 |118|[Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)|[Java](./algorithms/java/118_pascals-triangle.java)|Easy|
 |75|[Sort Colors](https://leetcode.com/problems/sort-colors/)|[Java](./algorithms/java/75_sort-colors.java)|Medium|
 |73|[Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)|[Java](./algorithms/java/73_set-matrix-zeroes.java)|Medium|
+|66|[Plus One](https://leetcode.com/problems/plus-one/)|[Java](./algorithms/java/66_plus-one.java)|Easy|
 |42|[Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)|[Java](./algorithms/java/42_trapping-rain-water.java)|Hard|
 |38|[Count and Say](https://leetcode.com/problems/count-and-say/)|[Java](./algorithms/java/38_count-and-say.java)|Medium|
 |37|[Sudoku Solver](https://leetcode.com/problems/sudoku-solver/)|[Java](./algorithms/java/37_sudoku-solver.java)|Hard|
