@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-12-31
 // At the time of submission:
-//   Runtime 43 ms Beats 45.79%
-//   Memory 109.17 MB Beats 68.56%
+//   Runtime 13 ms Beats 98.83%
+//   Memory 109.27 MB Beats 51.59%
 
 /****************************************
 * 
@@ -47,27 +47,68 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort happiness descending and pick k highest values. Each pick reduces all
-    // remaining values by 1, so the i-th selected child effectively loses (i-1).
-    // Add max(happiness[i] - (i-1), 0) for each pick to avoid negative values.
-    // Sorting dominates runtime: O(n log n). Space: O(1) extra beyond input.
+    // Extract k largest values without fully sorting. Binary search finds how
+    // many values are needed; quickselect-style partition places the largest
+    // k elements at the end. Sum applies decreasing offsets for each pick.
+    // Time: avg O(n) due to partitioning, worst O(n^2) but rare. Space: O(1).
     public long maximumHappinessSum(int[] happiness, int k) {
-        Arrays.sort(happiness);
-
-        long total = 0;
-        int decrease = 0;
-
-        for (int i = happiness.length - 1; i >= 0 && k > 0; i--, k--) {
-            int value = happiness[i] - decrease;
-            if (value > 0) {
-                total += value;
-            }
-            decrease++;  // every subsequent pick suffers one more global decay
+        
+        // Binary search to determine how many values we need to consider
+        int low = 0, high = k;
+        while (low < high) {
+            int mid = (low + high) >> 1;
+            if (check(happiness, mid))
+                low = mid + 1;
+            else
+                high = mid;
         }
+        
+        k = low; // k becomes the final number of values we will extract
+        int n = happiness.length;
+        
+        // Partition so that the k largest values end up at the end of the array
+        quickSort(happiness, 0, n - 1, n - k);
 
-        return total;
+        // Sum the k largest values, applying the incremental decrease formula
+        long result = -((long) k * (k - 1)) >> 1;
+        for (int i = n - 1; k-- > 0; --i)
+            result += happiness[i];
+        
+        return result;
+    }
+    
+    // Count how many values are >= mid; if more than mid exist, condition satisfied
+    public boolean check(int[] happiness, int mid) {
+        int count = 0;
+        for (int value : happiness) {
+            if (value < mid) continue;
+            if (++count > mid)
+                return true;
+        }
+        return false;
+    }
+    
+    // Quickselect-style partitioning around the pivot so position n-k is correct
+    private void quickSort(int[] nums, int low, int high, int k) {
+        if (low == high) return;
+        
+        int left = low - 1, right = high + 1;
+        int pivot = nums[(low + high) >> 1];
+        
+        while (left < right) {
+            while (nums[++left] < pivot);
+            while (nums[--right] > pivot);
+            if (left < right) {
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+            }
+        }
+        
+        if (right < k)
+            quickSort(nums, right + 1, high, k);
+        else
+            quickSort(nums, low, right, k);
     }
 }
