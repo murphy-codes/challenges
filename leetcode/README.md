@@ -99,6 +99,7 @@ LeetCode
 |3105|[Longest Strictly Increasing or Strictly Decreasing Subarray](https://leetcode.com/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/)|[Java](./algorithms/java/3105_longest-strictly-increasing-or-strictly-decreasing-subarray.java)|Easy|
 |3100|[Water Bottles II](https://leetcode.com/problems/water-bottles-ii/)|[Java](./algorithms/java/3100_water-bottles-ii.java)|Medium|
 |3085|[Minimum Deletions to Make String K-Special](https://leetcode.com/problems/minimum-deletions-to-make-string-k-special/)|[Java](./algorithms/java/3085_minimum-deletions-to-make-string-k-special.java)|Medium|
+|3075|[Maximize Happiness of Selected Children](https://leetcode.com/problems/maximize-happiness-of-selected-children/)|[Java](./algorithms/java/3075_maximize-happiness-of-selected-children.java)|Medium|
 |3074|[Apple Redistribution into Boxes](https://leetcode.com/problems/apple-redistribution-into-boxes/)|[Java](./algorithms/java/3074_apple-redistribution-into-boxes.java)|Easy|
 |3068|[Find the Maximum Sum of Node Values](https://leetcode.com/problems/find-the-maximum-sum-of-node-values/)|[Java](./algorithms/java/3068_find-the-maximum-sum-of-node-values.java)|Hard|
 |3066|[Minimum Operations to Exceed Threshold Value II](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
