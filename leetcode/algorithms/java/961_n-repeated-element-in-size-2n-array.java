@@ -3,7 +3,7 @@
 // Date: 2026-01-01
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 47.83 MB Beats 6.18%
+//   Memory 47.66 MB Beats 25.52%
 
 /****************************************
 * 
@@ -39,9 +39,9 @@ class Solution {
   // twice must be the one repeated n times due to the problem constraints.
   // Time: O(n), singular scan. Space: O(1), array size fixed by constraints
     public int repeatedNTimes(int[] nums) {
-        boolean[] seen = new boolean[10000];
+        boolean[] seen = new boolean[10001];
         for (int i : nums){
-            if (seen[i] == true) return i;
+            if (seen[i]) return i;
             seen[i] = true;
         }
         return -1;
