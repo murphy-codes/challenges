@@ -286,6 +286,7 @@ LeetCode
 |1432|[Max Difference You Can Get From Changing an Integer](https://leetcode.com/problems/max-difference-you-can-get-from-changing-an-integer/)|[Java](./algorithms/java/1432_max-difference-you-can-get-from-changing-an-integer.java)|Medium|
 |1422|[Maximum Score After Splitting a String](https://leetcode.com/problems/maximum-score-after-splitting-a-string/)|[Java](./algorithms/java/1422_maximum-score-after-splitting-a-string.java)|Easy|
 |1415|[The k-th Lexicographical String of All Happy Strings of Length n](https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/)|[Java](./algorithms/java/1415_the-k-th-lexicographical-string-of-all-happy-strings-of-length-n.java)|Medium|
+|1411|[Number of Ways to Paint N × 3 Grid](https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/)|[Java](./algorithms/java/1411_number-of-ways-to-paint-n-3-grid.java)|Hard|
 |1408|[String Matching in an Array](https://leetcode.com/problems/string-matching-in-an-array/)|[Java](./algorithms/java/1408_string-matching-in-an-array.java)|Easy|
 |1400|[Construct K Palindrome Strings](https://leetcode.com/problems/construct-k-palindrome-strings/)|[Java](./algorithms/java/1400_construct-k-palindrome-strings.java)|Medium|
 |1399|[Count Largest Group](https://leetcode.com/problems/count-largest-group/)|[Java](./algorithms/java/1399_count-largest-group.java)|Easy|
