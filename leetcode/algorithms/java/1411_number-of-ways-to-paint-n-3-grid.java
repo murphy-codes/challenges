@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-02
 // At the time of submission:
-//   Runtime 3 ms Beats 93.85%
-//   Memory 42.38 MB Beats 35.38%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 42.36 MB Beats 35.38%
 
 /****************************************
 * 
@@ -32,25 +32,56 @@
 ****************************************/
 
 class Solution {
-    // Each row has two valid color patterns: ABA (2 colors) or ABC (3 colors).
-    // Track how many ways each pattern can occur and transition row by row.
-    // Transitions depend only on the previous row’s pattern type, not colors.
-    // Time: O(n), iterating once through all rows.
-    // Space: O(1), using only two rolling counters.
+    // The row transitions form a linear recurrence captured by a 2x2 matrix.
+    // Matrix exponentiation computes the nth row state in O(log n) time.
+    // Initial ABA and ABC counts are both 6 for the first row.
+    // Final answer is the sum of both pattern counts modulo 1e9+7.
+    // Time: O(log n), Space: O(1) since matrices are constant size.
 
-    private static final int MOD = 1_000_000_007;
+    int MOD = 1_000_000_007;
+
+    // Multiplies two matrices under modulo arithmetic
+    public long[][] multiply(long[][] a, long[][] b) {
+        long[][] result = new long[a.length][b[0].length];
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < b[0].length; j++) {
+                for (int k = 0; k < b.length; k++) {
+                    result[i][j] =
+                        (result[i][j] + a[i][k] * b[k][j]) % MOD;
+                }
+            }
+        }
+        return result;
+    }
+
+    // Computes matrix^power using binary exponentiation
+    public long[][] power(long[][] matrix, int power) {
+        long[][] result = {{1, 0}, {0, 1}}; // identity matrix
+        long[][] base = matrix;
+
+        while (power != 0) {
+            if ((power & 1) == 1) {
+                result = multiply(result, base);
+            }
+            base = multiply(base, base);
+            power >>= 1;
+        }
+        return result;
+    }
 
     public int numOfWays(int n) {
-        long aba = 6; // patterns like A B A
-        long abc = 6; // patterns like A B C
+        // Transition matrix for ABA / ABC states
+        long[][] transition = {{3, 2}, {2, 2}};
 
-        for (int i = 2; i <= n; i++) {
-            long newAba = (aba * 3 + abc * 2) % MOD;
-            long newAbc = (aba * 2 + abc * 2) % MOD;
-            aba = newAba;
-            abc = newAbc;
-        }
+        // Raise transition matrix to (n - 1)
+        long[][] transitionPower = power(transition, n - 1);
 
-        return (int)((aba + abc) % MOD);
+        // Initial state: [ABA(1), ABC(1)]
+        long[][] initial = {{6}, {6}};
+
+        // Final state = transition^(n-1) * initial
+        long[][] result = multiply(transitionPower, initial);
+
+        return (int)((result[0][0] + result[1][0]) % MOD);
     }
 }
