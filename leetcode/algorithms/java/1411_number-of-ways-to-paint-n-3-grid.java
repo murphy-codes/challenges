@@ -31,3 +31,26 @@
 * 
 ****************************************/
 
+class Solution {
+    // Each row has two valid color patterns: ABA (2 colors) or ABC (3 colors).
+    // Track how many ways each pattern can occur and transition row by row.
+    // Transitions depend only on the previous row’s pattern type, not colors.
+    // Time: O(n), iterating once through all rows.
+    // Space: O(1), using only two rolling counters.
+
+    private static final int MOD = 1_000_000_007;
+
+    public int numOfWays(int n) {
+        long aba = 6; // patterns like A B A
+        long abc = 6; // patterns like A B C
+
+        for (int i = 2; i <= n; i++) {
+            long newAba = (aba * 3 + abc * 2) % MOD;
+            long newAbc = (aba * 2 + abc * 2) % MOD;
+            aba = newAba;
+            abc = newAbc;
+        }
+
+        return (int)((aba + abc) % MOD);
+    }
+}
