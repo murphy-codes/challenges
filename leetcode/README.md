@@ -319,6 +319,7 @@ LeetCode
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |976|[Largest Perimeter Triangle](https://leetcode.com/problems/largest-perimeter-triangle/)|[Java](./algorithms/java/976_largest-perimeter-triangle.java)|Easy|
 |966|[Vowel Spellchecker](https://leetcode.com/problems/vowel-spellchecker/)|[Java](./algorithms/java/966_vowel-spellchecker.java)|Medium|
+|961|[N-Repeated Element in Size 2N Array](https://leetcode.com/problems/n-repeated-element-in-size-2n-array/)|[Java](./algorithms/java/961_n-repeated-element-in-size-2n-array.java)|Easy|
 |960|[Delete Columns to Make Sorted III](https://leetcode.com/problems/delete-columns-to-make-sorted-iii/)|[Java](./algorithms/java/960_delete-columns-to-make-sorted-iii.java)|Hard|
 |955|[Delete Columns to Make Sorted II](https://leetcode.com/problems/delete-columns-to-make-sorted-ii/)|[Java](./algorithms/java/955_delete-columns-to-make-sorted-ii.java)|Medium|
 |944|[Delete Columns to Make Sorted](https://leetcode.com/problems/delete-columns-to-make-sorted/)|[Java](./algorithms/java/944_delete-columns-to-make-sorted.java)|Easy|
