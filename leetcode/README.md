@@ -291,6 +291,7 @@ LeetCode
 |1400|[Construct K Palindrome Strings](https://leetcode.com/problems/construct-k-palindrome-strings/)|[Java](./algorithms/java/1400_construct-k-palindrome-strings.java)|Medium|
 |1399|[Count Largest Group](https://leetcode.com/problems/count-largest-group/)|[Java](./algorithms/java/1399_count-largest-group.java)|Easy|
 |1394|[Find Lucky Integer in an Array](https://leetcode.com/problems/find-lucky-integer-in-an-array/)|[Java](./algorithms/java/1394_find-lucky-integer-in-an-array.java)|Easy|
+|1390|[Four Divisors](https://leetcode.com/problems/four-divisors/)|[Java](./algorithms/java/1390_four-divisors.java)|Medium|
 |1368|[Minimum Cost to Make at Least One Valid Path in a Grid](https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/)|[Java](./algorithms/java/1368_minimum-cost-to-make-at-least-one-valid-path-in-a-grid.java)|Hard|
 |1358|[Number of Substrings Containing All Three Characters](https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/)|[Java](./algorithms/java/1358_number-of-substrings-containing-all-three-characters.java)|Medium|
 |1353|[Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)|[Java](./algorithms/java/1353_maximum-number-of-events-that-can-be-attended.java)|Medium|
