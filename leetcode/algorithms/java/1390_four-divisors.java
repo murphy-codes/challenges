@@ -85,7 +85,7 @@ class Solution {
 * 
 ****************************************/
 
-class Solution {
+// class Solution {
 //     // Precompute divisor count and divisor sum for all values up to MAX using
 //     // a sieve-like approach. Each i contributes to all multiples j = i, 2i, ...
 //     // After the pass, zero out sums for numbers that do not have exactly 4 divisors.
