@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-04
 // At the time of submission:
-//   Runtime 6 ms Beats 74.69%
-//   Memory 67.96 MB Beats 69.14%
+//   Runtime 4 ms Beats 95.06%
+//   Memory 68.21 MB Beats 14.20%
 
 /****************************************
 * 
@@ -36,34 +36,34 @@
 * 
 ****************************************/
 
-
 class Solution {
     // Each operation flips two adjacent cells, preserving negative parity.
-    // We maximize the sum by making all values positive when possible.
-    // If the number of negatives is odd, one smallest absolute value
-    // must remain negative, reducing the sum by twice that value.
+    // We maximize the sum by taking absolute values of all elements.
+    // If the number of negatives is odd, one smallest value must remain negative.
+    // In that case, subtract twice the smallest absolute value.
     // Time: O(n^2), Space: O(1).
     public long maxMatrixSum(int[][] matrix) {
-        long sum = 0;
-        int negativeCount = 0;
-        int minAbs = Integer.MAX_VALUE;
+        int minAbsValue = 100001;   // Smallest absolute value in matrix
+        long totalSum = 0L;         // Sum of absolute values
+        int negativeCount = 0;      // Number of negative elements
 
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                int val = matrix[i][j];
-                if (val < 0) negativeCount++;
-                int abs = Math.abs(val);
-                sum += abs;
-                minAbs = Math.min(minAbs, abs);
+        for (int[] row : matrix) {
+            for (int value : row) {
+
+                // Convert to absolute value and count negatives
+                if (value < 0) {
+                    negativeCount++;
+                    value = -value;
+                }
+
+                totalSum += value;
+                minAbsValue = Math.min(minAbsValue, value);
             }
         }
 
-        // If negatives are odd, one smallest absolute value must remain negative
-        if ((negativeCount & 1) == 1) {
-            sum -= 2L * minAbs;
-        }
-
-        return sum;
+        // If negatives are odd, one smallest absolute value must stay negative
+        return (negativeCount % 2 == 0)
+                ? totalSum
+                : totalSum - 2L * minAbsValue;
     }
 }
-
