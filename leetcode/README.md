@@ -309,6 +309,7 @@ LeetCode
 |1262|[Greatest Sum Divisible by Three](https://leetcode.com/problems/greatest-sum-divisible-by-three/)|[Java](./algorithms/java/1262_greatest-sum-divisible-by-three.java)|Medium|
 |1261|[Find Elements in a Contaminated Binary Tree](https://leetcode.com/problems/find-elements-in-a-contaminated-binary-tree/)|[Java](./algorithms/java/1261_find-elements-in-a-contaminated-binary-tree.java)|Medium|
 |1233|[Remove Sub-Folders from the Filesystem](https://leetcode.com/problems/remove-sub-folders-from-the-filesystem/)|[Java](./algorithms/java/1233_remove-sub-folders-from-the-filesystem.java)|Medium|
+|1161|[Maximum Level Sum of a Binary Tree](https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/)|[Java](./algorithms/java/1161_maximum-level-sum-of-a-binary-tree.java)|Medium|
 |1128|[Number of Equivalent Domino Pairs](https://leetcode.com/problems/number-of-equivalent-domino-pairs/)|[Java](./algorithms/java/1128_number-of-equivalent-domino-pairs.java)|Easy|
 |1123|[Lowest Common Ancestor of Deepest Leaves](https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/)|[Java](./algorithms/java/1123_lowest-common-ancestor-of-deepest-leaves.java)|Medium|
 |1092|[Shortest Common Supersequence](https://leetcode.com/problems/shortest-common-supersequence/)|[Java](./algorithms/java/1092_shortest-common-supersequence.java)|Hard|
