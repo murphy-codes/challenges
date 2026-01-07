@@ -2,72 +2,80 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-06
 // At the time of submission:
-//   Runtime 5 ms Beats 99.22%
-//   Memory 59.24 MB Beats 85.60%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 56.48 MB Beats 100.00%
 
 /****************************************
 * 
-* Given the `root` of a binary tree, the level of its root is `1`, the level of
-* _ its children is `2`, and so on.
-* Return the smallest level `x` such that the sum of all the values of nodes at
-* _ level `x` is maximal.
+* Given the `root` of a binary tree, split the binary tree into two subtrees by
+* _ removing one edge such that the product of the sums of the subtrees is maximized.
+* Return the maximum product of the sums of the two subtrees. Since the answer may
+* _ be too large, return it modulo `10^9 + 7`.
+* Note that you need to maximize the answer before taking the mod and not after taking it.
 *
 * Example 1:
-* Input: root = [1,7,0,7,-8,null,null]
-* Output: 2
-* Explanation:
-* Level 1 sum = 1.
-* Level 2 sum = 7 + 0 = 7.
-* Level 3 sum = 7 + -8 = -1.
-* So we return the level with the maximum sum which is level 2.
+* [Image: https://assets.leetcode.com/uploads/2020/01/21/sample_1_1699.png]
+* Input: root = [1,2,3,4,5,6]
+* Output: 110
+* Explanation: Remove the red edge and get 2 binary trees with sum 11 and 10. Their product is 110 (11*10)
 *
 * Example 2:
-* Input: root = [989,null,10250,98693,-89388,null,null,null,-32127]
-* Output: 2
+* [Image: https://assets.leetcode.com/uploads/2020/01/21/sample_2_1699.png]
+* Input: root = [1,null,2,3,4,null,null,5,6]
+* Output: 90
+* Explanation: Remove the red edge and get 2 binary trees with sum 15 and 6.Their product is 90 (15*6)
 *
 * Constraints:
-* • The number of nodes in the tree is in the range [1, 10^4].`
-* • `-10^5 <= Node.val <= 10^5`
+* • The number of nodes in the tree is in the range `[2, 5 * 10^4]`.
+* • `1 <= Node.val <= 10^4`
 * 
 ****************************************/
 
 class Solution {
-    // First compute the total sum of all nodes in the tree.
-    // Then compute each subtree sum using DFS.
-    // Treat each subtree as if its parent edge is cut.
-    // Maximize subtreeSum * (totalSum - subtreeSum).
-    // Time: O(n), Space: O(h) for recursion stack.
+    // First DFS computes the total sum of all nodes in the tree.
+    // Second DFS computes each subtree sum and treats it as a cut point.
+    // For each subtree, compute subtreeSum * (totalSum - subtreeSum).
+    // Track the maximum product across all possible cuts.
+    // Time: O(n), Space: O(h) due to recursion stack.
 
-    private long totalSum = 0;
-    private long maxProduct = 0;
-    private static final int MOD = 1_000_000_007;
+    static long totalSum;
+    static long maxProduct;
+    static final int MODULO = 1_000_000_007;
 
-    public int maxProduct(TreeNode root) {
-        totalSum = computeTotalSum(root);
-        computeSubtreeSum(root);
-        return (int)(maxProduct % MOD);
-    }
-
-    // First pass: compute total sum of all nodes
-    private long computeTotalSum(TreeNode node) {
-        if (node == null) return 0;
+    // Computes the sum of all nodes in the tree
+    private static long computeTotalSum(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
         return node.val
-            + computeTotalSum(node.left)
-            + computeTotalSum(node.right);
+             + computeTotalSum(node.left)
+             + computeTotalSum(node.right);
     }
 
-    // Second pass: compute subtree sums and evaluate split product
-    private long computeSubtreeSum(TreeNode node) {
-        if (node == null) return 0;
+    // Computes subtree sums and updates max product for each possible cut
+    private static long computeSubtreeSum(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
 
         long leftSum = computeSubtreeSum(node.left);
         long rightSum = computeSubtreeSum(node.right);
-        long subtreeSum = node.val + leftSum + rightSum;
 
-        long product = subtreeSum * (totalSum - subtreeSum);
-        maxProduct = Math.max(maxProduct, product);
+        long subtreeSum = leftSum + rightSum + node.val;
+        long product = (totalSum - subtreeSum) * subtreeSum;
+
+        if (product > maxProduct) {
+            maxProduct = product;
+        }
 
         return subtreeSum;
+    }
+
+    public static int maxProduct(TreeNode root) {
+        maxProduct = 0;
+        totalSum = computeTotalSum(root);
+        computeSubtreeSum(root);
+        return (int) (maxProduct % MODULO);
     }
 }
 
