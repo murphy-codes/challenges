@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-07
 // At the time of submission:
-//   Runtime 11 ms Beats 59.26%
-//   Memory 46.61 MB Beats 31.85%
+//   Runtime 7 ms Beats 99.26%
+//   Memory 46.25 MB Beats 85.93%
 
 /****************************************
 * 
@@ -40,36 +40,42 @@
 ****************************************/
 
 class Solution {
-    // Dynamic programming where dp[i][j] stores the maximum dot product
-    // using non-empty subsequences from nums1[0..i] and nums2[0..j].
-    // At each pair, either start a new subsequence or extend a previous one,
-    // while also allowing skipping elements from either array.
-    // Time complexity: O(n * m), Space complexity: O(n * m).
+    // Uses dynamic programming with space optimization to compute the maximum
+    // dot product of non-empty subsequences. Each dp state represents the best
+    // result up to given indices, allowing either starting a new pair or
+    // extending a previous subsequence while handling negative-only cases.
+    // Time complexity: O(n * m), Space complexity: O(m).
     public int maxDotProduct(int[] nums1, int[] nums2) {
-        int n = nums1.length;
-        int m = nums2.length;
+        int n = nums1.length, m = nums2.length;
+        int NEGATIVE_INF = -1_000_000_000;
 
-        int[][] dp = new int[n][m];
+        // dp[j] = best result using nums1[0..i-1] and nums2[0..j-1]
+        int[] prevRow = new int[m + 1];
+        for (int j = 0; j <= m; j++) prevRow[j] = NEGATIVE_INF;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                int product = nums1[i] * nums2[j];
+        for (int i = 1; i <= n; i++) {
+            int[] currRow = new int[m + 1];
+            for (int j = 0; j <= m; j++) currRow[j] = NEGATIVE_INF;
 
-                int bestWithPair = product;
-                if (i > 0 && j > 0) {
-                    bestWithPair += Math.max(dp[i - 1][j - 1], 0);
-                }
+            for (int j = 1; j <= m; j++) {
+                int product = nums1[i - 1] * nums2[j - 1];
 
-                int skipNums1 = (i > 0) ? dp[i - 1][j] : Integer.MIN_VALUE;
-                int skipNums2 = (j > 0) ? dp[i][j - 1] : Integer.MIN_VALUE;
+                // Either start new subsequence or extend previous one
+                int takePair = (prevRow[j - 1] == NEGATIVE_INF)
+                        ? product
+                        : Math.max(product, prevRow[j - 1] + product);
 
-                dp[i][j] = Math.max(
-                    bestWithPair,
-                    Math.max(skipNums1, skipNums2)
-                );
+                // Best of taking pair, skipping nums1, or skipping nums2
+                int best = takePair;
+                best = Math.max(best, prevRow[j]);
+                best = Math.max(best, currRow[j - 1]);
+
+                currRow[j] = best;
             }
+
+            prevRow = currRow;
         }
 
-        return dp[n - 1][m - 1];
+        return prevRow[m];
     }
 }
