@@ -336,6 +336,7 @@ LeetCode
 |889|[Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)|[Java](./algorithms/java/889_construct-binary-tree-from-preorder-and-postorder-traversal.java)|Medium|
 |873|[Length of Longest Fibonacci Subsequence](https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/)|[Java](./algorithms/java/873_length-of-longest-fibonacci-subsequence.java)|Medium|
 |869|[Reordered Power of 2](https://leetcode.com/problems/reordered-power-of-2/)|[Java](./algorithms/java/869_reordered-power-of-2.java)|Medium|
+|865|[Smallest Subtree with all the Deepest Nodes](https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/)|[Java](./algorithms/java/865_smallest-subtree-with-all-the-deepest-nodes.java)|Medium|
 |840|[Magic Squares In Grid](https://leetcode.com/problems/magic-squares-in-grid/)|[Java](./algorithms/java/840_magic-squares-in-grid.java)|Medium|
 |838|[Push Dominoes](https://leetcode.com/problems/push-dominoes/)|[Java](./algorithms/java/838_push-dominoes.java)|Medium|
 |837|[New 21 Game](https://leetcode.com/problems/new-21-game/)|[Java](./algorithms/java/837_new-21-game.java)|Medium|
