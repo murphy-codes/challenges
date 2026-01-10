@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-09
 // At the time of submission:
-//   Runtime 17 ms Beats 79.88%
-//   Memory 43.11 MB Beats 94.19%
+//   Runtime 8 ms Beats 99.85%
+//   Memory 46.45 MB Beats 58.72%
 
 /****************************************
 * 
@@ -33,36 +33,36 @@
 ****************************************/
 
 class Solution {
-    // Dynamic programming where dp[i][j] is the minimum ASCII delete sum to make
-    // s1[i:] and s2[j:] equal. Matching characters incur no cost; otherwise we
-    // delete one character and pay its ASCII value. The DP is optimized to O(m)
-    // space using a rolling array. Time O(n*m), space O(m).
+    // This solution reframes the problem as a weighted LCS. It computes the maximum
+    // ASCII sum of a common subsequence between the two strings using DP. The total
+    // ASCII sum of both strings is calculated upfront, and twice the kept sum is
+    // subtracted to obtain the minimum delete cost. Time O(n*m), space O(n*m).
     public int minimumDeleteSum(String s1, String s2) {
-        int n = s1.length(), m = s2.length();
-        int[] dp = new int[m + 1];
+        char[] s1Chars = s1.toCharArray();
+        char[] s2Chars = s2.toCharArray();
+        int n = s1Chars.length;
+        int m = s2Chars.length;
 
-        // Base case: delete all remaining chars from s2
-        for (int j = m - 1; j >= 0; j--) {
-            dp[j] = dp[j + 1] + s2.charAt(j);
-        }
+        // dp[i][j] = max ASCII sum of common subsequence of s1[i:] and s2[j:]
+        int[][] dp = new int[n + 1][m + 1];
 
+        // Total ASCII sum of all characters in both strings
+        int totalAsciiSum = 0;
+        for (char c : s1Chars) totalAsciiSum += c;
+        for (char c : s2Chars) totalAsciiSum += c;
+
+        // Bottom-up DP for weighted LCS
         for (int i = n - 1; i >= 0; i--) {
-            int prevDiagonal = dp[m];
-            dp[m] += s1.charAt(i); // delete all remaining from s1
-
             for (int j = m - 1; j >= 0; j--) {
-                int temp = dp[j];
-                if (s1.charAt(i) == s2.charAt(j)) {
-                    dp[j] = prevDiagonal;
+                if (s1Chars[i] == s2Chars[j]) {
+                    dp[i][j] = dp[i + 1][j + 1] + s1Chars[i];
                 } else {
-                    dp[j] = Math.min(
-                        s1.charAt(i) + dp[j],
-                        s2.charAt(j) + dp[j + 1]
-                    );
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
                 }
-                prevDiagonal = temp;
             }
         }
-        return dp[0];
+
+        // Subtract twice the kept ASCII sum from total
+        return totalAsciiSum - 2 * dp[0][0];
     }
 }
