@@ -351,6 +351,7 @@ LeetCode
 |757|[Set Intersection Size At Least Two](https://leetcode.com/problems/set-intersection-size-at-least-two/)|[Java](./algorithms/java/757_set-intersection-size-at-least-two.java)|Hard|
 |756|[Pyramid Transition Matrix](https://leetcode.com/problems/pyramid-transition-matrix/)|[Java](./algorithms/java/756_pyramid-transition-matrix.java)|Medium|
 |717|[1-bit and 2-bit Characters](https://leetcode.com/problems/1-bit-and-2-bit-characters/)|[Java](./algorithms/java/717_1-bit-and-2-bit-characters.java)|Easy|
+|712|[Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)|[Java](./algorithms/java/712_minimum-ascii-delete-sum-for-two-strings.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
 |684|[Redundant Connection](https://leetcode.com/problems/redundant-connection/)|[Java](./algorithms/java/684_redundant-connection.java)|Medium|
 |679|[24 Game](https://leetcode.com/problems/24-game/)|[Java](./algorithms/java/679_24-game.java)|Hard|
