@@ -373,6 +373,7 @@ LeetCode
 |135|[Candy](https://leetcode.com/problems/candy/)|[Java](./algorithms/java/135_candy.java)|Hard|
 |120|[Triangle](https://leetcode.com/problems/triangle/)|[Java](./algorithms/java/120_triangle.java)|Medium|
 |118|[Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)|[Java](./algorithms/java/118_pascals-triangle.java)|Easy|
+|85|[Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)|[Java](./algorithms/java/85_maximal-rectangle.java)|Hard|
 |75|[Sort Colors](https://leetcode.com/problems/sort-colors/)|[Java](./algorithms/java/75_sort-colors.java)|Medium|
 |73|[Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)|[Java](./algorithms/java/73_set-matrix-zeroes.java)|Medium|
 |66|[Plus One](https://leetcode.com/problems/plus-one/)|[Java](./algorithms/java/66_plus-one.java)|Easy|
