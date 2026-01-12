@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-11
 // At the time of submission:
-//   Runtime 5 ms Beats 90.69%
-//   Memory 49.96 MB Beats 28.18%
+//   Runtime 1 ms Beats 99.69%
+//   Memory 50.82 MB Beats 5.27%
 
 /****************************************
 * 
@@ -32,54 +32,87 @@
 * 
 ****************************************/
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Arrays;
 
 class Solution {
-    // Treat each row as the base of a histogram where heights represent
-    // consecutive '1's seen so far in each column. For every row, compute
-    // the largest rectangle in the histogram using a monotonic stack.
-    // This ensures each column index is pushed and popped once.
+    // Treat each row as the base of a histogram where heights represent consecutive
+    // '1's above each column. For every row, maintain left and right boundaries
+    // indicating how far the rectangle can expand horizontally.
+    // The area for each column is height * (right - left).
     // Time: O(rows * cols), Space: O(cols)
     public int maximalRectangle(char[][] matrix) {
-        if (matrix == null || matrix.length == 0) return 0;
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
 
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-        int[] heights = new int[cols];
+        int rowCount = matrix.length;
+        int colCount = matrix[0].length;
+
+        int[] heights = new int[colCount];
+        int[] leftLimits = new int[colCount];
+        int[] rightLimits = new int[colCount];
+        Arrays.fill(rightLimits, colCount);
+
         int maxArea = 0;
 
-        for (int r = 0; r < rows; r++) {
-            // Build histogram heights for this row
-            for (int c = 0; c < cols; c++) {
-                if (matrix[r][c] == '1') {
-                    heights[c]++;
-                } else {
-                    heights[c] = 0;
-                }
-            }
-            // Compute largest rectangle in histogram
-            maxArea = Math.max(maxArea, largestRectangleArea(heights));
+        for (int row = 0; row < rowCount; row++) {
+            int currentLeft = 0;
+            int currentRight = colCount;
+
+            updateHeightsAndLeftLimits(matrix[row], heights, leftLimits, currentLeft);
+            updateRightLimits(matrix[row], rightLimits, currentRight);
+            maxArea = computeMaxArea(heights, leftLimits, rightLimits, maxArea);
         }
 
         return maxArea;
     }
 
-    private int largestRectangleArea(int[] heights) {
-        Deque<Integer> stack = new ArrayDeque<>();
-        int maxArea = 0;
-
-        for (int i = 0; i <= heights.length; i++) {
-            int currHeight = (i == heights.length) ? 0 : heights[i];
-
-            while (!stack.isEmpty() && currHeight < heights[stack.peek()]) {
-                int h = heights[stack.pop()];
-                int width = stack.isEmpty() ? i : i - stack.peek() - 1;
-                maxArea = Math.max(maxArea, h * width);
+    // Updates histogram heights and the furthest valid left boundary per column
+    private void updateHeightsAndLeftLimits(
+            char[] row,
+            int[] heights,
+            int[] leftLimits,
+            int currentLeft
+    ) {
+        for (int col = 0; col < heights.length; col++) {
+            if (row[col] == '1') {
+                heights[col]++;
+                leftLimits[col] = Math.max(leftLimits[col], currentLeft);
+            } else {
+                heights[col] = 0;
+                leftLimits[col] = 0;
+                currentLeft = col + 1;
             }
-            stack.push(i);
         }
+    }
 
+    // Updates the furthest valid right boundary per column
+    private void updateRightLimits(
+            char[] row,
+            int[] rightLimits,
+            int currentRight
+    ) {
+        for (int col = rightLimits.length - 1; col >= 0; col--) {
+            if (row[col] == '1') {
+                rightLimits[col] = Math.min(rightLimits[col], currentRight);
+            } else {
+                rightLimits[col] = currentRight;
+                currentRight = col;
+            }
+        }
+    }
+
+    // Computes maximal rectangle area using current heights and boundaries
+    private int computeMaxArea(
+            int[] heights,
+            int[] leftLimits,
+            int[] rightLimits,
+            int maxArea
+    ) {
+        for (int col = 0; col < heights.length; col++) {
+            int width = rightLimits[col] - leftLimits[col];
+            maxArea = Math.max(maxArea, heights[col] * width);
+        }
         return maxArea;
     }
 }
