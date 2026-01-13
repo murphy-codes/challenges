@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-12
 // At the time of submission:
-//   Runtime 124 ms Beats 55.26%
-//   Memory 148.66 MB Beats 55.79%
+//   Runtime 84 ms Beats 99.47%
+//   Memory 150.61 MB Beats 20.00%
 
 /****************************************
 * 
@@ -44,55 +44,64 @@
 ****************************************/
 
 class Solution {
-    // We binary search on the y-coordinate of the horizontal line. For a given
-    // y, we compute the total area of all squares below the line, which is a
-    // monotonic function. The target is half of the total area. Each square
-    // contributes independently based on how much of it lies below y. The
-    // solution runs in O(n log R) time with constant extra space.
+    // We binary search on the y-coordinate of a horizontal line. For each candidate
+    // y, we compute the total area of all square portions above the line. This area
+    // is monotonic decreasing as y increases, allowing binary search. We adjust the
+    // search range until the area above equals the area below within precision.
+    // Time complexity is O(n log R) with O(1) extra space.
     public double separateSquares(int[][] squares) {
-        double low = Double.MAX_VALUE;
-        double high = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = 0.0;
         double totalArea = 0.0;
 
-        // Determine search bounds and total area
-        for (int[] sq : squares) {
-            double y = sq[1];
-            double l = sq[2];
-            low = Math.min(low, y);
-            high = Math.max(high, y + l);
-            totalArea += l * l;
+        // Compute vertical bounds and total area
+        for (int[] square : squares) {
+            double bottomY = square[1];
+            double side = square[2];
+            double topY = bottomY + side;
+
+            minY = Math.min(minY, bottomY);
+            maxY = Math.max(maxY, topY);
+            totalArea += side * side;
         }
 
-        double target = totalArea / 2.0;
+        double low = minY;
+        double high = maxY;
+        double precision = 1e-5;
 
-        // Binary search for y where area below == target
-        for (int iter = 0; iter < 60; iter++) {
-            double mid = (low + high) / 2.0;
-            double areaBelow = areaBelowLine(squares, mid);
+        // Binary search for the lowest y where top area <= bottom area
+        while (low < high) {
+            if (high - low < precision) {
+                break;
+            }
 
-            if (areaBelow < target) {
-                low = mid;
+            double midY = low + (high - low) / 2.0;
+            double areaAbove = computeAreaAboveLine(squares, midY);
+            double areaBelow = totalArea - areaAbove;
+
+            if (areaAbove <= areaBelow) {
+                high = midY;
             } else {
-                high = mid;
+                low = midY;
             }
         }
 
         return low;
     }
 
-    private double areaBelowLine(int[][] squares, double yLine) {
+    // Computes total area of all square portions above a horizontal line
+    public double computeAreaAboveLine(int[][] squares, double lineY) {
         double area = 0.0;
 
-        for (int[] sq : squares) {
-            double y = sq[1];
-            double l = sq[2];
+        for (int[] square : squares) {
+            double bottomY = square[1];
+            double side = square[2];
 
-            if (yLine <= y) {
-                continue;
-            } else if (yLine >= y + l) {
-                area += l * l;
-            } else {
-                area += l * (yLine - y);
+            if (bottomY >= lineY) {
+                area += side * side;
+            } else if (bottomY + side >= lineY) {
+                double heightAbove = bottomY + side - lineY;
+                area += heightAbove * side;
             }
         }
 
