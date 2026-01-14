@@ -31,6 +31,7 @@ LeetCode
 |3477|[Fruits Into Baskets II](https://leetcode.com/problems/fruits-into-baskets-ii/)|[Java](./algorithms/java/3477_fruits-into-baskets-ii.java)|Easy|
 |3461|[Check If Digits Are Equal in String After Operations I](https://leetcode.com/problems/check-if-digits-are-equal-in-string-after-operations-i/)|[Java](./algorithms/java/3461_check-if-digits-are-equal-in-string-after-operations-i.java)|Easy|
 |3459|[Length of Longest V-Shaped Diagonal Segment](https://leetcode.com/problems/length-of-longest-v-shaped-diagonal-segment/)|[Java](./algorithms/java/3459_length-of-longest-v-shaped-diagonal-segment.java)|Hard|
+|3454|[Separate Squares II](https://leetcode.com/problems/separate-squares-ii/)|[Java](./algorithms/java/3454_separate-squares-ii.java)|Hard|
 |3453|[Separate Squares I](https://leetcode.com/problems/separate-squares-i/)|[Java](./algorithms/java/3453_separate-squares-i.java)|Medium|
 |3446|[Sort Matrix by Diagonals](https://leetcode.com/problems/sort-matrix-by-diagonals/)|[Java](./algorithms/java/3446_sort-matrix-by-diagonals.java)|Medium|
 |3445|[Maximum Difference Between Even and Odd Frequency II](https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-ii/)|[Java](./algorithms/java/3445_maximum-difference-between-even-and-odd-frequency-ii.java)|Hard|
