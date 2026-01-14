@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/separate-squares-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2026-01-12
+// Date: 2026-01-13
 // At the time of submission:
-//   Runtime 275 ms Beats 69.81%
-//   Memory 117.14 MB Beats 75.47%
+//   Runtime 165 ms Beats 96.23%
+//   Memory 106.72 MB Beats 90.57%
 
 /****************************************
 * 
@@ -44,121 +44,183 @@
 import java.util.Arrays;
 
 class Solution {
-    // We sweep a horizontal line upward and maintain the union of active x-intervals
-    // using a segment tree. Between events, the covered width times deltaY gives area.
-    // Once cumulative area reaches half of the total union area, we interpolate the
-    // exact y-coordinate within that segment. Time complexity is O(N log N) with
-    // O(N) space for events, compression, and the segment tree.
+    // Uses a vertical sweep line with a segment tree to compute union area exactly.
+    // Each square contributes enter/exit events in Y and active X-interval coverage.
+    // Area is accumulated per horizontal strip, then scanned to find the 50% point.
+    // Time complexity: O(n log n) due to sorting and segment tree updates.
+    // Space complexity: O(n) for events, compressed coordinates, and segment tree.
 
-    static class Event implements Comparable<Event> {
-        double y;
-        int x1, x2;
-        int delta;
+    // Sweep event: add/remove an x-interval at a given y
+    static final class Event {
+        final long y;
+        final int leftIdx, rightIdx;
+        final int delta; // +1 enter, -1 exit
 
-        Event(double y, int x1, int x2, int delta) {
+        Event(long y, int leftIdx, int rightIdx, int delta) {
             this.y = y;
-            this.x1 = x1;
-            this.x2 = x2;
+            this.leftIdx = leftIdx;
+            this.rightIdx = rightIdx;
             this.delta = delta;
-        }
-
-        public int compareTo(Event other) {
-            return Double.compare(this.y, other.y);
         }
     }
 
-    static class SegmentTree {
-        int[] count;
-        double[] length;
-        double[] xs;
+    // Segment tree tracking total covered x-length (union, not sum)
+    static final class SegmentTree {
+        final long[] xs;      // compressed x-coordinates
+        final long[] cover;   // covered length per node
+        final int[] count;    // coverage count per node
 
-        SegmentTree(double[] xs) {
+        SegmentTree(long[] xs) {
             this.xs = xs;
-            int n = xs.length * 4;
-            count = new int[n];
-            length = new double[n];
+            int n = Math.max(1, xs.length - 1);
+            cover = new long[n << 2];
+            count = new int[n << 2];
         }
 
-        void update(int node, int l, int r, int ql, int qr, int delta) {
-            if (ql >= r || qr <= l) return;
-            if (ql <= l && r <= qr) {
+        long coveredLength() {
+            return cover[1];
+        }
+
+        void update(int l, int r, int delta) {
+            if (l < r) update(1, 0, xs.length - 1, l, r, delta);
+        }
+
+        private void update(int node, int L, int R, int ql, int qr, int delta) {
+            if (qr <= L || R <= ql) return;
+
+            if (ql <= L && R <= qr) {
                 count[node] += delta;
-            } else {
-                int mid = (l + r) / 2;
-                update(node * 2, l, mid, ql, qr, delta);
-                update(node * 2 + 1, mid, r, ql, qr, delta);
+                pushUp(node, L, R);
+                return;
             }
 
+            int mid = (L + R) >>> 1;
+            update(node << 1, L, mid, ql, qr, delta);
+            update(node << 1 | 1, mid, R, ql, qr, delta);
+            pushUp(node, L, R);
+        }
+
+        private void pushUp(int node, int L, int R) {
             if (count[node] > 0) {
-                length[node] = xs[r] - xs[l];
-            } else if (l + 1 == r) {
-                length[node] = 0;
+                cover[node] = xs[R] - xs[L];
+            } else if (L + 1 == R) {
+                cover[node] = 0;
             } else {
-                length[node] = length[node * 2] + length[node * 2 + 1];
+                cover[node] = cover[node << 1] + cover[node << 1 | 1];
             }
         }
     }
 
     public double separateSquares(int[][] squares) {
         int n = squares.length;
-        Event[] events = new Event[n * 2];
-        double[] xs = new double[n * 2];
+        if (n == 0) return -1;
 
-        int xi = 0, ei = 0;
-
+        // --- Coordinate compression for X ---
+        long[] xs = new long[2 * n];
+        int idx = 0;
         for (int[] s : squares) {
-            int x = s[0], y = s[1], l = s[2];
-            xs[xi++] = x;
-            xs[xi++] = x + l;
-
-            events[ei++] = new Event(y, x, x + l, +1);
-            events[ei++] = new Event(y + l, x, x + l, -1);
+            xs[idx++] = s[0];
+            xs[idx++] = (long) s[0] + s[2];
         }
 
         Arrays.sort(xs);
-        xs = Arrays.stream(xs).distinct().toArray();
-        Arrays.sort(events);
+        int unique = 1;
+        for (int i = 1; i < xs.length; i++) {
+            if (xs[i] != xs[unique - 1]) {
+                xs[unique++] = xs[i];
+            }
+        }
+        xs = Arrays.copyOf(xs, unique);
 
-        SegmentTree st = new SegmentTree(xs);
-
-        double totalArea = 0;
-        double prevY = events[0].y;
-
-        for (Event e : events) {
-            double dy = e.y - prevY;
-            totalArea += st.length[1] * dy;
-
-            int l = Arrays.binarySearch(xs, e.x1);
-            int r = Arrays.binarySearch(xs, e.x2);
-            st.update(1, 0, xs.length - 1, l, r, e.delta);
-
-            prevY = e.y;
+        if (xs.length < 2) {
+            long minY = Long.MAX_VALUE;
+            for (int[] s : squares) minY = Math.min(minY, s[1]);
+            return minY;
         }
 
-        double half = totalArea / 2.0;
-        double area = 0;
-        prevY = events[0].y;
+        // --- Build sweep events ---
+        Event[] events = new Event[2 * n];
+        int e = 0;
 
-        Arrays.fill(st.count, 0);
-        Arrays.fill(st.length, 0);
+        for (int[] s : squares) {
+            long x1 = s[0];
+            long x2 = (long) s[0] + s[2];
+            long y1 = s[1];
+            long y2 = (long) s[1] + s[2];
 
-        for (Event e : events) {
-            double dy = e.y - prevY;
-            double slice = st.length[1] * dy;
+            int l = lowerBound(xs, x1);
+            int r = lowerBound(xs, x2);
+            if (l < r) {
+                events[e++] = new Event(y1, l, r, +1);
+                events[e++] = new Event(y2, l, r, -1);
+            }
+        }
 
-            if (area + slice >= half) {
-                return prevY + (half - area) / st.length[1];
+        if (e == 0) return -1;
+        events = Arrays.copyOf(events, e);
+        Arrays.sort(events, (a, b) -> Long.compare(a.y, b.y));
+
+        // --- Sweep ---
+        SegmentTree st = new SegmentTree(xs);
+
+        long[] startY = new long[e];
+        long[] endY = new long[e];
+        long[] baseLen = new long[e];
+        int segments = 0;
+
+        long totalArea = 0;
+        long prevY = events[0].y;
+        long currBase = 0;
+
+        int i = 0;
+        while (i < e) {
+            long y = events[i].y;
+            long dy = y - prevY;
+
+            if (dy > 0 && currBase > 0) {
+                totalArea += currBase * dy;
+                startY[segments] = prevY;
+                endY[segments] = y;
+                baseLen[segments] = currBase;
+                segments++;
             }
 
-            area += slice;
+            int j = i;
+            while (j < e && events[j].y == y) {
+                st.update(events[j].leftIdx, events[j].rightIdx, events[j].delta);
+                j++;
+            }
 
-            int l = Arrays.binarySearch(xs, e.x1);
-            int r = Arrays.binarySearch(xs, e.x2);
-            st.update(1, 0, xs.length - 1, l, r, e.delta);
+            currBase = st.coveredLength();
+            prevY = y;
+            i = j;
+        }
 
-            prevY = e.y;
+        if (totalArea == 0) return prevY;
+
+        // --- Find y where area reaches half ---
+        double target = totalArea / 2.0;
+        long prefix = 0;
+
+        for (int k = 0; k < segments; k++) {
+            long area = baseLen[k] * (endY[k] - startY[k]);
+            if (prefix + area < target) {
+                prefix += area;
+            } else {
+                return startY[k] + (target - prefix) / baseLen[k];
+            }
         }
 
         return prevY;
+    }
+
+    private static int lowerBound(long[] arr, long key) {
+        int lo = 0, hi = arr.length;
+        while (lo < hi) {
+            int mid = (lo + hi) >>> 1;
+            if (arr[mid] < key) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
     }
 }
