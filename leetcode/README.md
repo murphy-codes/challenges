@@ -118,6 +118,7 @@ LeetCode
 |2965|[Find Missing and Repeated Values](https://leetcode.com/problems/find-missing-and-repeated-values/)|[Java](./algorithms/java/2965_find-missing-and-repeated-values.java)|Easy|
 |2962|[Count Subarrays Where Max Element Appears at Least K Times](https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/)|[Java](./algorithms/java/2962_count-subarrays-where-max-element-appears-at-least-k-times.java)|Medium|
 |2948|[Make Lexicographically Smallest Array by Swapping Elements](https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/)|[Java](./algorithms/java/2948_make-lexicographically-smallest-array-by-swapping-elements.java)|Medium|
+|2943|[Maximize Area of Square Hole in Grid](https://leetcode.com/problems/maximize-area-of-square-hole-in-grid/)|[Java](./algorithms/java/2943_maximize-area-of-square-hole-in-grid.java)|Medium|
 |2942|[Find Words Containing Character](https://leetcode.com/problems/find-words-containing-character/)|[Java](./algorithms/java/2942_find-words-containing-character.java)|Easy|
 |2929|[Distribute Candies Among Children II](https://leetcode.com/problems/distribute-candies-among-children-ii/)|[Java](./algorithms/java/2929_distribute-candies-among-children-ii.java)|Medium|
 |2918|[Minimum Equal Sum of Two Arrays After Replacing Zeros](https://leetcode.com/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/)|[Java](./algorithms/java/2918_minimum-equal-sum-of-two-arrays-after-replacing-zeros.java)|Medium|
