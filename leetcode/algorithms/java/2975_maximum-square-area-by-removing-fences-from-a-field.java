@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-14
 // At the time of submission:
-//   Runtime 379 ms Beats 95.24%
-//   Memory 181.38 MB Beats 46.43%
+//   Runtime 312 ms Beats 97.62%
+//   Memory 174.50 MB Beats 46.43%
 
 /****************************************
 * 
@@ -44,47 +44,64 @@
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 class Solution {
-    // Add boundary fences so all possible field edges are represented.
-    // Any square side length must be a difference between two horizontal
-    // fences and also two vertical fences.
-    // We compute all vertical distances, then scan horizontal distances
-    // to find the maximum common value.
+    // Add boundary fences so all possible field edges are considered.
+    // Any square side length must appear as a distance between both
+    // horizontal and vertical fence coordinates.
+    // Store all vertical distances in a set, then scan horizontal ones
+    // to find the largest matching square area.
     // Time: O(H^2 + V^2), Space: O(V^2).
-
-    private static final int MOD = 1_000_000_007;
-
     public int maximizeSquareArea(int m, int n, int[] hFences, int[] vFences) {
-        int[] h = addBounds(hFences, 1, m);
-        int[] v = addBounds(vFences, 1, n);
+        final long MOD = 1_000_000_007L;
 
-        HashSet<Long> verticalDistances = new HashSet<>();
-        for (int i = 0; i < v.length; i++) {
-            for (int j = i + 1; j < v.length; j++) {
-                verticalDistances.add((long) v[j] - v[i]);
+        long maxArea = 0L;
+
+        int totalY = hFences.length + 2;
+        int totalX = vFences.length + 2;
+
+        int[] yCoords = new int[totalY];
+        int[] xCoords = new int[totalX];
+
+        yCoords[0] = 1;
+        yCoords[totalY - 1] = m;
+        xCoords[0] = 1;
+        xCoords[totalX - 1] = n;
+
+        for (int i = 0; i < hFences.length; i++) {
+            yCoords[i + 1] = hFences[i];
+        }
+        for (int i = 0; i < vFences.length; i++) {
+            xCoords[i + 1] = vFences[i];
+        }
+
+        Arrays.sort(yCoords);
+        Arrays.sort(xCoords);
+
+        Set<Long> verticalDiffs = new HashSet<>();
+
+        // Store all vertical distances
+        for (int i = 0; i < xCoords.length; i++) {
+            for (int j = i; j < xCoords.length; j++) {
+                verticalDiffs.add((long) xCoords[i] - xCoords[j]);
             }
         }
 
-        long maxSide = -1;
-        for (int i = 0; i < h.length; i++) {
-            for (int j = i + 1; j < h.length; j++) {
-                long side = (long) h[j] - h[i];
-                if (verticalDistances.contains(side)) {
-                    maxSide = Math.max(maxSide, side);
+        // Check horizontal distances against vertical ones
+        for (int i = 0; i < yCoords.length; i++) {
+            for (int j = i; j < yCoords.length; j++) {
+                long side = (long) yCoords[i] - yCoords[j];
+                long area = side * side;
+
+                if (area <= maxArea) continue;
+
+                if (verticalDiffs.contains(side)) {
+                    maxArea = area;
                 }
             }
         }
 
-        if (maxSide == -1) return -1;
-        return (int) ((maxSide % MOD) * (maxSide % MOD) % MOD);
-    }
-
-    private int[] addBounds(int[] fences, int low, int high) {
-        int[] res = Arrays.copyOf(fences, fences.length + 2);
-        res[fences.length] = low;
-        res[fences.length + 1] = high;
-        Arrays.sort(res);
-        return res;
+        return maxArea == 0 ? -1 : (int) (maxArea % MOD);
     }
 }
