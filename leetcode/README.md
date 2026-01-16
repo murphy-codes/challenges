@@ -114,6 +114,7 @@ LeetCode
 |3003|[Maximize the Number of Partitions After Operations](https://leetcode.com/problems/maximize-the-number-of-partitions-after-operations/)|[Java](./algorithms/java/3003_maximize-the-number-of-partitions-after-operations.java)|Hard|
 |3000|[Maximum Area of Longest Diagonal Rectangle](https://leetcode.com/problems/maximum-area-of-longest-diagonal-rectangle/)|[Java](./algorithms/java/3000_maximum-area-of-longest-diagonal-rectangle.java)|Easy|
 |2999|[Count the Number of Powerful Integers](https://leetcode.com/problems/count-the-number-of-powerful-integers/)|[Java](./algorithms/java/2999_count-the-number-of-powerful-integers.java)|Hard|
+|2975|[Maximum Square Area by Removing Fences From a Field](https://leetcode.com/problems/maximum-square-area-by-removing-fences-from-a-field/)|[Java](./algorithms/java/2975_maximum-square-area-by-removing-fences-from-a-field.java)|Medium|
 |2966|[Divide Array Into Arrays With Max Difference](https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/)|[Java](./algorithms/java/2966_divide-array-into-arrays-with-max-difference.java)|Medium|
 |2965|[Find Missing and Repeated Values](https://leetcode.com/problems/find-missing-and-repeated-values/)|[Java](./algorithms/java/2965_find-missing-and-repeated-values.java)|Easy|
 |2962|[Count Subarrays Where Max Element Appears at Least K Times](https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/)|[Java](./algorithms/java/2962_count-subarrays-where-max-element-appears-at-least-k-times.java)|Medium|
