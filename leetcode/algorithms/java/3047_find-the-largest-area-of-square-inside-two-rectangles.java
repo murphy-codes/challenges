@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-17
 // At the time of submission:
-//   Runtime 95 ms Beats 35.42%
-//   Memory 48.08 MB Beats 10.42%
+//   Runtime 25 ms Beats 100.00%
+//   Memory 47.72 MB Beats 68.75%
 
 /****************************************
 * 
@@ -55,32 +55,35 @@
 ****************************************/
 
 class Solution {
-    // For each pair of rectangles, compute their intersection region.
-    // If they overlap, the largest square that fits has side equal to
-    // min(intersection width, intersection height).
-    // Track the maximum square area across all rectangle pairs.
+    // Compare every pair of rectangles and compute their intersection size.
+    // The largest square that fits inside an intersection has side length
+    // equal to min(overlapWidth, overlapHeight).
+    // Invalid intersections yield non-positive sides and are ignored naturally.
     // Time: O(n^2), Space: O(1).
     public long largestSquareArea(int[][] bottomLeft, int[][] topRight) {
-        int n = bottomLeft.length;
-        long maxArea = 0;
+        int rectCount = bottomLeft.length;
+        long maxSideLength = 0;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
+        for (int i = 0; i < rectCount; i++) {
+            for (int j = i + 1; j < rectCount; j++) {
 
-                int left   = Math.max(bottomLeft[i][0], bottomLeft[j][0]);
-                int right  = Math.min(topRight[i][0],   topRight[j][0]);
-                int bottom = Math.max(bottomLeft[i][1], bottomLeft[j][1]);
-                int top    = Math.min(topRight[i][1],   topRight[j][1]);
+                // Compute intersection width
+                int overlapWidth =
+                    Math.min(topRight[i][0], topRight[j][0]) -
+                    Math.max(bottomLeft[i][0], bottomLeft[j][0]);
 
-                if (left < right && bottom < top) {
-                    long width  = right - left;
-                    long height = top - bottom;
-                    long side   = Math.min(width, height);
-                    maxArea = Math.max(maxArea, side * side);
-                }
+                // Compute intersection height
+                int overlapHeight =
+                    Math.min(topRight[i][1], topRight[j][1]) -
+                    Math.max(bottomLeft[i][1], bottomLeft[j][1]);
+
+                // Largest square side within intersection
+                int squareSide = Math.min(overlapWidth, overlapHeight);
+
+                maxSideLength = Math.max(maxSideLength, squareSide);
             }
         }
 
-        return maxArea;
+        return maxSideLength * maxSideLength;
     }
 }
