@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-17
 // At the time of submission:
-//   Runtime 7 ms Beats 72.35%
-//   Memory 46.42 MB Beats 44.71%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 46.45 MB Beats 44.71%
 
 /****************************************
 * 
@@ -38,75 +38,88 @@
 ****************************************/
 
 class Solution {
-    // Precompute prefix sums for rows, columns, and both diagonals.
-    // Try square sizes from largest to smallest and stop early on success.
-    // Each candidate square is checked in O(k) using O(1) sum queries.
-    // Time: O(m * n * min(m, n)), Space: O(m * n).
+    // Uses row and column prefix sums to validate square sums in O(1) time.
+    // Iterates square sizes from largest to smallest, exiting early on success.
+    // Rows and columns are validated first, followed by both diagonals.
+    // Time Complexity: O(m * n * min(m, n))
+    // Space Complexity: O(m * n) for prefix sum arrays
 
-    public int largestMagicSquare(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
+    // Checks whether a magic square of given size exists anywhere in the grid
+    boolean existsMagicSquare(
+        int[][] grid,
+        int[][] rowPrefix,
+        int[][] colPrefix,
+        int size
+    ) {
+        int rows = grid.length;
+        int cols = grid[0].length;
 
-        // Prefix sums
-        int[][] rowSum = new int[m][n + 1];
-        int[][] colSum = new int[n][m + 1];
-        int[][] diag1  = new int[m + 1][n + 1]; // top-left -> bottom-right
-        int[][] diag2  = new int[m + 1][n + 1]; // top-right -> bottom-left
+        int maxRowStart = rows - size;
+        int maxColStart = cols - size;
 
-        // Build prefix sums
-        for (int r = 0; r < m; r++) {
-            for (int c = 0; c < n; c++) {
-                rowSum[r][c + 1] = rowSum[r][c] + grid[r][c];
-                colSum[c][r + 1] = colSum[c][r] + grid[r][c];
-                diag1[r + 1][c + 1] = diag1[r][c] + grid[r][c];
-                diag2[r + 1][c] = diag2[r][c + 1] + grid[r][c];
-            }
-        }
+        for (int startRow = 0; startRow <= maxRowStart; startRow++) {
+            for (int startCol = 0; startCol <= maxColStart; startCol++) {
 
-        // Try larger squares first
-        for (int k = Math.min(m, n); k >= 2; k--) {
-            for (int r = 0; r + k <= m; r++) {
-                for (int c = 0; c + k <= n; c++) {
-                    if (isMagic(grid, rowSum, colSum, diag1, diag2, r, c, k)) {
-                        return k;
+                // Target sum: first row of the square
+                int targetSum =
+                    rowPrefix[startRow][startCol + size] -
+                    rowPrefix[startRow][startCol];
+
+                boolean valid = true;
+
+                // Check all rows and columns
+                for (int offset = 0; valid && offset < size; offset++) {
+                    int rowSum =
+                        rowPrefix[startRow + offset][startCol + size] -
+                        rowPrefix[startRow + offset][startCol];
+
+                    int colSum =
+                        colPrefix[startRow + size][startCol + offset] -
+                        colPrefix[startRow][startCol + offset];
+
+                    valid = (rowSum == targetSum) && (colSum == targetSum);
+                }
+
+                // Check both diagonals only if rows/columns matched
+                if (valid) {
+                    int diag1 = 0, diag2 = 0;
+
+                    for (int i = 0; i < size; i++) {
+                        diag1 += grid[startRow + i][startCol + i];
+                        diag2 += grid[startRow + i][startCol + size - 1 - i];
+                    }
+
+                    if (diag1 == targetSum && diag2 == targetSum) {
+                        return true;
                     }
                 }
             }
         }
-
-        return 1; // 1x1 is always magic
+        return false;
     }
 
-    private boolean isMagic(
-        int[][] grid,
-        int[][] rowSum,
-        int[][] colSum,
-        int[][] diag1,
-        int[][] diag2,
-        int r,
-        int c,
-        int k
-    ) {
-        int target = rowSum[r][c + k] - rowSum[r][c];
+    public int largestMagicSquare(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
 
-        // Check rows
-        for (int i = 0; i < k; i++) {
-            if (rowSum[r + i][c + k] - rowSum[r + i][c] != target) {
-                return false;
+        // Prefix sums for rows and columns
+        int[][] rowPrefix = new int[rows][cols + 1];
+        int[][] colPrefix = new int[rows + 1][cols];
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                rowPrefix[r][c + 1] = rowPrefix[r][c] + grid[r][c];
+                colPrefix[r + 1][c] = colPrefix[r][c] + grid[r][c];
             }
         }
 
-        // Check columns
-        for (int j = 0; j < k; j++) {
-            if (colSum[c + j][r + k] - colSum[c + j][r] != target) {
-                return false;
+        // Try largest possible size first
+        for (int size = Math.min(rows, cols); size > 1; size--) {
+            if (existsMagicSquare(grid, rowPrefix, colPrefix, size)) {
+                return size;
             }
         }
 
-        // Check diagonals
-        int d1 = diag1[r + k][c + k] - diag1[r][c];
-        int d2 = diag2[r + k][c] - diag2[r][c + k];
-
-        return d1 == target && d2 == target;
+        return 1; // Every 1x1 square is magic
     }
 }
