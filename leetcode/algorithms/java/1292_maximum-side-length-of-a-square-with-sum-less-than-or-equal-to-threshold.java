@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2026-01-17
+// Date: 2026-01-19
 // At the time of submission:
-//   Runtime 7 ms Beats 83.33%
-//   Memory 57.61 MB Beats 59.60%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 53.90 MB Beats 93.43%
 
 /****************************************
 * 
@@ -31,68 +31,58 @@
 ****************************************/
 
 class Solution {
-    // Uses a 2D prefix sum to compute square sums in constant time.
-    // Binary searches on side length since validity is monotonic.
-    // For each size, checks all possible k x k squares efficiently.
-    // Time Complexity: O(m * n * log(min(m, n)))
-    // Space Complexity: O(m * n)
+    // Converts the matrix into an in-place 2D prefix sum array.
+    // For each cell as bottom-right, incrementally expands square size.
+    // Uses prefix sums to compute square sums in O(1) time.
+    // Prunes early when sums exceed threshold.
+    // Time: O(m * n * min(m, n)), Space: O(1) extra.
+
     public int maxSideLength(int[][] mat, int threshold) {
         int rows = mat.length;
         int cols = mat[0].length;
 
-        // Build 2D prefix sum array
-        int[][] ps = new int[rows + 1][cols + 1];
+        // Build prefix sums in-place (row-wise then column-wise)
+        for (int r = 0; r < rows; r++) {
+            for (int c = 1; c < cols; c++) {
+                mat[r][c] += mat[r][c - 1];
+            }
+        }
+        for (int r = 1; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                mat[r][c] += mat[r - 1][c];
+            }
+        }
 
+        int maxSide = 0;
+
+        // Try every bottom-right corner
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                ps[r + 1][c + 1] =
-                    ps[r][c + 1] +
-                    ps[r + 1][c] -
-                    ps[r][c] +
-                    mat[r][c];
-            }
-        }
 
-        int left = 1;
-        int right = Math.min(rows, cols);
-        int answer = 0;
+                // Grow square size starting from current best + 1
+                for (int side = maxSide + 1;
+                     r + 1 - side >= 0 && c + 1 - side >= 0;
+                     side++) {
 
-        // Binary search on side length
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
+                    int prevRow = r - side;
+                    int prevCol = c - side;
 
-            if (existsSquare(ps, rows, cols, mid, threshold)) {
-                answer = mid;
-                left = mid + 1;   // try larger square
-            } else {
-                right = mid - 1;  // try smaller square
-            }
-        }
+                    int topLeft = (prevRow >= 0 && prevCol >= 0)
+                        ? mat[prevRow][prevCol] : 0;
+                    int top = (prevRow >= 0) ? mat[prevRow][c] : 0;
+                    int left = (prevCol >= 0) ? mat[r][prevCol] : 0;
 
-        return answer;
-    }
+                    int squareSum = mat[r][c] + topLeft - top - left;
 
-    // Checks whether any k x k square has sum <= threshold
-    private boolean existsSquare(
-        int[][] ps,
-        int rows,
-        int cols,
-        int size,
-        int threshold
-    ) {
-        for (int r = size; r <= rows; r++) {
-            for (int c = size; c <= cols; c++) {
-                int sum =
-                    ps[r][c] -
-                    ps[r - size][c] -
-                    ps[r][c - size] +
-                    ps[r - size][c - size];
-
-                if (sum <= threshold) {
-                    return true;
+                    if (squareSum <= threshold) {
+                        maxSide = side;
+                    } else {
+                        break; // larger squares will also fail
+                    }
                 }
             }
         }
-        return false;
+
+        return maxSide;
     }
 }
