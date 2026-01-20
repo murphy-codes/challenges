@@ -311,6 +311,7 @@ LeetCode
 |1304|[Find N Unique Integers Sum up to Zero](https://leetcode.com/problems/find-n-unique-integers-sum-up-to-zero/)|[Java](./algorithms/java/1304_find-n-unique-integers-sum-up-to-zero.java)|Easy|
 |1298|[Maximum Candies You Can Get from Boxes](https://leetcode.com/problems/maximum-candies-you-can-get-from-boxes/)|[Java](./algorithms/java/1298_maximum-candies-you-can-get-from-boxes.java)|Hard|
 |1295|[Find Numbers with Even Number of Digits](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/)|[Java](./algorithms/java/1295_find-numbers-with-even-number-of-digits.java)|Easy|
+|1292|[Maximum Side Length of a Square with Sum Less than or Equal to Threshold](https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/)|[Java](./algorithms/java/1292_maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold.java)|Medium|
 |1290|[Convert Binary Number in a Linked List to Integer](https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/)|[Java](./algorithms/java/1290_convert-binary-number-in-a-linked-list-to-integer.java)|Easy|
 |1277|[Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones/)|[Java](./algorithms/java/1277_count-square-submatrices-with-all-ones.java)|Medium|
 |1267|[Count Servers that Communicate](https://leetcode.com/problems/count-servers-that-communicate/)|[Java](./algorithms/java/1267_count-servers-that-communicate.java)|Medium|
