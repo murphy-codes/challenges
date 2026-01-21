@@ -35,7 +35,7 @@
 * Constraints:
 * • `1 <= nums.length <= 100`
 * • `2 <= nums[i] <= 1000`
-* • `nums[i] is a prime number.`
+* • `nums[i]` is a prime number.`
 * 
 ****************************************/
 
