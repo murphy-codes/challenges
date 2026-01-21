@@ -72,6 +72,7 @@ LeetCode
 |3330|[Find the Original Typed String I](https://leetcode.com/problems/find-the-original-typed-string-i/)|[Java](./algorithms/java/3330_find-the-original-typed-string-i.java)|Easy|
 |3321|[Find X-Sum of All K-Long Subarrays II](https://leetcode.com/problems/find-x-sum-of-all-k-long-subarrays-ii/)|[Java](./algorithms/java/3321_find-x-sum-of-all-k-long-subarrays-ii.java)|Hard|
 |3318|[Find X-Sum of All K-Long Subarrays I](https://leetcode.com/problems/find-x-sum-of-all-k-long-subarrays-i/)|[Java](./algorithms/java/3318_find-x-sum-of-all-k-long-subarrays-i.java)|Easy|
+|3315|[Construct the Minimum Bitwise Array II](https://leetcode.com/problems/construct-the-minimum-bitwise-array-ii/)|[Java](./algorithms/java/3315_construct-the-minimum-bitwise-array-ii.java)|Medium|
 |3314|[Construct the Minimum Bitwise Array I](https://leetcode.com/problems/construct-the-minimum-bitwise-array-i/)|[Java](./algorithms/java/3314_construct-the-minimum-bitwise-array-i.java)|Easy|
 |3307|[Find the K-th Character in String Game II](https://leetcode.com/problems/find-the-k-th-character-in-string-game-ii/)|[Java](./algorithms/java/3307_find-the-k-th-character-in-string-game-ii.java)|Hard|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
