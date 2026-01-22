@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-21
 // At the time of submission:
-//   Runtime 3 ms Beats 66.06%
-//   Memory 44.36 MB Beats 74.41%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.26 MB Beats 84.20%
 
 /****************************************
 * 
@@ -36,42 +36,53 @@
 ****************************************/
 
 class Solution {
-    // Each operation scans the array to check sortedness and find min sum.
-    // At most n-1 operations occur.
-    // Time: O(n^2), Space: O(n) for the mutable list.
-    public int minimumPairRemoval(int[] nums) {
-        List<Integer> arr = new ArrayList<>();
-        for (int n : nums) arr.add(n);
+    // Repeatedly simulate the required operation until the array becomes
+    // non-decreasing. Each iteration scans the current array to both
+    // find the leftmost adjacent pair with the minimum sum and check
+    // sortedness, then merges that pair in-place by shifting elements.
+    // Time: O(n^2) worst case, Space: O(1) extra space.
+    public int minimumPairRemoval(final int[] nums) {
+        int length = nums.length;
+        int operations = 0;
 
-        int ops = 0;
+        while (length > 1) {
+            int minPairSum = Integer.MAX_VALUE;
+            int minPairIndex = -1;
+            boolean isNonDecreasing = true;
 
-        while (!isNonDecreasing(arr)) {
-            int minSum = Integer.MAX_VALUE;
-            int idx = 0;
+            // Scan array once to:
+            // 1) find leftmost minimum-sum adjacent pair
+            // 2) detect if array is already non-decreasing
+            for (int i = 1; i < length; ++i) {
+                int pairSum = nums[i - 1] + nums[i];
 
-            // Find leftmost minimum-sum adjacent pair
-            for (int i = 0; i < arr.size() - 1; i++) {
-                int sum = arr.get(i) + arr.get(i + 1);
-                if (sum < minSum) {
-                    minSum = sum;
-                    idx = i;
+                if (pairSum < minPairSum) {
+                    minPairSum = pairSum;
+                    minPairIndex = i - 1;
+                }
+
+                if (nums[i - 1] > nums[i]) {
+                    isNonDecreasing = false;
                 }
             }
 
-            // Replace the pair with their sum
-            arr.set(idx, minSum);
-            arr.remove(idx + 1);
+            // If already sorted, no more operations needed
+            if (isNonDecreasing) {
+                return operations;
+            }
 
-            ops++;
+            // Merge the minimum-sum pair
+            nums[minPairIndex] = minPairSum;
+
+            // Shift elements left to remove the second element of the pair
+            for (int i = minPairIndex + 1; i < length - 1; ++i) {
+                nums[i] = nums[i + 1];
+            }
+
+            operations++;
+            length--; // effective array size shrinks by one
         }
 
-        return ops;
-    }
-
-    private boolean isNonDecreasing(List<Integer> arr) {
-        for (int i = 1; i < arr.size(); i++) {
-            if (arr.get(i) < arr.get(i - 1)) return false;
-        }
-        return true;
+        return operations;
     }
 }
