@@ -22,6 +22,7 @@ LeetCode
 |3516|[Find Closest Person](https://leetcode.com/problems/find-closest-person/)|[Java](./algorithms/java/3516_find-closest-person.java)|Easy|
 |3512|[Minimum Operations to Make Array Sum Divisible by K](https://leetcode.com/problems/minimum-operations-to-make-array-sum-divisible-by-k/)|[Java](./algorithms/java/3512_minimum-operations-to-make-array-sum-divisible-by-k.java)|Easy|
 |3508|[Implement Router](https://leetcode.com/problems/implement-router/)|[Java](./algorithms/java/3508_implement-router.java)|Medium|
+|3507|[Minimum Pair Removal to Sort Array I](https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/)|[Java](./algorithms/java/3507_minimum-pair-removal-to-sort-array-i.java)|Easy|
 |3495|[Minimum Operations to Make Array Elements Zero](https://leetcode.com/problems/minimum-operations-to-make-array-elements-zero/)|[Java](./algorithms/java/3495_minimum-operations-to-make-array-elements-zero.java)|Hard|
 |3494|[Find the Minimum Amount of Time to Brew Potions](https://leetcode.com/problems/find-the-minimum-amount-of-time-to-brew-potions/)|[Java](./algorithms/java/3494_find-the-minimum-amount-of-time-to-brew-potions.java)|Medium|
 |3487|[Maximum Unique Subarray Sum After Deletion](https://leetcode.com/problems/maximum-unique-subarray-sum-after-deletion/)|[Java](./algorithms/java/3487_maximum-unique-subarray-sum-after-deletion.java)|Easy|
