@@ -2,19 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-23
 // At the time of submission:
-//   Runtime 426 ms Beats 98.79%
-//   Memory 150.02 MB Beats 48.99%
-
-
-/****************************************
-* 
-* My "solution" below solved the first 671 out of 681 test cases, failing on 
-* test cases numbers 672 and beyond. An approximately 98.53% solve rate is good,
-* but not good enough. Due to time constraints, I hardcoded answers to those last 
-* 10 testcases. My goal was to look at actual, working solutions to try to 
-* identify where I went wrong, and then fix my approach.
-* 
-****************************************/
+//   Runtime 583 ms Beats 98.79%
+//   Memory 195.04 MB Beats 21.86%
 
 /****************************************
 * 
@@ -46,95 +35,86 @@
 * 
 ****************************************/
 
-import java.util.PriorityQueue;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 class Solution {
-    private static class Pair {
-        long sum;
-        int left;
-
-        Pair(long sum, int left) {
-            this.sum = sum;
-            this.left = left;
-        }
-    }
-
+    // Simulate forced merges using a linked list and ordered pair sums.
+    // Track adjacent inversions to know when array becomes non-decreasing.
+    // TreeSet maintains the leftmost minimum-sum adjacent pair at all times.
+    // Each merge updates only affected neighbors and inversion count.
+    // Time: O(n log n), Space: O(n)
     public int minimumPairRemoval(int[] nums) {
-        if(nums[0]==-85529083) return 598; // testcase 672 // this function's Output: 597
-        if(nums[0]==172955385) return 298; // testcase 673 // this function's Output: 299
-        if(nums[0]==-190564996) return 704; // testcase 674 // this function's Output: 706
-        if(nums[0]==579718179) return 380; // testcase 675 // this function's Output: 378
-        if(nums[0]==-511356355) return 904; // testcase 676 // this function's Output: 905
-        if(nums[0]==178919459) return 44145; // testcase 677 // this function's Output: 44142
-        if(nums[0]==-36756493) return 32245; // testcase 678 // this function's Output: 32244
-        if(nums.length > 1 && nums[1]==1000004) return 99998; // testcase 679 // this function's Output: 99999
-        if(nums[0]==100000) return 99998; // testcase 680 // this function's Output: 99997
-        if(nums[0]==1000004) return 99998; // testcase 681 // this function's Output: 99999
         int n = nums.length;
-        if (n <= 1) return 0;
 
-        int[] prev = new int[n];
+        // Use long to avoid overflow during merges
+        long[] values = new long[n];
+        for (int i = 0; i < n; i++) values[i] = nums[i];
+
+        // Doubly linked list via indices
         int[] next = new int[n];
-        HashSet<Integer> alive = new HashSet<>();
-
+        int[] prev = new int[n];
         for (int i = 0; i < n; i++) {
-            prev[i] = i - 1;
             next[i] = i + 1;
-            alive.add(i);
+            prev[i] = i - 1;
         }
-        next[n - 1] = -1;
 
-        PriorityQueue<Pair> pq = new PriorityQueue<>(
-            (a, b) -> a.sum != b.sum
-                ? Long.compare(a.sum, b.sum)
-                : Integer.compare(a.left, b.left)
-        );
+        // Stores {pairSum, leftIndex}, ordered by sum then index
+        TreeSet<long[]> pairs = new TreeSet<>((a, b) -> {
+            if (a[0] != b[0]) return Long.compare(a[0], b[0]);
+            return Long.compare(a[1], b[1]);
+        });
 
+        // Count adjacent inversions
         int inversions = 0;
         for (int i = 0; i < n - 1; i++) {
-            pq.offer(new Pair((long) nums[i] + nums[i + 1], i));
-            if (nums[i] > nums[i + 1]) inversions++;
+            if (values[i] > values[i + 1]) inversions++;
+            pairs.add(new long[]{values[i] + values[i + 1], i});
         }
 
         int operations = 0;
 
         while (inversions > 0) {
-            Pair cur;
-            do {
-                cur = pq.poll();
-            } while (
-                cur != null &&
-                (!alive.contains(cur.left) ||
-                 next[cur.left] == -1 ||
-                 !alive.contains(next[cur.left]) ||
-                 (long) nums[cur.left] + nums[next[cur.left]] != cur.sum)
-            );
+            long[] minPair = pairs.pollFirst();
+            int left = (int) minPair[1];
+            int right = next[left];
 
-            int i = cur.left;
-            int j = next[i];
+            int leftNeighbor = prev[left];
+            int rightNeighbor = next[right];
 
-            int left = prev[i];
-            int right = next[j];
+            // Remove internal inversion
+            if (values[left] > values[right]) inversions--;
 
-            if (left != -1 && nums[left] > nums[i]) inversions--;
-            if (nums[i] > nums[j]) inversions--;
-            if (right != -1 && nums[j] > nums[right]) inversions--;
+            long merged = values[left] + values[right];
 
-            nums[i] += nums[j];
-            alive.remove(j);
+            // Left neighbor impact
+            if (leftNeighbor >= 0) {
+                boolean wasBad = values[leftNeighbor] > values[left];
+                boolean isBad = values[leftNeighbor] > merged;
 
-            next[i] = right;
-            if (right != -1) prev[right] = i;
+                if (wasBad && !isBad) inversions--;
+                else if (!wasBad && isBad) inversions++;
 
-            if (left != -1 && nums[left] > nums[i]) inversions++;
-            if (right != -1 && nums[i] > nums[right]) inversions++;
+                pairs.remove(new long[]{values[leftNeighbor] + values[left], leftNeighbor});
+                pairs.add(new long[]{values[leftNeighbor] + merged, leftNeighbor});
+            }
 
-            if (left != -1)
-                pq.offer(new Pair((long) nums[left] + nums[i], left));
-            if (right != -1)
-                pq.offer(new Pair((long) nums[i] + nums[right], i));
+            // Right neighbor impact
+            if (rightNeighbor < n) {
+                boolean wasBad = values[right] > values[rightNeighbor];
+                boolean isBad = merged > values[rightNeighbor];
 
+                if (wasBad && !isBad) inversions--;
+                else if (!wasBad && isBad) inversions++;
+
+                pairs.remove(new long[]{values[right] + values[rightNeighbor], right});
+                pairs.add(new long[]{merged + values[rightNeighbor], left});
+
+                prev[rightNeighbor] = left;
+            }
+
+            // Finalize merge
+            next[left] = rightNeighbor;
+            values[left] = merged;
             operations++;
         }
 
