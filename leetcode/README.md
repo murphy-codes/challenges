@@ -21,6 +21,7 @@ LeetCode
 |3531|[Count Covered Buildings](https://leetcode.com/problems/count-covered-buildings/)|[Java](./algorithms/java/3531_count-covered-buildings.java)|Medium|
 |3516|[Find Closest Person](https://leetcode.com/problems/find-closest-person/)|[Java](./algorithms/java/3516_find-closest-person.java)|Easy|
 |3512|[Minimum Operations to Make Array Sum Divisible by K](https://leetcode.com/problems/minimum-operations-to-make-array-sum-divisible-by-k/)|[Java](./algorithms/java/3512_minimum-operations-to-make-array-sum-divisible-by-k.java)|Easy|
+|3510|[Minimum Pair Removal to Sort Array II](https://leetcode.com/problems/minimum-pair-removal-to-sort-array-ii/)|[Java](./algorithms/java/3510_minimum-pair-removal-to-sort-array-ii.java)|Hard|
 |3508|[Implement Router](https://leetcode.com/problems/implement-router/)|[Java](./algorithms/java/3508_implement-router.java)|Medium|
 |3507|[Minimum Pair Removal to Sort Array I](https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/)|[Java](./algorithms/java/3507_minimum-pair-removal-to-sort-array-i.java)|Easy|
 |3495|[Minimum Operations to Make Array Elements Zero](https://leetcode.com/problems/minimum-operations-to-make-array-elements-zero/)|[Java](./algorithms/java/3495_minimum-operations-to-make-array-elements-zero.java)|Hard|
