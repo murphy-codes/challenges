@@ -8,7 +8,6 @@
 
 /****************************************
 * 
-* 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 * My "solution" below solved the first 671 out of 681 test cases, failing on 
 * test cases numbers 672 and beyond. An approximately 98.53% solve rate is good,
 * but not good enough. Due to time constraints, I hardcoded answers to those last 
