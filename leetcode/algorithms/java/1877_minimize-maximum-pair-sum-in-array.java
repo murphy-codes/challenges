@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-23
 // At the time of submission:
-//   Runtime 57 ms Beats 93.05%
-//   Memory 97.02 MB Beats 40.09%
+//   Runtime 7 ms Beats 99.25%
+//   Memory 98.25 MB Beats 5.16%
 
 /****************************************
 * 
@@ -37,19 +37,46 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort nums and pair smallest with largest using a two-pointer approach.
-    // This greedy strategy minimizes the maximum pair sum by balancing values.
-    // Track the maximum sum encountered across all n/2 pairs.
-    // Time complexity: O(n log n) from sorting.
-    // Space complexity: O(1) extra space.
+    // Count frequencies instead of sorting to enable linear-time pairing.
+    // Use two pointers to always pair smallest and largest available values.
+    // Track the maximum sum encountered across all pairs.
+    // Time complexity: O(n + max(nums)).
+    // Space complexity: O(max(nums)).
     public int minPairSum(int[] nums) {
-        int minMax = 0;
-        Arrays.sort(nums);
-        int i = 0, j = nums.length-1;
-        while (i < j) minMax = Math.max(minMax, nums[i++]+nums[j--]);
-        return minMax;
+        int maxValue = 0;
+
+        // Find maximum value to size frequency array
+        for (int n : nums) {
+            maxValue = Math.max(maxValue, n);
+        }
+
+        // Frequency array for counting occurrences
+        int[] freq = new int[maxValue + 1];
+        for (int n : nums) {
+            freq[n]++;
+        }
+
+        int left = 0, right = maxValue;
+        int maxPairSum = 0;
+
+        // Pair smallest and largest remaining values
+        while (left < right) {
+            while (freq[left] == 0) left++;
+            while (freq[right] == 0) right--;
+
+            maxPairSum = Math.max(maxPairSum, left + right);
+
+            if (freq[right] > freq[left]) {
+                freq[right] -= freq[left++];
+            } else if (freq[left] > freq[right]) {
+                freq[left] -= freq[right--];
+            } else {
+                left++;
+                right--;
+            }
+        }
+
+        return maxPairSum;
     }
 }
