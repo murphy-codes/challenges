@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-23
 // At the time of submission:
-//   Runtime 58 ms Beats 63.10%
-//   Memory 97.08 MB Beats 40.09%
+//   Runtime 57 ms Beats 93.05%
+//   Memory 97.02 MB Beats 40.09%
 
 /****************************************
 * 
@@ -40,13 +40,16 @@
 import java.util.Arrays;
 
 class Solution {
+    // Sort nums and pair smallest with largest using a two-pointer approach.
+    // This greedy strategy minimizes the maximum pair sum by balancing values.
+    // Track the maximum sum encountered across all n/2 pairs.
+    // Time complexity: O(n log n) from sorting.
+    // Space complexity: O(1) extra space.
     public int minPairSum(int[] nums) {
         int minMax = 0;
         Arrays.sort(nums);
-        int j = nums.length-1;
-        for (int i = 0; i < j; i++) {
-            minMax = Math.max(minMax, nums[i]+nums[j--]);
-        }
+        int i = 0, j = nums.length-1;
+        while (i < j) minMax = Math.max(minMax, nums[i++]+nums[j--]);
         return minMax;
     }
 }
