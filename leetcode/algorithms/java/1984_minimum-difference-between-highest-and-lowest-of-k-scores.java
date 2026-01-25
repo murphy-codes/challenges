@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-25
 // At the time of submission:
-//   Runtime 9 ms Beats 26.64%
-//   Memory 46.93 MB Beats 43.99%
+//   Runtime 4 ms Beats 99.35%
+//   Memory 46.26 MB Beats 99.05%
 
 /****************************************
 * 
@@ -38,23 +38,46 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort the scores so close values are adjacent.
-    // Any optimal group of k scores must be contiguous after sorting.
-    // Slide a window of size k and minimize (max - min) for each window.
-    // Time complexity: O(n log n), Space complexity: O(1) extra.
+    // Sort the array of scores using in-place QuickSort.
+    // Slide a window of size k and compute the difference between 
+    // max and min in that window. Track the minimum difference.
+    // Time complexity: O(n log n) for QuickSort + O(n) for window scan.
+    // Space complexity: O(log n) recursion depth for QuickSort.
     public int minimumDifference(int[] nums, int k) {
-        if (k == 1) return 0;
+        if (nums.length == 1 || k == 1) return 0;
 
-        Arrays.sort(nums);
+        quickSort(nums, 0, nums.length - 1); // Sort array in-place
+
         int minDiff = Integer.MAX_VALUE;
-
-        for (int i = 0; i + k - 1 < nums.length; i++) {
-            minDiff = Math.min(minDiff, nums[i + k - 1] - nums[i]);
+        for (int i = k - 1; i < nums.length; i++) {
+            // Difference of the current window of size k
+            minDiff = Math.min(minDiff, nums[i] - nums[i - k + 1]);
         }
 
         return minDiff;
+    }
+
+    // In-place QuickSort
+    public void quickSort(int[] nums, int start, int end) {
+        int left = start;
+        int right = end;
+        int pivot = nums[start];
+
+        while (left <= right) {
+            while (left <= right && nums[left] < pivot) left++;
+            while (left <= right && nums[right] > pivot) right--;
+
+            if (left <= right) {
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+                left++;
+                right--;
+            }
+        }
+
+        if (start < right) quickSort(nums, start, right);
+        if (left < end) quickSort(nums, left, end);
     }
 }
