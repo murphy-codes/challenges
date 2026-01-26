@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-25
 // At the time of submission:
-//   Runtime 21 ms Beats 72.27%
-//   Memory 63.74 MB Beats 76.30%
+//   Runtime 9 ms Beats 99.64%
+//   Memory 63.51 MB Beats 93.15%
 
 /****************************************
 * 
@@ -36,27 +36,52 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 class Solution {
-    // Sort the input array to bring elements with smallest differences together.
+    // Use a counting-sort approach to sort the array efficiently by mapping values
+    // into a boolean array of size (max-min+1). Then reconstruct the sorted array.
     // Iterate through consecutive pairs to find the minimum absolute difference.
-    // Collect all pairs that have this minimum difference in ascending order.
-    // Time complexity: O(n log n) due to sorting, where n is arr.length.
-    // Space complexity: O(n) for storing the result list of pairs.
+    // Collect all pairs with this difference into a result list in ascending order.
+    // Time: O(n + range) where range = max - min; Space: O(range) for boolean array.
     public List<List<Integer>> minimumAbsDifference(int[] arr) {
-        List<List<Integer>> results = new ArrayList<>();
-        Arrays.sort(arr);
-        int minDiff = 1_000_000;
-        for (int i = 0; i < arr.length - 1; i++) {
-            int diff = arr[i+1] - arr[i];
-            if(diff < minDiff) {
-                minDiff = diff;
-                results = new ArrayList<>();
-                results.add(Arrays.asList(arr[i], arr[i+1]));
-            } else if (diff == minDiff) {
-                results.add(Arrays.asList(arr[i], arr[i+1]));
+        // Find min and max of array
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int num : arr) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+
+        // Counting sort using boolean array
+        int range = max - min + 1;
+        boolean[] present = new boolean[range];
+        for (int num : arr) {
+            present[num - min] = true;
+        }
+
+        // Reconstruct sorted array from boolean array
+        int idx = 0;
+        for (int i = 0; i < range; i++) {
+            if (present[i]) {
+                arr[idx++] = i + min;
             }
         }
-        return results;
+
+        // Find minimum absolute difference pairs
+        List<List<Integer>> result = new ArrayList<>();
+        int minDiff = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length - 1; i++) {
+            int currentDiff = arr[i + 1] - arr[i];
+            if (currentDiff < minDiff) {
+                result.clear();
+                minDiff = currentDiff;
+            }
+            if (currentDiff == minDiff) {
+                result.add(Arrays.asList(arr[i], arr[i + 1]));
+            }
+        }
+
+        return result;
     }
 }
