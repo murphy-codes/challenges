@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-26
 // At the time of submission:
-//   Runtime 70 ms Beats 93.12%
-//   Memory 276.63 MB Beats 16.19%
+//   Runtime 67 ms Beats 97.17%
+//   Memory 275.87 MB Beats 36.03%
 
 /****************************************
 * 
@@ -45,51 +45,70 @@
 ****************************************/
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 
 class Solution {
-    // Convert the graph by adding both original edges (u→v, w)
-    // and reversible edges (v→u, 2w), modeling switch usage implicitly.
-    // This removes the need to track switch states per node.
-    // Run Dijkstra on the expanded graph to find the minimum cost path.
+    // Each directed edge is expanded into two edges: the original edge
+    // and a reversible edge with double cost, modeling switch usage.
+    // This eliminates the need to track switch states explicitly.
+    // Dijkstra's algorithm finds the minimum cost path efficiently.
     // Time: O((n + m) log n), Space: O(n + m).
+
+    static class Edge {
+        int to;
+        int cost;
+
+        Edge(int to, int cost) {
+            this.to = to;
+            this.cost = cost;
+        }
+    }
+
     public int minCost(int n, int[][] edges) {
-        // Build adjacency list
-        List<int[]>[] graph = new ArrayList[n];
+        List<Edge>[] graph = new ArrayList[n];
+
+        // Initialize adjacency list
         for (int i = 0; i < n; i++) {
             graph[i] = new ArrayList<>();
         }
 
-        // Add original edges and their reversible counterparts
+        // Add original and reversible edges
         for (int[] e : edges) {
-            int u = e[0], v = e[1], w = e[2];
-            graph[u].add(new int[]{v, w});        // normal edge
-            graph[v].add(new int[]{u, 2 * w});    // reversed edge via switch
+            int from = e[0];
+            int to = e[1];
+            int weight = e[2];
+
+            graph[from].add(new Edge(to, weight));       // normal edge
+            graph[to].add(new Edge(from, 2 * weight));   // reversed edge
         }
 
-        // Dijkstra setup
+        // Distance array: shortest known cost to each node
         int[] dist = new int[n];
-        for (int i = 0; i < n; i++) dist[i] = Integer.MAX_VALUE;
+        Arrays.fill(dist, Integer.MAX_VALUE);
         dist[0] = 0;
 
+        // Min-heap ordered by distance
         PriorityQueue<int[]> pq =
-            new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
-        pq.offer(new int[]{0, 0}); // {node, cost}
+            new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        pq.add(new int[]{0, 0}); // {node, cost}
 
         while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
-            int node = cur[0], cost = cur[1];
+            int[] current = pq.poll();
+            int node = current[0];
+            int costSoFar = current[1];
 
-            if (cost > dist[node]) continue;
-            if (node == n - 1) return cost;
+            // Early exit: destination reached
+            if (node == n - 1) return costSoFar;
 
-            for (int[] next : graph[node]) {
-                int nextNode = next[0];
-                int nextCost = cost + next[1];
-                if (nextCost < dist[nextNode]) {
-                    dist[nextNode] = nextCost;
-                    pq.offer(new int[]{nextNode, nextCost});
+            for (Edge edge : graph[node]) {
+                int nextNode = edge.to;
+                int newCost = costSoFar + edge.cost;
+
+                if (newCost < dist[nextNode]) {
+                    dist[nextNode] = newCost;
+                    pq.add(new int[]{nextNode, newCost});
                 }
             }
         }
