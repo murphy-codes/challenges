@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-27
 // At the time of submission:
-//   Runtime 350 ms Beats 27.54%
-//   Memory 48.54 MB Beats 8.70%
+//   Runtime 31 ms Beats 98.55%
+//   Memory 48.22 MB Beats 28.99%
 
 /****************************************
 * 
@@ -50,89 +50,80 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 
 class Solution {
-    // We use dynamic programming where costs[i][j] is the minimum cost to
-    // reach the bottom-right cell from (i, j). Teleportation is handled by
-    // sorting all cells by value and propagating the minimum reachable cost
-    // across all cells with grid value less than or equal to the current one.
-    // This avoids enumerating all teleport destinations explicitly.
-    // Time Complexity: O((k + log(mn)) * m * n)
-    // Space Complexity: O(m * n)
+    // We compute the minimum path cost using DP while allowing up to k
+    // teleportations. Normal moves are handled via rolling 1D grid DP.
+    // Teleportation is optimized by tracking minimum cost per grid value
+    // and propagating suffix minimums to allow O(1) teleport transitions.
+    // Early stopping avoids unnecessary teleport layers.
+    // Time Complexity: O(k * m * n + k * maxValue)
+    // Space Complexity: O(maxValue + n)
 
     public int minCost(int[][] grid, int k) {
-        int m = grid.length;
-        int n = grid[0].length;
+        int rows = grid.length;
+        int cols = grid[0].length;
 
-        // Collect all cells and sort them by grid value (ascending)
-        List<int[]> cells = new ArrayList<>();
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                cells.add(new int[]{i, j});
+        // If we can teleport immediately to the end for free
+        if (k > 0 && grid[0][0] >= grid[rows - 1][cols - 1]) {
+            return 0;
+        }
+
+        // Find maximum grid value
+        int maxValue = 0;
+        for (int[] row : grid) {
+            for (int val : row) {
+                maxValue = Math.max(maxValue, val);
             }
         }
-        cells.sort(Comparator.comparingInt(c -> grid[c[0]][c[1]]));
 
-        // costs[i][j] = minimum cost to reach bottom-right from (i, j)
-        int[][] costs = new int[m][n];
-        for (int[] row : costs) {
-            Arrays.fill(row, Integer.MAX_VALUE);
-        }
+        // sufMinCost[v] = min cost reachable with value >= v
+        int[] sufMinCost = new int[maxValue + 2];
+        Arrays.fill(sufMinCost, Integer.MAX_VALUE);
 
-        // Repeat DP for up to k teleportations
+        // minCostAtValue[v] = min cost to reach any cell with value v
+        int[] minCostAtValue = new int[maxValue + 1];
+
+        // dp[col] = min cost to reach this column in current row
+        int[] dp = new int[cols + 1];
+
         for (int used = 0; used <= k; used++) {
+            Arrays.fill(minCostAtValue, Integer.MAX_VALUE);
+            Arrays.fill(dp, Integer.MAX_VALUE / 2);
 
-            // Handle teleport transitions in sorted order
-            int minCostSoFar = Integer.MAX_VALUE;
-            int start = 0;
+            // Offset trick to avoid special-casing (0,0)
+            dp[1] = -grid[0][0];
 
-            for (int i = 0; i < cells.size(); i++) {
-                int x = cells.get(i)[0];
-                int y = cells.get(i)[1];
-                minCostSoFar = Math.min(minCostSoFar, costs[x][y]);
+            for (int[] row : grid) {
+                for (int j = 0; j < cols; j++) {
+                    int cellValue = row[j];
 
-                // If next cell has the same grid value, delay updates
-                if (i + 1 < cells.size() &&
-                    grid[x][y] == grid[cells.get(i + 1)[0]][cells.get(i + 1)[1]]) {
-                    continue;
-                }
+                    dp[j + 1] = Math.min(
+                        Math.min(dp[j], dp[j + 1]) + cellValue,
+                        sufMinCost[cellValue]
+                    );
 
-                // Apply teleport relaxation to all cells with this value
-                for (int r = start; r <= i; r++) {
-                    int cx = cells.get(r)[0];
-                    int cy = cells.get(r)[1];
-                    costs[cx][cy] = minCostSoFar;
-                }
-                start = i + 1;
-            }
-
-            // Handle normal moves (right and down)
-            for (int i = m - 1; i >= 0; i--) {
-                for (int j = n - 1; j >= 0; j--) {
-                    if (i == m - 1 && j == n - 1) {
-                        costs[i][j] = 0;
-                        continue;
-                    }
-                    if (i + 1 < m) {
-                        costs[i][j] = Math.min(
-                            costs[i][j],
-                            costs[i + 1][j] + grid[i + 1][j]
-                        );
-                    }
-                    if (j + 1 < n) {
-                        costs[i][j] = Math.min(
-                            costs[i][j],
-                            costs[i][j + 1] + grid[i][j + 1]
-                        );
-                    }
+                    minCostAtValue[cellValue] =
+                        Math.min(minCostAtValue[cellValue], dp[j + 1]);
                 }
             }
+
+            boolean noChange = true;
+
+            // Update suffix minimums
+            for (int v = maxValue; v >= 0; v--) {
+                int best = Math.min(sufMinCost[v + 1], minCostAtValue[v]);
+                if (best < sufMinCost[v]) {
+                    sufMinCost[v] = best;
+                    noChange = false;
+                }
+            }
+
+            // Early exit if teleport adds no improvement
+            if (noChange) break;
         }
 
-        return costs[0][0];
+        return dp[cols];
     }
 }
