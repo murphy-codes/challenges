@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-28
 // At the time of submission:
-//   Runtime 24 ms Beats 56.27%
-//   Memory 48.17 MB Beats 30.82%
+//   Runtime 12 ms Beats 100.00%
+//   Memory 48.10 MB Beats 49.82%
 
 /****************************************
 * 
@@ -53,14 +53,14 @@
 * 
 ****************************************/
 
+import java.util.Arrays;
+
 class Solution {
-    // Treat each character as a node in a directed graph where edges represent
-    // allowed transformations with associated costs. We precompute all-pairs
-    // shortest paths using Floyd–Warshall since the graph has only 26 nodes.
-    // Each character in source is converted independently using the precomputed
-    // costs. If any conversion is unreachable, return -1.
-    // Time Complexity: O(26^3 + n)
-    // Space Complexity: O(26^2)
+    // Model character conversions as a directed graph with 26 nodes.
+    // Use Floyd–Warshall to compute all-pairs minimum conversion costs.
+    // Each character in source is converted independently to target.
+    // If any conversion is unreachable, return -1.
+    // Time: O(26^3 + n), Space: O(26^2)
     public long minimumCost(
         String source,
         String target,
@@ -68,43 +68,42 @@ class Solution {
         char[] changed,
         int[] cost
     ) {
-        final int ALPHABET = 26;
-        final long INF = Long.MAX_VALUE / 4;
+        int[][] dist = new int[26][26];
 
-        long[][] dist = new long[ALPHABET][ALPHABET];
-
-        // Initialize distances
-        for (int i = 0; i < ALPHABET; i++) {
-            for (int j = 0; j < ALPHABET; j++) {
-                dist[i][j] = (i == j) ? 0 : INF;
-            }
+        // Initialize distance matrix
+        for (int i = 0; i < 26; i++) {
+            Arrays.fill(dist[i], Integer.MAX_VALUE);
+            dist[i][i] = 0;
         }
 
-        // Build graph: keep the cheapest edge per (u, v)
-        for (int i = 0; i < original.length; i++) {
-            int u = original[i] - 'a';
-            int v = changed[i] - 'a';
-            dist[u][v] = Math.min(dist[u][v], cost[i]);
+        // Keep minimum direct conversion cost per (from -> to)
+        for (int i = 0; i < cost.length; i++) {
+            int from = original[i] - 'a';
+            int to = changed[i] - 'a';
+            dist[from][to] = Math.min(dist[from][to], cost[i]);
         }
 
         // Floyd–Warshall: all-pairs shortest paths
-        for (int k = 0; k < ALPHABET; k++) {
-            for (int i = 0; i < ALPHABET; i++) {
-                for (int j = 0; j < ALPHABET; j++) {
-                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
-                        dist[i][j] = dist[i][k] + dist[k][j];
-                    }
+        for (int via = 0; via < 26; via++) {
+            for (int from = 0; from < 26; from++) {
+                if (dist[from][via] == Integer.MAX_VALUE) continue;
+                for (int to = 0; to < 26; to++) {
+                    if (dist[via][to] == Integer.MAX_VALUE) continue;
+                    dist[from][to] = Math.min(
+                        dist[from][to],
+                        dist[from][via] + dist[via][to]
+                    );
                 }
             }
         }
 
-        // Compute total conversion cost
-        long totalCost = 0;
+        // Sum conversion costs for each character position
+        long totalCost = 0L;
         for (int i = 0; i < source.length(); i++) {
             int from = source.charAt(i) - 'a';
             int to = target.charAt(i) - 'a';
-            if (dist[from][to] == INF) {
-                return -1;
+            if (dist[from][to] == Integer.MAX_VALUE) {
+                return -1L;
             }
             totalCost += dist[from][to];
         }
