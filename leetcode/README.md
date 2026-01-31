@@ -369,6 +369,7 @@ LeetCode
 |763|[Partition Labels](https://leetcode.com/problems/partition-labels/)|[Java](./algorithms/java/763_partition-labels.java)|Medium|
 |757|[Set Intersection Size At Least Two](https://leetcode.com/problems/set-intersection-size-at-least-two/)|[Java](./algorithms/java/757_set-intersection-size-at-least-two.java)|Hard|
 |756|[Pyramid Transition Matrix](https://leetcode.com/problems/pyramid-transition-matrix/)|[Java](./algorithms/java/756_pyramid-transition-matrix.java)|Medium|
+|744|[Find Smallest Letter Greater Than Target](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)|[Java](./algorithms/java/744_find-smallest-letter-greater-than-target.java)|Easy|
 |717|[1-bit and 2-bit Characters](https://leetcode.com/problems/1-bit-and-2-bit-characters/)|[Java](./algorithms/java/717_1-bit-and-2-bit-characters.java)|Easy|
 |712|[Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)|[Java](./algorithms/java/712_minimum-ascii-delete-sum-for-two-strings.java)|Medium|
 |689|[Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/)|[Java](./algorithms/java/689_maximum-sum-of-3-non-overlapping-subarrays.java)|Hard|
