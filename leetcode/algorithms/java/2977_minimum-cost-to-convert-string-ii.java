@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-30
 // At the time of submission:
-//   Runtime 294 ms Beats 23.64%
-//   Memory 49.78 MB Beats 7.27%
+//   Runtime 107 ms Beats 87.27%
+//   Memory 48.26 MB Beats 38.18%
 
 /****************************************
 * 
@@ -69,32 +69,15 @@
 ****************************************/
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 class Solution {
-    // Assign each unique substring an ID and build a conversion graph.
-    // Use Floyd–Warshall to compute minimum cost between all string pairs.
-    // Apply DP where dp[i] is the minimum cost to convert prefix [0..i).
-    // Trie enables fast substring matching for valid conversions.
-    // Time: O(m^3 + n^2), Space: O(m^2 + n)
+    // Uses a Trie to map each unique string to an integer ID.
+    // Floyd–Warshall precomputes minimum costs between all string pairs.
+    // Dynamic programming scans the source string and tries all valid
+    // substring transformations using Trie traversal for pruning.
+    // Time: O(K^3 + N^2), Space: O(K^2 + N), where K = unique strings.
 
-    static class TrieNode {
-        TrieNode[] next = new TrieNode[26];
-        int id = -1;
-    }
-
-    private void insert(TrieNode root, String s, int id) {
-        TrieNode cur = root;
-        for (char c : s.toCharArray()) {
-            int idx = c - 'a';
-            if (cur.next[idx] == null) {
-                cur.next[idx] = new TrieNode();
-            }
-            cur = cur.next[idx];
-        }
-        cur.id = id;
-    }
+    private int nextId = 0;
 
     public long minimumCost(
         String source,
@@ -103,84 +86,100 @@ class Solution {
         String[] changed,
         int[] cost
     ) {
-        int n = source.length();
-        int m = original.length;
+        TrieNode root = new TrieNode();
 
-        // Step 1: assign IDs to unique strings
-        Map<String, Integer> idMap = new HashMap<>();
-        int id = 0;
-        for (int i = 0; i < m; i++) {
-            if (!idMap.containsKey(original[i])) {
-                idMap.put(original[i], id++);
-            }
-            if (!idMap.containsKey(changed[i])) {
-                idMap.put(changed[i], id++);
-            }
-        }
+        // Insert all unique strings into the Trie
+        for (String s : original) insert(s, root);
+        for (String s : changed) insert(s, root);
 
-        int sz = id;
-        long[][] dist = new long[sz][sz];
-        for (int i = 0; i < sz; i++) {
-            Arrays.fill(dist[i], Long.MAX_VALUE / 4);
+        // dist[i][j] = minimum cost to convert string i -> string j
+        int[][] dist = new int[nextId][nextId];
+        for (int i = 0; i < nextId; i++) {
+            Arrays.fill(dist[i], Integer.MAX_VALUE);
             dist[i][i] = 0;
         }
 
-        // Step 2: build conversion graph
-        for (int i = 0; i < m; i++) {
-            int u = idMap.get(original[i]);
-            int v = idMap.get(changed[i]);
-            dist[u][v] = Math.min(dist[u][v], cost[i]);
+        // Initialize direct transformation costs
+        for (int i = 0; i < cost.length; i++) {
+            int from = getIndex(original[i], root);
+            int to = getIndex(changed[i], root);
+            dist[from][to] = Math.min(dist[from][to], cost[i]);
         }
 
-        // Step 3: Floyd–Warshall
-        for (int k = 0; k < sz; k++) {
-            for (int i = 0; i < sz; i++) {
-                for (int j = 0; j < sz; j++) {
-                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
-                        dist[i][j] = dist[i][k] + dist[k][j];
-                    }
+        // Floyd–Warshall to compute all-pairs shortest paths
+        for (int mid = 0; mid < nextId; mid++) {
+            for (int from = 0; from < nextId; from++) {
+                if (dist[from][mid] == Integer.MAX_VALUE) continue;
+                for (int to = 0; to < nextId; to++) {
+                    if (dist[mid][to] == Integer.MAX_VALUE) continue;
+                    dist[from][to] = Math.min(
+                        dist[from][to],
+                        dist[from][mid] + dist[mid][to]
+                    );
                 }
             }
         }
 
-        // Step 4: build Tries
-        TrieNode srcTrie = new TrieNode();
-        TrieNode tgtTrie = new TrieNode();
-        for (Map.Entry<String, Integer> e : idMap.entrySet()) {
-            insert(srcTrie, e.getKey(), e.getValue());
-            insert(tgtTrie, e.getKey(), e.getValue());
-        }
+        char[] src = source.toCharArray();
+        char[] tgt = target.toCharArray();
+        int n = src.length;
 
-        // Step 5: DP
+        // dp[i] = min cost to convert source[0..i)
         long[] dp = new long[n + 1];
-        Arrays.fill(dp, Long.MAX_VALUE / 4);
+        Arrays.fill(dp, Long.MAX_VALUE);
         dp[0] = 0;
 
         for (int i = 0; i < n; i++) {
-            if (dp[i] == Long.MAX_VALUE / 4) continue;
+            if (dp[i] == Long.MAX_VALUE) continue;
 
-            // No operation
-            if (source.charAt(i) == target.charAt(i)) {
+            TrieNode nodeSrc = root;
+            TrieNode nodeTgt = root;
+
+            // If characters already match, move forward at zero cost
+            if (src[i] == tgt[i]) {
                 dp[i + 1] = Math.min(dp[i + 1], dp[i]);
             }
 
-            TrieNode sNode = srcTrie;
-            TrieNode tNode = tgtTrie;
-
+            // Try extending substrings starting at i
             for (int j = i; j < n; j++) {
-                sNode = sNode == null ? null : sNode.next[source.charAt(j) - 'a'];
-                tNode = tNode == null ? null : tNode.next[target.charAt(j) - 'a'];
-                if (sNode == null || tNode == null) break;
+                nodeSrc = nodeSrc.next[src[j] - 'a'];
+                nodeTgt = nodeTgt.next[tgt[j] - 'a'];
 
-                if (sNode.id != -1 && tNode.id != -1) {
-                    long c = dist[sNode.id][tNode.id];
-                    if (c < Long.MAX_VALUE / 4) {
-                        dp[j + 1] = Math.min(dp[j + 1], dp[i] + c);
-                    }
+                if (nodeSrc == null || nodeTgt == null) break;
+
+                if (nodeSrc.index != -1 &&
+                    nodeTgt.index != -1 &&
+                    dist[nodeSrc.index][nodeTgt.index] != Integer.MAX_VALUE) {
+
+                    dp[j + 1] = Math.min(
+                        dp[j + 1],
+                        dp[i] + dist[nodeSrc.index][nodeTgt.index]
+                    );
                 }
             }
         }
 
-        return dp[n] >= Long.MAX_VALUE / 4 ? -1 : dp[n];
+        return dp[n] == Long.MAX_VALUE ? -1 : dp[n];
     }
+
+    private void insert(String s, TrieNode node) {
+        for (int i = 0; i < s.length(); i++) {
+            int c = s.charAt(i) - 'a';
+            if (node.next[c] == null) node.next[c] = new TrieNode();
+            node = node.next[c];
+        }
+        if (node.index == -1) node.index = nextId++;
+    }
+
+    private int getIndex(String s, TrieNode node) {
+        for (int i = 0; i < s.length(); i++) {
+            node = node.next[s.charAt(i) - 'a'];
+        }
+        return node.index;
+    }
+}
+
+class TrieNode {
+    TrieNode[] next = new TrieNode[26];
+    int index = -1;
 }
