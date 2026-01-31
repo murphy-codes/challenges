@@ -3,7 +3,7 @@
 // Date: 2026-01-30
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 46.62 MB Beats 9.86%
+//   Memory 46.28 MB Beats 83.25%
 
 /****************************************
 * 
@@ -39,19 +39,16 @@
 ****************************************/
 
 class Solution {
-    // We mark which of the 26 lowercase letters appear in the input array.
-    // Starting from the character just after the target, we scan forward
-    // through the alphabet to find the first letter that was seen.
-    // If no greater letter exists, the problem guarantees wraparound,
-    // so we return the first letter in the original array.
-    // Time complexity: O(n + 26) → O(n). Space complexity: O(26) → O(1).
+    // Since the array is sorted, the first character greater than target
+    // must appear when scanning from left to right.
+    // We iterate through the array and return immediately if found
+    // Otherwise, we return letters[0]
+    // Time complexity: O(n). Space complexity: O(1).
     public char nextGreatestLetter(char[] letters, char target) {
-        boolean[] chars = new boolean[26]; // Tracks which letters we've found
-        for (char c : letters) chars[c - 'a'] = true; // Mark all seen letters
-        int i = target - 'a' + 1;
-        while (i < 26) {
-            if (chars[i]) return (char) ('a' + i);
-            i++;
+        for (char c : letters) {
+            if (c > target) {
+                return c;
+            }
         }
         return letters[0];
     }
