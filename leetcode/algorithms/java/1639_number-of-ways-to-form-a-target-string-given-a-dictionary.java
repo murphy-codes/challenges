@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-01-30
 // At the time of submission:
-//   Runtime 31 ms Beats 81.63%
-//   Memory 51.06 MB Beats 86.73%
+//   Runtime 15 ms Beats 100.00%
+//   Memory 61.15 MB Beats 63.27%
 
 /****************************************
 * 
@@ -52,38 +52,51 @@
 ****************************************/
 
 class Solution {
-    // We precompute character frequencies for each column across all words.
-    // dp[i] represents the number of ways to form the first i characters of target.
-    // For each column, we update dp backwards to ensure columns are used only once.
-    // Each transition multiplies existing ways by the column's character frequency.
-    // Time complexity: O(wordLen * targetLen). Space complexity: O(targetLen).
-    private static final int MOD = 1_000_000_007;
-
+    // Precompute character frequencies for each column across all words.
+    // dp[i][j] represents the number of ways to form the first i characters
+    // of the target using the first j columns. For each column, we either
+    // use it to match the current target character or skip it entirely.
+    // Time complexity: O(wordLen * 26 + targetLen * wordLen), Space: O(targetLen * wordLen)
     public int numWays(String[] words, String target) {
+        if (target == null || target.length() == 0) return 0;
+
         int wordLen = words[0].length();
+        int[][] charCountByCol = new int[wordLen + 1][26];
+
+        // Count how many times each character appears in each column
+        for (String word : words) {
+            for (int col = 1; col <= wordLen; col++) {
+                charCountByCol[col][word.charAt(col - 1) - 'a']++;
+            }
+        }
+
         int targetLen = target.length();
+        if (wordLen < targetLen) return 0;
 
-        // freq[col][char] = count of char at column col across all words
-        int[][] freq = new int[wordLen][26];
-        for (String w : words) {
-            for (int i = 0; i < wordLen; i++) {
-                freq[i][w.charAt(i) - 'a']++;
+        int[][] dp = new int[targetLen + 1][wordLen + 1];
+
+        // One way to form an empty target using any number of columns
+        for (int col = 0; col <= wordLen; col++) {
+            dp[0][col] = 1;
+        }
+
+        int MOD = 1_000_000_007;
+
+        for (int i = 1; i <= targetLen; i++) {
+            int targetCharIdx = target.charAt(i - 1) - 'a';
+            int maxCol = wordLen - targetLen + i;
+
+            for (int col = i; col <= maxCol; col++) {
+                long waysUsingCol =
+                        (long) charCountByCol[col][targetCharIdx]
+                        * dp[i - 1][col - 1];
+
+                long waysSkippingCol = dp[i][col - 1];
+
+                dp[i][col] = (int) ((waysUsingCol + waysSkippingCol) % MOD);
             }
         }
 
-        long[] dp = new long[targetLen + 1];
-        dp[0] = 1L;
-
-        for (int col = 0; col < wordLen; col++) {
-            // iterate backwards to prevent reusing the same column
-            for (int i = targetLen - 1; i >= 0; i--) {
-                int c = target.charAt(i) - 'a';
-                if (freq[col][c] > 0) {
-                    dp[i + 1] = (dp[i + 1] + dp[i] * freq[col][c]) % MOD;
-                }
-            }
-        }
-
-        return (int) dp[targetLen];
+        return dp[targetLen][wordLen];
     }
 }
