@@ -3,7 +3,7 @@
 // Date: 2026-01-31
 // At the time of submission:
 //   Runtime 1 ms Beats 99.20%
-//   Memory 45.44 MB Beats 58.40%
+//   Memory 45.36 MB Beats 72.80%
 
 /****************************************
 * 
@@ -41,25 +41,24 @@
 
 class Solution {
     // The first subarray must start at index 0, so its cost is nums[0].
-    // To minimize total cost, we choose the two smallest remaining values
-    // as the starting elements of the other two subarrays.
-    // Since values are bounded (1–50), we count frequencies and greedily
-    // pick the next two smallest values after nums[0].
-    // Time: O(n + 50) ≈ O(n), Space: O(50) ≈ O(1).
+    // To minimize total cost, the remaining two subarrays should start
+    // at the two smallest values in the rest of the array.
+    // We scan once to find the smallest and second smallest values.
+    // Time: O(n), Space: O(1).
     public int minimumCost(int[] nums) {
-        int[] counts = new int[51];
-        for (int i : nums) counts[i]++;
-        int minCost = nums[0];
-        counts[minCost]--;
-        int rem = 2;
-        for (int i = 1; i < 51; i++) {
-            while (counts[i] > 0 && rem > 0) {
-                minCost+=i;
-                counts[i]--;
-                rem--;
+        int first = nums[0];          // Cost of the first subarray
+        int min1 = Integer.MAX_VALUE; // Smallest value after index 0
+        int min2 = Integer.MAX_VALUE; // Second smallest value
+
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < min1) {
+                min2 = min1;
+                min1 = nums[i];
+            } else if (nums[i] < min2) {
+                min2 = nums[i];
             }
-            if (rem == 0) return minCost;
         }
-        return minCost;
+
+        return first + min1 + min2;
     }
 }
