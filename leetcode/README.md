@@ -117,6 +117,7 @@ LeetCode
 |3025|[Find the Number of Ways to Place People I](https://leetcode.com/problems/find-the-number-of-ways-to-place-people-i/)|[Java](./algorithms/java/3025_find-the-number-of-ways-to-place-people-i.java)|Medium|
 |3024|[Type of Triangle](https://leetcode.com/problems/type-of-triangle/)|[Java](./algorithms/java/3024_type-of-triangle.java)|Easy|
 |3021|[Alice and Bob Playing Flower Game](https://leetcode.com/problems/alice-and-bob-playing-flower-game/)|[Java](./algorithms/java/3021_alice-and-bob-playing-flower-game.java)|Medium|
+|3013|[Divide an Array Into Subarrays With Minimum Cost II](https://leetcode.com/problems/divide-an-array-into-subarrays-with-minimum-cost-ii/)|[Java](./algorithms/java/3013_divide-an-array-into-subarrays-with-minimum-cost-ii.java)|Hard|
 |3010|[Divide an Array Into Subarrays With Minimum Cost I](https://leetcode.com/problems/divide-an-array-into-subarrays-with-minimum-cost-i/)|[Java](./algorithms/java/3010_divide-an-array-into-subarrays-with-minimum-cost-i.java)|Easy|
 |3005|[Count Elements With Maximum Frequency](https://leetcode.com/problems/count-elements-with-maximum-frequency/)|[Java](./algorithms/java/3005_count-elements-with-maximum-frequency.java)|Easy|
 |3003|[Maximize the Number of Partitions After Operations](https://leetcode.com/problems/maximize-the-number-of-partitions-after-operations/)|[Java](./algorithms/java/3003_maximize-the-number-of-partitions-after-operations.java)|Hard|
