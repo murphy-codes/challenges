@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/divide-an-array-into-subarrays-with-minimum-cost-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2026-01-31
+// Date: 2026-02-01
 // At the time of submission:
-//   Runtime 246 ms Beats 65.22%
-//   Memory 94.51 MB Beats 43.48%
+//   Runtime 104 ms Beats 100.00%
+//   Memory 87.25 MB Beats 65.22%
 
 /****************************************
 * 
@@ -46,132 +46,100 @@
 * 
 ****************************************/
 
+import java.util.PriorityQueue;
+import java.util.HashMap;
+import java.util.Map;
+
 class Solution {
-    // We always include nums[0], then use a sliding window to choose the remaining
-    // k−1 subarray starts within the allowed distance constraint. Two TreeMaps
-    // maintain the k−1 smallest values (left) and the rest (right), while tracking
-    // the sum of the left partition. As the window slides, we rebalance to keep
-    // exactly k−1 elements on the left. Time: O(n log n), Space: O(n).
-    
-    // TreeMap to store the k smallest elements (left partition)
-    private final TreeMap<Integer, Integer> leftPartition = new TreeMap<>();
-    // TreeMap to store elements larger than the k smallest (right partition)
-    private final TreeMap<Integer, Integer> rightPartition = new TreeMap<>();
-    // Sum of elements in the left partition
-    private long currentSum;
-    // Number of elements in the left partition
-    private int leftPartitionSize;
-
+    // We fix nums[0] as the first subarray cost and slide a window of size dist+1.
+    // Two heaps maintain the smallest k−1 elements in the window and their sum.
+    // A lazy-deletion map handles removals efficiently as the window moves.
+    // At each valid window, we update the minimum cost using the heap sum.
+    // Time: O(n log n), Space: O(n).
     public long minimumCost(int[] nums, int k, int dist) {
-        // Adjust k since nums[0] is always included
-        --k;
-      
-        // Initialize with nums[0] as it's always part of the answer
-        currentSum = nums[0];
-      
-        // Add all elements in the initial window to the left partition
-        for (int i = 1; i < dist + 2; ++i) {
-            currentSum += nums[i];
-            leftPartition.merge(nums[i], 1, Integer::sum);
-        }
-      
-        // Initial window size (excluding nums[0])
-        leftPartitionSize = dist + 1;
-      
-        // Balance the partitions to keep exactly k elements in left partition
-        while (leftPartitionSize > k) {
-            moveLeftToRight();
-        }
-      
-        // Initialize answer with the sum of first valid window
-        long answer = currentSum;
-      
-        // Slide the window through the rest of the array
-        for (int i = dist + 2; i < nums.length; ++i) {
-            // Remove the element that's going out of the window
-            int elementToRemove = nums[i - dist - 1];
-          
-            // Check if element to remove is in left partition
-            if (leftPartition.containsKey(elementToRemove)) {
-                // Remove from left partition and update sum
-                if (leftPartition.merge(elementToRemove, -1, Integer::sum) == 0) {
-                    leftPartition.remove(elementToRemove);
-                }
-                currentSum -= elementToRemove;
-                --leftPartitionSize;
-            } else {
-                // Remove from right partition
-                if (rightPartition.merge(elementToRemove, -1, Integer::sum) == 0) {
-                    rightPartition.remove(elementToRemove);
+        int n = nums.length;
+
+        // Max-heap: holds the smallest (k - 1) values in the window
+        PriorityQueue<Integer> leftMaxHeap =
+            new PriorityQueue<>((a, b) -> b - a);
+
+        // Min-heap: holds remaining values
+        PriorityQueue<Integer> rightMinHeap =
+            new PriorityQueue<>();
+
+        // Lazy deletion map: value -> pending removals
+        Map<Integer, Integer> lazyRemove = new HashMap<>();
+
+        int leftSize = 0;      // valid elements in left heap
+        long leftSum = 0;      // sum of left heap values
+        long answer = Long.MAX_VALUE;
+
+        for (int i = 1; i < n; i++) {
+
+            // Remove element that slides out of window
+            if (i >= dist + 2) {
+                int outgoing = nums[i - dist - 1];
+
+                if (outgoing < leftMaxHeap.peek()) {
+                    lazyRemove.merge(outgoing, 1, Integer::sum);
+                    leftSize--;
+                    leftSum -= outgoing;
+                } else if (outgoing == leftMaxHeap.peek()) {
+                    leftMaxHeap.poll();
+                    leftSize--;
+                    leftSum -= outgoing;
+                } else if (!rightMinHeap.isEmpty()
+                           && outgoing == rightMinHeap.peek()) {
+                    rightMinHeap.poll();
+                } else {
+                    lazyRemove.merge(outgoing, 1, Integer::sum);
                 }
             }
-          
-            // Add the new element entering the window
-            int elementToAdd = nums[i];
-          
-            // Determine which partition to add the new element to
-            if (elementToAdd < leftPartition.lastKey()) {
-                // Add to left partition if it's smaller than the largest in left
-                leftPartition.merge(elementToAdd, 1, Integer::sum);
-                ++leftPartitionSize;
-                currentSum += elementToAdd;
+
+            // Insert new element
+            if (i <= k - 1 || nums[i] <= leftMaxHeap.peek()) {
+                leftMaxHeap.offer(nums[i]);
+                leftSize++;
+                leftSum += nums[i];
             } else {
-                // Otherwise add to right partition
-                rightPartition.merge(elementToAdd, 1, Integer::sum);
+                rightMinHeap.offer(nums[i]);
             }
-          
-            // Rebalance partitions to maintain exactly k elements in left
-            while (leftPartitionSize < k) {
-                moveRightToLeft();
-            }
-            while (leftPartitionSize > k) {
-                moveLeftToRight();
-            }
-          
-            // Update minimum answer
-            answer = Math.min(answer, currentSum);
-        }
-      
-        return answer;
-    }
 
-    /**
-     * Move the largest element from left partition to right partition
-     */
-    private void moveLeftToRight() {
-        // Get the largest element from left partition
-        int elementToMove = leftPartition.lastKey();
-      
-        // Update sum as element leaves left partition
-        currentSum -= elementToMove;
-      
-        // Remove from left partition
-        if (leftPartition.merge(elementToMove, -1, Integer::sum) == 0) {
-            leftPartition.remove(elementToMove);
-        }
-        --leftPartitionSize;
-      
-        // Add to right partition
-        rightPartition.merge(elementToMove, 1, Integer::sum);
-    }
+            // Rebalance heaps
+            if (i > k - 1) {
+                if (leftSize < k - 1) {
+                    int v = rightMinHeap.poll();
+                    leftMaxHeap.offer(v);
+                    leftSize++;
+                    leftSum += v;
+                } else if (leftSize > k - 1) {
+                    int v = leftMaxHeap.poll();
+                    leftSize--;
+                    leftSum -= v;
+                    rightMinHeap.offer(v);
+                }
+            }
 
-    /**
-     * Move the smallest element from right partition to left partition
-     */
-    private void moveRightToLeft() {
-        // Get the smallest element from right partition
-        int elementToMove = rightPartition.firstKey();
-      
-        // Remove from right partition
-        if (rightPartition.merge(elementToMove, -1, Integer::sum) == 0) {
-            rightPartition.remove(elementToMove);
+            // Clean invalid elements from heap tops
+            while (!leftMaxHeap.isEmpty()
+                   && lazyRemove.getOrDefault(leftMaxHeap.peek(), 0) > 0) {
+                int v = leftMaxHeap.poll();
+                lazyRemove.merge(v, -1, Integer::sum);
+            }
+
+            while (!rightMinHeap.isEmpty()
+                   && lazyRemove.getOrDefault(rightMinHeap.peek(), 0) > 0) {
+                int v = rightMinHeap.poll();
+                lazyRemove.merge(v, -1, Integer::sum);
+            }
+
+            // Update result once window is valid
+            if (i >= dist + 1) {
+                answer = Math.min(answer, leftSum);
+            }
         }
-      
-        // Add to left partition
-        leftPartition.merge(elementToMove, 1, Integer::sum);
-      
-        // Update sum as element enters left partition
-        currentSum += elementToMove;
-        ++leftPartitionSize;
+
+        // nums[0] is always included
+        return answer + nums[0];
     }
 }
