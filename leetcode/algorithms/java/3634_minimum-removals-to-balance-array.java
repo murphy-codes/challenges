@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-06
 // At the time of submission:
-//   Runtime 24 ms Beats 93.31%
-//   Memory 86.23 MB Beats 38.19%
+//   Runtime 23 ms Beats 100.00%
+//   Memory 86.13 MB Beats 61.42%
 
 /****************************************
 * 
@@ -45,25 +45,21 @@
 import java.util.Arrays;
 
 class Solution {
-    // Sort the array and use a sliding window where nums[i] is the minimum
-    // and nums[j] is the maximum. Expand j while nums[j] <= k * nums[i]
-    // to find the largest balanced subarray. The answer is removing all
-    // elements outside this maximum window.
-    // Time Complexity: O(n log n), Space Complexity: O(1) (ignoring sort)
+    // Sort the array and use a sliding window where nums[left] is the minimum
+    // and nums[right] is the maximum. Expand right and shrink left until
+    // nums[right] <= k * nums[left] holds. Track the largest valid window.
+    // Minimum removals equals total length minus this window size.
+    // Time: O(n log n), Space: O(1) excluding sort
     public int minRemoval(int[] nums, int k) {
         Arrays.sort(nums);
-        int n = nums.length;
+        int i = 0, mx = 0, n = nums.length;
 
-        int maxWindow = 1;
-        int j = 0;
-
-        for (int i = 0; i < n; i++) {
-            while (j < n && (long) nums[j] <= (long) nums[i] * k) {
-                j++;
+        for (int j = 0; j < n; j++) {
+            while ((long) nums[j] > (long) nums[i] * k) {
+                i++;
             }
-            maxWindow = Math.max(maxWindow, j - i);
+            mx = Math.max(mx, j - i + 1);
         }
-
-        return n - maxWindow;
+        return n - mx;
     }
 }
