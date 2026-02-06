@@ -10,6 +10,7 @@ LeetCode
 |3650|[Minimum Cost Path with Edge Reversals](https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/)|[Java](./algorithms/java/3650_minimum-cost-path-with-edge-reversals.java)|Medium|
 |3640|[Trionic Array II](https://leetcode.com/problems/trionic-array-ii/)|[Java](./algorithms/java/3640_trionic-array-ii.java)|Hard|
 |3637|[Trionic Array I](https://leetcode.com/problems/trionic-array-i/)|[Java](./algorithms/java/3637_trionic-array-i.java)|Easy|
+|3634|[Minimum Removals to Balance Array](https://leetcode.com/problems/minimum-removals-to-balance-array/)|[Java](./algorithms/java/3634_minimum-removals-to-balance-array.java)|Medium|
 |3625|[Count Number of Trapezoids II](https://leetcode.com/problems/count-number-of-trapezoids-ii/)|[Java](./algorithms/java/3625_count-number-of-trapezoids-ii.java)|Hard|
 |3623|[Count Number of Trapezoids I](https://leetcode.com/problems/count-number-of-trapezoids-i/)|[Java](./algorithms/java/3623_count-number-of-trapezoids-i.java)|Medium|
 |3607|[Power Grid Maintenance](https://leetcode.com/problems/power-grid-maintenance/)|[Java](./algorithms/java/3607_power-grid-maintenance.java)|Medium|
