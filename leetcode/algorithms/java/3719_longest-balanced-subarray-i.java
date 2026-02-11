@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-10
 // At the time of submission:
-//   Runtime 253 ms Beats 92.28%
-//   Memory 47.14 MB Beats 45.77%
+//   Runtime 28 ms Beats 99.45%
+//   Memory 47.70 MB Beats 11.40%
 
 /****************************************
 * 
@@ -42,30 +42,50 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // Try every subarray by fixing a left index and expanding the right index.
-    // Track distinct even and odd values using two HashSets for each subarray.
-    // Update the answer whenever the counts of distinct evens and odds match.
-    // Time complexity is O(n^2) due to all subarrays being examined.
-    // Space complexity is O(n) in the worst case for the distinct sets.
+    // Enumerate all subarrays using a fixed left index and expanding right.
+    // Track distinct evens and odds using timestamped arrays instead of sets.
+    // A rolling timer simulates clearing state in O(1) time.
+    // Early termination skips windows that cannot exceed the current best.
+    // Time complexity: O(n^2), Space complexity: O(max(nums[i])).
+
+    // Marker arrays to track seen values using a rolling timestamp
+    int[] seenEven = new int[100001];
+    int[] seenOdd  = new int[100001];
+
     public int longestBalanced(int[] nums) {
-        int res = 0, r = 0, n = nums.length;
-        Set<Integer> evenS = new HashSet<>();
-        Set<Integer> oddS = new HashSet<>();
-        for (int l = 0; l < n; l++) {
-            evenS.clear();
-            oddS.clear();
-            r = l;
-            while (r < n) {
-                if (nums[r] % 2 == 0) evenS.add(nums[r]);
-                else oddS.add(nums[r]);
-                if (evenS.size() == oddS.size() && r - l + 1 > res) res = r - l + 1;
-                r++;
+        int n = nums.length;
+        int maxLen = 0;
+        int stamp = 0;
+
+        for (int left = 0; left < n; left++) {
+            // Skip if remaining elements cannot exceed current max
+            if (maxLen >= n - left) break;
+
+            stamp++; // Acts like clearing the sets
+            int evenCount = 0;
+            int oddCount = 0;
+
+            for (int right = left; right < n; right++) {
+                int val = nums[right];
+
+                if ((val & 1) == 0) {
+                    if (seenEven[val] != stamp) {
+                        seenEven[val] = stamp;
+                        evenCount++;
+                    }
+                } else {
+                    if (seenOdd[val] != stamp) {
+                        seenOdd[val] = stamp;
+                        oddCount++;
+                    }
+                }
+
+                if (evenCount == oddCount) {
+                    maxLen = Math.max(maxLen, right - left + 1);
+                }
             }
         }
-        return res;
+        return maxLen;
     }
 }
