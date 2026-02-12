@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-11
 // At the time of submission:
-//   Runtime 221 ms Beats 32.58%
-//   Memory 47.06 MB Beats 42.88%
+//   Runtime 21 ms Beats 100.00%
+//   Memory 46.79 MB Beats 89.70%
 
 /****************************************
 * 
@@ -37,45 +37,57 @@
 ****************************************/
 
 class Solution {
-    // We brute-force all substrings by fixing a start index and expanding right.
-    // A frequency array tracks character counts, ignoring unused characters.
-    // A substring is balanced if all active characters share the same frequency.
-    // Since the alphabet size is constant (26), checking min/max is cheap.
-    // Time: O(n^2), Space: O(1) constant extra space.
+    // We expand every substring using two pointers while tracking character
+    // frequencies, number of unique characters, and the maximum frequency.
+    // A substring is balanced if its length equals uniqueCount * maxFrequency,
+    // meaning all unique characters appear equally often. Early termination
+    // prevents unnecessary work once no longer substring can beat the best.
+    // Time complexity is O(n^2); space complexity is O(1) using a fixed array.
+    
     public int longestBalanced(String s) {
         int n = s.length();
-        int maxLen = 0;
 
+        // Convert characters to integer indices (0–25)
+        int[] chars = new int[n];
         for (int i = 0; i < n; i++) {
+            chars[i] = s.charAt(i) - 'a';
+        }
+
+        int bestLength = 0;
+
+        for (int left = 0; left < n; left++) {
+            // Early exit: remaining substring cannot beat current best
+            if (n - left <= bestLength) {
+                break;
+            }
+
             int[] freq = new int[26];
-            int distinct = 0;
-            int minFreq = Integer.MAX_VALUE;
-            int maxFreq = 0;
+            int uniqueCount = 0;
+            int maxFrequency = 0;
 
-            for (int j = i; j < n; j++) {
-                int idx = s.charAt(j) - 'a';
+            for (int right = left; right < n; right++) {
+                int ch = chars[right];
 
-                if (freq[idx] == 0) {
-                    distinct++;
-                }
-                freq[idx]++;
-
-                // Update min/max frequency among active characters
-                minFreq = Integer.MAX_VALUE;
-                maxFreq = 0;
-                for (int k = 0; k < 26; k++) {
-                    if (freq[k] > 0) {
-                        minFreq = Math.min(minFreq, freq[k]);
-                        maxFreq = Math.max(maxFreq, freq[k]);
-                    }
+                // New character discovered
+                if (freq[ch] == 0) {
+                    uniqueCount++;
                 }
 
-                if (minFreq == maxFreq) {
-                    maxLen = Math.max(maxLen, j - i + 1);
+                freq[ch]++;
+                if (freq[ch] > maxFrequency) {
+                    maxFrequency = freq[ch];
+                }
+
+                int windowLength = right - left + 1;
+
+                // Balanced if all unique chars occur maxFrequency times
+                if (uniqueCount * maxFrequency == windowLength &&
+                    windowLength > bestLength) {
+                    bestLength = windowLength;
                 }
             }
         }
 
-        return maxLen;
+        return bestLength;
     }
 }
