@@ -7,6 +7,7 @@ LeetCode
 |---| ----- | -------- | ---------- |
 |3721|[Longest Balanced Subarray II](https://leetcode.com/problems/longest-balanced-subarray-ii/)|[Java](./algorithms/java/3721_longest-balanced-subarray-ii.java)|Hard|
 |3719|[Longest Balanced Subarray I](https://leetcode.com/problems/longest-balanced-subarray-i/)|[Java](./algorithms/java/3719_longest-balanced-subarray-i.java)|Medium|
+|3713|[Longest Balanced Substring I](https://leetcode.com/problems/longest-balanced-substring-i/)|[Java](./algorithms/java/3713_longest-balanced-substring-i.java)|Medium|
 |3652|[Best Time to Buy and Sell Stock using Strategy](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-using-strategy/)|[Java](./algorithms/java/3652_best-time-to-buy-and-sell-stock-using-strategy.java)|Medium|
 |3651|[Minimum Cost Path with Teleportations](https://leetcode.com/problems/minimum-cost-path-with-teleportations/)|[Java](./algorithms/java/3651_minimum-cost-path-with-teleportations.java)|Hard|
 |3650|[Minimum Cost Path with Edge Reversals](https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/)|[Java](./algorithms/java/3650_minimum-cost-path-with-edge-reversals.java)|Medium|
