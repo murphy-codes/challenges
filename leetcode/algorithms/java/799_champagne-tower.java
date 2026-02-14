@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-13
 // At the time of submission:
-//   Runtime 3 ms Beats 76.33%
-//   Memory 47.74 MB Beats 87.99%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 46.64 MB Beats 97.88%
 
 /****************************************
 * 
@@ -47,28 +47,30 @@
 ****************************************/
 
 class Solution {
-    // Simulate champagne pouring row by row using a 2D array tower[row][col].
-    // Each glass holds at most 1 cup; excess spills equally to two glasses below.
-    // Time complexity: O(query_row^2) since we only simulate up to query_row.
-    // Space complexity: O(100*100) = O(1) constant space for the fixed-size tower.
-    // The answer is the min of 1.0 and the value in tower[query_row][query_glass].
-    public double champagneTower(int poured, int query_row, int query_glass) {
-        // Maximum row size is 100
-        double[][] tower = new double[101][101];
-        tower[0][0] = poured;
+    // Use 1D dynamic programming where dp[j] stores the champagne in glass j
+    // of the current row. Iterate rows top-down and glasses right-to-left
+    // so values are not overwritten. Overflow above 1 cup spills equally
+    // to the two glasses below. Time complexity is O(row * col) and
+    // space complexity is O(col), which is optimal for this problem.
+    public double champagneTower(int poured, int queryRow, int queryGlass) {
+        // dp[j] represents the amount of champagne in glass j
+        // for the current row being processed
+        double[] dp = new double[queryGlass + 2];
+        dp[0] = poured;
 
-        for (int row = 0; row <= query_row; row++) {
-            for (int col = 0; col <= row; col++) {
-                // Calculate excess champagne
-                double excess = (tower[row][col] - 1.0) / 2.0;
-                if (excess > 0) {
-                    tower[row + 1][col] += excess;
-                    tower[row + 1][col + 1] += excess;
+        for (int row = 0; row < queryRow; row++) {
+            // Iterate backwards to avoid overwriting values
+            for (int glass = Math.min(row, queryGlass); glass >= 0; glass--) {
+                if (dp[glass] > 1.0) {
+                    double overflow = (dp[glass] - 1.0) / 2.0;
+                    dp[glass] = overflow;
+                    dp[glass + 1] += overflow;
+                } else {
+                    dp[glass] = 0.0;
                 }
             }
         }
 
-        // Each glass can hold at most 1 cup
-        return Math.min(1.0, tower[query_row][query_glass]);
+        return Math.min(1.0, dp[queryGlass]);
     }
 }
