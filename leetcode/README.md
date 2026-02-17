@@ -397,6 +397,7 @@ LeetCode
 |417|[Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/)|[Java](./algorithms/java/417_pacific-atlantic-water-flow.java)|Medium|
 |416|[Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)|[Java](./algorithms/java/416_partition-equal-subset-sum.java)|Medium|
 |407|[Trapping Rain Water II](https://leetcode.com/problems/trapping-rain-water-ii/)|[Java](./algorithms/java/407_trapping-rain-water-ii.java)|Hard|
+|401|[Binary Watch](https://leetcode.com/problems/binary-watch/)|[Java](./algorithms/java/401_binary-watch.java)|Easy|
 |386|[Lexicographical Numbers](https://leetcode.com/problems/lexicographical-numbers/)|[Java](./algorithms/java/386_lexicographical-numbers.java)|Medium|
 |368|[Largest Divisible Subset](https://leetcode.com/problems/largest-divisible-subset/)|[Java](./algorithms/java/368_largest-divisible-subset.java)|Medium|
 |342|[Power of Four](https://leetcode.com/problems/power-of-four/)|[Java](./algorithms/java/342_power-of-four.java)|Easy|
