@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-16
 // At the time of submission:
-//   Runtime 14 ms Beats 8.18%
-//   Memory 49.41 MB Beats 32.74%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 43.51 MB Beats 91.66%
 
 /****************************************
 * 
@@ -35,21 +35,80 @@ import java.util.List;
 import java.util.ArrayList;
 
 class Solution {
-    // Enumerate all possible hour (0–11) and minute (0–59) combinations.
-    // For each time, compare the total number of set bits using bitCount.
-    // Valid times are formatted and added to the result list.
-    // Time complexity is O(1) due to a fixed search space, and space is O(1).
-    public List<String> readBinaryWatch(int turnedOn) {
-        List<String> result = new ArrayList<>();
+    // This solution uses backtracking to build valid hours and minutes from LEDs.
+    // It tracks numeric values, remaining bits, and LEDs turned on to prune early.
+    // Invalid branches (hour > 11 or minute > 59) are skipped immediately.
+    // Time complexity is O(1) due to a fixed LED count, with O(1) space usage.
 
-        for (int hour = 0; hour < 12; hour++) {
-            for (int minute = 0; minute < 60; minute++) {
-                if (Integer.bitCount(hour) + Integer.bitCount(minute) == turnedOn) {
-                    result.add(hour + ":" + String.format("%02d", minute));
-                }
-            }
+    public List<String> readBinaryWatch(int turnedOn) {
+        List<String> results = new ArrayList<>();
+
+        if (turnedOn > 8) {
+            return results;
         }
 
-        return result;
+        buildHours(results, new StringBuilder(), 0, 4, turnedOn, 0);
+        return results;
+    }
+
+    void buildHours(List<String> results, StringBuilder current,
+                    int hourValue, int bitsLeft,
+                    int targetOn, int ledsOn) {
+
+        if (bitsLeft == 0) {
+            if (hourValue > 11) return;
+
+            if (hourValue >= 10) {
+                current.append(hourValue);
+            } else {
+                current.append((char) (hourValue + '0'));
+            }
+
+            current.append(':');
+            buildMinutes(results, current, 0, 6, targetOn, ledsOn, current.length());
+            current.setLength(0);
+            return;
+        }
+
+        int withBit = hourValue + (1 << (bitsLeft - 1));
+
+        if (ledsOn < targetOn) {
+            buildHours(results, current, withBit,
+                       bitsLeft - 1, targetOn, ledsOn + 1);
+        }
+
+        buildHours(results, current, hourValue,
+                   bitsLeft - 1, targetOn, ledsOn);
+    }
+
+    void buildMinutes(List<String> results, StringBuilder current,
+                      int minuteValue, int bitsLeft,
+                      int targetOn, int ledsOn, int resetLen) {
+
+        if (bitsLeft == 0) {
+            if (ledsOn != targetOn || minuteValue > 59) return;
+
+            if (minuteValue >= 10) {
+                current.append((char) (minuteValue / 10 + '0'));
+                current.append((char) (minuteValue % 10 + '0'));
+            } else {
+                current.append('0');
+                current.append((char) (minuteValue + '0'));
+            }
+
+            results.add(current.toString());
+            current.setLength(resetLen);
+            return;
+        }
+
+        int withBit = minuteValue + (1 << (bitsLeft - 1));
+
+        if (ledsOn < targetOn) {
+            buildMinutes(results, current, withBit,
+                         bitsLeft - 1, targetOn, ledsOn + 1, resetLen);
+        }
+
+        buildMinutes(results, current, minuteValue,
+                     bitsLeft - 1, targetOn, ledsOn, resetLen);
     }
 }
