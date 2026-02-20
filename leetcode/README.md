@@ -381,6 +381,7 @@ LeetCode
 |781|[Rabbits in Forest](https://leetcode.com/problems/rabbits-in-forest/)|[Java](./algorithms/java/781_rabbits-in-forest.java)|Medium|
 |778|[Swim in Rising Water](https://leetcode.com/problems/swim-in-rising-water/)|[Java](./algorithms/java/778_swim-in-rising-water.java)|Hard|
 |763|[Partition Labels](https://leetcode.com/problems/partition-labels/)|[Java](./algorithms/java/763_partition-labels.java)|Medium|
+|761|[Special Binary String](https://leetcode.com/problems/special-binary-string/)|[Java](./algorithms/java/761_special-binary-string.java)|Hard|
 |757|[Set Intersection Size At Least Two](https://leetcode.com/problems/set-intersection-size-at-least-two/)|[Java](./algorithms/java/757_set-intersection-size-at-least-two.java)|Hard|
 |756|[Pyramid Transition Matrix](https://leetcode.com/problems/pyramid-transition-matrix/)|[Java](./algorithms/java/756_pyramid-transition-matrix.java)|Medium|
 |744|[Find Smallest Letter Greater Than Target](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)|[Java](./algorithms/java/744_find-smallest-letter-greater-than-target.java)|Easy|
