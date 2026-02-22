@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-21
 // At the time of submission:
-//   Runtime 2 ms Beats 98.83%
-//   Memory 42.55 MB Beats 27.37%
+//   Runtime 1 ms Beats 99.39%
+//   Memory 42.18 MB Beats 90.76%
 
 /****************************************
 * 
@@ -44,25 +44,80 @@
 ****************************************/
 
 class Solution {
-    // Iterate through the range & count set bits using Integer.bitCount()
-    // Since n <= 10^6, the maximum possible set bits is 20.
-    // We precompute which counts are prime for O(1) lookup.
-    // Time complexity is O(N), space complexity is O(1).
-    public int countPrimeSetBits(int left, int right) {
-        // Prime counts possible for numbers <= 10^6 (max 20 bits)
-        boolean[] isPrime = new boolean[21];
-        isPrime[2] = isPrime[3] = isPrime[5] = isPrime[7] = true;
-        isPrime[11] = isPrime[13] = isPrime[17] = isPrime[19] = true;
+    // Count how many numbers ≤ N have a prime number of set bits
+    // by iterating through each bit position and counting valid combinations
+    // using binomial coefficients. Instead of scanning the range, it computes
+    // count(right) − count(left − 1). Time complexity is O(32 × primes), and
+    // space complexity is O(1).
 
-        int count = 0;
+    // All prime values <= 19 (max possible set bits for numbers <= 1e6)
+    private static int[] PRIMES = {2, 3, 5, 7, 11, 13, 17, 19};
 
-        for (int n = left; n <= right; n++) {
-            int setBits = Integer.bitCount(n);
-            if (isPrime[setBits]) {
-                count++;
-            }
+    // Computes C(n, k) using factorial division
+    private int comb(int n, int k) {
+        if (n <= 0 || k <= 0 || k > n) return 0;
+
+        long numerator = 1, denominator = 1;
+
+        for (int i = k + 1; i <= n; i++) {
+            numerator *= i;
         }
 
-        return count;
+        for (int i = 2; i <= n - k; i++) {
+            denominator *= i;
+        }
+
+        return (int) (numerator / denominator);
+    }
+
+    // Counts valid combinations given:
+    // av = available remaining bit positions
+    // al = already selected set bits
+    private int countValid(int available, int alreadySet) {
+        int total = 0;
+
+        for (int prime : PRIMES) {
+            int needed = prime - alreadySet;
+            if (needed < 0 || needed > available) continue;
+            total += comb(available, needed);
+        }
+
+        return total;
+    }
+
+    // Counts how many primes are <= num
+    private int countPrimes(int num) {
+        for (int i = PRIMES.length - 1; i >= 0; i--) {
+            if (num >= PRIMES[i]) {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+
+    // Counts numbers <= num with a prime number of set bits
+    private int countNum(int num) {
+        if (num == 0) return 0;
+
+        int bitMask = 0x40000000; // highest 1-bit for 32-bit int
+        int remainingBits = 31;
+        int setBitsSoFar = 0;
+        int total = 0;
+
+        while (bitMask != 0) {
+            if ((num & bitMask) != 0) {
+                total += countValid(remainingBits - 1, setBitsSoFar);
+                setBitsSoFar++;
+            }
+            bitMask >>>= 1;
+            remainingBits--;
+        }
+
+        total += countPrimes(setBitsSoFar);
+        return total;
+    }
+
+    public int countPrimeSetBits(int left, int right) {
+        return countNum(right) - countNum(left - 1);
     }
 }
