@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-21
 // At the time of submission:
-//   Runtime 1 ms Beats 40.87%
-//   Memory 42.20 MB Beats 84.49%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 42.24 MB Beats 67.49%
 
 /****************************************
 * 
@@ -41,80 +41,26 @@
 ****************************************/
 
 class Solution {
-    // Count how many numbers ≤ N have a prime number of set bits
-    // by iterating through each bit position and counting valid combinations
-    // using binomial coefficients. Instead of scanning the range, it computes
-    // count(right) − count(left − 1). Time complexity is O(32 × primes), and
-    // space complexity is O(1).
-
-    // All prime values <= 19 (max possible set bits for numbers <= 1e6)
-    private static int[] PRIMES = {2, 3, 5, 7, 11, 13, 17, 19};
-
-    // Computes C(n, k) using factorial division
-    private int comb(int n, int k) {
-        if (n <= 0 || k <= 0 || k > n) return 0;
-
-        long numerator = 1, denominator = 1;
-
-        for (int i = k + 1; i <= n; i++) {
-            numerator *= i;
-        }
-
-        for (int i = 2; i <= n - k; i++) {
-            denominator *= i;
-        }
-
-        return (int) (numerator / denominator);
-    }
-
-    // Counts valid combinations given:
-    // av = available remaining bit positions
-    // al = already selected set bits
-    private int countValid(int available, int alreadySet) {
-        int total = 0;
-
-        for (int prime : PRIMES) {
-            int needed = prime - alreadySet;
-            if (needed < 0 || needed > available) continue;
-            total += comb(available, needed);
-        }
-
-        return total;
-    }
-
-    // Counts how many primes are <= num
-    private int countPrimes(int num) {
-        for (int i = PRIMES.length - 1; i >= 0; i--) {
-            if (num >= PRIMES[i]) {
-                return i + 1;
+    // We scan the bits of n from right to left using bitwise operations.
+    // Each time we see a '1', we compute the distance from the previous '1'.
+    // The maximum distance between consecutive '1' bits is tracked and returned.
+    // Time complexity is O(log n), since we process each bit once.
+    // Space complexity is O(1), using only a few integer variables.
+    public int binaryGap(int n) {
+        int lastOne = -1;
+        int maxGap = 0;
+        int position = 0;
+        while (n > 0) {
+            if ((n & 1) == 1) {
+                if (lastOne != -1) {
+                    maxGap = Math.max(maxGap, position - lastOne);
+                }
+                lastOne = position;
             }
-        }
-        return 0;
-    }
-
-    // Counts numbers <= num with a prime number of set bits
-    private int countNum(int num) {
-        if (num == 0) return 0;
-
-        int bitMask = 0x40000000; // highest 1-bit for 32-bit int
-        int remainingBits = 31;
-        int setBitsSoFar = 0;
-        int total = 0;
-
-        while (bitMask != 0) {
-            if ((num & bitMask) != 0) {
-                total += countValid(remainingBits - 1, setBitsSoFar);
-                setBitsSoFar++;
-            }
-            bitMask >>>= 1;
-            remainingBits--;
+            n >>= 1;
+            position++;
         }
 
-        total += countPrimes(setBitsSoFar);
-        return total;
-    }
-
-    public int countPrimeSetBits(int left, int right) {
-        return countNum(right) - countNum(left - 1);
+        return maxGap;
     }
 }
