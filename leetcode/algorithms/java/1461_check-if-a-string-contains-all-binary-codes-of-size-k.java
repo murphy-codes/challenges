@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-22
 // At the time of submission:
-//   Runtime 9 ms Beats 96.54%
-//   Memory 47.92 MB Beats 94.07%
+//   Runtime 6 ms Beats 100.00%
+//   Memory 47.83 MB Beats 95.80%
 
 /****************************************
 * 
@@ -33,28 +33,39 @@
 ****************************************/
 
 class Solution {
-    // Use a rolling bitmask to represent each length-k substring as an integer.
-    // Slide across the string, updating the mask in O(1) time per character.
-    // Track seen patterns in a boolean array of size 2^k.
-    // If all 2^k patterns appear, return true.
-    // Time: O(n), Space: O(2^k)
+    // Uses a rolling k-bit hash to represent each substring in O(1) time.
+    // Each binary substring maps directly to an integer in [0, 2^k).
+    // A boolean array tracks which codes have been seen so far.
+    // Time complexity is O(n), space complexity is O(2^k).
     public boolean hasAllCodes(String s, int k) {
-        int needed = 1 << k;
-        boolean[] seen = new boolean[needed];
+        int totalCodes = 1 << k;        // Number of binary codes of length k
+        int n = s.length();
 
-        int mask = needed - 1; // keeps last k bits
-        int hash = 0;
-        int found = 0;
+        // Not enough characters or substrings to cover all codes
+        if (n < k || n - k + 1 < totalCodes) {
+            return false;
+        }
 
-        for (int i = 0; i < s.length(); i++) {
-            // shift left, add current bit, keep only k bits
-            hash = ((hash << 1) & mask) | (s.charAt(i) - '0');
+        boolean[] seen = new boolean[totalCodes];
+        int rollingHash = 0;
+        int mask = totalCodes - 1;      // Keeps only last k bits
+        int foundCount = 0;
 
-            // only start recording after first k bits
-            if (i >= k - 1 && !seen[hash]) {
-                seen[hash] = true;
-                found++;
-                if (found == needed) return true;
+        for (int i = 0; i < n; i++) {
+            // Shift left, drop old bit, add new bit
+            rollingHash = ((rollingHash << 1) & mask)
+                        | (s.charAt(i) - '0');
+
+            // Only start checking once we have k bits
+            if (i >= k - 1) {
+                if (!seen[rollingHash]) {
+                    seen[rollingHash] = true;
+                    foundCount++;
+
+                    if (foundCount == totalCodes) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
