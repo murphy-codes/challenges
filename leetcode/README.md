@@ -326,6 +326,7 @@ LeetCode
 |1382|[Balance a Binary Search Tree](https://leetcode.com/problems/balance-a-binary-search-tree/)|[Java](./algorithms/java/1382_balance-a-binary-search-tree.java)|Medium|
 |1368|[Minimum Cost to Make at Least One Valid Path in a Grid](https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/)|[Java](./algorithms/java/1368_minimum-cost-to-make-at-least-one-valid-path-in-a-grid.java)|Hard|
 |1358|[Number of Substrings Containing All Three Characters](https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/)|[Java](./algorithms/java/1358_number-of-substrings-containing-all-three-characters.java)|Medium|
+|1356|[Sort Integers by The Number of 1 Bits](https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/)|[Java](./algorithms/java/1356_sort-integers-by-the-number-of-1-bits.java)|Easy|
 |1353|[Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)|[Java](./algorithms/java/1353_maximum-number-of-events-that-can-be-attended.java)|Medium|
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
 |1351|[Count Negative Numbers in a Sorted Matrix](https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/)|[Java](./algorithms/java/1351_count-negative-numbers-in-a-sorted-matrix.java)|Easy|
