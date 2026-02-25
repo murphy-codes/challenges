@@ -352,6 +352,7 @@ LeetCode
 |1061|[Lexicographically Smallest Equivalent String](https://leetcode.com/problems/lexicographically-smallest-equivalent-string/)|[Java](./algorithms/java/1061_lexicographically-smallest-equivalent-string.java)|Medium|
 |1039|[Minimum Score Triangulation of Polygon](https://leetcode.com/problems/minimum-score-triangulation-of-polygon/)|[Java](./algorithms/java/1039_minimum-score-triangulation-of-polygon.java)|Medium|
 |1028|[Recover a Tree From Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/)|[Java](./algorithms/java/1028_recover-a-tree-from-preorder-traversal.java)|Hard|
+|1022|[Sum of Root To Leaf Binary Numbers](https://leetcode.com/problems/sum-of-root-to-leaf-binary-numbers/)|[Java](./algorithms/java/1022_sum-of-root-to-leaf-binary-numbers.java)|Easy|
 |1018|[Binary Prefix Divisible By 5](https://leetcode.com/problems/binary-prefix-divisible-by-5/)|[Java](./algorithms/java/1018_binary-prefix-divisible-by-5.java)|Medium|
 |1015|[Smallest Integer Divisible by K](https://leetcode.com/problems/smallest-integer-divisible-by-k/)|[Java](./algorithms/java/1015_smallest-integer-divisible-by-k.java)|Easy|
 |1007|[Minimum Domino Rotations For Equal Row](https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/)|[Java](./algorithms/java/1007_minimum-domino-rotations-for-equal-row.java)|Medium|
