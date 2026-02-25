@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-24
 // At the time of submission:
-//   Runtime 7 ms Beats 78.21%
-//   Memory 46.80 MB Beats 52.92%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 46.85 MB Beats 39.38%
 
 /****************************************
 * 
@@ -33,32 +33,67 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 class Solution {
-    // Sort numbers by count of 1-bits using a custom comparator.
-    // Integer.bitCount provides fast bit counting per value.
-    // Primary sort key is bit count; secondary key is numeric value.
-    // Sorting dominates runtime: O(n log n).
-    // Space complexity is O(n) due to boxing the array.
+    // This solution encodes the bit count into each value by shifting it into
+    // higher-order digits, allowing a single numeric sort to enforce both
+    // sorting rules simultaneously. A custom in-place quicksort with
+    // median-of-three pivot selection avoids comparator overhead.
+    // Time complexity is O(n log n), with O(log n) stack space.
     public int[] sortByBits(int[] arr) {
-        // Box int[] to Integer[] so we can use a custom comparator
-        Integer[] boxed = new Integer[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            boxed[i] = arr[i];
+        int length = arr.length;
+
+        // Encode bit count as higher-order key
+        for (int i = 0; i < length; i++) {
+            arr[i] += 10001 * Integer.bitCount(arr[i]);
         }
 
-        Arrays.sort(boxed, (a, b) -> {
-            int bitDiff = Integer.bitCount(a) - Integer.bitCount(b);
-            return bitDiff != 0 ? bitDiff : a - b;
-        });
+        quicksort(arr, 0, length - 1);
 
-        // Unbox back to int[]
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = boxed[i];
+        // Decode original values
+        for (int i = 0; i < length; i++) {
+            arr[i] %= 10001;
         }
 
         return arr;
+    }
+
+    private static void quicksort(int[] nums, int left, int right) {
+        if (left < right) {
+            int partitionIndex = partition(nums, left - 1, right + 1);
+            quicksort(nums, left, partitionIndex);
+            quicksort(nums, partitionIndex + 1, right);
+        }
+    }
+
+    private static int partition(int[] nums, int left, int right) {
+        int pivot = getPivot(
+            nums[left + 1],
+            nums[(left + right) >>> 1],
+            nums[right - 1]
+        );
+
+        while (true) {
+            do {
+                left++;
+            } while (nums[left] < pivot);
+
+            do {
+                right--;
+            } while (nums[right] > pivot);
+
+            if (left >= right) {
+                return right;
+            }
+
+            int tmp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = tmp;
+        }
+    }
+
+    private static int getPivot(int a, int b, int c) {
+        if ((a >= b) ^ (a >= c)) return a;
+        if ((a >= b) ^ (c >= b)) return b;
+        return c;
     }
 }
