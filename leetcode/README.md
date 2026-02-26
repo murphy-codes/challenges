@@ -319,6 +319,7 @@ LeetCode
 |1415|[The k-th Lexicographical String of All Happy Strings of Length n](https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/)|[Java](./algorithms/java/1415_the-k-th-lexicographical-string-of-all-happy-strings-of-length-n.java)|Medium|
 |1411|[Number of Ways to Paint N × 3 Grid](https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/)|[Java](./algorithms/java/1411_number-of-ways-to-paint-n-3-grid.java)|Hard|
 |1408|[String Matching in an Array](https://leetcode.com/problems/string-matching-in-an-array/)|[Java](./algorithms/java/1408_string-matching-in-an-array.java)|Easy|
+|1404|[Number of Steps to Reduce a Number in Binary Representation to One](https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/)|[Java](./algorithms/java/1404_number-of-steps-to-reduce-a-number-in-binary-representation-to-one.java)|Medium|
 |1400|[Construct K Palindrome Strings](https://leetcode.com/problems/construct-k-palindrome-strings/)|[Java](./algorithms/java/1400_construct-k-palindrome-strings.java)|Medium|
 |1399|[Count Largest Group](https://leetcode.com/problems/count-largest-group/)|[Java](./algorithms/java/1399_count-largest-group.java)|Easy|
 |1394|[Find Lucky Integer in an Array](https://leetcode.com/problems/find-lucky-integer-in-an-array/)|[Java](./algorithms/java/1394_find-lucky-integer-in-an-array.java)|Easy|
