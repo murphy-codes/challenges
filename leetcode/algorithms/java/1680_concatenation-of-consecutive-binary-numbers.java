@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-02-27
 // At the time of submission:
-//   Runtime 24 ms Beats 98.84%
-//   Memory 42.33 MB Beats 84.88%
+//   Runtime 23 ms Beats 100.00%
+//   Memory 42.40 MB Beats 84.88%
 
 /****************************************
 * 
@@ -35,25 +35,26 @@
 ****************************************/
 
 class Solution {
-    // We build the result incrementally by appending each number in binary.
-    // Appending i means shifting the current value left by bitLength(i).
-    // The bit length increases only when i is a power of two.
-    // Each step applies modulo arithmetic to avoid overflow.
-    // Time complexity is O(n), space complexity is O(1).
+    // We build the result by appending numbers 1 through n in binary form.
+    // Appending a number means left-shifting by its bit length, then adding it.
+    // The bit length increases only when the number is a power of two.
+    // Modulo arithmetic prevents overflow during accumulation.
+    // Time complexity is O(n); space complexity is O(1).
     public int concatenatedBinary(int n) {
-        final int MOD = 1_000_000_007;
 
         long result = 0;
+        long modulo = 1_000_000_007;
         int bitLength = 0;
 
-        for (int i = 1; i <= n; i++) {
-            // If i is a power of two, its binary length increases by 1
-            if ((i & (i - 1)) == 0) {
+        for (int value = 1; value <= n; value++) {
+
+            // Bit length increases when value is a power of two
+            if ((value & (value - 1)) == 0) {
                 bitLength++;
             }
 
-            // Shift left to make space for i, then add i
-            result = ((result << bitLength) + i) % MOD;
+            // Shift left to make room for value, then append it
+            result = ((result << bitLength) + value) % modulo;
         }
 
         return (int) result;
