@@ -294,6 +294,7 @@ LeetCode
 |1717|[Maximum Score From Removing Substrings](https://leetcode.com/problems/maximum-score-from-removing-substrings/)|[Java](./algorithms/java/1717_maximum-score-from-removing-substrings.java)|Medium|
 |1716|[Calculate Money in Leetcode Bank](https://leetcode.com/problems/calculate-money-in-leetcode-bank/)|[Java](./algorithms/java/1716_calculate-money-in-leetcode-bank.java)|Easy|
 |1695|[Maximum Erasure Value](https://leetcode.com/problems/maximum-erasure-value/)|[Java](./algorithms/java/1695_maximum-erasure-value.java)|Medium|
+|1689|[Partitioning Into Minimum Number Of Deci-Binary Numbers](https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers/)|[Java](./algorithms/java/1689_partitioning-into-minimum-number-of-deci-binary-numbers.java)|Medium|
 |1680|[Concatenation of Consecutive Binary Numbers](https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/)|[Java](./algorithms/java/1680_concatenation-of-consecutive-binary-numbers.java)|Medium|
 |1653|[Minimum Deletions to Make String Balanced](https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/)|[Java](./algorithms/java/1653_minimum-deletions-to-make-string-balanced.java)|Medium|
 |1639|[Number of Ways to Form a Target String Given a Dictionary](https://leetcode.com/problems/number-of-ways-to-form-a-target-string-given-a-dictionary/)|[Java](./algorithms/java/1639_number-of-ways-to-form-a-target-string-given-a-dictionary.java)|Hard|
