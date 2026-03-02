@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-01
 // At the time of submission:
-//   Runtime 3 ms Beats 22.64%
-//   Memory 49.60 MB Beats 77.36%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 49.86 MB Beats 33.96%
 
 /****************************************
 * 
@@ -39,49 +39,53 @@
 ****************************************/
 
 class Solution {
-    // For each row, record the rightmost position of a '1'.
-    // A row at index i is valid only if its rightmost '1' is <= i.
-    // Greedily move the closest valid row upward using adjacent swaps.
-    // Each swap counts toward the answer; if no row fits, return -1.
-    // Time complexity: O(n^2); Space complexity: O(n).
-    public int minSwaps(int[][] grid) {
-        int n = grid.length;
-        int[] rightMost = new int[n];
+    // For each row, count how many trailing zeros it has.
+    // Row i must have at least (n - 1 - i) trailing zeros to be valid.
+    // Greedily select the nearest valid row below and bubble it upward.
+    // Each upward move costs one swap; if none exists, return -1.
+    // Time: O(n^2), Space: O(n).
+  public int minSwaps(int[][] grid) {
+    final int n = grid.length;
+    int swaps = 0;
 
-        // Step 1: find the rightmost '1' in each row
-        for (int i = 0; i < n; i++) {
-            rightMost[i] = -1;
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1) {
-                    rightMost[i] = j;
-                }
-            }
-        }
+    // trailingZeros[i] = number of zeros at the end of row i
+    int[] trailingZeros = new int[n];
 
-        int swaps = 0;
+    for (int row = 0; row < n; ++row)
+      trailingZeros[row] = countTrailingZeros(grid[row]);
 
-        // Step 2: greedy row placement
-        for (int i = 0; i < n; i++) {
-            int target = i;
+    for (int row = 0; row < n; ++row) {
+      final int requiredZeros = n - 1 - row;
 
-            // Find the first row below that satisfies rightMost[row] <= i
-            while (target < n && rightMost[target] > i) {
-                target++;
-            }
+      // Find first row >= row with enough trailing zeros
+      final int candidate =
+          findRowWithEnoughZeros(trailingZeros, row, requiredZeros);
 
-            // No valid row found → impossible
-            if (target == n) return -1;
+      if (candidate == -1)
+        return -1;
 
-            // Step 3: bubble the row up using adjacent swaps
-            while (target > i) {
-                int tmp = rightMost[target];
-                rightMost[target] = rightMost[target - 1];
-                rightMost[target - 1] = tmp;
-                swaps++;
-                target--;
-            }
-        }
+      // Bubble candidate row upward using adjacent swaps
+      for (int k = candidate; k > row; --k)
+        trailingZeros[k] = trailingZeros[k - 1];
 
-        return swaps;
+      swaps += candidate - row;
     }
+
+    return swaps;
+  }
+
+  private int countTrailingZeros(int[] row) {
+    for (int col = row.length - 1; col >= 0; --col)
+      if (row[col] == 1)
+        return row.length - col - 1;
+    return row.length;
+  }
+
+  private int findRowWithEnoughZeros(
+      int[] trailingZeros, int start, int requiredZeros) {
+    for (int i = start; i < trailingZeros.length; ++i)
+      if (trailingZeros[i] >= requiredZeros)
+        return i;
+    return -1;
+  }
 }
