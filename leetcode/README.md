@@ -303,6 +303,7 @@ LeetCode
 |1590|[Make Sum Divisible by P](https://leetcode.com/problems/make-sum-divisible-by-p/)|[Java](./algorithms/java/1590_make-sum-divisible-by-p.java)|Medium|
 |1578|[Minimum Time to Make Rope Colorful](https://leetcode.com/problems/minimum-time-to-make-rope-colorful/)|[Java](./algorithms/java/1578_minimum-time-to-make-rope-colorful.java)|Medium|
 |1550|[Three Consecutive Odds](https://leetcode.com/problems/three-consecutive-odds/)|[Java](./algorithms/java/1550_three-consecutive-odds.java)|Easy|
+|1545|[Find Kth Bit in Nth Binary String](https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/)|[Java](./algorithms/java/1545_find-kth-bit-in-nth-binary-string.java)|Medium|
 |1536|[Minimum Swaps to Arrange a Binary Grid](https://leetcode.com/problems/minimum-swaps-to-arrange-a-binary-grid/)|[Java](./algorithms/java/1536_minimum-swaps-to-arrange-a-binary-grid.java)|Medium|
 |1534|[Count Good Triplets](https://leetcode.com/problems/count-good-triplets/)|[Java](./algorithms/java/1534_count-good-triplets.java)|Easy|
 |1526|[Minimum Number of Increments on Subarrays to Form a Target Array](https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/)|[Java](./algorithms/java/1526_minimum-number-of-increments-on-subarrays-to-form-a-target-array.java)|Hard|
