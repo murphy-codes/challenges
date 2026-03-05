@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-04
 // At the time of submission:
-//   Runtime 4 ms Beats 75.73%
-//   Memory 43.56 MB Beats 91.05%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.05 MB Beats 18.42%
 
 /****************************************
 * 
@@ -35,24 +35,36 @@
 ****************************************/
 
 class Solution {
-    // Count 1s at even and odd indexes to compute mismatches for both patterns.
-    // Pattern "0101..." expects even indexes 0, odd indexes 1; mismatches = eC + o-oC.
-    // Pattern "1010..." expects even indexes 1, odd indexes 0; mismatches = oC + e-eC.
-    // Return the minimum of the two possible patterns.
-    // Time: O(n) - single pass through the string; Space: O(1) - only counters used.
+    // Greedily fix adjacent duplicates to form alternating binary strings.
+    // Helper flips a character if it matches the previous one, counting changes.
+    // We try two patterns: start with original first char or flipped first char.
+    // Return the minimum changes needed between the two patterns.
+    // Time: O(n) — single pass for each pattern; Space: O(n) — arrays for patterns.
+
+    // Helper: returns number of changes to make array alternate
+    private static int fixAlternating(char[] chars) {
+        int changes = 0;
+        int n = chars.length;
+        for (int i = 1; i < n; i++) {
+            if (chars[i] != chars[i - 1]) continue; // already alternating
+            // flip current character to avoid same as previous
+            chars[i] = chars[i - 1] == '0' ? '1' : '0';
+            changes++;
+        }
+        return changes;
+    }
+
     public int minOperations(String s) {
         int n = s.length();
-        int e = (n + 1) / 2; // num of even indexes
-        int o = n / 2;       // num of odd indexes
-        int eC = 0; // count of even-indexed 1s
-        int oC = 0; // count of odd-indexed 1s
-        for (int i = 0; i < n; i++) {
-            char c = s.charAt(i);
-            if ((i & 1) == 0 && c == '1') { eC++; } 
-            else if (c == '1') { oC++; }
-        }
-        int a = eC + (o - oC); // changes to make "0101..."
-        int b = (e - eC) + oC; // changes to make "1010..."
-        return Math.min(eC + (o - oC), (e - eC) + oC);
+        // pattern 1: start with original first char
+        char[] pattern1 = s.toCharArray();
+        int ans1 = fixAlternating(pattern1);
+
+        // pattern 2: flip first char, then fix alternation
+        char[] pattern2 = s.toCharArray();
+        pattern2[0] = pattern2[0] == '0' ? '1' : '0';
+        int ans2 = fixAlternating(pattern2) + 1; // +1 for first char flip
+
+        return Math.min(ans1, ans2);
     }
 }
