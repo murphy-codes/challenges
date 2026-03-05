@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-03
 // At the time of submission:
-//   Runtime 2 ms Beats 94.84%
-//   Memory 47.15 MB Beats 65.84%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 47.05 MB Beats 83.22%
 
 /****************************************
 * 
@@ -30,38 +30,59 @@
 ****************************************/
 
 class Solution {
-    // Count how many 1s appear in each row and each column.
-    // A cell is special if it is 1 and its row and column both have exactly one 1.
-    // Use two passes: one for counting, one for validation.
-    // Time: O(m * n), Space: O(m + n).
+    // For each row, check whether it contains exactly one '1'. If so,
+    // record the column where it appears. Then verify that this column
+    // contains no other '1' in any other row. If both conditions hold,
+    // the position is special. Time complexity is O(m * n) and space
+    // complexity is O(1) since no extra arrays are used.
     public int numSpecial(int[][] mat) {
-        int m = mat.length;
-        int n = mat[0].length;
-
-        int[] rowCount = new int[m];
-        int[] colCount = new int[n];
-
-        // Count number of 1s in each row and column
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (mat[i][j] == 1) {
-                    rowCount[i]++;
-                    colCount[j]++;
-                }
-            }
-        }
 
         int specialCount = 0;
 
-        // Identify special positions
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (mat[i][j] == 1 && rowCount[i] == 1 && colCount[j] == 1) {
-                    specialCount++;
-                }
+        for (int row = 0; row < mat.length; row++) {
+
+            // Check if this row contains exactly one '1'
+            int columnIndex = findSingleOneColumn(mat, row);
+
+            // If exactly one '1' exists, verify the column condition
+            if (columnIndex >= 0 && isColumnValid(mat, row, columnIndex)) {
+                specialCount++;
             }
         }
 
         return specialCount;
+    }
+
+    // Returns the column index if the row contains exactly one '1'.
+    // If the row contains zero or more than one '1', returns -1.
+    private int findSingleOneColumn(int[][] mat, int row) {
+
+        int columnIndex = -1;
+
+        for (int col = 0; col < mat[0].length; col++) {
+
+            if (mat[row][col] == 1) {
+
+                // If we already saw a '1', row is invalid
+                if (columnIndex >= 0)
+                    return -1;
+
+                columnIndex = col;
+            }
+        }
+
+        return columnIndex;
+    }
+
+    // Verifies that no other row contains a '1' in this column.
+    private boolean isColumnValid(int[][] mat, int row, int columnIndex) {
+
+        for (int r = 0; r < mat.length; r++) {
+
+            if (mat[r][columnIndex] == 1 && r != row)
+                return false;
+        }
+
+        return true;
     }
 }
