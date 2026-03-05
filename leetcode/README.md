@@ -285,6 +285,7 @@ LeetCode
 |1780|[Check if Number is a Sum of Powers of Three](https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/)|[Java](./algorithms/java/1780_check-if-number-is-a-sum-of-powers-of-three.java)|Medium|
 |1769|[Minimum Number of Operations to Move All Balls to Each Box](https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/)|[Java](./algorithms/java/1769_minimum-number-of-operations-to-move-all-balls-to-each-box.java)|Medium|
 |1765|[Map of Highest Peak](https://leetcode.com/problems/map-of-highest-peak/)|[Java](./algorithms/java/1765_map-of-highest-peak.java)|Medium|
+|1758|[Minimum Changes To Make Alternating Binary String](https://leetcode.com/problems/minimum-changes-to-make-alternating-binary-string/)|[Java](./algorithms/java/1758_minimum-changes-to-make-alternating-binary-string.java)|Easy|
 |1752|[Map of Highest Peak](https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/)|[Java](./algorithms/java/1752_check-if-array-is-sorted-and-rotated.java)|Easy|
 |1751|[Maximum Number of Events That Can Be Attended II](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/)|[Java](./algorithms/java/1751_maximum-number-of-events-that-can-be-attended-ii.java)|Hard|
 |1749|[Maximum Absolute Sum of Any Subarray](https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/)|[Java](./algorithms/java/1749_maximum-absolute-sum-of-any-subarray.java)|Medium|
