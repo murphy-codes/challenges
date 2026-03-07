@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-06
 // At the time of submission:
-//   Runtime 24 ms Beats 64.83%
-//   Memory 47.00 MB Beats 86.86%
+//   Runtime 12 ms Beats 100.00%
+//   Memory 47.08 MB Beats 79.66%
 
 /****************************************
 * 
@@ -42,46 +42,81 @@
 ****************************************/
 
 class Solution {
-    // Treat rotations as substrings of s+s and use a sliding window of size n.
-    // For each window, compare against both alternating patterns: "0101..." and
-    // "1010...", counting mismatches (flips needed). Update counts as the window
-    // moves to avoid recomputation. The minimum mismatches across all windows
-    // gives the answer. Time: O(n), Space: O(n).
+    // We compute the number of flips required to convert the string into the two
+    // alternating patterns: "010101..." and "101010...". For odd-length strings,
+    // rotations change index parity, so we simulate rotations using a sliding
+    // window over s + s and update mismatch counts incrementally. Each rotation
+    // adjusts only the leaving and entering characters, yielding O(n) time and
+    // O(n) space complexity.
     public int minFlips(String s) {
         int n = s.length();
-        String ss = s + s;
 
-        int diff1 = 0; // mismatches with pattern "0101..."
-        int diff2 = 0; // mismatches with pattern "1010..."
-        int left = 0;
-        int ans = Integer.MAX_VALUE;
+        // flips needed to convert to "010101..."
+        int flipsForPattern01 = 0;
 
-        for (int right = 0; right < ss.length(); right++) {
-            char c = ss.charAt(right);
+        // flips needed to convert to "101010..."
+        int flipsForPattern10 = 0;
 
-            char expected1 = (right % 2 == 0) ? '0' : '1';
-            char expected2 = (right % 2 == 0) ? '1' : '0';
-
-            if (c != expected1) diff1++;
-            if (c != expected2) diff2++;
-
-            if (right - left + 1 > n) {
-                char lc = ss.charAt(left);
-
-                char le1 = (left % 2 == 0) ? '0' : '1';
-                char le2 = (left % 2 == 0) ? '1' : '0';
-
-                if (lc != le1) diff1--;
-                if (lc != le2) diff2--;
-
-                left++;
-            }
-
-            if (right - left + 1 == n) {
-                ans = Math.min(ans, Math.min(diff1, diff2));
+        // Compute mismatch cost for the original string
+        for (int i = 0; i < n; i++) {
+            if (i % 2 == 0) {
+                if (s.charAt(i) == '1')
+                    flipsForPattern01++;
+                else
+                    flipsForPattern10++;
+            } else {
+                if (s.charAt(i) == '0')
+                    flipsForPattern01++;
+                else
+                    flipsForPattern10++;
             }
         }
 
-        return ans;
+        int minFlips = Math.min(flipsForPattern01, flipsForPattern10);
+
+        // Only odd-length strings change parity when rotated
+        if (n % 2 == 1) {
+
+            // Double the string to simulate circular rotations
+            String doubled = s + s;
+
+            // Slide the window of length n
+            for (int start = 1; start < n; start++) {
+
+                char leavingChar = doubled.charAt(start - 1);
+                char enteringChar = doubled.charAt(start + n - 1);
+
+                // Remove effect of character leaving the window
+                if ((start - 1) % 2 == 0) {
+                    if (leavingChar == '1')
+                        flipsForPattern01--;
+                    else
+                        flipsForPattern10--;
+                } else {
+                    if (leavingChar == '0')
+                        flipsForPattern01--;
+                    else
+                        flipsForPattern10--;
+                }
+
+                // Add effect of character entering the window
+                if ((start + n - 1) % 2 == 0) {
+                    if (enteringChar == '1')
+                        flipsForPattern01++;
+                    else
+                        flipsForPattern10++;
+                } else {
+                    if (enteringChar == '0')
+                        flipsForPattern01++;
+                    else
+                        flipsForPattern10++;
+                }
+
+                minFlips = Math.min(minFlips,
+                        Math.min(flipsForPattern01, flipsForPattern10));
+            }
+        }
+
+        return minFlips;
     }
 }
