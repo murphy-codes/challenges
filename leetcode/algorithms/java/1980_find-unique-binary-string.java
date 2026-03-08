@@ -1,6 +1,9 @@
 // Source: https://leetcode.com/problems/find-unique-binary-string/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-02-19
+// At the time of submission:
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.45 MB Beats 100.00%
 
 /****************************************
 * 
