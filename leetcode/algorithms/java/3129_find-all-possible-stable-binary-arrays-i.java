@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-08
 // At the time of submission:
-//   Runtime 1217 ms Beats 5.26%
-//   Memory 287.20 MB Beats 5.26%
+//   Runtime 6 ms Beats 100.00%
+//   Memory 46.21 MB Beats 93.42%
 
 /****************************************
 * 
@@ -34,64 +34,51 @@
 ****************************************/
 
 class Solution {
-    // Use DP with memoization where the state tracks remaining zeros, ones,
-    // the last placed value, and the length of the current run of that value.
-    // When appending a new element, ensure the run length does not exceed the
-    // given limit. Recursively build valid arrays while caching results.
-    // Time: O(zero * one * limit), Space: O(zero * one * limit).
-
-    private static final int MOD = 1_000_000_007;
-    private Integer[][][][] memo;
-    private int limit;
-
+    // Use DP where dp0[i][j] and dp1[i][j] represent arrays with i zeros and j
+    // ones ending in 0 or 1. Normally we extend sequences by appending a value,
+    // but runs longer than 'limit' are invalid. Instead of tracking run length,
+    // we subtract sequences that would create runs of length limit+1 using an
+    // inclusion–exclusion step. Time: O(zero * one), Space: O(zero * one).
     public int numberOfStableArrays(int zero, int one, int limit) {
-        this.limit = limit;
 
-        memo = new Integer[zero + 1][one + 1][2][limit + 1];
+        final int MOD = 1_000_000_007;
 
-        long result = 0;
+        int window = limit + 1;
 
-        if (zero > 0)
-            result = (result + dfs(zero - 1, one, 0, 1)) % MOD;
+        // dpEndWithZero[i][j] = number of arrays using i zeros and j ones ending in 0
+        int[][] dpEndWithZero = new int[zero + 1][one + 1];
 
-        if (one > 0)
-            result = (result + dfs(zero, one - 1, 1, 1)) % MOD;
+        // dpEndWithOne[i][j] = number of arrays using i zeros and j ones ending in 1
+        int[][] dpEndWithOne = new int[zero + 1][one + 1];
 
-        return (int) result;
-    }
+        // Base cases: arrays made of only zeros (length must not exceed limit)
+        for (int z = 1; z <= Math.min(zero, limit); ++z)
+            dpEndWithZero[z][0] = 1;
 
-    private int dfs(int z, int o, int last, int run) {
+        // Base cases: arrays made of only ones
+        for (int o = 1; o <= Math.min(one, limit); ++o)
+            dpEndWithOne[0][o] = 1;
 
-        if (z == 0 && o == 0)
-            return 1;
+        // Build DP table
+        for (int z = 1; z <= zero; ++z) {
+            for (int o = 1; o <= one; ++o) {
 
-        if (memo[z][o][last][run] != null)
-            return memo[z][o][last][run];
+                // Append 0
+                dpEndWithZero[z][o] =
+                        (dpEndWithZero[z - 1][o] + dpEndWithOne[z - 1][o]
+                        - (z >= window ? dpEndWithOne[z - window][o] : 0)) % MOD;
 
-        long ways = 0;
+                // Append 1
+                dpEndWithOne[z][o] =
+                        (dpEndWithOne[z][o - 1] + dpEndWithZero[z][o - 1]
+                        - (o >= window ? dpEndWithZero[z][o - window] : 0)) % MOD;
 
-        // Try placing 0
-        if (z > 0) {
-            if (last == 0) {
-                if (run < limit)
-                    ways += dfs(z - 1, o, 0, run + 1);
-            } else {
-                ways += dfs(z - 1, o, 0, 1);
+                // Normalize negative values after subtraction
+                dpEndWithZero[z][o] = (dpEndWithZero[z][o] + MOD) % MOD;
+                dpEndWithOne[z][o] = (dpEndWithOne[z][o] + MOD) % MOD;
             }
         }
 
-        // Try placing 1
-        if (o > 0) {
-            if (last == 1) {
-                if (run < limit)
-                    ways += dfs(z, o - 1, 1, run + 1);
-            } else {
-                ways += dfs(z, o - 1, 1, 1);
-            }
-        }
-
-        ways %= MOD;
-
-        return memo[z][o][last][run] = (int) ways;
+        return (dpEndWithZero[zero][one] + dpEndWithOne[zero][one]) % MOD;
     }
 }
