@@ -112,6 +112,7 @@ LeetCode
 |3151|[Special Array I](https://leetcode.com/problems/special-array-i/)|[Java](./algorithms/java/3151_special-array-i.java)|Easy|
 |3147|[Taking Maximum Energy From the Mystic Dungeon](https://leetcode.com/problems/taking-maximum-energy-from-the-mystic-dungeon/)|[Java](./algorithms/java/3147_taking-maximum-energy-from-the-mystic-dungeon.java)|Medium|
 |3136|[Valid Word](https://leetcode.com/problems/valid-word/)|[Java](./algorithms/java/3136_valid-word.java)|Easy|
+|3129|[Find All Possible Stable Binary Arrays I](https://leetcode.com/problems/find-all-possible-stable-binary-arrays-i/)|[Java](./algorithms/java/3129_find-all-possible-stable-binary-arrays-i.java)|Medium|
 |3108|[Minimum Cost Walk in Weighted Graph](https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/)|[Java](./algorithms/java/3108_minimum-cost-walk-in-weighted-graph.java)|Hard|
 |3105|[Longest Strictly Increasing or Strictly Decreasing Subarray](https://leetcode.com/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/)|[Java](./algorithms/java/3105_longest-strictly-increasing-or-strictly-decreasing-subarray.java)|Easy|
 |3100|[Water Bottles II](https://leetcode.com/problems/water-bottles-ii/)|[Java](./algorithms/java/3100_water-bottles-ii.java)|Medium|
