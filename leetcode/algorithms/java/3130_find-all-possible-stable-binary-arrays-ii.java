@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-09
 // At the time of submission:
-//   Runtime 49 ms Beats 96.55%
-//   Memory 73.86 MB Beats 85.06%
+//   Runtime 38 ms Beats 100.00%
+//   Memory 53.82 MB Beats 89.66%
 
 /****************************************
 * 
@@ -39,45 +39,84 @@
 ****************************************/
 
 class Solution {
-    // Let dp0[i][j] and dp1[i][j] represent arrays with i zeros and j ones
-    // ending in 0 or 1. We extend sequences by appending a value, but runs
-    // longer than 'limit' are invalid. Instead of tracking run length, we
-    // subtract sequences that would create runs of length limit+1 using an
-    // inclusion–exclusion step. Time: O(zero * one), Space: O(zero * one).
+    // Instead of building arrays element-by-element, we treat them as alternating
+    // groups of zeros and ones where each group length is between 1 and limit.
+    // We first compute the number of ways to split a total length into k groups
+    // with bounded size using prefix-sum DP. Then we combine zero-group and
+    // one-group counts to count valid alternating sequences.
+    // Time: O(max(zero, one)^2), Space: O(max(zero, one)^2).
 
-    public int numberOfStableArrays(int zero, int one, int limit) {
+	private static final int MOD = (int)1e9 + 7;
+	private static final long MOD_LONG = MOD;
 
-        final int MOD = 1_000_000_007;
+	private static int add(int a, int b) {
+		return (a + b) % MOD;
+	}
 
-        int[][] dpEndZero = new int[zero + 1][one + 1];
-        int[][] dpEndOne  = new int[zero + 1][one + 1];
+	private static int subtract(int a, int b) {
+		return (a + MOD - b) % MOD;
+	}
 
-        int L = limit + 1;
+	private static int multiply(int a, int b) {
+		return (int)((long)a * b % MOD_LONG);
+	}
 
-        // Base cases: arrays consisting only of zeros
-        for (int z = 1; z <= Math.min(zero, limit); z++)
-            dpEndZero[z][0] = 1;
+	public static int numberOfStableArrays(int zero, int one, int limit) {
 
-        // Base cases: arrays consisting only of ones
-        for (int o = 1; o <= Math.min(one, limit); o++)
-            dpEndOne[0][o] = 1;
+		int maxCount = Math.max(zero, one);
 
-        for (int z = 1; z <= zero; z++) {
-            for (int o = 1; o <= one; o++) {
+		// ways[g][s] = ways to split total sum s into g groups
+		// where each group size is between 1 and limit
+		int[][] ways = new int[maxCount + 1][maxCount + 1];
 
-                dpEndZero[z][o] =
-                        (dpEndZero[z-1][o] + dpEndOne[z-1][o]
-                        - (z >= L ? dpEndOne[z-L][o] : 0)) % MOD;
+		int[] prefix = new int[maxCount + 1];
 
-                dpEndOne[z][o] =
-                        (dpEndOne[z][o-1] + dpEndZero[z][o-1]
-                        - (o >= L ? dpEndZero[z][o-L] : 0)) % MOD;
+		int[] prevRow = ways[0];
+		prevRow[0] = 1;
 
-                if (dpEndZero[z][o] < 0) dpEndZero[z][o] += MOD;
-                if (dpEndOne[z][o] < 0) dpEndOne[z][o] += MOD;
-            }
-        }
+		// Build DP table for bounded compositions
+		for (int groups = 1; groups <= maxCount; groups++) {
 
-        return (dpEndZero[zero][one] + dpEndOne[zero][one]) % MOD;
-    }
+			int maxSum = Math.min(groups * limit, maxCount);
+
+			int running = 0;
+
+			for (int s = 0; s <= maxSum; s++) {
+				prefix[s] = running;
+				running = add(running, prevRow[s]);
+			}
+
+			prevRow = ways[groups];
+
+			for (int s = groups; s <= maxSum; s++) {
+
+				prevRow[s] =
+						s < limit
+						? prefix[s]
+						: subtract(prefix[s], prefix[s - limit]);
+			}
+		}
+
+		int result = maxCount <= limit ? 2 : 0;
+
+		int zeroWays = ways[1][zero];
+		int oneWays  = ways[1][one];
+
+		for (int groups = 2; groups <= maxCount; groups++) {
+
+			int prevZero = zeroWays;
+			int prevOne  = oneWays;
+
+			zeroWays = ways[groups][zero];
+			oneWays  = ways[groups][one];
+
+			result = add(result, multiply(zeroWays, prevOne));
+			result = add(result, multiply(oneWays, prevZero));
+
+			int both = multiply(zeroWays, oneWays);
+			result = add(result, add(both, both));
+		}
+
+		return result;
+	}
 }
