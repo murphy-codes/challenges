@@ -305,6 +305,7 @@ LeetCode
 |1653|[Minimum Deletions to Make String Balanced](https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/)|[Java](./algorithms/java/1653_minimum-deletions-to-make-string-balanced.java)|Medium|
 |1639|[Number of Ways to Form a Target String Given a Dictionary](https://leetcode.com/problems/number-of-ways-to-form-a-target-string-given-a-dictionary/)|[Java](./algorithms/java/1639_number-of-ways-to-form-a-target-string-given-a-dictionary.java)|Hard|
 |1625|[Lexicographically Smallest String After Applying Operations](https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/)|[Java](./algorithms/java/1625_lexicographically-smallest-string-after-applying-operations.java)|Medium|
+|1622|[Fancy Sequence](https://leetcode.com/problems/fancy-sequence/)|[Java](./algorithms/java/1622_fancy-sequence.java)|Hard|
 |1611|[Minimum One Bit Operations to Make Integers Zero](https://leetcode.com/problems/minimum-one-bit-operations-to-make-integers-zero/)|[Java](./algorithms/java/1611_minimum-one-bit-operations-to-make-integers-zero.java)|Hard|
 |1590|[Make Sum Divisible by P](https://leetcode.com/problems/make-sum-divisible-by-p/)|[Java](./algorithms/java/1590_make-sum-divisible-by-p.java)|Medium|
 |1582|[Special Positions in a Binary Matrix](https://leetcode.com/problems/special-positions-in-a-binary-matrix/)|[Java](./algorithms/java/1582_special-positions-in-a-binary-matrix.java)|Easy|
