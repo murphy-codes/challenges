@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-13
 // At the time of submission:
-//   Runtime 8 ms Beats 79.77%
-//   Memory 47.79 MB Beats 28.50%
+//   Runtime 5 ms Beats 100.00%
+//   Memory 47.76 MB Beats 28.50%
 
 /****************************************
 * 
@@ -52,53 +52,68 @@
 * 
 ****************************************/
 
-import java.lang.Math;
-
 class Solution {
-    // Binary search the minimum time T required to reduce the mountain height
-    // to zero. For a worker with time t, reducing x layers costs
-    // t * (1 + 2 + ... + x) = t * x(x+1)/2 seconds. For a given T we compute
-    // the maximum x each worker can remove using the quadratic formula and
-    // sum the contributions. If total ≥ mountainHeight, T is feasible.
+    // Binary search the minimum time needed to reduce the mountain height.
+    // If a worker has time t, removing x layers costs t*x(x+1)/2 seconds.
+    // For a candidate time T we compute the maximum x each worker can remove
+    // using the quadratic formula and subtract it from the remaining height.
+    // If the total removed height ≥ mountainHeight, T is feasible.
     // Time: O(W log T), Space: O(1).
 
     public long minNumberOfSeconds(int mountainHeight, int[] workerTimes) {
 
+        int maxWorkerTime = max(workerTimes);
+
+        // Estimate average height each worker must remove
+        int avgHeightPerWorker =
+                (mountainHeight - 1) / workerTimes.length + 1;
+
+        // Upper bound on time if the slowest worker did that work
         long left = 1;
-        long right = (long)1e18;
-        long ans = right;
+        long right =
+                (long) maxWorkerTime *
+                avgHeightPerWorker *
+                (avgHeightPerWorker + 1) >> 1;
 
         while (left <= right) {
 
-            long mid = left + (right - left) / 2;
+            long mid = (left + right) >>> 1;
 
-            if (canFinish(mid, mountainHeight, workerTimes)) {
-                ans = mid;
+            if (canFinish(mountainHeight, workerTimes, mid))
                 right = mid - 1;
-            } else {
+            else
                 left = mid + 1;
-            }
         }
 
-        return ans;
+        return left;
     }
 
-    private boolean canFinish(long time, int height, int[] workerTimes) {
+    private static boolean canFinish(
+            int mountainHeight,
+            int[] workerTimes,
+            long time) {
 
-        long removed = 0;
+        for (int workerTime : workerTimes) {
 
-        for (int t : workerTimes) {
+            // Solve x(x+1)/2 * t <= time
+            // Using quadratic formula
+            mountainHeight -=
+                    (int) (-1 + Math.sqrt(1 + (time << 3) / workerTime)) >> 1;
 
-            long k = (long)(2 * time / t);
-
-            long x = (long)((Math.sqrt(1 + 4 * k) - 1) / 2);
-
-            removed += x;
-
-            if (removed >= height)
+            if (mountainHeight <= 0)
                 return true;
         }
 
         return false;
+    }
+
+    private static int max(int[] arr) {
+
+        int maxValue = 0;
+
+        for (int v : arr)
+            maxValue = Math.max(maxValue, v);
+
+        return maxValue;
     }
 }
