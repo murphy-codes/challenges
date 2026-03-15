@@ -90,6 +90,7 @@ LeetCode
 |3307|[Find the K-th Character in String Game II](https://leetcode.com/problems/find-the-k-th-character-in-string-game-ii/)|[Java](./algorithms/java/3307_find-the-k-th-character-in-string-game-ii.java)|Hard|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
 |3304|[Find the K-th Character in String Game I](https://leetcode.com/problems/find-the-k-th-character-in-string-game-i/)|[Java](./algorithms/java/3304_find-the-k-th-character-in-string-game-i.java)|Easy|
+|3296|[Minimum Number of Seconds to Make Mountain Height Zero](https://leetcode.com/problems/minimum-number-of-seconds-to-make-mountain-height-zero/)|[Java](./algorithms/java/3296_minimum-number-of-seconds-to-make-mountain-height-zero.java)|Medium|
 |3289|[The Two Sneaky Numbers of Digitville](https://leetcode.com/problems/the-two-sneaky-numbers-of-digitville/)|[Java](./algorithms/java/3289_the-two-sneaky-numbers-of-digitville.java)|Easy|
 |3272|[Find the Count of Good Integers](https://leetcode.com/problems/find-the-count-of-good-integers/)|[Java](./algorithms/java/3272_find-the-count-of-good-integers.java)|Hard|
 |3234|[Count the Number of Substrings With Dominant Ones](https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/)|[Java](./algorithms/java/3234_count-the-number-of-substrings-with-dominant-ones.java)|Medium|
