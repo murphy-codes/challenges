@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-15
 // At the time of submission:
-//   Runtime 46 ms Beats 84.48%
-//   Memory 124.42 MB Beats 65.52%
+//   Runtime 33 ms Beats 100.00%
+//   Memory 124.96 MB Beats 34.48%
 
 /****************************************
 * 
@@ -45,38 +45,65 @@
 * 
 ****************************************/
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
+
 class Fancy {
-    // Maintain a global linear transform: value = stored * mul + add (mod M).
-    // append() stores numbers in normalized form by reversing the transform
-    // using a modular inverse so later operations apply correctly.
-    // addAll() and multAll() update the global transform instead of each value.
-    // getIndex() reconstructs the value using the stored base value.
-    // Time: O(1) amortized per operation (inverse via fast power). Space: O(n).
+    // Maintain a global affine transform: value = stored * mul + add (mod M).
+    // When appending we reverse the current transform using the inverse
+    // multiplier so stored values remain normalized. multAll() updates both
+    // the forward multiplier and its inverse using precomputed inverses.
+    // getIndex() reconstructs the current value from the stored base.
+    // Time: O(1) per operation. Space: O(n).
 
-    // All results must be modulo this value
-    private static final long MOD = 1_000_000_007;
+    private static final int MOD = 1_000_000_007;
 
-    // Stores normalized values of appended numbers
-    private List<Long> values;
+    // Precompute modular inverses for values 0..100
+    private static final int[] INV =
+            IntStream.range(0, 101)
+                     .map(Fancy::modInverse)
+                     .toArray();
 
-    // Global transformation parameters
-    private long mul;
-    private long add;
+    // Extended Euclidean algorithm to compute modular inverse
+    private static int modInverse(int a) {
 
-    public Fancy() {
-        values = new ArrayList<>();
-        mul = 1;
-        add = 0;
+        int m = MOD;
+        int y = 0;
+        int x = 1;
+
+        while (a > 1) {
+
+            int q = a / m;
+
+            int temp = m;
+            m = a % m;
+            a = temp;
+
+            temp = y;
+            y = x - q * y;
+            x = temp;
+        }
+
+        return x < 0 ? x + MOD : x;
     }
+
+    // Global forward transform parameters
+    private long mul = 1;
+    private long add = 0;
+
+    // Reverse multiplier (inverse of cumulative multiplication)
+    private long invMul = 1;
+
+    // Stored normalized values
+    private final List<Integer> values = new ArrayList<>();
 
     public void append(int val) {
 
-        // Normalize the value by reversing the current transformation
-        long normalized =
-                ((val - add + MOD) % MOD) *
-                modInverse(mul) % MOD;
-
-        values.add(normalized);
+        // Reverse current transform before storing
+        values.add(
+            (int)(((MOD - add + val) * invMul) % MOD)
+        );
     }
 
     public void addAll(int inc) {
@@ -84,7 +111,12 @@ class Fancy {
     }
 
     public void multAll(int m) {
+
         mul = (mul * m) % MOD;
+
+        // Maintain inverse multiplier
+        invMul = (invMul * INV[m]) % MOD;
+
         add = (add * m) % MOD;
     }
 
@@ -93,32 +125,6 @@ class Fancy {
         if (idx >= values.size())
             return -1;
 
-        long base = values.get(idx);
-
-        long result = (base * mul % MOD + add) % MOD;
-
-        return (int) result;
-    }
-
-    // Modular exponentiation
-    private long modPow(long base, long exp) {
-
-        long result = 1;
-
-        while (exp > 0) {
-
-            if ((exp & 1) == 1)
-                result = result * base % MOD;
-
-            base = base * base % MOD;
-            exp >>= 1;
-        }
-
-        return result;
-    }
-
-    // Fermat modular inverse
-    private long modInverse(long x) {
-        return modPow(x, MOD - 2);
+        return (int)(((values.get(idx) * mul) + add) % MOD);
     }
 }
