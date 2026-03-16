@@ -128,3 +128,12 @@ class Fancy {
         return (int)(((values.get(idx) * mul) + add) % MOD);
     }
 }
+
+/**
+ * Your Fancy object will be instantiated and called as such:
+ * Fancy obj = new Fancy();
+ * obj.append(val);
+ * obj.addAll(inc);
+ * obj.multAll(m);
+ * int param_4 = obj.getIndex(idx);
+ */
