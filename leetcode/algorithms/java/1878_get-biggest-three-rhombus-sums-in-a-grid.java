@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-15
 // At the time of submission:
-//   Runtime 40 ms Beats 69.57%
-//   Memory 47.20 MB Beats 92.75%
+//   Runtime 15 ms Beats 100.00%
+//   Memory 46.49 MB Beats 100.00%
 
 /****************************************
 * 
@@ -50,76 +50,88 @@
 * 
 ****************************************/
 
-import java.util.TreeSet;
-
 class Solution {
-    // Iterate every grid cell as the top vertex of a rhombus and expand
-    // possible sizes while staying within bounds. For each valid rhombus,
-    // compute the border sum by walking its four edges. A TreeSet keeps
-    // the three largest distinct sums while discarding smaller values.
-    // Time: O(m * n * min(m,n)^2). Space: O(1) aside from result storage.
+    // Enumerate all rhombus borders centered at each grid cell. Radius 0
+    // rhombuses are single cells; larger rhombuses sum their four edges.
+    // Instead of using a TreeSet, maintain the three largest distinct sums
+    // manually with constant-time comparisons. This avoids extra overhead.
+    // Time: O(m * n * min(m,n)^2). Space: O(1).
+
+    // Track the three largest distinct rhombus sums
+    private int largest = -1;
+    private int secondLargest = -1;
+    private int thirdLargest = -1;
 
     public int[] getBiggestThree(int[][] grid) {
 
         int rows = grid.length;
         int cols = grid[0].length;
 
-        TreeSet<Integer> best = new TreeSet<>();
+        // Radius 0 rhombus (single cell)
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                add(grid[r][c]);
+            }
+        }
 
+        // Enumerate rhombus borders of radius k >= 1
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
 
-                // size 0 rhombus (single cell)
-                add(best, grid[r][c]);
-
-                for (int k = 1; ; k++) {
-
-                    int bottom = r + 2 * k;
-                    int left = c - k;
-                    int right = c + k;
-
-                    if (bottom >= rows || left < 0 || right >= cols)
-                        break;
+                for (int k = 1;
+                     r - k >= 0 && r + k < rows &&
+                     c - k >= 0 && c + k < cols;
+                     k++) {
 
                     int sum = 0;
 
-                    int x = r, y = c;
+                    // top -> right edge
+                    for (int d = 0; d < k; d++)
+                        sum += grid[r - k + d][c + d];
 
-                    // top -> right
-                    for (int i = 0; i < k; i++)
-                        sum += grid[x + i][y + i];
+                    // right -> bottom edge
+                    for (int d = 0; d < k; d++)
+                        sum += grid[r + d][c + k - d];
 
-                    // right -> bottom
-                    for (int i = 0; i < k; i++)
-                        sum += grid[x + k + i][y + k - i];
+                    // bottom -> left edge
+                    for (int d = 0; d < k; d++)
+                        sum += grid[r + k - d][c - d];
 
-                    // bottom -> left
-                    for (int i = 0; i < k; i++)
-                        sum += grid[x + 2 * k - i][y - i];
+                    // left -> top edge
+                    for (int d = 0; d < k; d++)
+                        sum += grid[r - d][c - k + d];
 
-                    // left -> top
-                    for (int i = 0; i < k; i++)
-                        sum += grid[x + k - i][y - k + i];
-
-                    add(best, sum);
+                    add(sum);
                 }
             }
         }
 
-        int[] result = new int[best.size()];
-        int i = 0;
+        if (secondLargest == -1)
+            return new int[]{largest};
 
-        while (!best.isEmpty())
-            result[i++] = best.pollLast();
+        if (thirdLargest == -1)
+            return new int[]{largest, secondLargest};
 
-        return result;
+        return new int[]{largest, secondLargest, thirdLargest};
     }
 
-    private void add(TreeSet<Integer> set, int val) {
+    // Maintains the top three distinct values
+    private void add(int val) {
 
-        set.add(val);
+        if (val == largest || val == secondLargest || val == thirdLargest)
+            return;
 
-        if (set.size() > 3)
-            set.pollFirst();
+        if (val > largest) {
+            thirdLargest = secondLargest;
+            secondLargest = largest;
+            largest = val;
+        }
+        else if (val > secondLargest) {
+            thirdLargest = secondLargest;
+            secondLargest = val;
+        }
+        else if (val > thirdLargest) {
+            thirdLargest = val;
+        }
     }
 }
