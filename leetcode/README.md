@@ -279,6 +279,7 @@ LeetCode
 |1900|[The Earliest and Latest Rounds Where Players Compete](https://leetcode.com/problems/the-earliest-and-latest-rounds-where-players-compete/)|[Java](./algorithms/java/1900_the-earliest-and-latest-rounds-where-players-compete.java)|Hard|
 |1895|[Largest Magic Square](https://leetcode.com/problems/largest-magic-square/)|[Java](./algorithms/java/1895_largest-magic-square.java)|Medium|
 |1888|[Minimum Number of Flips to Make the Binary String Alternating](https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/)|[Java](./algorithms/java/1888_minimum-number-of-flips-to-make-the-binary-string-alternating.java)|Medium|
+|1878|[Get Biggest Three Rhombus Sums in a Grid](https://leetcode.com/problems/get-biggest-three-rhombus-sums-in-a-grid/)|[Java](./algorithms/java/1878_get-biggest-three-rhombus-sums-in-a-grid.java)|Medium|
 |1877|[Minimize Maximum Pair Sum in Array](https://leetcode.com/problems/minimize-maximum-pair-sum-in-array/)|[Java](./algorithms/java/1877_minimize-maximum-pair-sum-in-array.java)|Medium|
 |1865|[Finding Pairs With a Certain Sum](https://leetcode.com/problems/finding-pairs-with-a-certain-sum/)|[Java](./algorithms/java/1865_finding-pairs-with-a-certain-sum.java)|Medium|
 |1863|[Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals/)|[Java](./algorithms/java/1863_sum-of-all-subset-xor-totals.java)|Easy|
