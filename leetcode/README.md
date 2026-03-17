@@ -372,6 +372,7 @@ LeetCode
 |1022|[Sum of Root To Leaf Binary Numbers](https://leetcode.com/problems/sum-of-root-to-leaf-binary-numbers/)|[Java](./algorithms/java/1022_sum-of-root-to-leaf-binary-numbers.java)|Easy|
 |1018|[Binary Prefix Divisible By 5](https://leetcode.com/problems/binary-prefix-divisible-by-5/)|[Java](./algorithms/java/1018_binary-prefix-divisible-by-5.java)|Medium|
 |1015|[Smallest Integer Divisible by K](https://leetcode.com/problems/smallest-integer-divisible-by-k/)|[Java](./algorithms/java/1015_smallest-integer-divisible-by-k.java)|Easy|
+|1009|[Complement of Base 10 Integer](https://leetcode.com/problems/complement-of-base-10-integer/)|[Java](./algorithms/java/1009_complement-of-base-10-integer.java)|Easy|
 |1007|[Minimum Domino Rotations For Equal Row](https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/)|[Java](./algorithms/java/1007_minimum-domino-rotations-for-equal-row.java)|Medium|
 |983|[Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/)|[Java](./algorithms/java/983_minimum-cost-for-tickets.java)|Medium|
 |976|[Largest Perimeter Triangle](https://leetcode.com/problems/largest-perimeter-triangle/)|[Java](./algorithms/java/976_largest-perimeter-triangle.java)|Easy|
