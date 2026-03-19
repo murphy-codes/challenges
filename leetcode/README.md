@@ -122,6 +122,7 @@ LeetCode
 |3085|[Minimum Deletions to Make String K-Special](https://leetcode.com/problems/minimum-deletions-to-make-string-k-special/)|[Java](./algorithms/java/3085_minimum-deletions-to-make-string-k-special.java)|Medium|
 |3075|[Maximize Happiness of Selected Children](https://leetcode.com/problems/maximize-happiness-of-selected-children/)|[Java](./algorithms/java/3075_maximize-happiness-of-selected-children.java)|Medium|
 |3074|[Apple Redistribution into Boxes](https://leetcode.com/problems/apple-redistribution-into-boxes/)|[Java](./algorithms/java/3074_apple-redistribution-into-boxes.java)|Easy|
+|3070|[Count Submatrices with Top-Left Element and Sum Less Than k](https://leetcode.com/problems/count-submatrices-with-top-left-element-and-sum-less-than-k/)|[Java](./algorithms/java/3070_count-submatrices-with-top-left-element-and-sum-less-than-k.java)|Medium|
 |3068|[Find the Maximum Sum of Node Values](https://leetcode.com/problems/find-the-maximum-sum-of-node-values/)|[Java](./algorithms/java/3068_find-the-maximum-sum-of-node-values.java)|Hard|
 |3066|[Minimum Operations to Exceed Threshold Value II](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
 |3047|[Find the Largest Area of Square Inside Two Rectangles](https://leetcode.com/problems/find-the-largest-area-of-square-inside-two-rectangles/)|[Java](./algorithms/java/3047_find-the-largest-area-of-square-inside-two-rectangles.java)|Medium|
