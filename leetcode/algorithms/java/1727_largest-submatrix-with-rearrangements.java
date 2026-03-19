@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-18
 // At the time of submission:
-//   Runtime 13 ms Beats 77.93%
-//   Memory 114.22 MB Beats 39.62%
+//   Runtime 5 ms Beats 100.00%
+//   Memory 114.19 MB Beats 43.27%
 
 /****************************************
 * 
@@ -39,41 +39,81 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Treat each row as a histogram of consecutive 1s heights. Since columns
-    // can be rearranged arbitrarily, we sort the heights in descending order
-    // for each row and compute the best rectangle using height * width.
-    // This ensures we always use the tallest columns first.
-    // Time: O(m * n log n), Space: O(n).
+    // Convert matrix into heights of consecutive 1s per column (in-place).
+    // For each row, use counting sort (freq array) instead of sorting to
+    // process heights in descending order and compute max area greedily.
+    // Width expands as we include more columns with decreasing heights.
+    // Time: O(m * n). Space: O(n) for frequency array.
+
+    // Frequency array used for counting sort of heights
+    static int[] freq = new int[100000];
+
     public int largestSubmatrix(int[][] matrix) {
 
-        int m = matrix.length;
-        int n = matrix[0].length;
+        int rows = matrix.length;
+        int cols = matrix[0].length;
 
-        int[] height = new int[n];
         int maxArea = 0;
 
-        for (int i = 0; i < m; i++) {
+        // Handle first row (height = 1s only)
+        for (int val : matrix[0]) {
+            if (val == 1) maxArea++;
+        }
 
-            // Build heights
-            for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == 1)
-                    height[j] += 1;
-                else
-                    height[j] = 0;
+        if (rows == 1) return maxArea;
+
+        // Special case: single column
+        if (cols == 1) {
+            for (int i = 1; i < rows; i++) {
+                int val = matrix[i][0];
+
+                // If val == 1, add previous height
+                val += (-val & matrix[i - 1][0]);
+
+                matrix[i][0] = val;
+                maxArea = Math.max(maxArea, val);
+            }
+            return maxArea;
+        }
+
+        // Process each row
+        for (int i = 1; i < rows; i++) {
+
+            // Build heights (in-place)
+            for (int j = 0; j < cols; j++) {
+                int val = matrix[i][j];
+                val += (-val & matrix[i - 1][j]);
+                matrix[i][j] = val;
             }
 
-            // Copy and sort descending
-            int[] sorted = height.clone();
-            Arrays.sort(sorted);
+            // Find min and max heights in this row
+            int minHeight = i + 1;
+            int maxHeight = 0;
 
-            // Try all widths
-            for (int j = 0; j < n; j++) {
-                int h = sorted[n - 1 - j]; // largest first
-                int width = j + 1;
-                maxArea = Math.max(maxArea, h * width);
+            for (int h : matrix[i]) {
+                minHeight = Math.min(minHeight, h);
+                maxHeight = Math.max(maxHeight, h);
+            }
+
+            // Reset frequency array for used range
+            for (int k = 0; k <= maxHeight - minHeight; k++) {
+                freq[k] = 0;
+            }
+
+            // Count frequencies of heights
+            for (int h : matrix[i]) {
+                freq[h - minHeight]++;
+            }
+
+            int width = 0;
+
+            // Traverse heights from largest to smallest
+            for (int h = maxHeight - minHeight; width < cols; h--) {
+                if (freq[h] > 0) {
+                    width += freq[h];
+                    maxArea = Math.max(maxArea, width * (h + minHeight));
+                }
             }
         }
 
