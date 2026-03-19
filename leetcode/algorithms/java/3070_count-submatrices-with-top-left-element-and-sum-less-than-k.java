@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-18
 // At the time of submission:
-//   Runtime 6 ms Beats 65.60%
-//   Memory 161.21 MB Beats 64.80%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 161.06 MB Beats 86.40%
 
 /****************************************
 * 
@@ -33,34 +33,39 @@
 ****************************************/
 
 class Solution {
-    // Since all submatrices must include (0,0), each valid submatrix is
-    // uniquely defined by its bottom-right corner (i, j). We compute the
-    // 2D prefix sum in-place so grid[i][j] becomes the sum of rectangle
-    // (0,0) to (i,j). Count how many such prefix sums are <= k.
-    // Time: O(m * n). Space: O(1).
+    // We iterate row by row, maintaining columnSums[j] as the sum of
+    // column j from row 0 to current row. For each row, we build a
+    // running prefixSum across columns, which represents the sum of
+    // submatrix (0,0) to (i,j). Count how many such sums are ≤ k.
+    // Time: O(m * n), Space: O(n).
+
     public int countSubmatrices(int[][] grid, int k) {
+        int rowsCount = grid.length;
+        int colsCount = grid[0].length;
 
-        int m = grid.length;
-        int n = grid[0].length;
+        // columnSums[j] = sum of column j from row 0 to current row i
+        int[] columnSums = new int[colsCount];
 
-        int count = 0;
+        int result = 0;
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+        for (int row = 0; row < rowsCount; row++) {
+            int prefixSum = 0; // sum of rectangle (0,0) → (row, col)
 
-                int top = (i > 0) ? grid[i - 1][j] : 0;
-                int left = (j > 0) ? grid[i][j - 1] : 0;
-                int topLeft = (i > 0 && j > 0) ? grid[i - 1][j - 1] : 0;
+            for (int col = 0; col < colsCount; col++) {
 
-                // Build prefix sum in-place
-                grid[i][j] += top + left - topLeft;
+                // Accumulate column sum up to current row
+                columnSums[col] += grid[row][col];
 
-                if (grid[i][j] <= k) {
-                    count++;
+                // Build prefix sum across columns
+                prefixSum += columnSums[col];
+
+                // Check if current submatrix sum ≤ k
+                if (prefixSum <= k) {
+                    result++;
                 }
             }
         }
 
-        return count;
+        return result;
     }
 }
