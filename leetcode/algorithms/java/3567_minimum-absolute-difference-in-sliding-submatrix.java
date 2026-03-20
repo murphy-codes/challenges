@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-19
 // At the time of submission:
-//   Runtime 19 ms Beats 61.70%
-//   Memory 47.68 MB Beats 53.19%
+//   Runtime 11 ms Beats 97.87%
+//   Memory 48.24 MB Beats 12.77%
 
 /****************************************
 * 
@@ -56,49 +56,49 @@
 import java.util.Arrays;
 
 class Solution {
-    // For each k x k submatrix, collect all elements and sort them.
-    // The minimum absolute difference must occur between adjacent
-    // distinct values in sorted order, so we skip duplicates and scan.
-    // If no distinct pair exists, return 0. Constraints are small (≤30),
-    // so brute force is sufficient. Time: O(m * n * k^2 log k), Space: O(k^2).
-    public int[][] minAbsDiff(int[][] grid, int k) {
+    // For each k x k submatrix, collect all values into an array,
+    // sort them, and compute the minimum difference between adjacent
+    // distinct elements. Sorting ensures the minimum difference is
+    // found among neighbors. If no distinct pair exists, return 0.
+    // Time: O(m * n * k^2 log k), Space: O(k^2).
 
-        int m = grid.length;
-        int n = grid[0].length;
+    public int getMinDiff(int[] values) {
 
-        int[][] result = new int[m - k + 1][n - k + 1];
+        Arrays.sort(values);
 
-        // Special case: k == 1 → no pairs → answer is 0
-        if (k == 1) {
-            return result;
+        int minDiff = Integer.MAX_VALUE;
+
+        for (int i = 1; i < values.length; i++) {
+            // Only consider distinct values
+            if (values[i - 1] != values[i]) {
+                minDiff = Math.min(minDiff, Math.abs(values[i] - values[i - 1]));
+            }
         }
 
-        for (int i = 0; i <= m - k; i++) {
-            for (int j = 0; j <= n - k; j++) {
+        return (minDiff == Integer.MAX_VALUE) ? 0 : minDiff;
+    }
 
-                int size = k * k;
-                int[] vals = new int[size];
-                int idx = 0;
+    public int[][] minAbsDiff(int[][] grid, int k) {
 
-                // Collect values
-                for (int r = i; r < i + k; r++) {
-                    for (int c = j; c < j + k; c++) {
-                        vals[idx++] = grid[r][c];
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        int[][] result = new int[rows - k + 1][cols - k + 1];
+
+        for (int r = 0; r <= rows - k; r++) {
+            for (int c = 0; c <= cols - k; c++) {
+
+                int[] values = new int[k * k];
+                int index = 0;
+
+                // Collect k x k submatrix values
+                for (int i = r; i < r + k; i++) {
+                    for (int j = c; j < c + k; j++) {
+                        values[index++] = grid[i][j];
                     }
                 }
 
-                Arrays.sort(vals);
-
-                int minDiff = Integer.MAX_VALUE;
-
-                for (int t = 1; t < size; t++) {
-                    if (vals[t] != vals[t - 1]) { // 🔑 skip duplicates
-                        minDiff = Math.min(minDiff, vals[t] - vals[t - 1]);
-                    }
-                }
-
-                // If all values are the same → no distinct pair → return 0
-                result[i][j] = (minDiff == Integer.MAX_VALUE) ? 0 : minDiff;
+                result[r][c] = getMinDiff(values);
             }
         }
 
