@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-19
 // At the time of submission:
-//   Runtime 17 ms Beats 98.11%
-//   Memory 260.24 MB Beats 5.66%
+//   Runtime 16 ms Beats 100.00%
+//   Memory 260.23 MB Beats 5.66%
 
 /****************************************
 * 
@@ -41,41 +41,41 @@
 ****************************************/
 
 class Solution {
-    // Convert grid values: 'X'=+1, 'Y'=-1, '.'=0. Maintain column-wise
-    // prefix sums and X counts. For each row, build a running prefix sum
-    // across columns representing submatrix (0,0) to (i,j). Count cases
-    // where sum == 0 (equal X and Y) and at least one X exists.
+    // Maintain column-wise counts of X and Y while iterating rows.
+    // For each row, build prefix sums across columns representing
+    // submatrix (0,0) to (r,c). A valid submatrix has equal X and Y
+    // counts and at least one X. Count all such prefixes.
     // Time: O(m * n), Space: O(n).
     public int numberOfSubmatrices(char[][] grid) {
+
         int rows = grid.length;
         int cols = grid[0].length;
 
-        int[] colSum = new int[cols]; // stores X=+1, Y=-1
-        int[] colX = new int[cols];   // counts number of X
+        // Column-wise cumulative counts of X and Y
+        int[] colXCount = new int[cols];
+        int[] colYCount = new int[cols];
 
         int result = 0;
 
-        for (int i = 0; i < rows; i++) {
+        for (int r = 0; r < rows; r++) {
 
-            int prefixSum = 0;
-            int prefixX = 0;
+            // Update column accumulators for current row
+            for (int c = 0; c < cols; c++) {
+                if (grid[r][c] == 'X') colXCount[c]++;
+                if (grid[r][c] == 'Y') colYCount[c]++;
+            }
 
-            for (int j = 0; j < cols; j++) {
+            int totalX = 0;
+            int totalY = 0;
 
-                // Update column accumulators
-                if (grid[i][j] == 'X') {
-                    colSum[j] += 1;
-                    colX[j] += 1;
-                } else if (grid[i][j] == 'Y') {
-                    colSum[j] -= 1;
-                }
+            // Build prefix over columns for submatrix (0,0) → (r,c)
+            for (int c = 0; c < cols; c++) {
 
-                // Build prefix for submatrix (0,0) → (i,j)
-                prefixSum += colSum[j];
-                prefixX += colX[j];
+                totalX += colXCount[c];
+                totalY += colYCount[c];
 
                 // Valid if equal X and Y AND at least one X
-                if (prefixSum == 0 && prefixX > 0) {
+                if (totalX == totalY && totalX > 0) {
                     result++;
                 }
             }
@@ -84,3 +84,5 @@ class Solution {
         return result;
     }
 }
+
+ 
