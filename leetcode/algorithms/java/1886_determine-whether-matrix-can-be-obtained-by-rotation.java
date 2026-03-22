@@ -7,9 +7,9 @@
 
 /****************************************
 * 
-* Given two `n x n` binary matrices `mat` and `target`, return `true` if
-* _ it is possible to make `mat` equal to `target` by rotating `mat` in
-* _ 90-degree increments, or `false` otherwise.
+* Given two `n x n` binary matrices `mat` and `target`, return `true` if it is
+* _ possible to make `mat` equal to `target` by rotating `mat` in 90-degree
+* _ increments, or `false` otherwise.
 *
 * Example 1:
 * Input: mat = [[0,1],[1,0]], target = [[1,0],[0,1]]
@@ -30,7 +30,7 @@
 * • `n == mat.length == target.length`
 * • `n == mat[i].length == target[i].length`
 * • `1 <= n <= 10`
-* • `mat[i][j] and target[i][j] are either 0 or 1.`
+* • `mat[i][j]` and `target[i][j]` are either `0` or `1`.
 * 
 ****************************************/
 
