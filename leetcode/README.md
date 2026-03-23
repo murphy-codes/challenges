@@ -314,6 +314,7 @@ LeetCode
 |1625|[Lexicographically Smallest String After Applying Operations](https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/)|[Java](./algorithms/java/1625_lexicographically-smallest-string-after-applying-operations.java)|Medium|
 |1622|[Fancy Sequence](https://leetcode.com/problems/fancy-sequence/)|[Java](./algorithms/java/1622_fancy-sequence.java)|Hard|
 |1611|[Minimum One Bit Operations to Make Integers Zero](https://leetcode.com/problems/minimum-one-bit-operations-to-make-integers-zero/)|[Java](./algorithms/java/1611_minimum-one-bit-operations-to-make-integers-zero.java)|Hard|
+|1594|[Maximum Non Negative Product in a Matrix](https://leetcode.com/problems/maximum-non-negative-product-in-a-matrix/)|[Java](./algorithms/java/1594_maximum-non-negative-product-in-a-matrix.java)|Medium|
 |1590|[Make Sum Divisible by P](https://leetcode.com/problems/make-sum-divisible-by-p/)|[Java](./algorithms/java/1590_make-sum-divisible-by-p.java)|Medium|
 |1582|[Special Positions in a Binary Matrix](https://leetcode.com/problems/special-positions-in-a-binary-matrix/)|[Java](./algorithms/java/1582_special-positions-in-a-binary-matrix.java)|Easy|
 |1578|[Minimum Time to Make Rope Colorful](https://leetcode.com/problems/minimum-time-to-make-rope-colorful/)|[Java](./algorithms/java/1578_minimum-time-to-make-rope-colorful.java)|Medium|
