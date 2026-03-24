@@ -150,6 +150,7 @@ LeetCode
 |2942|[Find Words Containing Character](https://leetcode.com/problems/find-words-containing-character/)|[Java](./algorithms/java/2942_find-words-containing-character.java)|Easy|
 |2929|[Distribute Candies Among Children II](https://leetcode.com/problems/distribute-candies-among-children-ii/)|[Java](./algorithms/java/2929_distribute-candies-among-children-ii.java)|Medium|
 |2918|[Minimum Equal Sum of Two Arrays After Replacing Zeros](https://leetcode.com/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/)|[Java](./algorithms/java/2918_minimum-equal-sum-of-two-arrays-after-replacing-zeros.java)|Medium|
+|2906|[Construct Product Matrix](https://leetcode.com/problems/construct-product-matrix/)|[Java](./algorithms/java/2906_construct-product-matrix.java)|Medium|
 |2901|[Longest Unequal Adjacent Groups Subsequence II](https://leetcode.com/problems/longest-unequal-adjacent-groups-subsequence-ii/)|[Java](./algorithms/java/2901_longest-unequal-adjacent-groups-subsequence-ii.java)|Medium|
 |2900|[Longest Unequal Adjacent Groups Subsequence I](https://leetcode.com/problems/longest-unequal-adjacent-groups-subsequence-i/)|[Java](./algorithms/java/2900_longest-unequal-adjacent-groups-subsequence-i.java)|Easy|
 |2894|[Divisible and Non-divisible Sums Difference](https://leetcode.com/problems/divisible-and-non-divisible-sums-difference/)|[Java](./algorithms/java/2894_divisible-and-non-divisible-sums-difference.java)|Easy|
