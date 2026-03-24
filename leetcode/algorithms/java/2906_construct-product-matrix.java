@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-23
 // At the time of submission:
-//   Runtime 10 ms Beats 84.31%
-//   Memory 101.15 MB Beats 39.22%
+//   Runtime 7 ms Beats 99.02%
+//   Memory 89.09 MB Beats 96.57%
 
 /****************************************
 * 
@@ -41,37 +41,51 @@
 ****************************************/
 
 class Solution {
-    // Treat matrix as a flattened array and use prefix/suffix products.
-    // First pass stores product of all previous elements in result.
-    // Second pass multiplies by product of elements after each position.
-    // Avoids division and handles modulo safely at each step.
-    // Time: O(n * m) with two passes over all elements.
-    // Space: O(1) extra space aside from the output matrix.
+    // Flatten the matrix into a 1D array to simplify processing.
+    // Compute prefix[i] as product of elements before index i.
+    // Compute suffix[i] as product of elements after index i.
+    // Result at each index is prefix[i] * suffix[i] modulo mod.
+    // Time: O(n * m) for linear passes over all elements.
+    // Space: O(n * m) due to auxiliary prefix and suffix arrays.
     public int[][] constructProductMatrix(int[][] grid) {
-        int n = grid.length;
-        int m = grid[0].length;
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int size = rows * cols;
         int mod = 12345;
 
-        int[][] result = new int[n][m];
+        int[] flat = new int[size];      // Flattened grid
+        long[] prefix = new long[size];  // Product before index
+        long[] suffix = new long[size];  // Product after index
 
-        // Prefix pass
-        int prefix = 1;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                result[i][j] = prefix;
-                prefix = (int)((long)prefix * grid[i][j] % mod);
+        // Flatten 2D grid into 1D array
+        int index = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                flat[index++] = grid[i][j];
             }
         }
 
-        // Suffix pass
-        int suffix = 1;
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = m - 1; j >= 0; j--) {
-                result[i][j] = (int)((long)result[i][j] * suffix % mod);
-                suffix = (int)((long)suffix * grid[i][j] % mod);
+        // Build prefix product array
+        prefix[0] = 1;
+        for (int i = 1; i < size; i++) {
+            prefix[i] = (prefix[i - 1] * flat[i - 1]) % mod;
+        }
+
+        // Build suffix product array
+        suffix[size - 1] = 1;
+        for (int i = size - 2; i >= 0; i--) {
+            suffix[i] = (flat[i + 1] * suffix[i + 1]) % mod;
+        }
+
+        // Reconstruct result into original grid
+        index = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                grid[i][j] = (int)((prefix[index] * suffix[index]) % mod);
+                index++;
             }
         }
 
-        return result;
+        return grid;
     }
 }
