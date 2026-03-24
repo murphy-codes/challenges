@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-23
 // At the time of submission:
-//   Runtime 1 ms Beats 100.00%
-//   Memory 44.27 MB Beats 43.56%
+//   Runtime 10 ms Beats 84.31%
+//   Memory 101.15 MB Beats 39.22%
 
 /****************************************
 * 
