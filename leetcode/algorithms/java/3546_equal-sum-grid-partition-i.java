@@ -3,7 +3,7 @@
 // Date: 2026-03-24
 // At the time of submission:
 //   Runtime 4 ms Beats 97.20%
-//   Memory 161.87 MB Beats 26.57%
+//   Memory 161.04 MB Beats 53.15%
 
 /****************************************
 * 
@@ -36,54 +36,51 @@
 ****************************************/
 
 class Solution {
-    // Compute total sum and check if it is even.
-    // For horizontal cuts, accumulate row sums and check for target.
-    // For vertical cuts, accumulate column sums similarly.
-    // A valid cut exists if any prefix equals half the total sum.
-    // Time: O(m * n) as all elements are visited a constant number of times.
-    // Space: O(1) using only running sums.
+    // Compute row sums and total grid sum in one pass.
+    // If total is odd, equal partition is impossible.
+    // Check horizontal cuts using prefix sums of row totals.
+    // Then check vertical cuts by accumulating column values.
+    // Early exit when running sum exceeds target.
+    // Time: O(m * n); Space: O(m) for row sums.
     public boolean canPartitionGrid(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
+        int rows = grid.length;
+        int cols = grid[0].length;
 
-        long total = 0;
+        long[] rowSums = new long[rows];
+        long totalSum = 0;
 
-        // Compute total sum
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                total += grid[i][j];
+        // Compute row sums and total sum
+        for (int i = 0; i < rows; i++) {
+            for (int val : grid[i]) {
+                rowSums[i] += val;
             }
+            totalSum += rowSums[i];
         }
 
         // If total is odd, cannot split evenly
-        if (total % 2 != 0) {
+        if ((totalSum % 2) != 0) {
             return false;
         }
 
-        long target = total / 2;
+        long target = totalSum / 2;
 
-        // Check horizontal cuts
+        // Check horizontal cuts using row sums
         long running = 0;
-        for (int i = 0; i < m - 1; i++) { // ensure bottom is non-empty
-            for (int j = 0; j < n; j++) {
-                running += grid[i][j];
-            }
-            if (running == target) {
-                return true;
-            }
+        for (int i = 0; i < rows - 1 && running < target; i++) {
+            running += rowSums[i];
+        }
+        if (running == target) {
+            return true;
         }
 
         // Check vertical cuts
         running = 0;
-        for (int j = 0; j < n - 1; j++) { // ensure right is non-empty
-            for (int i = 0; i < m; i++) {
+        for (int j = 0; j < cols - 1 && running < target; j++) {
+            for (int i = 0; i < rows; i++) {
                 running += grid[i][j];
-            }
-            if (running == target) {
-                return true;
             }
         }
 
-        return false;
+        return running == target;
     }
 }
