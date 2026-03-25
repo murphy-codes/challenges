@@ -27,6 +27,7 @@ LeetCode
 |3573|[Best Time to Buy and Sell Stock V](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-v/)|[Java](./algorithms/java/3573_best-time-to-buy-and-sell-stock-v.java)|Medium|
 |3567|[Minimum Absolute Difference in Sliding Submatrix](https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/)|[Java](./algorithms/java/3567_minimum-absolute-difference-in-sliding-submatrix.java)|Medium|
 |3562|[Maximum Profit from Trading Stocks with Discounts](https://leetcode.com/problems/maximum-profit-from-trading-stocks-with-discounts/)|[Java](./algorithms/java/3562_maximum-profit-from-trading-stocks-with-discounts.java)|Hard|
+|3546|[Equal Sum Grid Partition I](https://leetcode.com/problems/equal-sum-grid-partition-i/)|[Java](./algorithms/java/3546_equal-sum-grid-partition-i.java)|Medium|
 |3542|[Minimum Operations to Convert All Elements to Zero](https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/)|[Java](./algorithms/java/3542_minimum-operations-to-convert-all-elements-to-zero.java)|Medium|
 |3541|[Find Most Frequent Vowel and Consonant](https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/)|[Java](./algorithms/java/3541_find-most-frequent-vowel-and-consonant.java)|Easy|
 |3539|[Find Sum of Array Product of Magical Sequences](https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/)|[Java](./algorithms/java/3539_find-sum-of-array-product-of-magical-sequences.java)|Hard|
