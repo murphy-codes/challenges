@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-25
 // At the time of submission:
-//   Runtime 270 ms Beats 76.47%
-//   Memory 273.88 MB Beats 82.35%
+//   Runtime 44 ms Beats 94.12%
+//   Memory 176.29 MB Beats 100.00%
 
 /****************************************
 * 
@@ -56,102 +56,241 @@
 ****************************************/
 
 class Solution {
-    // Try all horizontal cuts and rotate grid to cover all orientations.
-    // Maintain prefix sum and a set of seen values in the top section.
-    // Let tag = 2 * prefixSum - total; removing tag balances the sums.
-    // Handle thin grids (1 row/column) with endpoint-only removal rules.
-    // Time: O(m * n); Space: O(m * n) due to hash set usage.
-
+    // Precompute row and column prefix sums for fast partition queries.
+    // Try all horizontal and vertical cuts and compare partition sums.
+    // If unequal, compute diff and check if it exists in larger side.
+    // Use frequency arrays for O(1) lookup and better performance.
+    // Handle thin partitions via endpoint checks for connectivity.
+    // Time: O(m * n); Space: O(m + n + maxVal).
     public boolean canPartitionGrid(int[][] grid) {
-        long total = 0;
-        int m = grid.length;
-        int n = grid[0].length;
+        int rows = grid.length;
+        int cols = grid[0].length;
 
-        // Compute total sum
-        for (int[] row : grid) {
-            for (int val : row) {
-                total += val;
+        long totalSum = 0;
+
+        // Row sums and total
+        long[] rowSum = new long[rows];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                rowSum[i] += grid[i][j];
+                totalSum += grid[i][j];
             }
         }
 
-        // Try all 4 rotations (handles both horizontal + vertical cuts)
-        for (int rot = 0; rot < 4; rot++) {
+        // Prefix sums over rows
+        long[] rowPrefix = new long[rows + 1];
+        for (int i = 1; i <= rows; i++) {
+            rowPrefix[i] = rowPrefix[i - 1] + rowSum[i - 1];
+        }
 
-            m = grid.length;
-            n = grid[0].length;
-
-            // If only 1 row → no valid horizontal cut
-            if (m < 2) {
-                grid = rotate(grid);
-                continue;
+        // Column sums
+        long[] colSum = new long[cols];
+        for (int j = 0; j < cols; j++) {
+            for (int i = 0; i < rows; i++) {
+                colSum[j] += grid[i][j];
             }
+        }
 
-            long prefixSum = 0;
-            java.util.Set<Long> seen = new java.util.HashSet<>();
-            seen.add(0L);
+        // Prefix sums over columns
+        long[] colPrefix = new long[cols + 1];
+        for (int j = 1; j <= cols; j++) {
+            colPrefix[j] = colPrefix[j - 1] + colSum[j - 1];
+        }
 
-            // Special case: single column (1D vertical)
-            if (n == 1) {
-                for (int i = 0; i < m - 1; i++) {
-                    prefixSum += grid[i][0];
+        // Check exact equal partition (no removal)
+        for (int k = 1; k < rows; k++) {
+            long s1 = rowPrefix[k];
+            if (s1 == totalSum - s1) return true;
+        }
+        for (int k = 1; k < cols; k++) {
+            long s1 = colPrefix[k];
+            if (s1 == totalSum - s1) return true;
+        }
 
-                    long tag = prefixSum * 2 - total;
+        final int MAXV = 100000;
 
-                    // Only endpoints allowed
-                    if (tag == 0 ||
-                        tag == grid[0][0] ||
-                        tag == grid[i][0]) {
-                        return true;
+        // Horizontal: top partition larger
+        if (rows >= 2) {
+            int[] freq = new int[MAXV + 1];
+
+            for (int k = 1; k < rows; k++) {
+
+                // Add row k-1 into top partition
+                for (int j = 0; j < cols; j++) {
+                    int val = grid[k - 1][j];
+                    if (val <= MAXV) freq[val]++;
+                }
+
+                long top = rowPrefix[k];
+                long bottom = totalSum - top;
+                if (top <= bottom) continue;
+
+                long diff = top - bottom;
+                if (diff > MAXV) continue;
+
+                int D = (int) diff;
+
+                int h = k, w = cols;
+
+                boolean can = false;
+
+                if (h >= 2 && w >= 2) {
+                    if (freq[D] > 0) can = true;
+                } else {
+                    int r1 = 0, r2 = k - 1;
+                    int c1 = 0, c2 = cols - 1;
+                    if (grid[r1][c1] == D || grid[r1][c2] == D ||
+                        grid[r2][c1] == D || grid[r2][c2] == D) {
+                        can = true;
                     }
                 }
-                grid = rotate(grid);
-                continue;
+
+                if (can) return true;
             }
+        }
 
-            // General case
-            for (int i = 0; i < m - 1; i++) {
+        // Horizontal: bottom partition larger
+        if (rows >= 2) {
+            int[] freq = new int[MAXV + 1];
 
-                for (int j = 0; j < n; j++) {
-                    prefixSum += grid[i][j];
-                    seen.add((long) grid[i][j]);
+            for (int bottomHeight = 1; bottomHeight < rows; bottomHeight++) {
+
+                int rowToAdd = rows - bottomHeight;
+
+                // Add row into bottom partition
+                for (int j = 0; j < cols; j++) {
+                    int val = grid[rowToAdd][j];
+                    if (val <= MAXV) freq[val]++;
                 }
 
-                long tag = prefixSum * 2 - total;
+                int topRows = rows - bottomHeight;
+                long top = rowPrefix[topRows];
+                long bottom = totalSum - top;
 
-                // First row → top partition is 1 row → endpoint restriction
-                if (i == 0) {
-                    if (tag == 0 ||
-                        tag == grid[0][0] ||
-                        tag == grid[0][n - 1]) {
-                        return true;
+                if (bottom <= top) continue;
+
+                long diff = bottom - top;
+                if (diff > MAXV) continue;
+
+                int D = (int) diff;
+
+                int h = bottomHeight;
+                int w = cols;
+
+                int r1 = rows - bottomHeight;
+                int r2 = rows - 1;
+                int c1 = 0;
+                int c2 = cols - 1;
+
+                boolean can = false;
+
+                if (h >= 2 && w >= 2) {
+                    if (freq[D] > 0) can = true;
+                } else {
+                    if (grid[r1][c1] == D || grid[r1][c2] == D ||
+                        grid[r2][c1] == D || grid[r2][c2] == D) {
+                        can = true;
                     }
-                    continue;
                 }
 
-                // General 2D case
-                if (seen.contains(tag)) {
-                    return true;
-                }
+                if (can) return true;
             }
+        }
 
-            grid = rotate(grid);
+        // Vertical: left partition larger
+        if (cols >= 2) {
+            int[] freq = new int[MAXV + 1];
+
+            for (int k = 1; k < cols; k++) {
+
+                int colToAdd = k - 1;
+
+                // Add column into left partition
+                for (int i = 0; i < rows; i++) {
+                    int val = grid[i][colToAdd];
+                    if (val <= MAXV) freq[val]++;
+                }
+
+                long left = colPrefix[k];
+                long right = totalSum - left;
+
+                if (left <= right) continue;
+
+                long diff = left - right;
+                if (diff > MAXV) continue;
+
+                int D = (int) diff;
+
+                int h = rows;
+                int w = k;
+
+                int r1 = 0;
+                int r2 = rows - 1;
+                int c1 = 0;
+                int c2 = k - 1;
+
+                boolean can = false;
+
+                if (h >= 2 && w >= 2) {
+                    if (freq[D] > 0) can = true;
+                } else {
+                    if (grid[r1][c1] == D || grid[r1][c2] == D ||
+                        grid[r2][c1] == D || grid[r2][c2] == D) {
+                        can = true;
+                    }
+                }
+
+                if (can) return true;
+            }
+        }
+        // Vertical: right partition larger
+        if (cols >= 2) {
+            int[] freq = new int[MAXV + 1];
+
+            for (int rightWidth = 1; rightWidth < cols; rightWidth++) {
+
+                int colToAdd = cols - rightWidth;
+
+                // Add column into right partition
+                for (int i = 0; i < rows; i++) {
+                    int val = grid[i][colToAdd];
+                    if (val <= MAXV) freq[val]++;
+                }
+
+                int leftCols = cols - rightWidth;
+                long left = colPrefix[leftCols];
+                long right = totalSum - left;
+
+                if (right <= left) continue;
+
+                long diff = right - left;
+                if (diff > MAXV) continue;
+
+                int D = (int) diff;
+
+                int h = rows;
+                int w = rightWidth;
+
+                int r1 = 0;
+                int r2 = rows - 1;
+                int c1 = cols - rightWidth;
+                int c2 = cols - 1;
+
+                boolean can = false;
+
+                if (h >= 2 && w >= 2) {
+                    if (freq[D] > 0) can = true;
+                } else {
+                    if (grid[r1][c1] == D || grid[r1][c2] == D ||
+                        grid[r2][c1] == D || grid[r2][c2] == D) {
+                        can = true;
+                    }
+                }
+
+                if (can) return true;
+            }
         }
 
         return false;
-    }
-
-    private int[][] rotate(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-
-        int[][] rotated = new int[n][m];
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                rotated[j][m - 1 - i] = grid[i][j];
-            }
-        }
-
-        return rotated;
     }
 }
