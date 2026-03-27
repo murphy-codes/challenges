@@ -3,7 +3,7 @@
 // Date: 2026-03-25
 // At the time of submission:
 //   Runtime 1 ms Beats 99.47%
-//   Memory 47.21 MB Beats 6.40%
+//   Memory 46.84 MB Beats 82.13%
 
 /****************************************
 * 
@@ -45,31 +45,29 @@
 ****************************************/
 
 class Solution {
-    // Each row is cyclically shifted k times; reduce to k % n shifts.
-    // Even rows shift left, odd rows shift right.
-    // For each position, compute its source index after shifts.
-    // Compare shifted value with original without modifying matrix.
+    // Reduce k using modulo since shifts are cyclic over row length.
+    // A matrix remains unchanged only if each row equals its shifted form.
+    // For each cell, compare with its k-shifted column index.
+    // If any mismatch occurs, the matrix cannot return to original.
     // Time: O(m * n); Space: O(1).
     public boolean areSimilar(int[][] mat, int k) {
-        int m = mat.length;
-        int n = mat[0].length;
+        int rows = mat.length;
+        int cols = mat[0].length;
 
-        int shift = k % n;
+        // Reduce shifts using modulo
+        k = k % cols;
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+        // No shift → always identical
+        if (k == 0) return true;
 
-                int sourceCol;
+        // Check each row for cyclic invariance
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
 
-                if (i % 2 == 0) {
-                    // Even row → left shift
-                    sourceCol = (j + shift) % n;
-                } else {
-                    // Odd row → right shift
-                    sourceCol = (j - shift + n) % n;
-                }
+                // Compare current element with its shifted position
+                int shiftedCol = (j - k + cols) % cols;
 
-                if (mat[i][j] != mat[i][sourceCol]) {
+                if (mat[i][j] != mat[i][shiftedCol]) {
                     return false;
                 }
             }
