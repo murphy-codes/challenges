@@ -148,6 +148,7 @@ LeetCode
 |2965|[Find Missing and Repeated Values](https://leetcode.com/problems/find-missing-and-repeated-values/)|[Java](./algorithms/java/2965_find-missing-and-repeated-values.java)|Easy|
 |2962|[Count Subarrays Where Max Element Appears at Least K Times](https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/)|[Java](./algorithms/java/2962_count-subarrays-where-max-element-appears-at-least-k-times.java)|Medium|
 |2948|[Make Lexicographically Smallest Array by Swapping Elements](https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/)|[Java](./algorithms/java/2948_make-lexicographically-smallest-array-by-swapping-elements.java)|Medium|
+|2946|[Matrix Similarity After Cyclic Shifts](https://leetcode.com/problems/matrix-similarity-after-cyclic-shifts/)|[Java](./algorithms/java/2946_matrix-similarity-after-cyclic-shifts.java)|Easy|
 |2943|[Maximize Area of Square Hole in Grid](https://leetcode.com/problems/maximize-area-of-square-hole-in-grid/)|[Java](./algorithms/java/2943_maximize-area-of-square-hole-in-grid.java)|Medium|
 |2942|[Find Words Containing Character](https://leetcode.com/problems/find-words-containing-character/)|[Java](./algorithms/java/2942_find-words-containing-character.java)|Easy|
 |2929|[Distribute Candies Among Children II](https://leetcode.com/problems/distribute-candies-among-children-ii/)|[Java](./algorithms/java/2929_distribute-candies-among-children-ii.java)|Medium|
