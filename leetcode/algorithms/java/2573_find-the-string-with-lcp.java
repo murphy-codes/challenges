@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-27
 // At the time of submission:
-//   Runtime 10 ms Beats 42.86%
-//   Memory 178.86 MB Beats 8.57%
+//   Runtime 5 ms Beats 100.00%
+//   Memory 173.13 MB Beats 91.43%
 
 /****************************************
 * 
@@ -43,79 +43,65 @@
 ****************************************/
 
 class Solution {
-    // Use DSU to group indices that must share the same character
-    // based on lcp[i][j] > 0 constraints. Assign smallest letters
-    // to each group to ensure lexicographically minimal result.
-    // Rebuild LCP using DP and validate against input matrix.
-    // Time: O(n^2); Space: O(n^2) for DP validation.
+    // Greedily assign smallest characters and propagate equality using
+    // lcp[i][j] > 0 constraints to build the string without DSU.
+    // Then validate using LCP recurrence: if chars match, lcp[i][j]
+    // must equal lcp[i+1][j+1] + 1, else must be 0.
+    // Bottom-up traversal ensures dependencies are already validated.
+    // Time: O(n^2); Space: O(1) extra (excluding input).
+
     public String findTheString(int[][] lcp) {
         int n = lcp.length;
-
-        // Step 1: Validate diagonal
-        for (int i = 0; i < n; i++) {
-            if (lcp[i][i] != n - i) return "";
-        }
-
-        // Step 2: DSU to group equal indices
-        int[] parent = new int[n];
-        for (int i = 0; i < n; i++) parent[i] = i;
-
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                if (lcp[i][j] > 0) {
-                    union(parent, i, j);
-                }
-            }
-        }
-
-        // Step 3: Assign smallest lexicographic characters
         char[] word = new char[n];
-        int[] groupChar = new int[n];
-        for (int i = 0; i < n; i++) groupChar[i] = -1;
+        char nextChar = 'a';
 
-        int nextChar = 0;
-
+        // Step 1: Construct string using greedy assignment
         for (int i = 0; i < n; i++) {
-            int root = find(parent, i);
 
-            if (groupChar[root] == -1) {
-                if (nextChar >= 26) return "";
-                groupChar[root] = nextChar++;
+            // If not assigned yet, assign smallest available char
+            if (word[i] == 0) {
+
+                if (nextChar > 'z') {
+                    return ""; // Too many distinct groups
+                }
+
+                word[i] = nextChar;
+
+                // Propagate equality: lcp[i][j] > 0 ⇒ same char
+                for (int j = i + 1; j < n; j++) {
+                    if (lcp[i][j] > 0) {
+                        word[j] = word[i];
+                    }
+                }
+
+                nextChar++;
             }
-
-            word[i] = (char) ('a' + groupChar[root]);
         }
 
-        // Step 4: Recompute LCP and validate
-        int[][] dp = new int[n + 1][n + 1];
-
+        // Step 2: Validate using LCP recurrence
         for (int i = n - 1; i >= 0; i--) {
             for (int j = n - 1; j >= 0; j--) {
-                if (word[i] == word[j]) {
-                    dp[i][j] = dp[i + 1][j + 1] + 1;
-                } else {
-                    dp[i][j] = 0;
-                }
 
-                if (dp[i][j] != lcp[i][j]) return "";
+                if (word[i] != word[j]) {
+                    // Different chars ⇒ LCP must be 0
+                    if (lcp[i][j] != 0) {
+                        return "";
+                    }
+                } else {
+                    // Same chars ⇒ follow recurrence
+                    if (i == n - 1 || j == n - 1) {
+                        if (lcp[i][j] != 1) {
+                            return "";
+                        }
+                    } else {
+                        if (lcp[i][j] != lcp[i + 1][j + 1] + 1) {
+                            return "";
+                        }
+                    }
+                }
             }
         }
 
         return new String(word);
-    }
-
-    private int find(int[] parent, int x) {
-        if (parent[x] != x) {
-            parent[x] = find(parent, parent[x]);
-        }
-        return parent[x];
-    }
-
-    private void union(int[] parent, int a, int b) {
-        int pa = find(parent, a);
-        int pb = find(parent, b);
-        if (pa != pb) {
-            parent[pa] = pb;
-        }
     }
 }
