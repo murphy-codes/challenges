@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-29
 // At the time of submission:
-//   Runtime 5 ms Beats 93.81%
-//   Memory 47.99 MB Beats 72.94%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 48.09 MB Beats 59.79%
 
 /****************************************
 * 
@@ -37,33 +37,35 @@
 class Solution {
     // Swaps are allowed only between indices with same parity,
     // so even and odd indices form independent groups.
-    // Characters can be freely permuted within each group.
-    // Compare frequency counts of even and odd positions separately.
+    // Count frequency differences for even and odd positions separately.
+    // If all counts return to zero, both groups can be permuted to match.
     // Time: O(n); Space: O(1) using fixed-size frequency arrays.
     public boolean checkStrings(String s1, String s2) {
+        int[] evenFreqDiff = new int[26];
+        int[] oddFreqDiff = new int[26];
+
         int n = s1.length();
 
-        int[] evenCount = new int[26];
-        int[] oddCount = new int[26];
-
-        for (int i = 0; i < n; i++) {
-            int c1 = s1.charAt(i) - 'a';
-            int c2 = s2.charAt(i) - 'a';
-
-            if (i % 2 == 0) {
-                evenCount[c1]++;
-                evenCount[c2]--;
-            } else {
-                oddCount[c1]++;
-                oddCount[c2]--;
-            }
+        // Process even indices
+        for (int i = 0; i < n; i += 2) {
+            evenFreqDiff[s1.charAt(i) - 'a']++;
+            evenFreqDiff[s2.charAt(i) - 'a']--;
         }
 
-        // Check if all counts balance out
-        for (int i = 0; i < 26; i++) {
-            if (evenCount[i] != 0 || oddCount[i] != 0) {
-                return false;
-            }
+        // Check even group
+        for (int count : evenFreqDiff) {
+            if (count != 0) return false;
+        }
+
+        // Process odd indices
+        for (int i = 1; i < n; i += 2) {
+            oddFreqDiff[s1.charAt(i) - 'a']++;
+            oddFreqDiff[s2.charAt(i) - 'a']--;
+        }
+
+        // Check odd group
+        for (int count : oddFreqDiff) {
+            if (count != 0) return false;
         }
 
         return true;
