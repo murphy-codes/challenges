@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-29
 // At the time of submission:
-//   Runtime 1535 ms Beats 6.25%
-//   Memory 46.60 MB Beats 70.83%
+//   Runtime 3 ms Beats 100.00%
+//   Memory 46.62 MB Beats 70.83%
 
 /****************************************
 * 
@@ -48,103 +48,101 @@
 * 
 ****************************************/
 
+import java.util.Arrays;
+
 class Solution {
-    // First enforce all 'T' constraints by placing str2 at required indices.
-    // Fill remaining positions with 'a' for lexicographically smallest result.
-    // For each 'F', if substring matches str2, try modifying characters to break
-    // the match while ensuring no 'T' constraint is violated.
-    // Time: O(n * m * 26); Space: O(n + m).
-    public String generateString(String str1, String str2) {
-        int n = str1.length();
-        int m = str2.length();
-        int L = n + m - 1;
+    // Use Z-function to efficiently validate overlaps and substring matches.
+    // First enforce 'T' constraints by ensuring overlapping placements of
+    // pattern are consistent using Z-array prefix checks. Fill remaining
+    // positions with 'a' to minimize lexicographic order.
+    // For 'F', detect full matches using Z and break them at nearest
+    // modifiable position. Time: O(n + m); Space: O(n + m).
+    public String generateString(String str1, String pattern) {
+        char[] flags = str1.toCharArray();
+        int n = flags.length;
+        int m = pattern.length();
 
-        char[] word = new char[L];
+        char[] result = new char[n + m - 1];
+        Arrays.fill(result, '?');
 
-        // Step 1: Apply 'T' constraints
+        // Precompute Z-array for pattern
+        int[] zPattern = calcZ(pattern);
+
+        int lastTIndex = -m;
+
+        // Step 1: Process 'T' constraints
         for (int i = 0; i < n; i++) {
-            if (str1.charAt(i) == 'T') {
-                for (int j = 0; j < m; j++) {
-                    int idx = i + j;
-                    if (word[idx] == 0 || word[idx] == str2.charAt(j)) {
-                        word[idx] = str2.charAt(j);
-                    } else {
-                        return "";
-                    }
-                }
+            if (flags[i] != 'T') continue;
+
+            int overlap = Math.max(lastTIndex + m - i, 0);
+
+            // Validate overlap consistency
+            if (overlap > 0 && zPattern[m - overlap] < overlap) {
+                return "";
             }
+
+            // Fill non-overlapping portion
+            for (int j = overlap; j < m; j++) {
+                result[i + j] = pattern.charAt(j);
+            }
+
+            lastTIndex = i;
         }
 
-        // Step 2: Fill remaining with 'a'
-        for (int i = 0; i < L; i++) {
-            if (word[i] == 0) {
-                word[i] = 'a';
+        // Track nearest '?' positions
+        int[] lastFree = new int[result.length];
+        int last = -1;
+
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] == '?') {
+                result[i] = 'a'; // minimal lexicographic
+                last = i;
             }
+            lastFree[i] = last;
         }
 
-        // Step 3: Fix 'F' constraints
+        // Compute Z-array for pattern + result
+        int[] zCombined = calcZ(pattern + new String(result));
+
+        // Step 2: Process 'F' constraints
         for (int i = 0; i < n; i++) {
-            if (str1.charAt(i) == 'F') {
+            if (flags[i] != 'F') continue;
 
-                if (matches(word, i, str2)) {
-                    boolean fixed = false;
+            // If already not matching, skip
+            if (zCombined[m + i] < m) continue;
 
-                    for (int j = m - 1; j >= 0 && !fixed; j--) {
-                        int idx = i + j;
-                        char original = word[idx];
+            // Find rightmost modifiable position
+            int j = lastFree[i + m - 1];
 
-                        for (char c = 'a'; c <= 'z'; c++) {
-                            if (c == original) continue;
+            if (j < i) return "";
 
-                            word[idx] = c;
-
-                            // Must break F condition
-                            if (matches(word, i, str2)) {
-                                continue;
-                            }
-
-                            // Must NOT break any T condition
-                            if (validAllT(word, str1, str2)) {
-                                fixed = true;
-                                break;
-                            }
-                        }
-
-                        if (!fixed) {
-                            word[idx] = original;
-                        }
-                    }
-
-                    if (!fixed) return "";
-                }
-            }
+            result[j] = 'b'; // minimally break match
+            i = j; // jump forward
         }
 
-        return new String(word);
+        return new String(result);
     }
 
-    private boolean matches(char[] word, int start, String str2) {
-        for (int j = 0; j < str2.length(); j++) {
-            if (word[start + j] != str2.charAt(j)) {
-                return false;
+    private int[] calcZ(String str) {
+        char[] s = str.toCharArray();
+        int n = s.length;
+        int[] z = new int[n];
+
+        int left = 0, right = 0;
+
+        for (int i = 1; i < n; i++) {
+            if (i <= right) {
+                z[i] = Math.min(z[i - left], right - i + 1);
+            }
+
+            while (i + z[i] < n && s[z[i]] == s[i + z[i]]) {
+                left = i;
+                right = i + z[i];
+                z[i]++;
             }
         }
-        return true;
-    }
 
-    private boolean validAllT(char[] word, String str1, String str2) {
-        int n = str1.length();
-        int m = str2.length();
-
-        for (int i = 0; i < n; i++) {
-            if (str1.charAt(i) == 'T') {
-                for (int j = 0; j < m; j++) {
-                    if (word[i + j] != str2.charAt(j)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        z[0] = n;
+        return z;
     }
 }
