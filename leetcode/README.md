@@ -162,6 +162,7 @@ LeetCode
 |2872|[Maximum Number of K-Divisible Components](https://leetcode.com/problems/maximum-number-of-k-divisible-components/)|[Java](./algorithms/java/2872_maximum-number-of-k-divisible-components.java)|Hard|
 |2845|[Count of Interesting Subarrays](https://leetcode.com/problems/count-of-interesting-subarrays/)|[Java](./algorithms/java/2845_count-of-interesting-subarrays.java)|Medium|
 |2843|[Count Symmetric Integers](https://leetcode.com/problems/count-symmetric-integers/)|[Java](./algorithms/java/2843_count-symmetric-integers.java)|Easy|
+|2840|[Check if Strings Can be Made Equal With Operations II](https://leetcode.com/problems/check-if-strings-can-be-made-equal-with-operations-ii/)|[Java](./algorithms/java/2840_check-if-strings-can-be-made-equal-with-operations-ii.java)|Medium|
 |2839|[Check if Strings Can be Made Equal With Operations I](https://leetcode.com/problems/check-if-strings-can-be-made-equal-with-operations-i/)|[Java](./algorithms/java/2839_check-if-strings-can-be-made-equal-with-operations-i.java)|Easy|
 |2818|[Apply Operations to Maximize Score](https://leetcode.com/problems/apply-operations-to-maximize-score/)|[Java](./algorithms/java/2818_apply-operations-to-maximize-score.java)|Hard|
 |2799|[Count Complete Subarrays in an Array](https://leetcode.com/problems/count-complete-subarrays-in-an-array/)|[Java](./algorithms/java/2799_count-complete-subarrays-in-an-array.java)|Medium|
