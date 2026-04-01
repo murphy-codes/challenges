@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-03-31
 // At the time of submission:
-//   Runtime 36 ms Beats 82.61%
-//   Memory 114.87 MB Beats 71.30%
+//   Runtime 21 ms Beats 100.00%
+//   Memory 116.04 MB Beats 67.83%
 
 /****************************************
 * 
@@ -53,65 +53,67 @@
 * 
 ****************************************/
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 class Solution {
-    // Sort robots by position to simulate collisions in spatial order.
-    // Use a stack to track right-moving robots that may collide later.
+    // Sort robots by position to simulate collisions left-to-right.
+    // Use an array as a stack to track right-moving robots.
     // For each left-moving robot, resolve collisions with stack top
-    // until one side dies or no collisions remain. Survivors lose 1 HP.
-    // Time: O(n log n) for sorting + O(n) simulation, Space: O(n).
-
+    // until it dies or no collisions remain; survivors lose 1 health.
+    // Time: O(n log n) sort + O(n) simulation, Space: O(n).
     public List<Integer> survivedRobotsHealths(
-        int[] positions,
-        int[] healths,
-        String directions
-    ) {
+            int[] positions, int[] healths, String directions) {
+
         int n = positions.length;
-        Integer[] indices = new Integer[n];
-        List<Integer> result = new ArrayList<>();
-        Stack<Integer> stack = new Stack<>();
 
-        for (int index = 0; index < n; ++index) {
-            indices[index] = index;
+        // Sort indices by position
+        Integer[] order = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            order[i] = i;
         }
+        Arrays.sort(order, (a, b) -> positions[a] - positions[b]);
 
-        Arrays.sort(
-            indices,
-            (lhs, rhs) -> Integer.compare(positions[lhs], positions[rhs])
-        );
+        // Stack of indices for right-moving robots
+        int[] stack = new int[n];
+        int top = -1;
 
-        for (int currentIndex : indices) {
-            // Add right-moving robots to the stack
-            if (directions.charAt(currentIndex) == 'R') {
-                stack.push(currentIndex);
+        for (int idx : order) {
+            if (directions.charAt(idx) == 'R') {
+                stack[++top] = idx; // push
             } else {
-                while (!stack.isEmpty() && healths[currentIndex] > 0) {
-                    // Pop the top robot from the stack for collision check
-                    int topIndex = stack.pop();
+                // Resolve collisions with right-moving robots
+                while (top >= 0 && healths[idx] > 0) {
+                    int rightIdx = stack[top]; // peek
 
-                    // Top robot survives, current robot is destroyed
-                    if (healths[topIndex] > healths[currentIndex]) {
-                        healths[topIndex] -= 1;
-                        healths[currentIndex] = 0;
-                        stack.push(topIndex);
-                    } else if (healths[topIndex] < healths[currentIndex]) {
-                        // Current robot survives, top robot is destroyed
-                        healths[currentIndex] -= 1;
-                        healths[topIndex] = 0;
+                    if (healths[rightIdx] < healths[idx]) {
+                        // Right robot dies
+                        healths[rightIdx] = 0;
+                        healths[idx]--;
+                        top--; // pop
+                    } else if (healths[rightIdx] > healths[idx]) {
+                        // Left robot dies
+                        healths[idx] = 0;
+                        healths[rightIdx]--;
                     } else {
-                        // Both robots are destroyed
-                        healths[currentIndex] = 0;
-                        healths[topIndex] = 0;
+                        // Both die
+                        healths[rightIdx] = 0;
+                        healths[idx] = 0;
+                        top--; // pop
                     }
                 }
             }
         }
 
-        // Collect surviving robots
-        for (int index = 0; index < n; ++index) {
-            if (healths[index] > 0) {
-                result.add(healths[index]);
+        // Collect surviving robots in original order
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (healths[i] > 0) {
+                result.add(healths[i]);
             }
         }
+
         return result;
     }
 }
