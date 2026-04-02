@@ -59,6 +59,7 @@ LeetCode
 |3433|[Count Mentions Per User](https://leetcode.com/problems/count-mentions-per-user/)|[Java](./algorithms/java/3433_count-mentions-per-user.java)|Medium|
 |3432|[Count Partitions with Even Sum Difference](https://leetcode.com/problems/count-partitions-with-even-sum-difference/)|[Java](./algorithms/java/3432_count-partitions-with-even-sum-difference.java)|Easy|
 |3423|[Maximum Difference Between Adjacent Elements in a Circular Array](https://leetcode.com/problems/maximum-difference-between-adjacent-elements-in-a-circular-array/)|[Java](./algorithms/java/3423_maximum-difference-between-adjacent-elements-in-a-circular-array.java)|Easy|
+|3418|[Maximum Amount of Money Robot Can Earn](https://leetcode.com/problems/maximum-amount-of-money-robot-can-earn/)|[Java](./algorithms/java/3418_maximum-amount-of-money-robot-can-earn.java)|Medium|
 |3408|[Design Task Manager](https://leetcode.com/problems/design-task-manager/)|[Java](./algorithms/java/3408_design-task-manager.java)|Medium|
 |3405|[Count the Number of Arrays with K Matching Adjacent Elements](https://leetcode.com/problems/count-the-number-of-arrays-with-k-matching-adjacent-elements/)|[Java](./algorithms/java/3405_count-the-number-of-arrays-with-k-matching-adjacent-elements.java)|Hard|
 |3403|[Find the Lexicographically Largest String From the Box I](https://leetcode.com/problems/find-the-lexicographically-largest-string-from-the-box-i/)|[Java](./algorithms/java/3403_find-the-lexicographically-largest-string-from-the-box-i.java)|Medium|
