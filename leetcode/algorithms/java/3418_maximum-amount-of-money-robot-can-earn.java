@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-01
 // At the time of submission:
-//   Runtime 96 ms Beats 80.90%
-//   Memory 238.27 MB Beats 67.42%
+//   Runtime 9 ms Beats 100.00%
+//   Memory 186.30 MB Beats 98.88%
 
 /****************************************
 * 
@@ -48,83 +48,51 @@
 * 
 ****************************************/
 
-class Solution {
-    // Use DP where dp[i][j][k] is max coins reaching (i,j)
-    // with k robber neutralizations used (k <= 2). Transition
-    // from top/left cells. For negative cells, either take loss
-    // or neutralize (if k > 0). Track best across all k at end.
-    // Time: O(m * n * 3), Space: O(m * n * 3).
-    public int maximumAmount(int[][] coins) {
-        int m = coins.length;
-        int n = coins[0].length;
+import java.util.Arrays;
 
-        int[][][] dp = new int[m][n][3];
+class Solution {
+    // Use rolling DP where dp[j][k] stores max coins at column j
+    // with k robber neutralizations used (k <= 2). Transition uses
+    // dp[j] (top) and dp[j-1] (left). For each cell, either take value
+    // or neutralize (skip adding). Time: O(m * n), Space: O(n * 3).
+
+    public int maximumAmount(int[][] coins) {
+        int cols = coins[0].length;
+
+        // dp[col][k] = max coins at this column with k neutralizations used
+        int[][] dp = new int[cols + 1][3];
 
         // Initialize with very small values
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int k = 0; k < 3; k++) {
-                    dp[i][j][k] = Integer.MIN_VALUE;
-                }
-            }
+        for (int c = 0; c <= cols; c++) {
+            Arrays.fill(dp[c], Integer.MIN_VALUE / 2);
         }
 
-        // Base case (0,0)
+        // Base initialization
         for (int k = 0; k < 3; k++) {
-            if (coins[0][0] >= 0) {
-                dp[0][0][k] = coins[0][0];
-            } else {
-                if (k > 0) {
-                    dp[0][0][k] = 0; // neutralize
-                } else {
-                    dp[0][0][k] = coins[0][0]; // take loss
-                }
+            dp[1][k] = 0;
+        }
+
+        for (int[] row : coins) {
+            for (int col = 1; col <= cols; col++) {
+                int val = row[col - 1];
+
+                // k = 2 (max neutralizations)
+                dp[col][2] = Math.max(
+                    Math.max(dp[col - 1][2] + val, dp[col][2] + val),
+                    Math.max(dp[col - 1][1], dp[col][1])
+                );
+
+                // k = 1
+                dp[col][1] = Math.max(
+                    Math.max(dp[col - 1][1] + val, dp[col][1] + val),
+                    Math.max(dp[col - 1][0], dp[col][0])
+                );
+
+                // k = 0 (no neutralization available)
+                dp[col][0] = Math.max(dp[col - 1][0], dp[col][0]) + val;
             }
         }
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-
-                if (i == 0 && j == 0) continue;
-
-                for (int k = 0; k < 3; k++) {
-                    int bestPrev = Integer.MIN_VALUE;
-
-                    if (i > 0) bestPrev = Math.max(bestPrev, dp[i - 1][j][k]);
-                    if (j > 0) bestPrev = Math.max(bestPrev, dp[i][j - 1][k]);
-
-                    if (bestPrev == Integer.MIN_VALUE) continue;
-
-                    int val = coins[i][j];
-
-                    if (val >= 0) {
-                        dp[i][j][k] = Math.max(dp[i][j][k], bestPrev + val);
-                    } else {
-                        // Option 1: take the hit
-                        dp[i][j][k] = Math.max(dp[i][j][k], bestPrev + val);
-
-                        // Option 2: neutralize
-                        if (k > 0) {
-                            int bestPrevWithLessK = Integer.MIN_VALUE;
-                            if (i > 0)
-                                bestPrevWithLessK = Math.max(bestPrevWithLessK, dp[i - 1][j][k - 1]);
-                            if (j > 0)
-                                bestPrevWithLessK = Math.max(bestPrevWithLessK, dp[i][j - 1][k - 1]);
-
-                            if (bestPrevWithLessK != Integer.MIN_VALUE) {
-                                dp[i][j][k] = Math.max(dp[i][j][k], bestPrevWithLessK);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        int res = Integer.MIN_VALUE;
-        for (int k = 0; k < 3; k++) {
-            res = Math.max(res, dp[m - 1][n - 1][k]);
-        }
-
-        return res;
+        return dp[cols][2];
     }
 }
