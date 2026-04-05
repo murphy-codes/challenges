@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-05
 // At the time of submission:
-//   Runtime 12 ms Beats 6.48%
-//   Memory 46.25 MB Beats 24.99%
+//   Runtime 4 ms Beats 99.05%
+//   Memory 46.18 MB Beats 34.52%
 
 /****************************************
 * 
@@ -36,20 +36,19 @@
 * 
 ****************************************/
 
-import java.util.HashMap;
-
 class Solution {
-    // Use a fixed map for storing coordinate deltas.
-    // Iterate through the string, updating x for L/R & y for U/D
-    // Returns true only if the final position is 0,0
+    // Iterate through moves, adjusting positions on
+    // the x & y axes for L/R & U/D chars respectively.
+    // Robot returned to origin if the final position is (0,0)
     // Time: O(n) for a single pass through moves
     // Space: O(1) for a constant extra storage
     public boolean judgeCircle(String moves) {
-        Map<Character, Integer> map = Map.of('U', 1, 'R', 1, 'D', -1, 'L', -1);
         int x = 0, y = 0;
         for (char c : moves.toCharArray()) {
-            if (c == 'L' || c == 'R') x += map.get(c);
-            else  y += map.get(c);
+            if (c == 'U') y++;
+            else if (c == 'R') x++;
+            else if (c == 'D') y--;
+            else if (c == 'L') x--;
         }
         return (x==0) && (y==0);
     }
