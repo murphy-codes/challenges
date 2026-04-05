@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-05
 // At the time of submission:
-//   Runtime 4 ms Beats 99.05%
-//   Memory 46.18 MB Beats 34.52%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 46.06 MB Beats 42.33%
 
 /****************************************
 * 
@@ -37,19 +37,13 @@
 ****************************************/
 
 class Solution {
-    // Iterate through moves, adjusting positions on
-    // the x & y axes for L/R & U/D chars respectively.
-    // Robot returned to origin if the final position is (0,0)
+    // Use an array to track counts of movements (U,D,L,R)
+    // Checks for return to origin by comparing U==D && L==R
     // Time: O(n) for a single pass through moves
-    // Space: O(1) for a constant extra storage
+    // Space: O(1) for a constant sized array (26)
     public boolean judgeCircle(String moves) {
-        int x = 0, y = 0;
-        for (char c : moves.toCharArray()) {
-            if (c == 'U') y++;
-            else if (c == 'R') x++;
-            else if (c == 'D') y--;
-            else if (c == 'L') x--;
-        }
-        return (x==0) && (y==0);
+        int[] mvC = new int[26];
+        for (char c : moves.toCharArray()) { mvC[c - 'A']++; }
+        return mvC['U' - 'A'] == mvC['D' - 'A'] && mvC['L' - 'A'] == mvC['R' - 'A'];
     }
 }
