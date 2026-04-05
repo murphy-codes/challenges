@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-04
 // At the time of submission:
-//   Runtime 17 ms Beats 99.38%
-//   Memory 55.15 MB Beats 99.38%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 55.96 MB Beats 93.85%
 
 /****************************************
 * 
@@ -62,36 +62,52 @@
 ****************************************/
 
 class Solution {
-    // Treat encodedText as a row-wise filled matrix with rows and cols.
-    // Original text is formed by reading diagonals starting from top row.
-    // For each column, traverse down-right and collect characters.
-    // Avoid building the matrix by computing indices directly.
-    // Time: O(n), Space: O(n) for result string.
+    // Treat encodedText as a row-wise matrix with known rows and cols.
+    // Decode by traversing diagonals starting from each column in row 0.
+    // Stop early when diagonals exceed matrix bounds to save work.
+    // Remove trailing spaces since original text has none.
+    // Time: O(n), Space: O(n) for result storage.
     public String decodeCiphertext(String encodedText, int rows) {
-        int n = encodedText.length();
-        if (rows == 1) return encodedText;
+        // Edge cases: empty string or single row → no encoding
+        if (encodedText.equals("") || rows == 1) {
+            return encodedText;
+        }
 
-        int cols = n / rows;
+        int totalLength = encodedText.length();
+        int cols = totalLength / rows;
+
         StringBuilder result = new StringBuilder();
 
-        // Traverse diagonals starting from each column in row 0
-        for (int startCol = 0; startCol < cols; startCol++) {
-            int r = 0;
-            int c = startCol;
+        // Traverse diagonals starting from each column
+        for (int startCol = 0; startCol < cols; ++startCol) {
+            boolean reachedBoundary = false;
 
-            while (r < rows && c < cols) {
-                result.append(encodedText.charAt(r * cols + c));
-                r++;
-                c++;
+            for (int row = 0; row < rows; ++row) {
+                int col = startCol + row;
+
+                // Stop if diagonal goes out of bounds
+                if (col == cols) {
+                    reachedBoundary = true;
+                    break;
+                }
+
+                // Convert (row, col) → index in encoded string
+                result.append(encodedText.charAt(row * cols + col));
+            }
+
+            // No further diagonals will be valid
+            if (reachedBoundary) {
+                break;
             }
         }
 
-        // Remove trailing spaces
+        // Trim trailing spaces
         int end = result.length() - 1;
-        while (end >= 0 && result.charAt(end) == ' ') {
-            end--;
+        while (result.charAt(end) == ' ') {
+            --end;
         }
 
-        return result.substring(0, end + 1);
+        result.setLength(end + 1);
+        return result.toString();
     }
 }
