@@ -404,6 +404,7 @@ LeetCode
 |904|[Fruit Into Baskets](https://leetcode.com/problems/fruit-into-baskets/)|[Java](./algorithms/java/904_fruit-into-baskets.java)|Medium|
 |898|[Bitwise ORs of Subarrays](https://leetcode.com/problems/bitwise-ors-of-subarrays/)|[Java](./algorithms/java/898_bitwise-ors-of-subarrays.java)|Medium|
 |889|[Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)|[Java](./algorithms/java/889_construct-binary-tree-from-preorder-and-postorder-traversal.java)|Medium|
+|874|[Walking Robot Simulation](https://leetcode.com/problems/walking-robot-simulation/)|[Java](./algorithms/java/874_walking-robot-simulation.java)|Medium|
 |873|[Length of Longest Fibonacci Subsequence](https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/)|[Java](./algorithms/java/873_length-of-longest-fibonacci-subsequence.java)|Medium|
 |869|[Reordered Power of 2](https://leetcode.com/problems/reordered-power-of-2/)|[Java](./algorithms/java/869_reordered-power-of-2.java)|Medium|
 |868|[Binary Gap](https://leetcode.com/problems/binary-gap/)|[Java](./algorithms/java/868_binary-gap.java)|Easy|
