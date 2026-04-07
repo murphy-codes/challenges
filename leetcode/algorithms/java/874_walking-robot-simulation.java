@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-06
 // At the time of submission:
-//   Runtime 14 ms Beats 86.28%
-//   Memory 50.55 MB Beats 84.48%
+//   Runtime 9 ms Beats 100.00%
+//   Memory 47.86 MB Beats 100.00%
 
 /****************************************
 * 
@@ -75,59 +75,87 @@ import java.util.HashSet;
 import java.util.Set;
 
 class Solution {
-    // Simulate robot movement step-by-step while tracking direction.
-    // Use a HashSet of encoded coordinates for O(1) obstacle checks.
-    // For movement commands, advance one unit at a time and stop if blocked.
-    // Track the maximum squared distance from origin during traversal.
-    // Time: O(C + O) where C = total steps, O = number of obstacles
+    // Simulate robot movement using direction vectors and step-by-step motion.
+    // Obstacles are stored in a HashSet of Coord objects for O(1) lookup.
+    // Reuse a single Coord object to avoid repeated allocations during movement.
+    // On each step, move forward and revert if an obstacle is encountered.
+    // Time: O(C + O), where C = total movement steps, O = obstacles count
     // Space: O(O) for storing obstacles in the set
-    public int robotSim(int[] commands, int[][] obstacles) {
-        // Store obstacles as encoded coordinates for O(1) lookup
-        Set<Long> obstacleSet = new HashSet<>();
-        for (int[] obs : obstacles) {
-            long key = encode(obs[0], obs[1]);
-            obstacleSet.add(key);
+
+    // Represents a coordinate on the grid
+    private static final class Coord {
+        private int x, y;
+
+        private Coord(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
 
-        // Directions: North, East, South, West
-        int[][] dirs = {
-            {0, 1},   // North
-            {1, 0},   // East
-            {0, -1},  // South
-            {-1, 0}   // West
-        };
+        // Squared distance from origin
+        private int getDist() {
+            return x * x + y * y;
+        }
 
-        int dir = 0; // start facing North
-        int x = 0, y = 0;
-        int maxDist = 0;
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof Coord coord)) return false;
+            return x == coord.x && y == coord.y;
+        }
 
-        for (int cmd : commands) {
-            if (cmd == -2) {
-                dir = (dir + 3) % 4; // turn left
-            } else if (cmd == -1) {
-                dir = (dir + 1) % 4; // turn right
-            } else {
-                // move step-by-step
-                for (int step = 0; step < cmd; step++) {
-                    int nx = x + dirs[dir][0];
-                    int ny = y + dirs[dir][1];
+        @Override
+        public int hashCode() {
+            return x * 31 + y;
+        }
+    }
 
-                    if (obstacleSet.contains(encode(nx, ny))) {
-                        break; // stop before obstacle
+    // Direction vectors: North, East, South, West
+    private static final int[] dx = {0, 1, 0, -1};
+    private static final int[] dy = {1, 0, -1, 0};
+
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int direction = 0; // 0=N, 1=E, 2=S, 3=W
+        int maxDistance = 0;
+
+        // Store obstacles in a HashSet for O(1) lookup
+        Set<Coord> obstacleSet = new HashSet<>(obstacles.length, 1.0f);
+        for (int[] obs : obstacles) {
+            obstacleSet.add(new Coord(obs[0], obs[1]));
+        }
+
+        // Current robot position (mutated during simulation)
+        Coord current = new Coord(0, 0);
+
+        for (int command : commands) {
+
+            // Turn right
+            if (command == -1) {
+                direction = (direction == 3) ? 0 : direction + 1;
+            }
+            // Turn left
+            else if (command == -2) {
+                direction = (direction == 0) ? 3 : direction - 1;
+            }
+            // Move forward
+            else {
+                for (int step = 0; step < command; step++) {
+
+                    // Move one step
+                    current.x += dx[direction];
+                    current.y += dy[direction];
+
+                    // If hit obstacle, step back and stop moving
+                    if (obstacleSet.contains(current)) {
+                        current.x -= dx[direction];
+                        current.y -= dy[direction];
+                        break;
                     }
-
-                    x = nx;
-                    y = ny;
-                    maxDist = Math.max(maxDist, x * x + y * y);
                 }
+
+                // Update max distance after movement
+                maxDistance = Math.max(maxDistance, current.getDist());
             }
         }
 
-        return maxDist;
-    }
-
-    // Encode (x, y) into a single long to avoid pair object overhead
-    private long encode(int x, int y) {
-        return (((long) x) << 32) | (y & 0xffffffffL);
+        return maxDistance;
     }
 }
