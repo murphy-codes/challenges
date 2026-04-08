@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-07
 // At the time of submission:
-//   Runtime 59 ms Beats 88.00%
-//   Memory 47.76 MB Beats 78.67%
+//   Runtime 57 ms Beats 97.33%
+//   Memory 47.77 MB Beats 78.67%
 
 /****************************************
 * 
@@ -44,33 +44,28 @@
 ****************************************/
 
 class Solution {
-    // For each query, we directly simulate the updates by iterating from l to r
-    // with step size k and applying the multiplication modulo 1e9+7. Given the
-    // constraints (n, q ≤ 1000), this O(q * n) approach is efficient enough.
-    // After processing all queries, we compute the XOR of the final array.
-    // The solution uses in-place updates and constant extra space.
-
-    private static final int MOD = 1_000_000_007;
-
-    public int xorAfterQueries(int[] nums, int[][] queries) {
-
-        for (int[] q : queries) {
-            int l = q[0];
-            int r = q[1];
-            int k = q[2];
-            int v = q[3];
-
-            for (int i = l; i <= r; i += k) {
-                long updated = (long) nums[i] * v;
-                nums[i] = (int) (updated % MOD);
+    // We simulate each query directly by iterating from l to r with step k,
+    // multiplying the selected elements modulo 1e9+7. A long array is used
+    // to prevent overflow during intermediate calculations. Given constraints
+    // (n, q ≤ 1000), this O(q * n) approach is efficient. Finally, we compute
+    // the XOR of all elements in the updated array.
+    long MOD = (long)10e8+7;
+    public int xorAfterQueries(int[] nums, int[][] q) {
+        int n = nums.length;
+        long arr[] =new long[n]; // long array to prevent overflow during mult
+        for(int i=0; i<n ;i++){ // Copy nums into long array
+            arr[i] = (long)nums[i];
+        }
+        for(int i=0;i<q.length;i++){
+            for(int j=q[i][0];j<=q[i][1];j+=q[i][2]){
+                arr[j]=(arr[j]*(long)q[i][3])%MOD;
             }
         }
-
-        int xor = 0;
-        for (int num : nums) {
-            xor ^= num;
+        // Comp XOR of final vals
+        long ans = 0;
+        for(int i=0;i<n;i++){
+            ans = ans^arr[i];
         }
-
-        return xor;
+        return (int)ans;
     }
 }
