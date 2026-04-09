@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-08
 // At the time of submission:
-//   Runtime 279 ms Beats 40.00%
-//   Memory 239.68 MB Beats 55.00%
+//   Runtime 263 ms Beats 95.00%
+//   Memory 212.32 MB Beats 80.00%
 
 /****************************************
 * 
@@ -44,106 +44,94 @@
 * 
 ****************************************/
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 class Solution {
-    // We use sqrt decomposition by splitting queries based on k. For large k,
-    // each query affects few elements and is processed directly. For small k,
-    // queries are grouped by (k, l mod k) and applied over compressed indices.
-    // We use prefix multiplication with modular inverses to correctly apply
-    // range multipliers. This reduces complexity to O((n + q) * sqrt(n)).
+    // We use sqrt decomposition by splitting queries based on step size k.
+    // For large k, updates are sparse and processed directly. For small k,
+    // queries are grouped and applied using a multiplicative difference array,
+    // where range updates are handled via prefix multiplication and modular
+    // inverses. This reduces total complexity to O((n + q) * sqrt(n)).
 
     private static final int MOD = 1_000_000_007;
+
+    // Fast exponentiation (used for modular inverse)
+    private int modPow(long base, long exp) {
+        long result = 1;
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                result = (result * base) % MOD;
+            }
+            base = (base * base) % MOD;
+            exp >>= 1;
+        }
+        return (int) result;
+    }
 
     public int xorAfterQueries(int[] nums, int[][] queries) {
 
         int n = nums.length;
-        int B = (int) Math.sqrt(n) + 1;
+        int threshold = (int) Math.sqrt(n);
 
-        // Group small-k queries
-        java.util.Map<Integer, java.util.Map<Integer, java.util.List<int[]>>> groups = new java.util.HashMap<>();
+        // Group queries by step size k
+        List<List<int[]>> queriesByK = new ArrayList<>(threshold);
+        for (int i = 0; i < threshold; i++) {
+            queriesByK.add(new ArrayList<>());
+        }
 
-        // Process large k directly
+        // Split queries into small-k and large-k
         for (int[] q : queries) {
             int l = q[0], r = q[1], k = q[2], v = q[3];
 
-            if (k > B) {
+            if (k < threshold) {
+                queriesByK.get(k).add(new int[]{l, r, v});
+            } else {
+                // Direct simulation for large k
                 for (int i = l; i <= r; i += k) {
                     nums[i] = (int) ((long) nums[i] * v % MOD);
                 }
-            } else {
-                groups
-                    .computeIfAbsent(k, x -> new java.util.HashMap<>())
-                    .computeIfAbsent(l % k, x -> new java.util.ArrayList<>())
-                    .add(q);
             }
         }
 
-        // Process small k groups
-        for (int k : groups.keySet()) {
-            java.util.Map<Integer, java.util.List<int[]>> modGroups = groups.get(k);
+        // Difference array reused for each k
+        long[] diff = new long[n + threshold];
 
-            for (int mod : modGroups.keySet()) {
+        // Process small k values
+        for (int k = 1; k < threshold; k++) {
 
-                int size = (n - mod + k - 1) / k;
+            if (queriesByK.get(k).isEmpty()) continue;
 
-                long[] start = new long[size + 1];
-                long[] end = new long[size + 1];
+            Arrays.fill(diff, 1);
 
-                // Initialize with 1 (multiplicative identity)
-                java.util.Arrays.fill(start, 1);
-                java.util.Arrays.fill(end, 1);
+            // Apply multiplicative range updates
+            for (int[] q : queriesByK.get(k)) {
+                int l = q[0], r = q[1], v = q[2];
 
-                for (int[] q : modGroups.get(mod)) {
-                    int l = q[0], r = q[1], v = q[3];
+                diff[l] = (diff[l] * v) % MOD;
 
-                    int s = (l - mod) / k;
-                    int e = (r - mod) / k;
+                // Compute end boundary for this step pattern
+                int end = ((r - l) / k + 1) * k + l;
 
-                    start[s] = (start[s] * v) % MOD;
+                diff[end] = (diff[end] * modPow(v, MOD - 2)) % MOD;
+            }
 
-                    if (e + 1 < size) {
-                        // cancel effect after range using modular inverse
-                        end[e + 1] = (end[e + 1] * v) % MOD;
-                    }
-                }
+            // Propagate multipliers with step k
+            for (int i = k; i < n; i++) {
+                diff[i] = (diff[i] * diff[i - k]) % MOD;
+            }
 
-                long curr = 1;
-
-                for (int i = 0; i < size; i++) {
-                    curr = (curr * start[i]) % MOD;
-
-                    int idx = mod + i * k;
-                    nums[idx] = (int) ((long) nums[idx] * curr % MOD);
-
-                    // remove effects that end here
-                    if (end[i + 1] != 1) {
-                        long inv = modInverse(end[i + 1]);
-                        curr = (curr * inv) % MOD;
-                    }
-                }
+            // Apply results to nums
+            for (int i = 0; i < n; i++) {
+                nums[i] = (int) ((long) nums[i] * diff[i] % MOD);
             }
         }
 
-        int xor = 0;
+        // Final XOR
+        int result = 0;
         for (int num : nums) {
-            xor ^= num;
-        }
-
-        return xor;
-    }
-
-    // Fast modular exponentiation for inverse
-    private long modInverse(long x) {
-        return modPow(x, MOD - 2);
-    }
-
-    private long modPow(long base, int exp) {
-        long result = 1;
-        base %= MOD;
-
-        while (exp > 0) {
-            if ((exp & 1) == 1) result = (result * base) % MOD;
-            base = (base * base) % MOD;
-            exp >>= 1;
+            result ^= num;
         }
 
         return result;
