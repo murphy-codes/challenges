@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3740|[Minimum Distance Between Three Equal Elements I](https://leetcode.com/problems/minimum-distance-between-three-equal-elements-i/)|[Java](./algorithms/java/3740_minimum-distance-between-three-equal-elements-i.java)|Easy|
 |3721|[Longest Balanced Subarray II](https://leetcode.com/problems/longest-balanced-subarray-ii/)|[Java](./algorithms/java/3721_longest-balanced-subarray-ii.java)|Hard|
 |3719|[Longest Balanced Subarray I](https://leetcode.com/problems/longest-balanced-subarray-i/)|[Java](./algorithms/java/3719_longest-balanced-subarray-i.java)|Medium|
 |3714|[Longest Balanced Substring II](https://leetcode.com/problems/longest-balanced-substring-ii/)|[Java](./algorithms/java/3714_longest-balanced-substring-ii.java)|Medium|
