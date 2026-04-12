@@ -3,7 +3,7 @@
 // Date: 2026-04-10
 // At the time of submission:
 //   Runtime 5 ms Beats 25.17%
-//   Memory 45.24 MB Beats 13.11%
+//   Memory 45.27 MB Beats 13.11%
 
 /****************************************
 * 
@@ -44,12 +44,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
-    // We group indices by value using a map from number to list of positions.
-    // For each value with at least three occurrences, we repeatedly examine
-    // the first three indices to compute the distance 2 * (k - i), then slide
-    // the window forward by removing the earliest index. This ensures we check
-    // all consecutive triples. Time is O(n^2) in worst case due to removals,
-    // with O(n) space for storing index lists.
+    // We map each value to a list of its indices in the array. For values with
+    // at least three occurrences, we scan consecutive triples of indices and
+    // compute the distance as 2 * (k - i), which minimizes the total distance.
+    // Checking only consecutive triples ensures optimality. The algorithm runs
+    // in O(n) time overall and uses O(n) space to store index lists.
     public int minimumDistance(int[] nums) {
         int minDist = 2*nums.length;
         Map<Integer, List<Integer>> freq = new HashMap<>();
@@ -58,9 +57,8 @@ class Solution {
             else { freq.put(nums[i],new ArrayList<>(List.of(i))); }
         }
         for (Map.Entry<Integer, List<Integer>> e : freq.entrySet()) {
-            while (e.getValue().size() > 2) {
-                minDist = Math.min(minDist, 2 * (e.getValue().get(2) - e.getValue().get(0)));
-                e.getValue().remove(0);
+            for (int i = 0; i + 2 < e.getValue().size(); i++) {
+                minDist = Math.min(minDist, 2 * (e.getValue().get(i+2) - e.getValue().get(i)));
             }
         }
         if (minDist < 2*nums.length) return minDist;
