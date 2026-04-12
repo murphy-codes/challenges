@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-10
 // At the time of submission:
-//   Runtime 5 ms Beats 25.17%
-//   Memory 45.27 MB Beats 13.11%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.83 MB Beats 33.01%
 
 /****************************************
 * 
@@ -44,24 +44,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
-    // We map each value to a list of its indices in the array. For values with
-    // at least three occurrences, we scan consecutive triples of indices and
-    // compute the distance as 2 * (k - i), which minimizes the total distance.
-    // Checking only consecutive triples ensures optimality. The algorithm runs
-    // in O(n) time overall and uses O(n) space to store index lists.
+    // For any triple i < j < k, the distance simplifies to 2 * (k - i).
+    // We group indices by value and, for each value with at least three
+    // occurrences, check consecutive triples to minimize (k - i).
+    // This ensures the smallest possible distance. The approach runs in
+    // O(n) time and uses O(n) space for storing indices.
+
     public int minimumDistance(int[] nums) {
-        int minDist = 2*nums.length;
-        Map<Integer, List<Integer>> freq = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            if(freq.containsKey(nums[i])) { freq.get(nums[i]).add(i); }
-            else { freq.put(nums[i],new ArrayList<>(List.of(i))); }
+
+        int n = nums.length;
+
+        // Since nums[i] <= n, we can use array of lists
+        List<Integer>[] positions = new ArrayList[n + 1];
+
+        for (int i = 0; i <= n; i++) {
+            positions[i] = new ArrayList<>();
         }
-        for (Map.Entry<Integer, List<Integer>> e : freq.entrySet()) {
-            for (int i = 0; i + 2 < e.getValue().size(); i++) {
-                minDist = Math.min(minDist, 2 * (e.getValue().get(i+2) - e.getValue().get(i)));
+
+        // Store indices for each value
+        for (int i = 0; i < n; i++) {
+            positions[nums[i]].add(i);
+        }
+
+        int minDistance = Integer.MAX_VALUE;
+
+        // Process each value
+        for (int val = 1; val <= n; val++) {
+            List<Integer> idxList = positions[val];
+
+            if (idxList.size() < 3) continue;
+
+            // Check consecutive triples
+            for (int i = 0; i + 2 < idxList.size(); i++) {
+                int left = idxList.get(i);
+                int right = idxList.get(i + 2);
+
+                int distance = 2 * (right - left);
+                minDistance = Math.min(minDistance, distance);
             }
         }
-        if (minDist < 2*nums.length) return minDist;
-        return -1;
+
+        return minDistance == Integer.MAX_VALUE ? -1 : minDistance;
     }
 }
