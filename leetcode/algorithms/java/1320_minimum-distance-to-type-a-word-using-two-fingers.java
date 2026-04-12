@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-11
 // At the time of submission:
-//   Runtime 7 ms Beats 86.92%
-//   Memory 43.14 MB Beats 87.69%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 42.66 MB Beats 93.08%
 
 /****************************************
 * 
@@ -50,64 +50,64 @@
 ****************************************/
 
 class Solution {
-    // We use dynamic programming where dp[j] represents the minimum cost
-    // when one finger is at the previous character and the other is at j.
-    // At each step, we either move the same finger or switch fingers,
-    // updating costs accordingly using Manhattan distance on the keyboard.
-    // This reduces the state space to O(26) per step, yielding O(26 * n)
-    // time and O(26) space.
-    private int dist(int a, int b) {
-        if (a == -1) return 0; // free initial placement
-        int x1 = a / 6, y1 = a % 6;
-        int x2 = b / 6, y2 = b % 6;
-        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
-    }
+    // We use a compressed DP where dp[x] represents the minimum cost when
+    // one finger is at the previous character and the other is at letter x
+    // (or free at index 26). For each step, we add movement cost for using
+    // the same finger and compute the optimal switch cost. This avoids extra
+    // arrays and runs in O(26 * n) time with O(1) space.
 
     public int minimumDistance(String word) {
-
         int n = word.length();
+        if (n < 3) return 0;
 
-        // dp[j] = min cost where j is position of the "other" finger
-        int[] dp = new int[26];
+        char[] chars = word.toCharArray();
 
-        // initialize as 0 (both fingers unused)
-        for (int i = 0; i < 26; i++) {
-            dp[i] = 0;
+        // dp[0..25] = other finger at 'A'..'Z'
+        // dp[26] = "free" finger (not placed yet)
+        int[] dp = new int[27];
+
+        for (int i = 0; i < 27; i++) {
+            dp[i] = Integer.MAX_VALUE;
         }
 
-        int prev = word.charAt(0) - 'A';
+        // Initial states
+        dp[26] = dist(chars[1], chars[0]); // same finger used twice
+        dp[chars[0] - 'A'] = 0;            // other finger unused
 
-        for (int i = 1; i < n; i++) {
-            int curr = word.charAt(i) - 'A';
+        for (int i = 2; i < n; i++) {
 
-            int[] newDp = new int[26];
+            int moveCost = dist(chars[i], chars[i - 1]);
+            int bestSwitchCost = dp[26];
 
-            // initialize large
-            for (int j = 0; j < 26; j++) {
-                newDp[j] = Integer.MAX_VALUE;
+            // Update all states
+            for (int other = 0; other < 27; other++) {
+
+                if (dp[other] < bestSwitchCost) {
+                    int switchCost = dp[other] +
+                        dist(chars[i], (char) (other + 'A'));
+                    bestSwitchCost = Math.min(bestSwitchCost, switchCost);
+                }
+
+                if (dp[other] < Integer.MAX_VALUE) {
+                    dp[other] += moveCost;
+                }
             }
 
-            for (int other = 0; other < 26; other++) {
-                if (dp[other] == Integer.MAX_VALUE) continue;
-
-                // Option 1: same finger types curr
-                int cost1 = dp[other] + dist(prev, curr);
-                newDp[other] = Math.min(newDp[other], cost1);
-
-                // Option 2: switch fingers
-                int cost2 = dp[other] + dist(other, curr);
-                newDp[prev] = Math.min(newDp[prev], cost2);
-            }
-
-            dp = newDp;
-            prev = curr;
+            // Update state where we switch fingers
+            int prevChar = chars[i - 1] - 'A';
+            dp[prevChar] = Math.min(dp[prevChar], bestSwitchCost);
         }
 
-        int ans = Integer.MAX_VALUE;
+        int result = Integer.MAX_VALUE;
         for (int val : dp) {
-            ans = Math.min(ans, val);
+            result = Math.min(result, val);
         }
 
-        return ans;
+        return result;
+    }
+
+    private int dist(char a, char b) {
+        int i = a - 'A', j = b - 'A';
+        return Math.abs(i / 6 - j / 6) + Math.abs(i % 6 - j % 6);
     }
 }
