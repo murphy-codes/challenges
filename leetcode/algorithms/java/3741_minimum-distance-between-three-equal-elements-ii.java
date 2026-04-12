@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/minimum-distance-between-three-equal-elements-ii/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2026-04-10
+// Date: 2026-04-11
 // At the time of submission:
-//   Runtime 40 ms Beats 98.32%
-//   Memory 265.59 MB Beats 86.68%
+//   Runtime 5 ms Beats 100.00%
+//   Memory 161.10 MB Beats 96.17%
 
 /****************************************
 * 
@@ -40,48 +40,35 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
-    // For any triple i < j < k, the distance simplifies to 2 * (k - i).
-    // We group indices by value and, for each value with at least three
-    // occurrences, check consecutive triples to minimize (k - i).
-    // This ensures the smallest possible distance. The approach runs in
-    // O(n) time and uses O(n) space for storing indices.
-
+    // We track the last two occurrences of each value while iterating once.
+    // When encountering a value for the third time, we compute the distance
+    // using the current index and the second previous occurrence, which
+    // minimizes 2 * (k - i). This avoids storing full index lists and
+    // achieves O(n) time with O(n) space using constant work per element.
     public int minimumDistance(int[] nums) {
 
-        int n = nums.length;
-
-        // Since nums[i] <= n, we can use array of lists
-        List<Integer>[] positions = new ArrayList[n + 1];
-
-        for (int i = 0; i <= n; i++) {
-            positions[i] = new ArrayList<>();
-        }
-
-        // Store indices for each value
-        for (int i = 0; i < n; i++) {
-            positions[nums[i]].add(i);
-        }
+        // lastTwo[0][v] = most recent occurrence of v (1-based index)
+        // lastTwo[1][v] = second most recent occurrence of v (1-based index)
+        int[][] lastTwo = new int[2][nums.length + 1];
 
         int minDistance = Integer.MAX_VALUE;
 
-        // Process each value
-        for (int val = 1; val <= n; val++) {
-            List<Integer> idxList = positions[val];
+        for (int i = 0; i < nums.length; i++) {
+            int value = nums[i];
 
-            if (idxList.size() < 3) continue;
-
-            // Check consecutive triples
-            for (int i = 0; i + 2 < idxList.size(); i++) {
-                int left = idxList.get(i);
-                int right = idxList.get(i + 2);
-
-                int distance = 2 * (right - left);
+            // If we have seen this value at least twice before
+            if (lastTwo[1][value] != 0) {
+                int distance = (i - lastTwo[1][value] + 1) * 2;
                 minDistance = Math.min(minDistance, distance);
             }
+
+            // Shift occurrences:
+            // second most recent ← most recent
+            lastTwo[1][value] = lastTwo[0][value];
+
+            // most recent ← current index (1-based)
+            lastTwo[0][value] = i + 1;
         }
 
         return minDistance == Integer.MAX_VALUE ? -1 : minDistance;
