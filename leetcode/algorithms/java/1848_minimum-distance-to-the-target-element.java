@@ -3,7 +3,7 @@
 // Date: 2026-04-12
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 44.96 MB Beats 52.26%
+//   Memory 45.05 MB Beats 32.51%
 
 /****************************************
 * 
@@ -37,25 +37,17 @@
 ****************************************/
 
 class Solution {
-    // Scan left and right from the starting index separately
-    // to find the first occurrence of the target on each.
-    // Return the min of the two. Runs in O(n) time
-    // and uses O(1) extra space.
+    // We expand outward from the start index, checking both left and right
+    // at increasing distances. The first time we encounter the target, we
+    // return the current distance since it is guaranteed to be minimal.
+    // This approach ensures early termination and avoids scanning the
+    // entire array unnecessarily. Time is O(n), space is O(1).
     public int getMinDistance(int[] nums, int target, int start) {
         if (nums.length == 1 || nums[start] == target) return 0;
-        int min = 1001;
-        for (int i = start+1; i < nums.length; i++) {
-            if (nums[i] == target) {
-                min = Math.min(i - start, min);
-                break;
-            }
+        for (int d = 1; d < nums.length; d++) {
+            if (start + d < nums.length && nums[start + d] == target) return d;
+            if (start - d >= 0 && nums[start - d] == target) return d;
         }
-        for (int i = start-1; i >= 0; i--) {
-            if (nums[i] == target) {
-                min = Math.min(start - i, min);
-                break;
-            }
-        }
-        return min;
+        return -1;
     }
 }
