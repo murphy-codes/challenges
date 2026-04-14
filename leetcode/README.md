@@ -207,6 +207,7 @@ LeetCode
 |2483|[Minimum Penalty for a Shop](https://leetcode.com/problems/minimum-penalty-for-a-shop/)|[Java](./algorithms/java/2483_minimum-penalty-for-a-shop.java)|Medium|
 |2467|[Most Profitable Path in a Tree](https://leetcode.com/problems/most-profitable-path-in-a-tree/)|[Java](./algorithms/java/2467_most-profitable-path-in-a-tree.java)|Medium|
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
+|2463|[Minimum Total Distance Traveled](https://leetcode.com/problems/minimum-total-distance-traveled/)|[Java](./algorithms/java/2463_minimum-total-distance-traveled.java)|Hard|
 |2460|[Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array/)|[Java](./algorithms/java/2460_apply-operations-to-an-array.java)|Easy|
 |2444|[Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds/)|[Java](./algorithms/java/2444_count-subarrays-with-fixed-bounds.java)|Hard|
 |2438|[Range Product Queries of Powers](https://leetcode.com/problems/range-product-queries-of-powers/)|[Java](./algorithms/java/2438_range-product-queries-of-powers.java)|Medium|
