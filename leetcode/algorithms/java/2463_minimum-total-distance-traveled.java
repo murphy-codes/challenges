@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-14
 // At the time of submission:
-//   Runtime 30 ms Beats 88.71%
-//   Memory 44.61 MB Beats 67.74%
+//   Runtime 18 ms Beats 100.00%
+//   Memory 45.69 MB Beats 64.52%
 
 /****************************************
 * 
@@ -64,55 +64,70 @@
 * 
 ****************************************/
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Arrays;
 
 class Solution {
-    // We sort robots and factories, then use DP where dp[i] represents
-    // the minimum cost to repair the first i robots. For each factory,
-    // we try assigning up to its capacity of consecutive robots and
-    // accumulate distance incrementally. This ensures optimal substructure
-    // and avoids recomputation. Time is O(n * m * limit), space is O(n).
+    // We use DP where dp[i][j] represents the minimum cost to repair robots
+    // from index i onward using factories from j onward. By rewriting the
+    // transition, we express it as a sliding window minimum problem and use
+    // a monotonic deque to optimize the inner loop. This reduces time from
+    // O(n * m * limit) to O(n * m) while maintaining correct capacity bounds.
 
-    public long minimumTotalDistance(List<Integer> robot, int[][] factory) {
+    public long minimumTotalDistance(List<Integer> robots, int[][] factories) {
 
-        Collections.sort(robot);
-        Arrays.sort(factory, (a, b) -> Integer.compare(a[0], b[0]));
+        Collections.sort(robots);
+        Arrays.sort(factories, (a, b) -> a[0] - b[0]);
 
-        int n = robot.size();
-        int m = factory.length;
+        int n = robots.size();
+        int m = factories.length;
 
-        long[] dp = new long[n + 1];
-        Arrays.fill(dp, Long.MAX_VALUE);
-        dp[0] = 0;
+        long[][] dp = new long[n + 1][m + 1];
 
-        for (int j = 0; j < m; j++) {
-            int pos = factory[j][0];
-            int limit = factory[j][1];
-
-            long[] newDp = new long[n + 1];
-            Arrays.fill(newDp, Long.MAX_VALUE);
-
-            for (int i = 0; i <= n; i++) {
-                if (dp[i] == Long.MAX_VALUE) continue;
-
-                long cost = 0;
-
-                // try assigning k robots to this factory
-                for (int k = 0; k <= limit && i + k <= n; k++) {
-
-                    if (k > 0) {
-                        cost += Math.abs(robot.get(i + k - 1) - pos);
-                    }
-
-                    newDp[i + k] = Math.min(newDp[i + k], dp[i] + cost);
-                }
-            }
-
-            dp = newDp;
+        // Base case: no factories left → impossible unless no robots
+        for (int i = 0; i < n; i++) {
+            dp[i][m] = Long.MAX_VALUE / 4;
         }
 
-        return dp[n];
+        // Process factories backwards
+        for (int j = m - 1; j >= 0; j--) {
+
+            int pos = factories[j][0];
+            int limit = factories[j][1];
+
+            long distSum = 0;
+
+            // Monotonic deque: [robotIndex, value]
+            ArrayDeque<long[]> deque = new ArrayDeque<>();
+            deque.addLast(new long[]{n, 0});
+
+            for (int i = n - 1; i >= 0; i--) {
+
+                // Expand segment cost
+                distSum += Math.abs(robots.get(i) - pos);
+
+                // Remove invalid indices (exceed capacity)
+                while (!deque.isEmpty() && deque.peekFirst()[0] > i + limit) {
+                    deque.pollFirst();
+                }
+
+                // Compute candidate value
+                long value = dp[i][j + 1] - distSum;
+
+                // Maintain monotonic increasing deque
+                while (!deque.isEmpty() && deque.peekLast()[1] >= value) {
+                    deque.pollLast();
+                }
+
+                deque.addLast(new long[]{i, value});
+
+                // Best result
+                dp[i][j] = deque.peekFirst()[1] + distSum;
+            }
+        }
+
+        return dp[0][0];
     }
 }
