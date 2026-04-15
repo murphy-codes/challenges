@@ -33,7 +33,7 @@
 * __ moved is `|y - x|`.
 *
 * Example 1:
-* [Image: ]
+* [Image: https://assets.leetcode.com/uploads/2022/09/15/example1.jpg]
 * Input: robot = [0,4,6], factory = [[2,2],[6,2]]
 * Output: 4
 * Explanation: As shown in the figure:
@@ -45,7 +45,7 @@
 * The total distance is |2 - 0| + |2 - 4| + |6 - 6| = 4. It can be shown that we cannot achieve a better total distance than 4.
 *
 * Example 2:
-* [Image: ]
+* [Image: https://assets.leetcode.com/uploads/2022/09/15/example-2.jpg]
 * Input: robot = [1,-1], factory = [[-2,1],[2,1]]
 * Output: 2
 * Explanation: As shown in the figure:
