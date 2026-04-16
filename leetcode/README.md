@@ -45,6 +45,7 @@ LeetCode
 |3507|[Minimum Pair Removal to Sort Array I](https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/)|[Java](./algorithms/java/3507_minimum-pair-removal-to-sort-array-i.java)|Easy|
 |3495|[Minimum Operations to Make Array Elements Zero](https://leetcode.com/problems/minimum-operations-to-make-array-elements-zero/)|[Java](./algorithms/java/3495_minimum-operations-to-make-array-elements-zero.java)|Hard|
 |3494|[Find the Minimum Amount of Time to Brew Potions](https://leetcode.com/problems/find-the-minimum-amount-of-time-to-brew-potions/)|[Java](./algorithms/java/3494_find-the-minimum-amount-of-time-to-brew-potions.java)|Medium|
+|3488|[Closest Equal Element Queries](https://leetcode.com/problems/closest-equal-element-queries/)|[Java](./algorithms/java/3488_closest-equal-element-queries.java)|Medium|
 |3487|[Maximum Unique Subarray Sum After Deletion](https://leetcode.com/problems/maximum-unique-subarray-sum-after-deletion/)|[Java](./algorithms/java/3487_maximum-unique-subarray-sum-after-deletion.java)|Easy|
 |3484|[Design Spreadsheet](https://leetcode.com/problems/design-spreadsheet/)|[Java](./algorithms/java/3484_design-spreadsheet.java)|Medium|
 |3480|[Maximize Subarrays After Removing One Conflicting Pair](https://leetcode.com/problems/maximize-subarrays-after-removing-one-conflicting-pair/)|[Java](./algorithms/java/3480_maximize-subarrays-after-removing-one-conflicting-pair.java)|Hard|
