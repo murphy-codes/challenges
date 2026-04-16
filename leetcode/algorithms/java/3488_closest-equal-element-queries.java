@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-15
 // At the time of submission:
-//   Runtime 110 ms Beats 54.55%
-//   Memory 186.78 MB Beats 62.63%
+//   Runtime 47 ms Beats 98.99%
+//   Memory 157.30 MB Beats 100.00%
 
 /****************************************
 * 
@@ -37,57 +37,71 @@
 ****************************************/
 
 import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.Map;
 import java.util.List;
-import java.util.Collections;
+import java.util.ArrayList;
 
 class Solution {
-    // We map each value to a sorted list of its indices. For each query,
-    // we binary search to find the current index within its value's list,
-    // then check the closest neighbors in that list. Since the array is
-    // circular, distance is computed as min(|i-j|, n-|i-j|). Each query
-    // runs in O(log n), total time is O(n + q log n), space is O(n).
+    // We track the first and most recent occurrences of each value while
+    // iterating through the array. For each new occurrence, we update the
+    // minimum circular distances for the previous, first, and current
+    // indices. This effectively links occurrences in a circular manner.
+    // After preprocessing in O(n), each query is answered in O(1).
+
+    // Distance moving clockwise from 'from' to 'to'
+    private int circularDistance(int from, int to, int n) {
+        if (from <= to) return to - from;
+        return n - from + to;
+    }
+
     public List<Integer> solveQueries(int[] nums, int[] queries) {
 
         int n = nums.length;
 
-        // Step 1: map value -> list of indices
-        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        int[] minDistances = new int[n];
+        Map<Integer, int[]> lastSeen = new HashMap<>();
 
         for (int i = 0; i < n; i++) {
-            map.computeIfAbsent(nums[i], k -> new ArrayList<>()).add(i);
+
+            minDistances[i] = Integer.MAX_VALUE;
+
+            int val = nums[i];
+
+            if (lastSeen.containsKey(val)) {
+
+                int firstIdx = lastSeen.get(val)[0];
+                int prevIdx  = lastSeen.get(val)[1];
+
+                // Update previous occurrence
+                minDistances[prevIdx] = Math.min(
+                    minDistances[prevIdx],
+                    circularDistance(prevIdx, i, n)
+                );
+
+                // Update first occurrence (wrap-around)
+                minDistances[firstIdx] = Math.min(
+                    minDistances[firstIdx],
+                    circularDistance(i, firstIdx, n)
+                );
+
+                // Update current index
+                minDistances[i] = Math.min(
+                    circularDistance(prevIdx, i, n),
+                    circularDistance(i, firstIdx, n)
+                );
+
+                // Update last seen indices
+                lastSeen.put(val, new int[]{firstIdx, i});
+
+            } else {
+                lastSeen.put(val, new int[]{i, i});
+            }
         }
 
         List<Integer> result = new ArrayList<>();
 
-        // Step 2: process each query
         for (int q : queries) {
-
-            int val = nums[q];
-            List<Integer> list = map.get(val);
-
-            if (list.size() == 1) {
-                result.add(-1);
-                continue;
-            }
-
-            // Step 3: binary search
-            int pos = Collections.binarySearch(list, q);
-
-            int size = list.size();
-
-            // neighbors (circular in the list)
-            int leftIdx = list.get((pos - 1 + size) % size);
-            int rightIdx = list.get((pos + 1) % size);
-
-            // Step 4: compute circular distances
-            int leftDist = Math.abs(q - leftIdx);
-            leftDist = Math.min(leftDist, n - leftDist);
-
-            int rightDist = Math.abs(q - rightIdx);
-            rightDist = Math.min(rightDist, n - rightDist);
-
-            result.add(Math.min(leftDist, rightDist));
+            result.add(minDistances[q] == Integer.MAX_VALUE ? -1 : minDistances[q]);
         }
 
         return result;
