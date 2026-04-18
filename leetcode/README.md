@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3761|[Minimum Absolute Distance Between Mirror Pairs](https://leetcode.com/problems/minimum-absolute-distance-between-mirror-pairs/)|[Java](./algorithms/java/3761_minimum-absolute-distance-between-mirror-pairs.java)|Medium|
 |3741|[Minimum Distance Between Three Equal Elements II](https://leetcode.com/problems/minimum-distance-between-three-equal-elements-ii/)|[Java](./algorithms/java/3741_minimum-distance-between-three-equal-elements-ii.java)|Medium|
 |3740|[Minimum Distance Between Three Equal Elements I](https://leetcode.com/problems/minimum-distance-between-three-equal-elements-i/)|[Java](./algorithms/java/3740_minimum-distance-between-three-equal-elements-i.java)|Easy|
 |3721|[Longest Balanced Subarray II](https://leetcode.com/problems/longest-balanced-subarray-ii/)|[Java](./algorithms/java/3721_longest-balanced-subarray-ii.java)|Hard|
