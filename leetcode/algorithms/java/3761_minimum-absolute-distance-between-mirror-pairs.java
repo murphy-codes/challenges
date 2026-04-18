@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-17
 // At the time of submission:
-//   Runtime 37 ms Beats 100.00%
-//   Memory 102.49 MB Beats 21.61%
+//   Runtime 40 ms Beats 99.50%
+//   Memory 102.42 MB Beats 21.61%
 
 /****************************************
 * 
@@ -45,66 +45,48 @@
 * 
 ****************************************/
 
-/*
- We are looking for nums[i] == reverse(nums[j]) 
- and also allows j - i Minimum
-
- hashmap What is stored inside?
- key   = reverse(nums[i])
- value = i the maximum subscript of
- It means: 
-  At what position does the reverse of a number to the left appear?
-*/ 
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
+    // We scan the array while storing the latest index of each reversed
+    // number in a hash map. For each element, we check if it already exists
+    // as a key, indicating a previous number whose reverse matches the
+    // current value. We update the minimum distance accordingly. Using the
+    // latest index ensures the smallest distance. Time is O(n), space is O(n).
     public int minMirrorPairDistance(int[] nums) {
-        int n = nums.length; 
-        int ans = n; 
 
-        // lastIndex：key = reverse(A left-side element nums[i])，value = The subscript *i* (taking the latest/maximum subscript)
-        // Pre-allocate capacity `n` with a load factor of 1 to minimize resizing and rehashing (a performance optimization, not strictly required).
-        Map<Integer, Integer> lastIndex = new HashMap<>(n,1.0f);
+        int n = nums.length;
+        int minDistance = n;
 
-        for(int j =0; j < n ; j++){
-            // Query: Is there any index `i` to the left such that `reverse(nums[i]) == nums[j]`?
-            // Since we stored `reverse(nums[i])` as the key in `lastIndex`, we can simply use `x` to perform the lookup.
-            int x = nums[j];
-            Integer i = lastIndex.get(x); 
+        // Map: reverse(value) -> latest index
+        Map<Integer, Integer> lastIndex = new HashMap<>(n, 1.0f);
 
-            if(i!= null){  // If a mirror pair is found
-                int dist = j-i;  // Calculate distance
-                ans = Math.min(ans, dist);  // Update the answer with a smaller distance.
+        for (int j = 0; j < n; j++) {
+
+            int current = nums[j];
+
+            // Check for mirror match
+            Integer prevIndex = lastIndex.get(current);
+            if (prevIndex != null) {
+                int distance = j - prevIndex;
+                minDistance = Math.min(minDistance, distance);
             }
 
+            // Compute reverse(current)
+            int temp = current;
+            int reversed = 0;
 
-             // ====== Below: Update the hash table (contributing the current element to "future right endpoints") ======
-
-            int t = x;                            // Store a copy of `x` in `t` (since the variable will be repeatedly modified by dividing by 10 later on).
-            int rev = 0;                          // rev is used to calculate reverse(x).
-
-
-
-             // Calculate reverse(t): for example t=123 -> rev=321
-            while (t > 0) {                       // As long as t still contains digits
-                int digit = t % 10;               // Extract the last digit of t.
-                rev = rev * 10 + digit;           // Append `digit` to the end of `rev`.
-                t = t / 10;                       // Remove the last digit of t.
+            while (temp > 0) {
+                int digit = temp % 10;
+                reversed = reversed * 10 + digit;
+                temp /= 10;
             }
 
-
-             // Store `reverse(nums[j])` as the key, and record the current index `j`.
-             // This overwrites any previous value: ensuring that the stored value is the "largest/most recent index," thereby making it possible for `j - i` to be smaller.
-            lastIndex.put(rev, j);                // lastIndex[rev] = j
-
+            // Store latest index
+            lastIndex.put(reversed, j);
         }
 
-        // If `ans` remains `n`, it indicates that it was never updated (meaning no mirror pairs were found); return -1.
-        // Otherwise, return the minimum distance `ans`.
-        if (ans < n) {                            // Mirror pair found
-            return ans;                           // Returns the minimum mirror distance.
-        } else {                                  // No mirror pair found
-            return -1;                            // Return -1 as per the problem statement.
-        }
-        
+        return (minDistance < n) ? minDistance : -1;
     }
 }
