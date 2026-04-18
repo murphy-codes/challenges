@@ -5,6 +5,7 @@ LeetCode
 
 | # | Title | Solution | Difficulty |
 |---| ----- | -------- | ---------- |
+|3783|[Mirror Distance of an Integer](https://leetcode.com/problems/mirror-distance-of-an-integer/)|[Java](./algorithms/java/3783_mirror-distance-of-an-integer.java)|Easy|
 |3761|[Minimum Absolute Distance Between Mirror Pairs](https://leetcode.com/problems/minimum-absolute-distance-between-mirror-pairs/)|[Java](./algorithms/java/3761_minimum-absolute-distance-between-mirror-pairs.java)|Medium|
 |3741|[Minimum Distance Between Three Equal Elements II](https://leetcode.com/problems/minimum-distance-between-three-equal-elements-ii/)|[Java](./algorithms/java/3741_minimum-distance-between-three-equal-elements-ii.java)|Medium|
 |3740|[Minimum Distance Between Three Equal Elements I](https://leetcode.com/problems/minimum-distance-between-three-equal-elements-i/)|[Java](./algorithms/java/3740_minimum-distance-between-three-equal-elements-i.java)|Easy|
