@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-20
 // At the time of submission:
-//   Runtime 48 ms Beats 66.67%
-//   Memory 112.39 MB Beats 83.87%
+//   Runtime 43 ms Beats 84.95%
+//   Memory 98.90 MB Beats 100.00%
 
 /****************************************
 * 
@@ -49,77 +49,81 @@
 * 
 ****************************************/
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 class Solution {
-    // Use Union-Find to group indices into connected components.
-    // Within each component, elements can be freely rearranged.
-    // Count frequencies of source values per component and try
-    // to match target values, reducing counts when possible.
-    // Unmatched elements contribute to Hamming distance.
-    // Time: O(n α(n)), Space: O(n).
+    // Use a Union-Find-like structure to group swappable indices.
+    // For each component, track frequency deltas: +1 for source,
+    // -1 for target. The sum of absolute imbalances gives twice
+    // the number of mismatches, so divide by 2. Handle isolated
+    // indices separately. Time: O(n α(n)), Space: O(n).
     public int minimumHammingDistance(int[] source, int[] target, int[][] allowedSwaps) {
         int n = source.length;
 
-        UnionFind uf = new UnionFind(n);
+        int[] parent = new int[n];
+        Arrays.fill(parent, 100001); // sentinel for "uninitialized"
 
-        // Build connected components
+        // Build union structure
         for (int[] swap : allowedSwaps) {
-            uf.union(swap[0], swap[1]);
+            int rootA = findRoot(parent, swap[0]);
+            int rootB = findRoot(parent, swap[1]);
+
+            int newRoot = Math.min(rootA, rootB);
+
+            parent[rootA] = newRoot;
+            parent[rootB] = newRoot;
+
+            // small optimization: flatten immediate nodes
+            parent[swap[0]] = newRoot;
+            parent[swap[1]] = newRoot;
         }
 
-        // Group indices by root
-        Map<Integer, Map<Integer, Integer>> groups = new HashMap<>();
+        HashMap<Integer, HashMap<Integer, Integer>> componentMap = new HashMap<>();
 
+        int mismatchNoSwap = 0;
+
+        // Build frequency deltas per component
         for (int i = 0; i < n; i++) {
-            int root = uf.find(i);
-            groups.putIfAbsent(root, new HashMap<>());
-            Map<Integer, Integer> freq = groups.get(root);
+            // No swaps allowed for this index
+            if (parent[i] == 100001) {
+                if (source[i] != target[i]) {
+                    mismatchNoSwap++;
+                }
+                continue;
+            }
 
+            int root = findRoot(parent, i);
+
+            componentMap.putIfAbsent(root, new HashMap<>());
+            HashMap<Integer, Integer> freq = componentMap.get(root);
+
+            // Add source, subtract target
             freq.put(source[i], freq.getOrDefault(source[i], 0) + 1);
+            freq.put(target[i], freq.getOrDefault(target[i], 0) - 1);
         }
 
-        int mismatch = 0;
+        int imbalance = 0;
 
-        // Try to match target values within each component
-        for (int i = 0; i < n; i++) {
-            int root = uf.find(i);
-            Map<Integer, Integer> freq = groups.get(root);
-
-            int val = target[i];
-            if (freq.getOrDefault(val, 0) > 0) {
-                freq.put(val, freq.get(val) - 1);
-            } else {
-                mismatch++;
+        // Sum absolute imbalances
+        for (HashMap<Integer, Integer> freq : componentMap.values()) {
+            for (int count : freq.values()) {
+                imbalance += Math.abs(count);
             }
         }
 
-        return mismatch;
+        // Each mismatch counted twice → divide by 2
+        return imbalance / 2 + mismatchNoSwap;
     }
 
-    // Union-Find with path compression
-    static class UnionFind {
-        int[] parent;
-
-        public UnionFind(int n) {
-            parent = new int[n];
-            for (int i = 0; i < n; i++) parent[i] = i;
+    private int findRoot(int[] parent, int index) {
+        if (parent[index] == 100001) {
+            parent[index] = index;
+            return index;
         }
-
-        public int find(int x) {
-            if (parent[x] != x) {
-                parent[x] = find(parent[x]);
-            }
-            return parent[x];
+        if (parent[index] == index) {
+            return index;
         }
-
-        public void union(int a, int b) {
-            int rootA = find(a);
-            int rootB = find(b);
-            if (rootA != rootB) {
-                parent[rootA] = rootB;
-            }
-        }
+        return findRoot(parent, parent[index]);
     }
 }
