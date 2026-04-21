@@ -274,6 +274,7 @@ LeetCode
 |2094|[Finding 3-Digit Even Numbers](https://leetcode.com/problems/finding-3-digit-even-numbers/)|[Java](./algorithms/java/2094_finding-3-digit-even-numbers.java)|Easy|
 |2092|[Find All People With Secret](https://leetcode.com/problems/find-all-people-with-secret/)|[Java](./algorithms/java/2092_find-all-people-with-secret.java)|Hard|
 |2081|[Sum of k-Mirror Numbers](https://leetcode.com/problems/sum-of-k-mirror-numbers/)|[Java](./algorithms/java/2081_sum-of-k-mirror-numbers.java)|Hard|
+|2078|[Two Furthest Houses With Different Colors](https://leetcode.com/problems/two-furthest-houses-with-different-colors/)|[Java](./algorithms/java/2078_two-furthest-houses-with-different-colors.java)|Easy|
 |2075|[Decode the Slanted Ciphertext](https://leetcode.com/problems/decode-the-slanted-ciphertext/)|[Java](./algorithms/java/2075_decode-the-slanted-ciphertext.java)|Medium|
 |2071|[Maximum Number of Tasks You Can Assign](https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/)|[Java](./algorithms/java/2071_maximum-number-of-tasks-you-can-assign.java)|Hard|
 |2069|[Walking Robot Simulation II](https://leetcode.com/problems/walking-robot-simulation-ii/)|[Java](./algorithms/java/2069_walking-robot-simulation-ii.java)|Medium|
@@ -327,6 +328,7 @@ LeetCode
 |1733|[Minimum Number of People to Teach](https://leetcode.com/problems/minimum-number-of-people-to-teach/)|[Java](./algorithms/java/1733_minimum-number-of-people-to-teach.java)|Medium|
 |1727|[Largest Submatrix With Rearrangements](https://leetcode.com/problems/largest-submatrix-with-rearrangements/)|[Java](./algorithms/java/1727_largest-submatrix-with-rearrangements.java)|Medium|
 |1726|[Tuple with Same Product](https://leetcode.com/problems/tuple-with-same-product/)|[Java](./algorithms/java/1726_tuple-with-same-product.java)|Medium|
+|1722|[Minimize Hamming Distance After Swap Operations](https://leetcode.com/problems/minimize-hamming-distance-after-swap-operations/)|[Java](./algorithms/java/1722_minimize-hamming-distance-after-swap-operations.java)|Medium|
 |1718|[Construct the Lexicographically Largest Valid Sequence](https://leetcode.com/problems/construct-the-lexicographically-largest-valid-sequence/)|[Java](./algorithms/java/1718_construct-the-lexicographically-largest-valid-sequence.java)|Medium|
 |1717|[Maximum Score From Removing Substrings](https://leetcode.com/problems/maximum-score-from-removing-substrings/)|[Java](./algorithms/java/1717_maximum-score-from-removing-substrings.java)|Medium|
 |1716|[Calculate Money in Leetcode Bank](https://leetcode.com/problems/calculate-money-in-leetcode-bank/)|[Java](./algorithms/java/1716_calculate-money-in-leetcode-bank.java)|Easy|
