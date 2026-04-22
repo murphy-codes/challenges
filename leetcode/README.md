@@ -213,6 +213,7 @@ LeetCode
 |2466|[Count Ways To Build Good Strings](https://leetcode.com/problems/count-ways-to-build-good-strings/)|[Java](./algorithms/java/2466_count-ways-to-build-good-strings.java)|Medium|
 |2463|[Minimum Total Distance Traveled](https://leetcode.com/problems/minimum-total-distance-traveled/)|[Java](./algorithms/java/2463_minimum-total-distance-traveled.java)|Hard|
 |2460|[Apply Operations to an Array](https://leetcode.com/problems/apply-operations-to-an-array/)|[Java](./algorithms/java/2460_apply-operations-to-an-array.java)|Easy|
+|2452|[Words Within Two Edits of Dictionary](https://leetcode.com/problems/words-within-two-edits-of-dictionary/)|[Java](./algorithms/java/2452_words-within-two-edits-of-dictionary.java)|Medium|
 |2444|[Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds/)|[Java](./algorithms/java/2444_count-subarrays-with-fixed-bounds.java)|Hard|
 |2438|[Range Product Queries of Powers](https://leetcode.com/problems/range-product-queries-of-powers/)|[Java](./algorithms/java/2438_range-product-queries-of-powers.java)|Medium|
 |2435|[Paths in Matrix Whose Sum Is Divisible by K](https://leetcode.com/problems/paths-in-matrix-whose-sum-is-divisible-by-k/)|[Java](./algorithms/java/2435_paths-in-matrix-whose-sum-is-divisible-by-k.java)|Hard|
