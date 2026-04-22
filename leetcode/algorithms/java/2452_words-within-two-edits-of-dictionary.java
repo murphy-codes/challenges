@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-21
 // At the time of submission:
-//   Runtime 2 ms Beats 97.79%
-//   Memory 44.34 MB Beats 71.32%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.68 MB Beats 32.35%
 
 /****************************************
 * 
@@ -44,36 +44,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
-    // For each query, compare it with every dictionary word and count
-    // character differences. If any dictionary word differs by at most
-    // two characters, include the query in the result. Early exit when
-    // differences exceed two for efficiency. Time: O(q * d * n), Space: O(1)
-    // (excluding output list).
+    // For each query, compare it against all dictionary words and track
+    // remaining allowed differences (max 2). Decrement on mismatches and
+    // stop early if more than 2 differences occur. If any dictionary word
+    // is within the limit, include the query. Time: O(q * d * n), Space: O(1).
+
+    // Checks if query matches any dictionary word within <= 2 edits
+    boolean matchesWithinTwoEdits(String query, String[] dictionary) {
+        for (String dictWord : dictionary) {
+            int remainingEdits = 2;
+
+            for (int i = 0; i < dictWord.length(); i++) {
+                if (dictWord.charAt(i) != query.charAt(i)) {
+                    remainingEdits--;
+                }
+
+                // Too many differences → stop checking this word
+                if (remainingEdits < 0) {
+                    break;
+                }
+            }
+
+            // Valid match found
+            if (remainingEdits >= 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public List<String> twoEditWords(String[] queries, String[] dictionary) {
         List<String> result = new ArrayList<>();
 
-        for (String q : queries) {
-            for (String d : dictionary) {
-                if (isWithinTwoEdits(q, d)) {
-                    result.add(q);
-                    break; // only need one match
-                }
+        for (String query : queries) {
+            if (matchesWithinTwoEdits(query, dictionary)) {
+                result.add(query);
             }
         }
 
         return result;
-    }
-
-    private boolean isWithinTwoEdits(String a, String b) {
-        int diff = 0;
-
-        for (int i = 0; i < a.length(); i++) {
-            if (a.charAt(i) != b.charAt(i)) {
-                diff++;
-                if (diff > 2) return false; // early exit
-            }
-        }
-
-        return true;
     }
 }
