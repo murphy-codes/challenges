@@ -189,6 +189,7 @@ LeetCode
 |2657|[Find the Prefix Common Array of Two Arrays](https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/)|[Java](./algorithms/java/2657_find-the-prefix-common-array-of-two-arrays.java)|Medium|
 |2654|[Minimum Number of Operations to Make All Array Elements Equal to 1](https://leetcode.com/problems/minimum-number-of-operations-to-make-all-array-elements-equal-to-1/)|[Java](./algorithms/java/2654_minimum-number-of-operations-to-make-all-array-elements-equal-to-1.java)|Medium|
 |2616|[Minimize the Maximum Difference of Pairs](https://leetcode.com/problems/minimize-the-maximum-difference-of-pairs/)|[Java](./algorithms/java/2616_minimize-the-maximum-difference-of-pairs.java)|Medium|
+|2615|[Sum of Distances](https://leetcode.com/problems/sum-of-distances/)|[Java](./algorithms/java/2615_sum-of-distances.java)|Medium|
 |2598|[Smallest Missing Non-negative Integer After Operations](https://leetcode.com/problems/smallest-missing-non-negative-integer-after-operations/)|[Java](./algorithms/java/2598_smallest-missing-non-negative-integer-after-operations.java)|Medium|
 |2594|[Minimum Time to Repair Cars](https://leetcode.com/problems/minimum-time-to-repair-cars/)|[Java](./algorithms/java/2594_minimum-time-to-repair-cars.java)|Medium|
 |2579|[Count Total Number of Colored Cells](https://leetcode.com/problems/count-total-number-of-colored-cells/)|[Java](./algorithms/java/2579_count-total-number-of-colored-cells.java)|Medium|
