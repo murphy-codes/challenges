@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-24
 // At the time of submission:
-//   Runtime 21 ms Beats 84.07%
-//   Memory 119.65 MB Beats 65.49%
+//   Runtime 13 ms Beats 100.00%
+//   Memory 108.22 MB Beats 95.13%
 
 /****************************************
 * 
@@ -34,54 +34,60 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class Solution {
-    // Group indices by value and process each group independently.
-    // Use prefix sums to compute distances to left and right indices
-    // in O(1) per position, avoiding quadratic comparisons.
-    // For each index, distance = left contribution + right contribution.
+    // Store running left/right counts and index sums for each value.
+    // First pass builds total right-side sums/counts. During the second
+    // pass, each index moves from right to left, allowing distance to be
+    // computed in O(1) using aggregated sums instead of index lists.
     // Time: O(n), Space: O(n).
+
+    private class Data {
+        long leftSum;    // sum of indices already processed
+        long rightSum;   // sum of indices not yet processed
+
+        int leftCount;   // count of processed indices
+        int rightCount;  // count of unprocessed indices
+    }
+
     public long[] distance(int[] nums) {
         int n = nums.length;
-        long[] result = new long[n];
 
-        // Group indices by value
-        Map<Integer, List<Integer>> map = new HashMap<>();
+        Map<Integer, Data> map = new HashMap<>();
+
+        // First pass:
+        // initialize right-side totals for every value
         for (int i = 0; i < n; i++) {
-            map.computeIfAbsent(nums[i], k -> new ArrayList<>()).add(i);
+            Data data = map.get(nums[i]);
+
+            if (data == null) {
+                data = new Data();
+                map.put(nums[i], data);
+            }
+
+            data.rightSum += i;
+            data.rightCount++;
         }
 
-        // Process each group independently
-        for (List<Integer> indices : map.values()) {
-            int size = indices.size();
+        long[] result = new long[n];
 
-            long prefixSum = 0; // sum of previous indices
-            long totalSum = 0;
+        // Second pass:
+        // move each index from right side to left side
+        for (int i = 0; i < n; i++) {
+            Data data = map.get(nums[i]);
 
-            // total sum of all indices in this group
-            for (int idx : indices) {
-                totalSum += idx;
-            }
+            result[i] =
+                data.rightSum - data.leftSum
+                + 1L * data.leftCount * i
+                - 1L * i * data.rightCount;
 
-            for (int i = 0; i < size; i++) {
-                int currentIndex = indices.get(i);
+            data.leftSum += i;
+            data.rightSum -= i;
 
-                // Left contribution
-                long left = (long) currentIndex * i - prefixSum;
-
-                // Right contribution
-                long right = (totalSum - prefixSum - currentIndex)
-                           - (long) currentIndex * (size - i - 1);
-
-                result[currentIndex] = left + right;
-
-                // update prefix sum
-                prefixSum += currentIndex;
-            }
+            data.leftCount++;
+            data.rightCount--;
         }
 
         return result;
