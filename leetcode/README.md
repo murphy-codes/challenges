@@ -54,6 +54,7 @@ LeetCode
 |3479|[Fruits Into Baskets III](https://leetcode.com/problems/fruits-into-baskets-iii/)|[Java](./algorithms/java/3479_fruits-into-baskets-iii.java)|Medium|
 |3477|[Fruits Into Baskets II](https://leetcode.com/problems/fruits-into-baskets-ii/)|[Java](./algorithms/java/3477_fruits-into-baskets-ii.java)|Easy|
 |3474|[Lexicographically Smallest Generated String](https://leetcode.com/problems/lexicographically-smallest-generated-string/)|[Java](./algorithms/java/3474_lexicographically-smallest-generated-string.java)|Hard|
+|3464|[Maximize the Distance Between Points on a Square](https://leetcode.com/problems/maximize-the-distance-between-points-on-a-square/)|[Java](./algorithms/java/3464_maximize-the-distance-between-points-on-a-square.java)|Hard|
 |3461|[Check If Digits Are Equal in String After Operations I](https://leetcode.com/problems/check-if-digits-are-equal-in-string-after-operations-i/)|[Java](./algorithms/java/3461_check-if-digits-are-equal-in-string-after-operations-i.java)|Easy|
 |3459|[Length of Longest V-Shaped Diagonal Segment](https://leetcode.com/problems/length-of-longest-v-shaped-diagonal-segment/)|[Java](./algorithms/java/3459_length-of-longest-v-shaped-diagonal-segment.java)|Hard|
 |3454|[Separate Squares II](https://leetcode.com/problems/separate-squares-ii/)|[Java](./algorithms/java/3454_separate-squares-ii.java)|Hard|
