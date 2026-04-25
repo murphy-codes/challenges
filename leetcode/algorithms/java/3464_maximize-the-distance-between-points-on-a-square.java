@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-24
 // At the time of submission:
-//   Runtime 114 ms Beats 47.83%
-//   Memory 47.83 MB Beats 34.78%
+//   Runtime 9 ms Beats 91.30%
+//   Memory 50.32 MB Beats 69.57%
 
 /****************************************
 * 
@@ -51,90 +51,92 @@
 * 
 ****************************************/
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 class Solution {
-    // Map each boundary point to its clockwise position on the square's
-    // perimeter, turning the problem into selecting k points on a circle.
-    // Binary search the maximum minimum Manhattan distance, and for each
-    // candidate distance greedily test if k points can be selected.
-    // Time: O(n log side + n^2), Space: O(n).
-
+    // Map each boundary point to a 1D position along the square perimeter,
+    // then binary search the largest minimum Manhattan distance possible.
+    // For each candidate distance, greedily place k points using lowerBound
+    // and sliding pointers while also checking circular wrap-around validity.
+    // Time: O(n log n + log(side) * n * k), Space: O(n + k)
     public int maxDistance(int side, int[][] points, int k) {
-        List<Long> perimeterPositions = new ArrayList<>();
+        // Convert boundary points into 1D perimeter positions
+        long[] perimeterPos = new long[points.length];
 
-        // Map each boundary point to a clockwise position
-        // around the square perimeter.
-        for (int[] point : points) {
-            int x = point[0];
-            int y = point[1];
+        for (int i = 0; i < points.length; i++) {
+            int x = points[i][0];
+            int y = points[i][1];
 
             if (x == 0) {
-                // Left edge: bottom -> top
-                perimeterPositions.add((long) y);
+                perimeterPos[i] = y;
             } else if (y == side) {
-                // Top edge: left -> right
-                perimeterPositions.add((long) side + x);
+                perimeterPos[i] = side + x;
             } else if (x == side) {
-                // Right edge: top -> bottom
-                perimeterPositions.add(3L * side - y);
+                perimeterPos[i] = side * 3L - y;
             } else {
-                // Bottom edge: right -> left
-                perimeterPositions.add(4L * side - x);
+                perimeterPos[i] = side * 4L - x;
             }
         }
 
-        Collections.sort(perimeterPositions);
+        Arrays.sort(perimeterPos);
 
-        long left = 1;
-        long right = side; // editorial bound
-        int answer = 0;
+        // Binary search maximum valid minimum Manhattan distance
+        int left = 1;
+        int right = side + 1;
 
-        // Binary search the maximum possible minimum distance
-        while (left <= right) {
-            long mid = left + (right - left) / 2;
+        while (left + 1 < right) {
+            int mid = (left + right) >>> 1;
 
-            if (canSelect(perimeterPositions, side, k, mid)) {
-                answer = (int) mid;
-                left = mid + 1;
+            if (canPlace(perimeterPos, side, k, mid)) {
+                left = mid;
             } else {
-                right = mid - 1;
+                right = mid;
             }
         }
 
-        return answer;
+        return left;
     }
 
-    private boolean canSelect(
-        List<Long> positions,
-        int side,
-        int k,
-        long minDistance
-    ) {
-        long perimeter = 4L * side;
+    private boolean canPlace(long[] positions, int side, int k, int minDist) {
+        // selected[i] stores chosen index for the i-th selected point
+        int[] selected = new int[k];
 
-        // Try every point as the starting point
-        for (long start : positions) {
-            long maxAllowed = start + perimeter - minDistance;
-            long current = start;
+        // Initial greedy selection starting from positions[0]
+        long current = positions[0];
 
-            // Need to pick k - 1 more points
-            for (int i = 0; i < k - 1; i++) {
-                int nextIndex = lowerBound(positions, current + minDistance);
+        for (int i = 1; i < k; i++) {
+            int nextIndex = lowerBound(positions, current + minDist);
 
-                // No valid next point OR wraparound would violate distance
-                if (nextIndex == positions.size()
-                    || positions.get(nextIndex) > maxAllowed) {
-                    current = -1;
-                    break;
-                }
-
-                current = positions.get(nextIndex);
+            if (nextIndex == positions.length) {
+                return false;
             }
 
-            if (current >= 0) {
+            selected[i] = nextIndex;
+            current = positions[nextIndex];
+        }
+
+        // Check circular wrap-around constraint
+        if (current - positions[0] <= side * 4L - minDist) {
+            return true;
+        }
+
+        // Move first pointer forward incrementally
+        int stop = selected[1];
+
+        for (selected[0] = 1; selected[0] < stop; selected[0]++) {
+            for (int i = 1; i < k; i++) {
+                while (positions[selected[i]]
+                        < positions[selected[i - 1]] + minDist) {
+                    selected[i]++;
+
+                    if (selected[i] == positions.length) {
+                        return false;
+                    }
+                }
+            }
+
+            if (positions[selected[k - 1]] - positions[selected[0]]
+                    <= side * 4L - minDist) {
                 return true;
             }
         }
@@ -142,22 +144,20 @@ class Solution {
         return false;
     }
 
-    // Standard lower bound:
-    // first index where positions[idx] >= target
-    private int lowerBound(List<Long> positions, long target) {
-        int left = 0;
-        int right = positions.size();
+    private int lowerBound(long[] nums, long target) {
+        int left = -1;
+        int right = nums.length;
 
-        while (left < right) {
-            int mid = left + (right - left) / 2;
+        while (left + 1 < right) {
+            int mid = (left + right) >>> 1;
 
-            if (positions.get(mid) < target) {
-                left = mid + 1;
-            } else {
+            if (nums[mid] >= target) {
                 right = mid;
+            } else {
+                left = mid;
             }
         }
 
-        return left;
+        return right;
     }
 }
