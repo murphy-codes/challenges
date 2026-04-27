@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-26
 // At the time of submission:
-//   Runtime 24 ms Beats 22.84%
-//   Memory 146.74 MB Beats 14.41%
+//   Runtime 6 ms Beats 100.00%
+//   Memory 123.99 MB Beats 91.78%
 
 /****************************************
 * 
@@ -47,27 +47,58 @@
 ****************************************/
 
 class Solution {
-    // Use DFS to explore each connected group of same-character cells.
-    // Track the previous (parent) cell so we do not count immediately
-    // stepping back as a cycle. If we reach an already visited cell
-    // that is not the parent, then a valid cycle exists.
-    // Time: O(m * n), Space: O(m * n)
-
-    private int rows;
-    private int cols;
-    private boolean[][] visited;
-
+    // Treat each cell as a graph node and connect adjacent cells
+    // that contain the same character using Union-Find (DSU).
+    // If two same-character neighbors are already in the same set,
+    // connecting them again means a cycle exists.
+    // Time: O(m * n * α(mn)), Space: O(m n)
     public boolean containsCycle(char[][] grid) {
-        rows = grid.length;
-        cols = grid[0].length;
-        visited = new boolean[rows][cols];
+        int rows = grid.length;
+        int cols = grid[0].length;
 
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                if (!visited[r][c]) {
-                    if (dfs(grid, r, c, -1, -1, grid[r][c])) {
+        // parent[i] stores the representative (root) of node i
+        int[] parent = new int[rows * cols];
+
+        // Initially, every cell is its own parent
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int id = row * cols + col;
+                parent[id] = id;
+            }
+        }
+
+        // Only check right and down neighbors to avoid duplicate edges
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int currentId = row * cols + col;
+                char currentChar = grid[row][col];
+
+                // Check downward neighbor
+                if (row + 1 < rows && grid[row + 1][col] == currentChar) {
+                    int rootA = find(currentId, parent);
+                    int rootB = find((row + 1) * cols + col, parent);
+
+                    // Already connected → cycle found
+                    if (rootA == rootB) {
                         return true;
                     }
+
+                    // Union the two groups
+                    parent[rootA] = rootB;
+                }
+
+                // Check right neighbor
+                if (col + 1 < cols && grid[row][col + 1] == currentChar) {
+                    int rootA = find(currentId, parent);
+                    int rootB = find(row * cols + col + 1, parent);
+
+                    // Already connected → cycle found
+                    if (rootA == rootB) {
+                        return true;
+                    }
+
+                    // Union the two groups
+                    parent[rootA] = rootB;
                 }
             }
         }
@@ -75,49 +106,13 @@ class Solution {
         return false;
     }
 
-    private boolean dfs(char[][] grid,
-                        int row,
-                        int col,
-                        int parentRow,
-                        int parentCol,
-                        char target) {
-
-        visited[row][col] = true;
-
-        int[][] directions = {
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
-        };
-
-        for (int[] dir : directions) {
-            int nextRow = row + dir[0];
-            int nextCol = col + dir[1];
-
-            // Skip out-of-bounds cells
-            if (nextRow < 0 || nextRow >= rows ||
-                nextCol < 0 || nextCol >= cols) {
-                continue;
-            }
-
-            // Skip different characters
-            if (grid[nextRow][nextCol] != target) {
-                continue;
-            }
-
-            // Skip the immediate parent cell
-            if (nextRow == parentRow && nextCol == parentCol) {
-                continue;
-            }
-
-            // If already visited and not parent, cycle found
-            if (visited[nextRow][nextCol]) {
-                return true;
-            }
-
-            if (dfs(grid, nextRow, nextCol, row, col, target)) {
-                return true;
-            }
+    private int find(int node, int[] parent) {
+        if (node == parent[node]) {
+            return node;
         }
 
-        return false;
+        // Path compression
+        parent[node] = find(parent[node], parent);
+        return parent[node];
     }
 }
