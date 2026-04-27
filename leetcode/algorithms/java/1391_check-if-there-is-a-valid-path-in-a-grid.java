@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-26
 // At the time of submission:
-//   Runtime 17 ms Beats 80.09%
-//   Memory 102.40 MB Beats 33.70%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 85.75 MB Beats 93.65%
 
 /****************************************
 * 
@@ -49,93 +49,88 @@
 ****************************************/
 
 class Solution {
-    // Use DFS starting from (0,0), following only the directions
-    // allowed by the current street type. A move is valid only if
-    // the neighboring cell also connects back in the opposite direction.
-    // If we can reach the bottom-right cell, a valid path exists.
-    // Time: O(m * n), Space: O(m * n)
+    // Each street has exactly two connections, so instead of DFS,
+    // we simulate the path directly using bitmasks for directions.
+    // At each step, remove the incoming direction and continue using
+    // the remaining valid exit. Try both possible starts from (0,0).
+    // Time: O(m * n), Space: O(1)
     
-    // Direction order:
-    // 0 = up, 1 = right, 2 = down, 3 = left
-    private final int[][] directions = {
-        {-1, 0}, // up
-        {0, 1},  // right
-        {1, 0},  // down
-        {0, -1}  // left
-    };
+    // Bitmask directions
+    static final int LEFT = 0b0001;
+    static final int RIGHT = 0b0010;
+    static final int UP = 0b0100;
+    static final int DOWN = 0b1000;
 
-    // For each street type, define which directions are allowed
-    private final int[][] streetDirs = {
-        {},         // dummy for 0-index alignment
-        {1, 3},     // type 1: left <-> right
-        {0, 2},     // type 2: up <-> down
-        {2, 3},     // type 3: left <-> down
-        {1, 2},     // type 4: right <-> down
-        {0, 3},     // type 5: left <-> up
-        {0, 1}      // type 6: right <-> up
+    // Index = street type
+    // Value = valid exits for that street
+    static final int[] STREET_MASK = {
+        0,
+        LEFT | RIGHT,   // type 1
+        UP | DOWN,      // type 2
+        LEFT | DOWN,    // type 3
+        DOWN | RIGHT,   // type 4
+        LEFT | UP,      // type 5
+        UP | RIGHT      // type 6
     };
 
     public boolean hasValidPath(int[][] grid) {
+        int startMask = STREET_MASK[grid[0][0]];
+
+        // Only right or down can be valid first moves from (0,0)
+        return followPath(grid, startMask & DOWN)
+            || followPath(grid, startMask & RIGHT);
+    }
+
+    private boolean followPath(int[][] grid, int outDirection) {
         int rows = grid.length;
         int cols = grid[0].length;
 
-        boolean[][] visited = new boolean[rows][cols];
+        int row = 0;
+        int col = 0;
+        int inDirection = 0;
 
-        return dfs(grid, 0, 0, visited, rows, cols);
-    }
+        while (true) {
+            // Reached destination
+            if (row == rows - 1 && col == cols - 1) {
+                return true;
+            }
 
-    private boolean dfs(int[][] grid,
-                        int row,
-                        int col,
-                        boolean[][] visited,
-                        int rows,
-                        int cols) {
+            // Move to next cell based on outgoing direction
+            if (outDirection == LEFT) {
+                col--;
+                inDirection = RIGHT;
+            } else if (outDirection == RIGHT) {
+                col++;
+                inDirection = LEFT;
+            } else if (outDirection == UP) {
+                row--;
+                inDirection = DOWN;
+            } else if (outDirection == DOWN) {
+                row++;
+                inDirection = UP;
+            } else {
+                return false;
+            }
 
-        // Reached destination
-        if (row == rows - 1 && col == cols - 1) {
-            return true;
-        }
-
-        visited[row][col] = true;
-
-        int streetType = grid[row][col];
-
-        // Try both valid directions for current street
-        for (int dir : streetDirs[streetType]) {
-            int nextRow = row + directions[dir][0];
-            int nextCol = col + directions[dir][1];
+            // Prevent looping back to start
+            if (row == 0 && col == 0) {
+                return false;
+            }
 
             // Out of bounds
-            if (nextRow < 0 || nextRow >= rows ||
-                nextCol < 0 || nextCol >= cols) {
-                continue;
+            if (row < 0 || row >= rows || col < 0 || col >= cols) {
+                return false;
             }
 
-            // Already visited
-            if (visited[nextRow][nextCol]) {
-                continue;
-            }
+            int nextMask = STREET_MASK[grid[row][col]];
 
-            // Check if neighbor connects back
-            int oppositeDir = (dir + 2) % 4;
-            if (!canConnect(grid[nextRow][nextCol], oppositeDir)) {
-                continue;
-            }
+            // Remove the direction we came from
+            outDirection = nextMask & (~inDirection);
 
-            if (dfs(grid, nextRow, nextCol, visited, rows, cols)) {
-                return true;
+            // If incoming direction was invalid, path breaks
+            if (outDirection == nextMask) {
+                return false;
             }
         }
-
-        return false;
-    }
-
-    private boolean canConnect(int streetType, int neededDir) {
-        for (int dir : streetDirs[streetType]) {
-            if (dir == neededDir) {
-                return true;
-            }
-        }
-        return false;
     }
 }
