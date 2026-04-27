@@ -348,6 +348,7 @@ LeetCode
 |1590|[Make Sum Divisible by P](https://leetcode.com/problems/make-sum-divisible-by-p/)|[Java](./algorithms/java/1590_make-sum-divisible-by-p.java)|Medium|
 |1582|[Special Positions in a Binary Matrix](https://leetcode.com/problems/special-positions-in-a-binary-matrix/)|[Java](./algorithms/java/1582_special-positions-in-a-binary-matrix.java)|Easy|
 |1578|[Minimum Time to Make Rope Colorful](https://leetcode.com/problems/minimum-time-to-make-rope-colorful/)|[Java](./algorithms/java/1578_minimum-time-to-make-rope-colorful.java)|Medium|
+|1559|[Detect Cycles in 2D Grid](https://leetcode.com/problems/detect-cycles-in-2d-grid/)|[Java](./algorithms/java/1559_detect-cycles-in-2d-grid.java)|Medium|
 |1550|[Three Consecutive Odds](https://leetcode.com/problems/three-consecutive-odds/)|[Java](./algorithms/java/1550_three-consecutive-odds.java)|Easy|
 |1545|[Find Kth Bit in Nth Binary String](https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/)|[Java](./algorithms/java/1545_find-kth-bit-in-nth-binary-string.java)|Medium|
 |1536|[Minimum Swaps to Arrange a Binary Grid](https://leetcode.com/problems/minimum-swaps-to-arrange-a-binary-grid/)|[Java](./algorithms/java/1536_minimum-swaps-to-arrange-a-binary-grid.java)|Medium|
