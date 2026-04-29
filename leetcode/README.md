@@ -111,6 +111,7 @@ LeetCode
 |3234|[Count the Number of Substrings With Dominant Ones](https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/)|[Java](./algorithms/java/3234_count-the-number-of-substrings-with-dominant-ones.java)|Medium|
 |3228|[Maximum Number of Operations to Move Ones to the End](https://leetcode.com/problems/maximum-number-of-operations-to-move-ones-to-the-end/)|[Java](./algorithms/java/3228_maximum-number-of-operations-to-move-ones-to-the-end.java)|Medium|
 |3227|[Vowels Game in a String0](https://leetcode.com/problems/vowels-game-in-a-string/)|[Java](./algorithms/java/3227_vowels-game-in-a-string.java)|Medium|
+|3225|[Maximum Score From Grid Operations](https://leetcode.com/problems/maximum-score-from-grid-operations/)|[Java](./algorithms/java/3225_maximum-score-from-grid-operations.java)|Hard|
 |3223|[Minimum Length of String After Operations](https://leetcode.com/problems/minimum-length-of-string-after-operations/)|[Java](./algorithms/java/3223_minimum-length-of-string-after-operations.java)|Medium|
 |3217|[Delete Nodes From Linked List Present in Array](https://leetcode.com/problems/delete-nodes-from-linked-list-present-in-array/)|[Java](./algorithms/java/3217_delete-nodes-from-linked-list-present-in-array.java)|Medium|
 |3212|[Count Submatrices With Equal Frequency of X and Y](https://leetcode.com/problems/count-submatrices-with-equal-frequency-of-x-and-y/)|[Java](./algorithms/java/3212_count-submatrices-with-equal-frequency-of-x-and-y.java)|Medium|
