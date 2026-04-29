@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-28
 // At the time of submission:
-//   Runtime 99 ms Beats 71.43%
-//   Memory 108.84 MB Beats 32.14%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 47.80 MB Beats 82.14%
 
 /****************************************
 * 
@@ -37,116 +37,92 @@
 ****************************************/
 
 class Solution {
-    // Let each column choose a black height h, meaning the top h cells are black.
-    // A white cell scores only if a left/right neighbor is black, so each column's
-    // contribution depends only on adjacent column heights.
-    // DP tracks (currentHeight, previousHeight), and prefix/suffix max arrays
-    // optimize transitions from O(n^4) brute force into efficient O(n^3),
-    // which passes comfortably for n <= 100.
-
+    // This solution avoids heavy 3D DP by using two rolling 1D DP arrays.
+    // We sweep columns in both directions and maintain the best score that
+    // can be carried forward based on adjacent black/white relationships.
+    // Instead of tracking every height state explicitly, we update optimal
+    // values incrementally, reducing the solution from O(n^3) to O(n^2)
+    // time with only O(n) extra space.
     public long maximumScore(int[][] grid) {
         int n = grid.length;
 
-        // Single column: no horizontal neighbor exists, so score is always 0.
-        if (n == 1) {
-            return 0;
-        }
+        // DP arrays for forward and backward sweeps
+        long[] leftToRightDp = new long[n];
+        long[] rightToLeftDp = new long[n];
 
-        // dp[col][currHeight][prevHeight]
-        // currHeight = black height of current column
-        // prevHeight = black height of previous column
+        long bestResult = 0;
 
-        // Represents the best score up to this column configuration.
-        long[][][] dp = new long[n][n + 1][n + 1];
+        // Previous best values carried between iterations
+        long previousForward = 0;
+        long previousBackward = 0;
 
-        // Prefix sums for each column:
-        // colPrefix[c][h] = sum of top h cells in column c
-        long[][] colPrefix = new long[n][n + 1];
-        for (int col = 0; col < n; col++) {
-            for (int row = 1; row <= n; row++) {
-                colPrefix[col][row] =
-                    colPrefix[col][row - 1] + grid[row - 1][col];
-            }
-        }
+        int col = 0;
 
-        // Optimization helpers to reduce O(n^4) transition cost.
-        long[][] prefixBest = new long[n + 1][n + 1];
-        long[][] suffixBest = new long[n + 1][n + 1];
-
-        for (int col = 1; col < n; col++) {
-            for (int currHeight = 0; currHeight <= n; currHeight++) {
-                for (int prevHeight = 0; prevHeight <= n; prevHeight++) {
-
-                    if (currHeight <= prevHeight) {
-                        // Current column is shorter or equal:
-                        // contribution comes from current column.
-                        long gain =
-                            colPrefix[col][prevHeight] -
-                            colPrefix[col][currHeight];
-
-                        dp[col][currHeight][prevHeight] = Math.max(
-                            dp[col][currHeight][prevHeight],
-                            suffixBest[prevHeight][0] + gain
-                        );
-
-                    } else {
-                        // Current column is taller:
-                        // contribution comes from previous column.
-                        long gain =
-                            colPrefix[col - 1][currHeight] -
-                            colPrefix[col - 1][prevHeight];
-
-                        dp[col][currHeight][prevHeight] = Math.max(
-                            dp[col][currHeight][prevHeight],
-                            Math.max(
-                                suffixBest[prevHeight][currHeight],
-                                prefixBest[prevHeight][currHeight] + gain
-                            )
-                        );
-                    }
-                }
-            }
-
-            // Build prefixBest and suffixBest for next iteration.
-            for (int currHeight = 0; currHeight <= n; currHeight++) {
-                prefixBest[currHeight][0] = dp[col][currHeight][0];
-
-                for (int prevHeight = 1; prevHeight <= n; prevHeight++) {
-                    long penalty = (prevHeight > currHeight)
-                        ? (colPrefix[col][prevHeight] -
-                           colPrefix[col][currHeight])
-                        : 0;
-
-                    prefixBest[currHeight][prevHeight] = Math.max(
-                        prefixBest[currHeight][prevHeight - 1],
-                        dp[col][currHeight][prevHeight] - penalty
-                    );
-                }
-
-                suffixBest[currHeight][n] = dp[col][currHeight][n];
-
-                for (int prevHeight = n - 1; prevHeight >= 0; prevHeight--) {
-                    suffixBest[currHeight][prevHeight] = Math.max(
-                        suffixBest[currHeight][prevHeight + 1],
-                        dp[col][currHeight][prevHeight]
-                    );
-                }
-            }
-        }
-        long answer = 0;
-
-        // Final column can be treated as fully black (n)
-        // or fully white (0), depending on optimal ending.
-        for (int prevHeight = 0; prevHeight <= n; prevHeight++) {
-            answer = Math.max(
-                answer,
-                Math.max(
-                    dp[n - 1][n][prevHeight],
-                    dp[n - 1][0][prevHeight]
-                )
+        while (col < n - 1) {
+            // Process current column from top -> bottom
+            long currentForward = processColumn(
+                grid,
+                leftToRightDp,
+                col,
+                previousForward,
+                0,
+                1,
+                n
             );
+
+            // Update carry value for next iteration
+            previousForward = Math.max(bestResult, previousBackward);
+
+            // Process next column from bottom -> top
+            previousBackward = processColumn(
+                grid,
+                rightToLeftDp,
+                col + 1,
+                bestResult,
+                n - 1,
+                -1,
+                -1
+            );
+
+            // Update best answer so far
+            bestResult = Math.max(previousForward, currentForward);
+
+            col++;
         }
 
-        return answer;
+        return Math.max(bestResult, previousBackward);
+    }
+
+    /**
+     * Sweeps one column in a specific direction and updates DP.
+     *
+     * row = starting row
+     * dir = traversal direction (+1 or -1)
+     * stop = stopping boundary
+     */
+    private long processColumn(
+        int[][] grid,
+        long[] dp,
+        int col,
+        long previousBest,
+        int row,
+        int dir,
+        int stop
+    ) {
+        long best = 0;
+
+        while (row != stop) {
+            best = Math.max(best, previousBest);
+
+            previousBest = dp[row];
+
+            best += grid[row][col];
+
+            dp[row] = best;
+
+            row += dir;
+        }
+
+        return best;
     }
 }
