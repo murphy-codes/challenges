@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-04-30
 // At the time of submission:
-//   Runtime 331 ms Beats 52.69%
-//   Memory 85.96 MB Beats 74.19%
+//   Runtime 54 ms Beats 99.46%
+//   Memory 50.88 MB Beats 98.92%
 
 /****************************************
 * 
@@ -46,64 +46,74 @@
 * 
 ****************************************/
 
+import java.util.Arrays;
+
 class Solution {
-    // 3D DP: dp[i][j][c] = max score at (i,j) with cost c.
-    // Transition from top/left if cost constraint allows.
-    // Track valid states (-1 = unreachable).
-    // Time: O(m*n*k), Space: O(m*n*k)
-    public int maxPathScore(int[][] grid, int k) {
-        int m = grid.length, n = grid[0].length;
+    // Use DP with dp[j][c] storing max score at column j with cost c.
+    // Transition from left and top while updating cost (0 or 1 per cell).
+    // Reverse iterate cost to avoid overwriting needed states.
+    // Precompute min path cost to prune impossible cases early.
+    // Time: O(m * n * k), Space: O(n * k)
+    public int maxPathScore(int[][] grid, int maxCost) {
+        // Early pruning: if minimum required cost exceeds maxCost, impossible
+        if (minPathCost(grid) > maxCost) {
+            return -1;
+        }
 
-        // dp[i][j][c] = max score at (i,j) with cost c
-        int[][][] dp = new int[m][n][k + 1];
+        int rows = grid.length;
+        int cols = grid[0].length;
 
-        // Initialize all states as unreachable
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int c = 0; c <= k; c++) {
-                    dp[i][j][c] = -1;
+        // Max cost can't exceed number of steps in path
+        maxCost = Math.min(maxCost, rows + cols - 2);
+
+        // dp[col][cost] = max score reaching current row at column "col"
+        int[][] dp = new int[cols + 1][maxCost + 2];
+
+        // Initialize DP with unreachable states
+        for (int[] row : dp) {
+            Arrays.fill(row, Integer.MIN_VALUE);
+        }
+
+        dp[1][1] = 0; // starting position
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                int value = grid[r][c];
+
+                // max cost to reach (r,c) is r + c
+                for (int cost = Math.min(maxCost, r + c); cost >= 0; cost--) {
+                    int prevCost = value > 0 ? cost - 1 : cost;
+
+                    dp[c + 1][cost + 1] =
+                        Math.max(dp[c + 1][prevCost + 1], dp[c][prevCost + 1]) + value;
                 }
             }
         }
 
-        // Starting point
-        dp[0][0][0] = 0;
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-
-                int cellCost = (grid[i][j] == 0) ? 0 : 1;
-                int cellScore = grid[i][j];
-
-                for (int c = 0; c <= k; c++) {
-
-                    if (i == 0 && j == 0) continue;
-
-                    // From top
-                    if (i > 0 && c >= cellCost && dp[i - 1][j][c - cellCost] != -1) {
-                        dp[i][j][c] = Math.max(
-                            dp[i][j][c],
-                            dp[i - 1][j][c - cellCost] + cellScore
-                        );
-                    }
-
-                    // From left
-                    if (j > 0 && c >= cellCost && dp[i][j - 1][c - cellCost] != -1) {
-                        dp[i][j][c] = Math.max(
-                            dp[i][j][c],
-                            dp[i][j - 1][c - cellCost] + cellScore
-                        );
-                    }
-                }
-            }
-        }
-
-        // Find best result at destination
-        int result = -1;
-        for (int c = 0; c <= k; c++) {
-            result = Math.max(result, dp[m - 1][n - 1][c]);
+        // Get best score at destination
+        int result = 0;
+        for (int score : dp[cols]) {
+            result = Math.max(result, score);
         }
 
         return result;
+    }
+
+    // Minimum cost path (treat values > 0 as cost 1)
+    private int minPathCost(int[][] grid) {
+        int cols = grid[0].length;
+        int[] dp = new int[cols + 1];
+
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[1] = 0;
+
+        for (int[] row : grid) {
+            for (int c = 0; c < cols; c++) {
+                dp[c + 1] = Math.min(dp[c], dp[c + 1])
+                          + Math.min(row[c], 1);
+            }
+        }
+
+        return dp[cols];
     }
 }
