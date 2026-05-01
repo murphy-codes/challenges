@@ -2,7 +2,7 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-01
 // At the time of submission:
-//   Runtime 4 ms Beats 90.14%
+//   Runtime 3 ms Beats 100.00%
 //   Memory 90.64 MB Beats 32.49%
 
 /****************************************
@@ -37,29 +37,35 @@
 
 class Solution {
     // Compute F(0) and total sum, then derive F(k) from F(k-1).
-    // Rotation adds sum to all weights and subtracts n * shifted value.
-    // Iterate once to update F(k) in O(1) per step.
+    // Each rotation adds sum and subtracts n * shifted element.
+    // Iterate once updating F in O(1) per step and track max.
     // Time: O(n), Space: O(1)
     public int maxRotateFunction(int[] nums) {
         int n = nums.length;
 
-        long sum = 0;
-        long f = 0;
+        int totalSum = 0;   // Sum of all elements
+        int currentF = 0;   // F(0)
 
-        // Compute total sum and F(0)
+        // Compute totalSum and initial F(0)
         for (int i = 0; i < n; i++) {
-            sum += nums[i];
-            f += (long) i * nums[i];
+            totalSum += nums[i];
+            currentF += i * nums[i];
         }
 
-        long max = f;
+        int maxF = currentF;
 
-        // Use recurrence to compute F(k)
+        // Compute F(k) using recurrence relation
         for (int k = 1; k < n; k++) {
-            f = f + sum - (long) n * nums[n - k];
-            max = Math.max(max, f);
+
+            // Transition: F(k) = F(k-1) + sum - n * nums[n - k]
+            currentF = currentF + totalSum - n * nums[n - k];
+
+            // Update maximum
+            if (currentF > maxF) {
+                maxF = currentF;
+            }
         }
 
-        return (int) max;
+        return maxF;
     }
 }
