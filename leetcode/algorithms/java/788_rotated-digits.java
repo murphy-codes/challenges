@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/rotated-digits/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2026-05-01
+// Date: 2026-05-03
 // At the time of submission:
-//   Runtime 3 ms Beats 91.63%
-//   Memory 41.76 MB Beats 96.61%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 42.20 MB Beats 47.82%
 
 /****************************************
 * 
@@ -37,42 +37,60 @@
 * 
 ****************************************/
 
-class Solution {
-    // Iterate 1..n and validate each number digit-by-digit.
-    // Reject if any digit is invalid (3,4,7); track if any digit changes.
-    // A number is good if valid and has at least one changing digit.
-    // Time: O(n * log n), Space: O(1)
-    public int rotatedDigits(int n) {
-        int count = 0;
+import java.util.Arrays;
 
-        for (int i = 1; i <= n; i++) {
-            if (isGood(i)) {
-                count++;
+class Solution {
+    // Use digit DP to count valid numbers ≤ n by building digits.
+    // Track position, tight bound, and if any digit changes after rotation.
+    // Only iterate valid digits and mark if a "good" digit is used.
+    // Time: O(d * 2 * 2 * 7), Space: O(d * 2 * 2)
+
+    // Valid digits after rotation
+    int[] validDigits = {0, 1, 2, 5, 6, 8, 9};
+
+    // dp[pos][tight][hasDiff]
+    int[][][] memo;
+
+    private int dfs(int pos, int isTight, int hasDiff, String numStr) {
+        // Base case: valid number only if at least one digit changes
+        if (pos == numStr.length()) {
+            return hasDiff == 1 ? 1 : 0;
+        }
+
+        if (memo[pos][isTight][hasDiff] != -1) {
+            return memo[pos][isTight][hasDiff];
+        }
+
+        int limit = (isTight == 1) ? numStr.charAt(pos) - '0' : 9;
+        int total = 0;
+
+        for (int digit : validDigits) {
+            if (digit > limit) continue;
+
+            int nextTight = (isTight == 1 && digit == limit) ? 1 : 0;
+
+            // Digits that do NOT change after rotation
+            if (digit == 0 || digit == 1 || digit == 8) {
+                total += dfs(pos + 1, nextTight, hasDiff, numStr);
+            } 
+            // Digits that DO change
+            else {
+                total += dfs(pos + 1, nextTight, 1, numStr);
             }
         }
 
-        return count;
+        return memo[pos][isTight][hasDiff] = total;
     }
 
-    private boolean isGood(int num) {
-        boolean changed = false;
+    public int rotatedDigits(int n) {
+        String numStr = String.valueOf(n);
 
-        while (num > 0) {
-            int digit = num % 10;
-
-            // invalid digits
-            if (digit == 3 || digit == 4 || digit == 7) {
-                return false;
-            }
-
-            // digits that change after rotation
-            if (digit == 2 || digit == 5 || digit == 6 || digit == 9) {
-                changed = true;
-            }
-
-            num /= 10;
+        memo = new int[numStr.length() + 1][2][2];
+        for (int i = 0; i <= numStr.length(); i++) {
+            Arrays.fill(memo[i][0], -1);
+            Arrays.fill(memo[i][1], -1);
         }
 
-        return changed;
+        return dfs(0, 1, 0, numStr);
     }
 }
