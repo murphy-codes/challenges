@@ -440,6 +440,7 @@ LeetCode
 |808|[Soup Servings](https://leetcode.com/problems/soup-servings/)|[Java](./algorithms/java/808_soup-servings.java)|Medium|
 |802|[Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/)|[Java](./algorithms/java/802_find-eventual-safe-states.java)|Medium|
 |799|[Champagne Tower](https://leetcode.com/problems/champagne-tower/)|[Java](./algorithms/java/799_champagne-tower.java)|Medium|
+|796|[Rotate String](https://leetcode.com/problems/rotate-string/)|[Java](./algorithms/java/796_rotate-string.java)|Easy|
 |790|[Domino and Tromino Tiling](https://leetcode.com/problems/domino-and-tromino-tiling/)|[Java](./algorithms/java/790_domino-and-tromino-tiling.java)|Medium|
 |788|[Rotated Digits](https://leetcode.com/problems/rotated-digits/)|[Java](./algorithms/java/788_rotated-digits.java)|Medium|
 |781|[Rabbits in Forest](https://leetcode.com/problems/rabbits-in-forest/)|[Java](./algorithms/java/781_rabbits-in-forest.java)|Medium|
