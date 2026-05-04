@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-03
 // At the time of submission:
-//   Runtime 0 ms Beats 100.00%
-//   Memory 43.04 MB Beats 18.69%
+//   Runtime 1 ms Beats 23.63%
+//   Memory 42.80 MB Beats 58.73%
 
 /****************************************
 * 
@@ -28,17 +28,61 @@
 ****************************************/
 
 class Solution {
+    // Treat rotation as substring search: goal must exist in s+s
+    // Use KMP to match goal in linear time via LPS backtracking
+    // Avoids redundant comparisons vs naive O(n^2) scanning
+    // Time: O(n), Space: O(n) for LPS array
+    
     public boolean rotateString(String s, String goal) {
-        int n = s.length();
-        if (n != goal.length()) return false;
+        if (s.length() != goal.length()) return false;
+        return kmpSearch(s + s, goal);
+    }
 
-        for (int i = 0; i < n; i++) {
-            int j = 0;
-            while (j < n && s.charAt(j) == goal.charAt((i + j) % n)) {
-                j++;
+    private int[] buildLPS(String pattern) {
+        int n = pattern.length();
+        int[] lps = new int[n];
+
+        int len = 0;
+        int i = 1;
+
+        while (i < n) {
+            if (pattern.charAt(i) == pattern.charAt(len)) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
             }
-            if (j == n) return true;
         }
+
+        return lps;
+    }
+
+    private boolean kmpSearch(String text, String pattern) {
+        int[] lps = buildLPS(pattern);
+
+        int i = 0, j = 0;
+
+        while (i < text.length()) {
+            if (text.charAt(i) == pattern.charAt(j)) {
+                i++;
+                j++;
+
+                if (j == pattern.length()) return true;
+            } else {
+                if (j != 0) {
+                    j = lps[j - 1];
+                } else {
+                    i++;
+                }
+            }
+        }
+
         return false;
     }
 }
