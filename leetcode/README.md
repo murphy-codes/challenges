@@ -486,6 +486,7 @@ LeetCode
 |73|[Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)|[Java](./algorithms/java/73_set-matrix-zeroes.java)|Medium|
 |67|[Add Binary](https://leetcode.com/problems/add-binary/)|[Java](./algorithms/java/67_add-binary.java)|Easy|
 |66|[Plus One](https://leetcode.com/problems/plus-one/)|[Java](./algorithms/java/66_plus-one.java)|Easy|
+|61|[Rotate List](https://leetcode.com/problems/rotate-list/)|[Java](./algorithms/java/61_rotate-list.java)|Medium|
 |48|[Rotate Image](https://leetcode.com/problems/rotate-image/)|[Java](./algorithms/java/48_rotate-image.java)|Medium|
 |42|[Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)|[Java](./algorithms/java/42_trapping-rain-water.java)|Hard|
 |38|[Count and Say](https://leetcode.com/problems/count-and-say/)|[Java](./algorithms/java/38_count-and-say.java)|Medium|
