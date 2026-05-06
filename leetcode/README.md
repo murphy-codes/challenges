@@ -317,6 +317,7 @@ LeetCode
 |1877|[Minimize Maximum Pair Sum in Array](https://leetcode.com/problems/minimize-maximum-pair-sum-in-array/)|[Java](./algorithms/java/1877_minimize-maximum-pair-sum-in-array.java)|Medium|
 |1865|[Finding Pairs With a Certain Sum](https://leetcode.com/problems/finding-pairs-with-a-certain-sum/)|[Java](./algorithms/java/1865_finding-pairs-with-a-certain-sum.java)|Medium|
 |1863|[Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals/)|[Java](./algorithms/java/1863_sum-of-all-subset-xor-totals.java)|Easy|
+|1861|[Rotating the Box](https://leetcode.com/problems/rotating-the-box/)|[Java](./algorithms/java/1861_rotating-the-box.java)|Medium|
 |1857|[Largest Color Value in a Directed Graph](https://leetcode.com/problems/largest-color-value-in-a-directed-graph/)|[Java](./algorithms/java/1857_largest-color-value-in-a-directed-graph.java)|Hard|
 |1855|[Maximum Distance Between a Pair of Values](https://leetcode.com/problems/maximum-distance-between-a-pair-of-values/)|[Java](./algorithms/java/1855_maximum-distance-between-a-pair-of-values.java)|Medium|
 |1848|[Minimum Distance to the Target Element](https://leetcode.com/problems/minimum-distance-to-the-target-element/)|[Java](./algorithms/java/1848_minimum-distance-to-the-target-element.java)|Easy|
