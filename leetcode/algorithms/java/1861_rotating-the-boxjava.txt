@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-05
 // At the time of submission:
-//   Runtime 7 ms Beats 93.03%
-//   Memory 123.35 MB Beats 95.67%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 124.68 MB Beats 76.68%
 
 /****************************************
 * 
@@ -59,38 +59,53 @@
 ****************************************/
 
 class Solution {
-    // Apply gravity per row using a write pointer from right to left.
-    // Stones fall until blocked by '*' or another stone.
-    // Then rotate matrix: res[j][m-1-i] = box[i][j].
+    // Process each row right-to-left, simulating gravity with a write index.
+    // Stones fall to lowest available position unless blocked by '*'.
+    // Write results directly into rotated grid to avoid extra pass.
     // Time: O(m*n), Space: O(m*n)
     public char[][] rotateTheBox(char[][] boxGrid) {
-        int m = boxGrid.length;
-        int n = boxGrid[0].length;
 
-        // Step 1: apply gravity row by row
-        for (int i = 0; i < m; i++) {
-            int write = n - 1; // position where next stone falls
-            for (int j = n - 1; j >= 0; j--) {
-                if (boxGrid[i][j] == '*') {
-                    write = j - 1; // reset after obstacle
-                } else if (boxGrid[i][j] == '#') {
-                    // move stone to write position
-                    char temp = boxGrid[i][write];
-                    boxGrid[i][write] = '#';
-                    boxGrid[i][j] = temp;
-                    write--;
+        int rows = boxGrid.length;
+        int cols = boxGrid[0].length;
+
+        // Rotated grid will be cols x rows
+        char[][] rotated = new char[cols][rows];
+
+        for (int r = 0; r < rows; r++) {
+            // Column index in rotated grid (mirrors rotation)
+            int rotatedCol = rows - 1 - r;
+            processRow(boxGrid[r], rotated, rotatedCol);
+        }
+
+        return rotated;
+    }
+
+    private void processRow(char[] row, char[][] rotated, int rotatedCol) {
+
+        // Next position where a stone can fall (from bottom up)
+        int writeRow = row.length;
+
+        for (int c = row.length - 1; c >= 0; c--) {
+
+            if (row[c] == '#') {
+                // Place stone at next available position
+                writeRow--;
+                rotated[writeRow][rotatedCol] = '#';
+
+                // Clear original spot if moved
+                if (c != writeRow) {
+                    rotated[c][rotatedCol] = '.';
                 }
+
+            } else if (row[c] == '*') {
+                // Obstacle resets falling boundary
+                writeRow = c;
+                rotated[writeRow][rotatedCol] = '*';
+
+            } else {
+                // Empty space
+                rotated[c][rotatedCol] = '.';
             }
         }
-
-        // Step 2: rotate 90° clockwise
-        char[][] result = new char[n][m];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                result[j][m - 1 - i] = boxGrid[i][j];
-            }
-        }
-
-        return result;
     }
 }
