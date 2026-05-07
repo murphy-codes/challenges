@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-06
 // At the time of submission:
-//   Runtime 5 ms Beats 87.10%
-//   Memory 197.64 MB Beats 85.48%
+//   Runtime 4 ms Beats 100.00%
+//   Memory 203.22 MB Beats 9.68%
 
 /****************************************
 * 
@@ -42,43 +42,37 @@
 ****************************************/
 
 class Solution {
-    // Split array into components where left max <= right min.
-    // Indices inside a component can reach the component maximum.
-    // Use prefix max and suffix min to greedily form components.
+    // Build prefix maximums, then scan backward with suffix minimums.
+    // If right side contains a smaller value, regions are connected.
+    // Propagate the reachable maximum right-to-left across components.
     // Time: O(n), Space: O(n)
     public int[] maxValue(int[] nums) {
+
         int n = nums.length;
 
-        int[] suffixMin = new int[n];
-        suffixMin[n - 1] = nums[n - 1];
+        // Tracks smallest value seen on the right side
+        int suffixMin = Integer.MAX_VALUE;
 
-        for (int i = n - 2; i >= 0; i--) {
-            suffixMin[i] = Math.min(nums[i], suffixMin[i + 1]);
+        // prefixMax[i] = max value in nums[0..i]
+        int[] prefixMax = new int[n];
+
+        prefixMax[0] = nums[0];
+
+        for (int i = 1; i < n; i++) {
+            prefixMax[i] = Math.max(prefixMax[i - 1], nums[i]);
         }
 
-        int[] ans = new int[n];
+        // Merge connected regions from right to left
+        for (int i = n - 2; i >= 0; i--) {
 
-        int start = 0;
-        int currentMax = nums[0];
+            suffixMin = Math.min(suffixMin, nums[i + 1]);
 
-        for (int i = 0; i < n; i++) {
-            currentMax = Math.max(currentMax, nums[i]);
-
-            // End current component
-            if (i == n - 1 || currentMax <= suffixMin[i + 1]) {
-
-                for (int j = start; j <= i; j++) {
-                    ans[j] = currentMax;
-                }
-
-                start = i + 1;
-
-                if (start < n) {
-                    currentMax = nums[start];
-                }
+            // Connection exists across boundary
+            if (suffixMin < prefixMax[i]) {
+                prefixMax[i] = prefixMax[i + 1];
             }
         }
 
-        return ans;
+        return prefixMax;
     }
 }
