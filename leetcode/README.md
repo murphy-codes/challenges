@@ -16,6 +16,7 @@ LeetCode
 |3713|[Longest Balanced Substring I](https://leetcode.com/problems/longest-balanced-substring-i/)|[Java](./algorithms/java/3713_longest-balanced-substring-i.java)|Medium|
 |3666|[Minimum Operations to Equalize Binary String](https://leetcode.com/problems/minimum-operations-to-equalize-binary-string/)|[Java](./algorithms/java/3666_minimum-operations-to-equalize-binary-string.java)|Hard|
 |3661|[Maximum Walls Destroyed by Robots](https://leetcode.com/problems/maximum-walls-destroyed-by-robots/)|[Java](./algorithms/java/3661_maximum-walls-destroyed-by-robots.java)|Hard|
+|3660|[Jump Game IX](https://leetcode.com/problems/jump-game-ix/)|[Java](./algorithms/java/3660_jump-game-ix.java)|Medium|
 |3655|[XOR After Range Multiplication Queries II](https://leetcode.com/problems/xor-after-range-multiplication-queries-ii/)|[Java](./algorithms/java/3655_xor-after-range-multiplication-queries-ii.java)|Hard|
 |3653|[XOR After Range Multiplication Queries I](https://leetcode.com/problems/xor-after-range-multiplication-queries-i/)|[Java](./algorithms/java/3653_xor-after-range-multiplication-queries-i.java)|Medium|
 |3652|[Best Time to Buy and Sell Stock using Strategy](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-using-strategy/)|[Java](./algorithms/java/3652_best-time-to-buy-and-sell-stock-using-strategy.java)|Medium|
