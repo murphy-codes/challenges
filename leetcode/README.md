@@ -309,6 +309,7 @@ LeetCode
 |1925|[Count Square Sum Triples](https://leetcode.com/problems/count-square-sum-triples/)|[Java](./algorithms/java/1925_count-square-sum-triples.java)|Easy|
 |1922|[Count Good Numbers](https://leetcode.com/problems/count-good-numbers/)|[Java](./algorithms/java/1922_count-good-numbers.java)|Medium|
 |1920|[Build Array from Permutation](https://leetcode.com/problems/build-array-from-permutation/)|[Java](./algorithms/java/1920_build-array-from-permutation.java)|Easy|
+|1914|[Cyclically Rotating a Grid](https://leetcode.com/problems/cyclically-rotating-a-grid/)|[Java](./algorithms/java/1914_cyclically-rotating-a-grid.java)|Medium|
 |1912|[Design Movie Rental System](https://leetcode.com/problems/design-movie-rental-system/)|[Java](./algorithms/java/1912_design-movie-rental-system.java)|Hard|
 |1910|[Remove All Occurrences of a Substring](https://leetcode.com/problems/remove-all-occurrences-of-a-substring/)|[Java](./algorithms/java/1910_remove-all-occurrences-of-a-substring.java)|Medium|
 |1900|[The Earliest and Latest Rounds Where Players Compete](https://leetcode.com/problems/the-earliest-and-latest-rounds-where-players-compete/)|[Java](./algorithms/java/1900_the-earliest-and-latest-rounds-where-players-compete.java)|Hard|
