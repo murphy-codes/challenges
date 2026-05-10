@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/maximum-number-of-jumps-to-reach-the-last-index/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2026-05-09
+// Date: 2026-05-10
 // At the time of submission:
-//   Runtime 14 ms Beats 80.95%
-//   Memory 47.32 MB Beats 8.33%
+//   Runtime 9 ms Beats 100.00%
+//   Memory 47.12 MB Beats 14.97%
 
 /****************************************
 * 
@@ -48,33 +48,41 @@
 ****************************************/
 
 class Solution {
-    // DP where dp[i] stores max jumps needed to reach index i.
-    // Transition from all prior indices j where the value difference
-    // satisfies the target constraint and j is reachable.
+    // DP where dp[i] stores max jumps to reach index i plus one.
+    // For each reachable index, try all forward jumps satisfying
+    // the target constraint and update the best reachable state.
     // Time: O(n^2), Space: O(n)
     public int maximumJumps(int[] nums, int target) {
         int n = nums.length;
 
-        int[] dp = new int[n];
+        // dp[i] stores max jumps to reach index i, plus 1.
+        // A value of 0 means unreachable.
+        int[] maxJumps = new int[n];
 
-        // -1 means unreachable
-        for (int i = 0; i < n; i++) {
-            dp[i] = -1;
-        }
+        // Start position is reachable with 0 jumps.
+        maxJumps[0] = 1;
 
-        dp[0] = 0;
+        for (int from = 0; from < n; from++) {
 
-        for (int j = 1; j < n; j++) {
-            for (int i = 0; i < j; i++) {
+            // Skip unreachable positions.
+            if (maxJumps[from] == 0) {
+                continue;
+            }
 
-                long diff = (long) nums[j] - nums[i];
+            for (int to = from + 1; to < n; to++) {
 
-                if (diff >= -target && diff <= target && dp[i] != -1) {
-                    dp[j] = Math.max(dp[j], dp[i] + 1);
+                int diff = nums[to] - nums[from];
+
+                if (diff >= -target && diff <= target) {
+                    maxJumps[to] = Math.max(
+                        maxJumps[to],
+                        maxJumps[from] + 1
+                    );
                 }
             }
         }
 
-        return dp[n - 1];
+        // Subtract the initial offset.
+        return maxJumps[n - 1] - 1;
     }
 }
