@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-10
 // At the time of submission:
-//   Runtime 2 ms Beats 93.38%
-//   Memory 46.08 MB Beats 98.46%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 46.80 MB Beats 36.46%
 
 /****************************************
 * 
@@ -39,41 +39,48 @@
 
 class Solution {
     // First count total digits to allocate the exact output size.
-    // Then extract digits left-to-right using the highest divisor
-    // for each number and append them directly into the result.
+    // Extract digits using %10 and fill the result array backwards
+    // so digits remain in original left-to-right order.
     // Time: O(d), Space: O(d), where d is total digit count
     // Since d is at most 5n, this is Time: O(n), Space: O(n)
-
     public int[] separateDigits(int[] nums) {
-    // First pass: count digits
-    int digCt = 0;
-    for (int n : nums) {
-        if (n == 0) {
-            digCt++;
-        } else {
-            while (n > 0) {
-                digCt++;
-                n /= 10;
+
+        int totalDigits = 0;
+
+        // Count total digits needed for result array.
+        for (int num : nums) {
+
+            int value = num;
+
+            if (value == 0) {
+                totalDigits++;
+            } else {
+                while (value > 0) {
+                    totalDigits++;
+                    value /= 10;
+                }
             }
         }
-    }
-    // Allocate exact size
-    int[] digits = new int[digCt];
-    // Second pass: fill digits left-to-right
-    int idx = 0;
-    for (int n : nums) {
-        // Find highest divisor
-        int div = 1;
-        while (n / div >= 10) {
-            div *= 10;
+
+        int[] result = new int[totalDigits];
+
+        // Fill from the end since %10 extracts digits in reverse order.
+        int writeIndex = totalDigits - 1;
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+
+            int value = nums[i];
+
+            if (value == 0) {
+                result[writeIndex--] = 0;
+            } else {
+                while (value > 0) {
+                    result[writeIndex--] = value % 10;
+                    value /= 10;
+                }
+            }
         }
-        // Extract digits
-        while (div > 0) {
-            digits[idx++] = n / div;
-            n %= div;
-            div /= 10;
-        }
-    }
-    return digits;
+
+        return result;
     }
 }
