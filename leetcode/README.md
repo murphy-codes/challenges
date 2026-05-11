@@ -207,6 +207,7 @@ LeetCode
 |2561|[Rearranging Fruits](https://leetcode.com/problems/rearranging-fruits/)|[Java](./algorithms/java/2561_rearranging-fruits.java)|Hard|
 |2560|[House Robber IV](https://leetcode.com/problems/house-robber-iv/)|[Java](./algorithms/java/2560_house-robber-iv.java)|Medium|
 |2559|[Count Vowel Strings in Ranges](https://leetcode.com/problems/count-vowel-strings-in-ranges/)|[Java](./algorithms/java/2559_count-vowel-strings-in-ranges.java)|Medium|
+|2553|[Separate the Digits in an Array](https://leetcode.com/problems/separate-the-digits-in-an-array/)|[Java](./algorithms/java/2553_separate-the-digits-in-an-array.java)|Easy|
 |2551|[Put Marbles in Bags](https://leetcode.com/problems/put-marbles-in-bags/)|[Java](./algorithms/java/2551_put-marbles-in-bags.java)|Hard|
 |2537|[Count the Number of Good Subarrays](https://leetcode.com/problems/count-the-number-of-good-subarrays/)|[Java](./algorithms/java/2537_count-the-number-of-good-subarrays.java)|Medium|
 |2536|[Increment Submatrices by One](https://leetcode.com/problems/increment-submatrices-by-one/)|[Java](./algorithms/java/2536_increment-submatrices-by-one.java)|Medium|
