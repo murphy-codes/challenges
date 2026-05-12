@@ -347,6 +347,7 @@ LeetCode
 |1695|[Maximum Erasure Value](https://leetcode.com/problems/maximum-erasure-value/)|[Java](./algorithms/java/1695_maximum-erasure-value.java)|Medium|
 |1689|[Partitioning Into Minimum Number Of Deci-Binary Numbers](https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers/)|[Java](./algorithms/java/1689_partitioning-into-minimum-number-of-deci-binary-numbers.java)|Medium|
 |1680|[Concatenation of Consecutive Binary Numbers](https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/)|[Java](./algorithms/java/1680_concatenation-of-consecutive-binary-numbers.java)|Medium|
+|1665|[Minimum Initial Energy to Finish Tasks](https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/)|[Java](./algorithms/java/1665_minimum-initial-energy-to-finish-tasks.java)|Hard|
 |1653|[Minimum Deletions to Make String Balanced](https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/)|[Java](./algorithms/java/1653_minimum-deletions-to-make-string-balanced.java)|Medium|
 |1639|[Number of Ways to Form a Target String Given a Dictionary](https://leetcode.com/problems/number-of-ways-to-form-a-target-string-given-a-dictionary/)|[Java](./algorithms/java/1639_number-of-ways-to-form-a-target-string-given-a-dictionary.java)|Hard|
 |1625|[Lexicographically Smallest String After Applying Operations](https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/)|[Java](./algorithms/java/1625_lexicographically-smallest-string-after-applying-operations.java)|Medium|
