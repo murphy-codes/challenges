@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-11
 // At the time of submission:
-//   Runtime 23 ms Beats 88.46%
-//   Memory 113.70 MB Beats 92.31%
+//   Runtime 22 ms Beats 100.00%
+//   Memory 113.78 MB Beats 79.81%
 
 /****************************************
 * 
@@ -58,14 +58,16 @@
 import java.util.Arrays;
 
 class Solution {
-    // Sort by (minimum - actual) descending to minimize required energy.
-    // If current energy is below minimum, increase initial energy enough
-    // to start the task, then subtract the actual energy cost.
-    // Time: O(n log n), Space: O(log n) due to sorting recursion
+    // Sort by (minimum - actual) descending to preserve larger reserves.
+    // If current energy is below a task's minimum, increase the initial
+    // energy just enough to satisfy the requirement before executing it.
+    // Time: O(n log n), Space: O(log n) from sorting recursion stack
+
     public int minimumEffort(int[][] tasks) {
 
-        Arrays.sort(tasks, (a, b) ->
-            (b[1] - b[0]) - (a[1] - a[0])
+        // Tasks requiring larger reserve energy go first.
+        Arrays.sort(tasks,
+            (a, b) -> (b[1] - b[0]) - (a[1] - a[0])
         );
 
         int initialEnergy = 0;
@@ -73,15 +75,17 @@ class Solution {
 
         for (int[] task : tasks) {
 
-            int actual = task[0];
-            int minimum = task[1];
+            int actualCost = task[0];
+            int minimumRequired = task[1];
 
-            if (currentEnergy < minimum) {
-                initialEnergy += minimum - currentEnergy;
-                currentEnergy = minimum;
+            // Increase starting energy only when necessary.
+            if (currentEnergy < minimumRequired) {
+                initialEnergy += minimumRequired - currentEnergy;
+                currentEnergy = minimumRequired;
             }
 
-            currentEnergy -= actual;
+            // Complete the task.
+            currentEnergy -= actualCost;
         }
 
         return initialEnergy;
