@@ -3,7 +3,7 @@
 // Date: 2026-05-12
 // At the time of submission:
 //   Runtime 6 ms Beats 100.00%
-//   Memory 76.62 MB Beats 24.66%
+//   Memory 76.35 MB Beats 65.75%
 
 /****************************************
 * 
@@ -45,42 +45,46 @@
 ****************************************/
 
 class Solution {
-    // Use a diff array to track move cost changes for each target sum.
-    // Each pair contributes ranges requiring 2, 1, or 0 modifications.
-    // Prefix summing the diff array gives total moves for every target.
+    // Use a diff array to track move-cost changes across target sums.
+    // Each pair contributes intervals requiring 2, 1, or 0 moves.
+    // Prefix summing reconstructs total moves for every possible sum.
     // Time: O(n + limit), Space: O(limit)
     public int minMoves(int[] nums, int limit) {
 
         int n = nums.length;
+
+        // Difference array for move cost changes by target sum
         int[] diff = new int[(2 * limit) + 2];
 
         for (int i = 0; i < n / 2; i++) {
 
-            int a = Math.min(nums[i], nums[n - 1 - i]);
-            int b = Math.max(nums[i], nums[n - 1 - i]);
+            int left = nums[i];
+            int right = nums[n - 1 - i];
 
-            int oneMoveLow = a + 1;
-            int oneMoveHigh = b + limit;
+            int minVal = Math.min(left, right);
+            int maxVal = Math.max(left, right);
 
-            int exactSum = a + b;
-
-            // Default cost = 2 moves
+            // Default: every target sum requires 2 moves
             diff[2] += 2;
+            diff[(2 * limit) + 1] -= 2;
 
-            // Reduce to 1 move range
-            diff[oneMoveLow] -= 1;
-            diff[oneMoveHigh + 1] += 1;
+            // Target sums achievable in 1 move
+            diff[minVal + 1] -= 1;
+            diff[maxVal + limit + 1] += 1;
 
-            // Reduce to 0 moves at exact sum
-            diff[exactSum] -= 1;
-            diff[exactSum + 1] += 1;
+            // Exact existing sum requires 0 moves
+            int pairSum = left + right;
+            diff[pairSum] -= 1;
+            diff[pairSum + 1] += 1;
         }
 
         int minMoves = Integer.MAX_VALUE;
         int currentMoves = 0;
 
-        for (int sum = 2; sum <= 2 * limit; sum++) {
-            currentMoves += diff[sum];
+        // Prefix sum reconstructs total moves for each target sum
+        for (int targetSum = 2; targetSum <= 2 * limit; targetSum++) {
+
+            currentMoves += diff[targetSum];
             minMoves = Math.min(minMoves, currentMoves);
         }
 
