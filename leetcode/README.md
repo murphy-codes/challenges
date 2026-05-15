@@ -184,6 +184,7 @@ LeetCode
 |2799|[Count Complete Subarrays in an Array](https://leetcode.com/problems/count-complete-subarrays-in-an-array/)|[Java](./algorithms/java/2799_count-complete-subarrays-in-an-array.java)|Medium|
 |2787|[Ways to Express an Integer as Sum of Powers](https://leetcode.com/problems/ways-to-express-an-integer-as-sum-of-powers/)|[Java](./algorithms/java/2787_ways-to-express-an-integer-as-sum-of-powers.java)|Medium|
 |2785|[Sort Vowels in a String](https://leetcode.com/problems/sort-vowels-in-a-string/)|[Java](./algorithms/java/2785_sort-vowels-in-a-string.java)|Medium|
+|2784|[Check if Array is Good](https://leetcode.com/problems/check-if-array-is-good/)|[Java](./algorithms/java/2784_check-if-array-is-good.java)|Easy|
 |2780|[Minimum Index of a Valid Split](https://leetcode.com/problems/minimum-index-of-a-valid-split/)|[Java](./algorithms/java/2780_minimum-index-of-a-valid-split.java)|Medium|
 |2770|[Maximum Number of Jumps to Reach the Last Index](https://leetcode.com/problems/maximum-number-of-jumps-to-reach-the-last-index/)|[Java](./algorithms/java/2770_maximum-number-of-jumps-to-reach-the-last-index.java)|Medium|
 |2751|[Robot Collisions](https://leetcode.com/problems/robot-collisions/)|[Java](./algorithms/java/2751_robot-collisions.java)|Hard|
@@ -485,6 +486,7 @@ LeetCode
 |190|[Reverse Bits](https://leetcode.com/problems/reverse-bits/)|[Java](./algorithms/java/190_reverse-bits.java)|Easy|
 |166|[Fraction to Recurring Decimal](https://leetcode.com/problems/fraction-to-recurring-decimal/)|[Java](./algorithms/java/166_fraction-to-recurring-decimal.java)|Medium|
 |165|[Compare Version Numbers](https://leetcode.com/problems/compare-version-numbers/)|[Java](./algorithms/java/165_compare-version-numbers.java)|Medium|
+|153|[Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)|[Java](./algorithms/java/153_find-minimum-in-rotated-sorted-array.java)|Medium|
 |135|[Candy](https://leetcode.com/problems/candy/)|[Java](./algorithms/java/135_candy.java)|Hard|
 |120|[Triangle](https://leetcode.com/problems/triangle/)|[Java](./algorithms/java/120_triangle.java)|Medium|
 |118|[Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)|[Java](./algorithms/java/118_pascals-triangle.java)|Easy|
