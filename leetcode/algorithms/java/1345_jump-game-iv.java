@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-17
 // At the time of submission:
-//   Runtime 48 ms Beats 87.48%
-//   Memory 75.80 MB Beats 90.46%
+//   Runtime 42 ms Beats 99.40%
+//   Memory 75.49 MB Beats 92.64%
 
 /****************************************
 * 
@@ -39,18 +39,17 @@
 * 
 ****************************************/
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 
 class Solution {
-    // BFS over indices with edges to neighbors and equal-value indices.
-    // Map each value to its indices for O(1) access to same-value jumps.
-    // Clear processed value groups to avoid redundant traversals.
-    // Time: O(n), each index/group processed once; Space: O(n).
+    // BFS from n-1 to 0 using adjacent and same-value jumps.
+    // Map each value to its indices, then remove buckets after use
+    // so equal-value edges are processed only once globally.
+    // Time: O(n), Space: O(n)
     public int minJumps(int[] arr) {
         int n = arr.length;
 
@@ -58,64 +57,77 @@ class Solution {
             return 0;
         }
 
-        Map<Integer, List<Integer>> indicesByValue = new HashMap<>();
+        // Map value -> all indices containing that value
+        HashMap<Integer, List<Integer>> valueToIndices = new HashMap<>();
 
         for (int i = 0; i < n; i++) {
-            indicesByValue
-                .computeIfAbsent(arr[i], k -> new ArrayList<>())
-                .add(i);
+            if (!valueToIndices.containsKey(arr[i])) {
+                valueToIndices.put(arr[i], new ArrayList<>());
+            }
+
+            valueToIndices.get(arr[i]).add(i);
         }
 
-        Queue<Integer> queue = new ArrayDeque<>();
+        Queue<Integer> queue = new LinkedList<>();
         boolean[] visited = new boolean[n];
 
-        queue.offer(0);
-        visited[0] = true;
+        // Start BFS from target index
+        queue.add(n - 1);
+        visited[n - 1] = true;
 
         int steps = 0;
 
         while (!queue.isEmpty()) {
-            int size = queue.size();
+            int levelSize = queue.size();
+            steps++;
 
-            for (int i = 0; i < size; i++) {
-                int curr = queue.poll();
+            for (int i = 0; i < levelSize; i++) {
+                int index = queue.poll();
 
-                if (curr == n - 1) {
+                // Jump to index - 1
+                int next = index - 1;
+
+                if (next == 0) {
                     return steps;
                 }
 
-                // Jump to left neighbor
-                int left = curr - 1;
-                if (left >= 0 && !visited[left]) {
-                    visited[left] = true;
-                    queue.offer(left);
+                if (next >= 0 && !visited[next]) {
+                    visited[next] = true;
+                    queue.add(next);
                 }
 
-                // Jump to right neighbor
-                int right = curr + 1;
-                if (right < n && !visited[right]) {
-                    visited[right] = true;
-                    queue.offer(right);
+                // Jump to index + 1
+                next = index + 1;
+
+                if (next == 0) {
+                    return steps;
+                }
+
+                if (next < n && !visited[next]) {
+                    visited[next] = true;
+                    queue.add(next);
                 }
 
                 // Jump to same-value indices
-                List<Integer> sameValue =
-                    indicesByValue.get(arr[curr]);
+                List<Integer> sameValueIndices =
+                    valueToIndices.get(arr[index]);
 
-                if (sameValue != null) {
-                    for (int next : sameValue) {
-                        if (!visited[next]) {
-                            visited[next] = true;
-                            queue.offer(next);
+                if (sameValueIndices != null) {
+                    for (int sameIndex : sameValueIndices) {
+                        if (!visited[sameIndex]) {
+                            if (sameIndex == 0) {
+                                return steps;
+                            }
+
+                            visited[sameIndex] = true;
+                            queue.add(sameIndex);
                         }
                     }
-
-                    // Prevent repeated scans of same group
-                    indicesByValue.remove(arr[curr]);
                 }
-            }
 
-            steps++;
+                // Prevent reprocessing same-value group
+                valueToIndices.remove(arr[index]);
+            }
         }
 
         return -1;
