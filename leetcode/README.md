@@ -395,6 +395,7 @@ LeetCode
 |1353|[Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)|[Java](./algorithms/java/1353_maximum-number-of-events-that-can-be-attended.java)|Medium|
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
 |1351|[Count Negative Numbers in a Sorted Matrix](https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/)|[Java](./algorithms/java/1351_count-negative-numbers-in-a-sorted-matrix.java)|Easy|
+|1345|[Jump Game IV](https://leetcode.com/problems/jump-game-iv/)|[Java](./algorithms/java/1345_jump-game-iv.java)|Hard|
 |1339|[Maximum Product of Splitted Binary Tree](https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/)|[Java](./algorithms/java/1339_maximum-product-of-splitted-binary-tree.java)|Medium|
 |1323|[Maximum 69 Number](https://leetcode.com/problems/maximum-69-number/)|[Java](./algorithms/java/1323_maximum-69-number.java)|Easy|
 |1320|[Minimum Distance to Type a Word Using Two Fingers](https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/)|[Java](./algorithms/java/1320_minimum-distance-to-type-a-word-using-two-fingers.java)|Hard|
