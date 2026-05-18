@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-17
 // At the time of submission:
-//   Runtime 1 ms Beats 99.73%
-//   Memory 52.39 MB Beats 40.41%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 48.64 MB Beats 73.18%
 
 /****************************************
 * 
@@ -39,24 +39,66 @@
 * 
 ****************************************/
 
+import java.util.ArrayList;
+import java.util.List;
+
 class Solution {
-    // DFS/BFS over indices; each index can jump left or right by arr[i].
-    // Mark visited indices in-place to avoid cycles and revisits.
-    // Return true immediately when a reachable index contains 0.
-    // Time: O(n), each index visited once; Space: O(n) recursion stack.
+
+    private final List<Integer> visited = new ArrayList<>();
+    
+    // DFS with visited tracking to avoid infinite cycles.
+    // Try both reachable indices: i + arr[i] and i - arr[i].
+    // Stop when reaching value 0 or an invalid/revisited index.
+    // Time: O(n²) worst-case due to List.contains(); Space: O(n).
     public boolean canReach(int[] arr, int start) {
-        if (start < 0 || start >= arr.length || arr[start] < 0) {
+
+        // Out of bounds or exhausted all indices
+        if (start < 0 || start >= arr.length
+                || visited.size() == arr.length) {
             return false;
         }
 
+        // Found reachable zero
         if (arr[start] == 0) {
             return true;
         }
 
-        int jump = arr[start];
-        arr[start] = -1; // Mark as visited
+        // Skip already visited indices
+        if (!visited.contains(start)) {
 
-        return canReach(arr, start + jump)
-            || canReach(arr, start - jump);
+            visited.add(start);
+
+            // Micro-optimization for direct reachability
+            if (arr[start] == 1 && arr[arr.length - 1] == 0) {
+                return true;
+            }
+
+            return canReach(arr, start + arr[start])
+                || canReach(arr, start - arr[start]);
+        }
+
+        return false;
     }
 }
+
+// class Solution {
+//     // DFS/BFS over indices; each index can jump left or right by arr[i].
+//     // Mark visited indices in-place to avoid cycles and revisits.
+//     // Return true immediately when a reachable index contains 0.
+//     // Time: O(n), each index visited once; Space: O(n) recursion stack.
+//     public boolean canReach(int[] arr, int start) {
+//         if (start < 0 || start >= arr.length || arr[start] < 0) {
+//             return false;
+//         }
+
+//         if (arr[start] == 0) {
+//             return true;
+//         }
+
+//         int jump = arr[start];
+//         arr[start] = -1; // Mark as visited
+
+//         return canReach(arr, start + jump)
+//             || canReach(arr, start - jump);
+//     }
+// }
