@@ -399,6 +399,7 @@ LeetCode
 |1323|[Maximum 69 Number](https://leetcode.com/problems/maximum-69-number/)|[Java](./algorithms/java/1323_maximum-69-number.java)|Easy|
 |1320|[Minimum Distance to Type a Word Using Two Fingers](https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/)|[Java](./algorithms/java/1320_minimum-distance-to-type-a-word-using-two-fingers.java)|Hard|
 |1317|[Convert Integer to the Sum of Two No-Zero Integers](https://leetcode.com/problems/convert-integer-to-the-sum-of-two-no-zero-integers/)|[Java](./algorithms/java/1317_convert-integer-to-the-sum-of-two-no-zero-integers.java)|Easy|
+|1306|[Jump Game III](https://leetcode.com/problems/jump-game-iii/)|[Java](./algorithms/java/1306_jump-game-iii.java)|Medium
 |1304|[Find N Unique Integers Sum up to Zero](https://leetcode.com/problems/find-n-unique-integers-sum-up-to-zero/)|[Java](./algorithms/java/1304_find-n-unique-integers-sum-up-to-zero.java)|Easy|
 |1298|[Maximum Candies You Can Get from Boxes](https://leetcode.com/problems/maximum-candies-you-can-get-from-boxes/)|[Java](./algorithms/java/1298_maximum-candies-you-can-get-from-boxes.java)|Hard|
 |1295|[Find Numbers with Even Number of Digits](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/)|[Java](./algorithms/java/1295_find-numbers-with-even-number-of-digits.java)|Easy|
