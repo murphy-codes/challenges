@@ -486,6 +486,7 @@ LeetCode
 |190|[Reverse Bits](https://leetcode.com/problems/reverse-bits/)|[Java](./algorithms/java/190_reverse-bits.java)|Easy|
 |166|[Fraction to Recurring Decimal](https://leetcode.com/problems/fraction-to-recurring-decimal/)|[Java](./algorithms/java/166_fraction-to-recurring-decimal.java)|Medium|
 |165|[Compare Version Numbers](https://leetcode.com/problems/compare-version-numbers/)|[Java](./algorithms/java/165_compare-version-numbers.java)|Medium|
+|154|[Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)|[Java](./algorithms/java/154_find-minimum-in-rotated-sorted-array-ii.java)|Hard|
 |153|[Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)|[Java](./algorithms/java/153_find-minimum-in-rotated-sorted-array.java)|Medium|
 |135|[Candy](https://leetcode.com/problems/candy/)|[Java](./algorithms/java/135_candy.java)|Hard|
 |120|[Triangle](https://leetcode.com/problems/triangle/)|[Java](./algorithms/java/120_triangle.java)|Medium|
