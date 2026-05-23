@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2026-02-02
+// Date: 2026-05-22
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 41.52 MB Beats 99.96%
+//   Memory 42.80 MB Beats 79.50%
 
 /****************************************
 * 
@@ -38,26 +38,22 @@
 ****************************************/
 
 class Solution {
-    // Iterate through the array to count drops (where nums[i] < nums[i-1]).
-    // A valid rotated sorted array can have at most one drop in order.
-    // Also check the wrap-around case (nums[n-1] > nums[0]) as a second drop.
-    // If more than one drop exists, the array is not a rotated sorted array.
-    // Time Complexity: O(n), as we traverse the array once. Space Complexity: O(1).
+    // Iterate through the array checking for a drop
+    // After 1 drop, confirm elements meet criteria
+    // Finally, check last element against first (if drop)
+    // Time Complexity: O(n). Space Complexity: O(1).
     public boolean check(int[] nums) {
-        int countDrop = 0;
         int n = nums.length;
-
+        if (n == 1) return true;
+        boolean drop = false;
         for (int i = 1; i < n; i++) {
-            if (nums[i] < nums[i - 1]) {
-                countDrop++;
+            if (drop) {
+                if (nums[i]<nums[i-1] || nums[i]>nums[0]) return false;
+            } else {
+                if (nums[i]<nums[i-1]) drop = true;
             }
         }
-
-        if (nums[n - 1] > nums[0]) {
-            countDrop++;
-        }
-
-        return countDrop <= 1;
+        if (drop && nums[n-1]>nums[0]) return false;
+        return true;
     }
 }
-
