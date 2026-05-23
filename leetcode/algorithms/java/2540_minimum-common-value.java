@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-18
 // At the time of submission:
-//   Runtime 2 ms Beats 88.98%
-//   Memory 80.12 MB Beats 91.06%
+//   Runtime 0 ms Beats 100.00%
+//   Memory 80.62 MB Beats 24.87%
 
 /****************************************
 * 
@@ -31,20 +31,29 @@
 ****************************************/
 
 class Solution {
-    // Use two pointers to scan both sorted arrays simultaneously.
+    // Use two pointers to traverse both sorted arrays simultaneously.
     // Advance the pointer with the smaller value since it cannot match later.
-    // First equal pair is the minimum common value due to sorted order.
+    // Early exit if array ranges do not overlap at all.
     // Time: O(n + m), Space: O(1)
     public int getCommon(int[] nums1, int[] nums2) {
         int i = 0;
         int j = 0;
 
-        while (i < nums1.length && j < nums2.length) {
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+
+        // Early exit if value ranges do not overlap
+        if (nums1[n1 - 1] < nums2[0] ||
+            nums2[n2 - 1] < nums1[0]) {
+            return -1;
+        }
+
+        // Standard two-pointer traversal
+        while (i < n1 && j < n2) {
+
             if (nums1[i] == nums2[j]) {
                 return nums1[i];
-            }
-
-            if (nums1[i] < nums2[j]) {
+            } else if (nums1[i] < nums2[j]) {
                 i++;
             } else {
                 j++;
