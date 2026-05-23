@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-21
 // At the time of submission:
-//   Runtime 65 ms Beats 58.97%
-//   Memory 80.52 MB Beats 73.36%
+//   Runtime 61 ms Beats 72.46%
+//   Memory 83.68 MB Beats 31.70%
 
 /****************************************
 * 
@@ -46,15 +46,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 class Solution {
-    // Store every numeric prefix from arr1 in a HashSet.
-    // For each arr2 value, trim digits right-to-left until a prefix matches.
-    // The first match found is the longest prefix for that number.
+    // Store all numeric prefixes from arr1 in a HashSet.
+    // Trim arr2 values right-to-left until a matching prefix is found.
+    // Track max possible prefix length from arr1 for early termination.
     // Time: O((n + m) * d), Space: O(n * d), d <= 9
     public int longestCommonPrefix(int[] arr1, int[] arr2) {
         Set<Integer> prefixes = new HashSet<>();
 
-        // Store all prefixes from arr1
+        int maxPrefixLength = 0;
+
+        // Build prefix set from arr1 and track max digit length
         for (int num : arr1) {
+            int original = num;
+
+            maxPrefixLength = Math.max(
+                maxPrefixLength,
+                digitLength(original)
+            );
+
             while (num > 0) {
                 prefixes.add(num);
                 num /= 10;
@@ -69,8 +78,16 @@ class Solution {
 
             while (current > 0) {
                 if (prefixes.contains(current)) {
-                    longest = Math.max(longest,
-                                       Integer.toString(current).length());
+                    int len = digitLength(current);
+
+                    longest = Math.max(longest, len);
+
+                    // Early exit: cannot do better
+                    if (longest == maxPrefixLength) {
+                        return longest;
+                    }
+
+                    // First match is longest for this number
                     break;
                 }
 
@@ -79,5 +96,16 @@ class Solution {
         }
 
         return longest;
+    }
+
+    private int digitLength(int num) {
+        int len = 0;
+
+        while (num > 0) {
+            len++;
+            num /= 10;
+        }
+
+        return len;
     }
 }
