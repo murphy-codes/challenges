@@ -3,7 +3,7 @@
 // Date: 2026-05-22
 // At the time of submission:
 //   Runtime 0 ms Beats 100.00%
-//   Memory 43.76 MB Beats 63.58%
+//   Memory 43.83 MB Beats 45.14%
 
 /****************************************
 * 
@@ -40,10 +40,10 @@
 ****************************************/
 
 class Solution {
-    // Modified binary search where one half is always sorted.
-    // Check whether target lies inside the sorted half each step.
-    // Discard the impossible half while preserving O(log n) search.
-    // Time: O(log n), Space: O(1)
+    // Binary search identifies which half remains sorted each step.
+    // Check whether target lies inside the sorted interval range.
+    // Discard the impossible half while preserving logarithmic search.
+    // Time: O(log n), Space: O(1) // Time: O(n) if duplicates present
     public int search(int[] nums, int target) {
         int left = 0;
         int right = nums.length - 1;
@@ -55,17 +55,32 @@ class Solution {
                 return mid;
             }
 
+            // Duplicate ambiguity case (needed for LC 81)
+            if (nums[left] == nums[mid] &&
+                nums[mid] == nums[right]) {
+
+                left++;
+                right--;
+            }
+
             // Left half is sorted
-            if (nums[left] <= nums[mid]) {
-                if (nums[left] <= target && target < nums[mid]) {
+            else if (nums[left] <= nums[mid]) {
+
+                if (target >= nums[left] &&
+                    target < nums[mid]) {
+
                     right = mid - 1;
                 } else {
                     left = mid + 1;
                 }
             }
+
             // Right half is sorted
             else {
-                if (nums[mid] < target && target <= nums[right]) {
+
+                if (target > nums[mid] &&
+                    target <= nums[right]) {
+
                     left = mid + 1;
                 } else {
                     right = mid - 1;
