@@ -1,9 +1,9 @@
 // Source: https://leetcode.com/problems/find-the-prefix-common-array-of-two-arrays/
 // Author: Tom Murphy https://github.com/murphy-codes/
-// Date: 2025-01-14
+// Date: 2026-05-19
 // At the time of submission:
-//   Runtime 5 ms Beats 37.37%
-//   Memory 46.04 MB Beats 99.94%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 47.31 MB Beats 51.46%
 
 /****************************************
 * 
@@ -38,36 +38,31 @@
 ****************************************/
 
 class Solution {
-    // We'll use sets to efficiently track numbers seen in A and B so far.
-    // At each index i, we add A[i] and B[i] to their respective sets.
-    // We check if A[i] or B[i] already exists in the opposite set to find common numbers.
-    // A counter tracks the total common numbers, which we store in the result array C.
-    // This approach ensures efficient membership checks and avoids double counting.
-    // Time complexity: O(n), Space complexity: O(n).
+    // Track occurrences of values seen in prefixes of A and B.
+    // A value becomes common once its frequency reaches exactly 2.
+    // Store the running count of common values at each index.
+    // Time: O(n), Space: O(n)
     public int[] findThePrefixCommonArray(int[] A, int[] B) {
-        int n = A.length; // Length of arrays
-        int[] C = new int[n]; // Result array
-        Set<Integer> seenA = new HashSet<>(); // Numbers seen in A
-        Set<Integer> seenB = new HashSet<>(); // Numbers seen in B
-        int common = 0; // Count of common numbers
-        
+        int n = A.length;
+
+        int[] freq = new int[n + 1];
+        int[] ans = new int[n];
+
+        int common = 0;
+
         for (int i = 0; i < n; i++) {
-            // Add current elements to respective sets
-            seenA.add(A[i]);
-            seenB.add(B[i]);
-            
-            // Check for common numbers and increment if found
-            if (seenB.contains(A[i])) {
+
+            if (++freq[A[i]] == 2) {
                 common++;
             }
-            if (seenA.contains(B[i]) && A[i] != B[i]) { // Avoid double counting
+
+            if (++freq[B[i]] == 2) {
                 common++;
             }
-            
-            // Update result array
-            C[i] = common;
+
+            ans[i] = common;
         }
-        
-        return C; // Return the prefix common array
+
+        return ans;
     }
 }
