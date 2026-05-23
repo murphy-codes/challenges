@@ -2,15 +2,18 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2025-01-14
 // At the time of submission:
-//   Runtime 5 ms Beats 48.55%
-//   Memory 46.04 MB Beats 6.71%
+//   Runtime 5 ms Beats 37.37%
+//   Memory 46.04 MB Beats 99.94%
 
 /****************************************
 * 
-* • You are given two 0-indexed integer permutations `A` and `B` of length `n`.
-* • A prefix common array of `A` and `B` is an array `C` such that `C[i]` is equal to the count of numbers that are present at or before the index `i` in both `A` and `B`.
-* • Return the prefix common array of `A` and `B`.
-* • A sequence of `n` integers is called a permutation if it contains all integers from `1` to `n` exactly once.
+* You are given two 0-indexed integer permutations `A` and `B` of length `n`.
+* A prefix common array of `A` and `B` is an array `C` such that `C[i]` is
+* _ equal to the count of numbers that are present at or before the index
+* _ `i` in both `A` and `B`.
+* Return the prefix common array of `A` and `B`.
+* A sequence of `n` integers is called a permutation if it contains all
+* _ integers from `1` to `n` exactly once.
 * 
 * Example 1:
 * Input: A = [1,3,2,4], B = [3,1,2,4]
