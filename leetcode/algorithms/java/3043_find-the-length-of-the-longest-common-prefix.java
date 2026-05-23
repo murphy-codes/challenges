@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-21
 // At the time of submission:
-//   Runtime 61 ms Beats 72.46%
-//   Memory 83.68 MB Beats 31.70%
+//   Runtime 20 ms Beats 100.00%
+//   Memory 75.87 MB Beats 98.15%
 
 /****************************************
 * 
@@ -42,70 +42,89 @@
 * 
 ****************************************/
 
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-    // Store all numeric prefixes from arr1 in a HashSet.
-    // Trim arr2 values right-to-left until a matching prefix is found.
-    // Track max possible prefix length from arr1 for early termination.
+    // Build a digit trie from arr1 using shared numeric prefixes.
+    // Traverse each arr2 value digit-by-digit to find longest match.
+    // Shared trie paths implicitly represent common integer prefixes.
     // Time: O((n + m) * d), Space: O(n * d), d <= 9
-    public int longestCommonPrefix(int[] arr1, int[] arr2) {
-        Set<Integer> prefixes = new HashSet<>();
 
-        int maxPrefixLength = 0;
+    private class TrieNode {
+        private final TrieNode[] children;
 
-        // Build prefix set from arr1 and track max digit length
-        for (int num : arr1) {
-            int original = num;
+        private TrieNode() {
+            children = new TrieNode[10];
+        }
+    }
 
-            maxPrefixLength = Math.max(
-                maxPrefixLength,
-                digitLength(original)
-            );
+    private TrieNode root;
 
-            while (num > 0) {
-                prefixes.add(num);
-                num /= 10;
+    // Powers of 10 for digit extraction
+    private final int[] placeValues = {
+        100000000, 10000000, 1000000,
+        100000, 10000, 1000,
+        100, 10, 1
+    };
+
+    // Insert all digits of a number into the trie
+    private void insert(int num) {
+        TrieNode node = root;
+
+        for (int i = firstDigitIndex(num); i < 9; i++) {
+            int digit = num / placeValues[i];
+
+            if (node.children[digit] == null) {
+                node.children[digit] = new TrieNode();
             }
+
+            node = node.children[digit];
+            num %= placeValues[i];
+        }
+    }
+
+    // Find longest matching prefix length in trie
+    private int longestPrefixMatch(int num) {
+        TrieNode node = root;
+        int prefixLength = 0;
+
+        for (int i = firstDigitIndex(num); i < 9; i++) {
+            int digit = num / placeValues[i];
+
+            if (node.children[digit] == null) {
+                break;
+            }
+
+            node = node.children[digit];
+            num %= placeValues[i];
+            prefixLength++;
+        }
+
+        return prefixLength;
+    }
+
+    // Find first non-leading digit position
+    private int firstDigitIndex(int num) {
+        for (int i = 0; i < 9; i++) {
+            if (num >= placeValues[i]) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public int longestCommonPrefix(int[] arr1, int[] arr2) {
+        root = new TrieNode();
+
+        for (int num : arr1) {
+            insert(num);
         }
 
         int longest = 0;
 
-        // Check prefixes from arr2
         for (int num : arr2) {
-            int current = num;
-
-            while (current > 0) {
-                if (prefixes.contains(current)) {
-                    int len = digitLength(current);
-
-                    longest = Math.max(longest, len);
-
-                    // Early exit: cannot do better
-                    if (longest == maxPrefixLength) {
-                        return longest;
-                    }
-
-                    // First match is longest for this number
-                    break;
-                }
-
-                current /= 10;
-            }
+            longest = Math.max(longest, longestPrefixMatch(num));
         }
 
         return longest;
-    }
-
-    private int digitLength(int num) {
-        int len = 0;
-
-        while (num > 0) {
-            len++;
-            num /= 10;
-        }
-
-        return len;
     }
 }
