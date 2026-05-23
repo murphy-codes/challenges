@@ -57,3 +57,35 @@ class Solution {
         return true;
     }
 }
+
+
+// Lower Memory version w/ no early exit
+
+// Date: 2026-02-02
+// At the time of submission:
+//   Runtime 0 ms Beats 100.00%
+//   Memory 41.52 MB Beats 99.96%
+
+// class Solution {
+//     // Iterate through the array to count drops (where nums[i] < nums[i-1]).
+//     // A valid rotated sorted array can have at most one drop in order.
+//     // Also check the wrap-around case (nums[n-1] > nums[0]) as a second drop.
+//     // If more than one drop exists, the array is not a rotated sorted array.
+//     // Time Complexity: O(n), as we traverse the array once. Space Complexity: O(1).
+//     public boolean check(int[] nums) {
+//         int countDrop = 0;
+//         int n = nums.length;
+
+//         for (int i = 1; i < n; i++) {
+//             if (nums[i] < nums[i - 1]) {
+//                 countDrop++;
+//             }
+//         }
+
+//         if (nums[n - 1] > nums[0]) {
+//             countDrop++;
+//         }
+
+//         return countDrop <= 1;
+//     }
+// }
