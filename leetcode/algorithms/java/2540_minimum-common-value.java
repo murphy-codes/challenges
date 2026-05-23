@@ -1,4 +1,4 @@
-// Source: https://leetcode.com/problems/jump-game-iv/
+// Source: https://leetcode.com/problems/minimum-common-value/
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-18
 // At the time of submission:
