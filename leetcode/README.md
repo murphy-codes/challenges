@@ -145,6 +145,7 @@ LeetCode
 |3068|[Find the Maximum Sum of Node Values](https://leetcode.com/problems/find-the-maximum-sum-of-node-values/)|[Java](./algorithms/java/3068_find-the-maximum-sum-of-node-values.java)|Hard|
 |3066|[Minimum Operations to Exceed Threshold Value II](https://leetcode.com/problems/minimum-operations-to-exceed-threshold-value-ii/)|[Java](./algorithms/java/3066_minimum-operations-to-exceed-threshold-value-ii.java)|Medium|
 |3047|[Find the Largest Area of Square Inside Two Rectangles](https://leetcode.com/problems/find-the-largest-area-of-square-inside-two-rectangles/)|[Java](./algorithms/java/3047_find-the-largest-area-of-square-inside-two-rectangles.java)|Medium|
+|3043|[Find the Length of the Longest Common Prefix](https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/)|[Java](./algorithms/java/3043_find-the-length-of-the-longest-common-prefix.java)|Medium|
 |3042|[Count Prefix and Suffix Pairs I](https://leetcode.com/problems/count-prefix-and-suffix-pairs-i/)|[Java](./algorithms/java/3042_count-prefix-and-suffix-pairs-i.java)|Easy|
 |3027|[Find the Number of Ways to Place People II](https://leetcode.com/problems/find-the-number-of-ways-to-place-people-ii/)|[Java](./algorithms/java/3027_find-the-number-of-ways-to-place-people-ii.java)|Hard|
 |3025|[Find the Number of Ways to Place People I](https://leetcode.com/problems/find-the-number-of-ways-to-place-people-i/)|[Java](./algorithms/java/3025_find-the-number-of-ways-to-place-people-i.java)|Medium|
@@ -210,6 +211,7 @@ LeetCode
 |2559|[Count Vowel Strings in Ranges](https://leetcode.com/problems/count-vowel-strings-in-ranges/)|[Java](./algorithms/java/2559_count-vowel-strings-in-ranges.java)|Medium|
 |2553|[Separate the Digits in an Array](https://leetcode.com/problems/separate-the-digits-in-an-array/)|[Java](./algorithms/java/2553_separate-the-digits-in-an-array.java)|Easy|
 |2551|[Put Marbles in Bags](https://leetcode.com/problems/put-marbles-in-bags/)|[Java](./algorithms/java/2551_put-marbles-in-bags.java)|Hard|
+|2540|[Minimum Common Value](https://leetcode.com/problems/minimum-common-value/)|[Java](./algorithms/java/2540_minimum-common-value.java)|Easy|
 |2537|[Count the Number of Good Subarrays](https://leetcode.com/problems/count-the-number-of-good-subarrays/)|[Java](./algorithms/java/2537_count-the-number-of-good-subarrays.java)|Medium|
 |2536|[Increment Submatrices by One](https://leetcode.com/problems/increment-submatrices-by-one/)|[Java](./algorithms/java/2536_increment-submatrices-by-one.java)|Medium|
 |2529|[Maximum Count of Positive Integer and Negative Integer](https://leetcode.com/problems/maximum-count-of-positive-integer-and-negative-integer/)|[Java](./algorithms/java/2529_maximum-count-of-positive-integer-and-negative-integer.java)|Easy|
@@ -505,6 +507,7 @@ LeetCode
 |38|[Count and Say](https://leetcode.com/problems/count-and-say/)|[Java](./algorithms/java/38_count-and-say.java)|Medium|
 |37|[Sudoku Solver](https://leetcode.com/problems/sudoku-solver/)|[Java](./algorithms/java/37_sudoku-solver.java)|Hard|
 |36|[Valid Sudoku](https://leetcode.com/problems/valid-sudoku/)|[Java](./algorithms/java/36_valid-sudoku.java)|Medium|
+|33|[Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)|[Java](./algorithms/java/33_search-in-rotated-sorted-array.java)|Medium|
 |11|[Container With Most Water](https://leetcode.com/problems/container-with-most-water/)|[Java](./algorithms/java/11_container-with-most-water.java)|Medium|
 |8|[String to Integer (atoi)](https://leetcode.com/problems/string-to-integer-atoi/)|[Java](./algorithms/java/8_string-to-integer-atoi.java)|Medium|
 |7|[Reverse Integer](https://leetcode.com/problems/reverse-integer/)|[Java](./algorithms/java/7_reverse-integer.java)|Medium|
