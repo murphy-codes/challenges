@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-25
 // At the time of submission:
-//   Runtime 10 ms Beats 91.39%
-//   Memory 46.22 MB Beats 78.17%
+//   Runtime 5 ms Beats 100.00%
+//   Memory 46.60 MB Beats 30.58%
 
 /****************************************
 * 
@@ -44,64 +44,95 @@
 ****************************************/
 
 class Solution {
-    // DFS + memoized DP where dp[i] is max path length from index i.
-    // Explore up to d positions left/right until blocked by >= height.
-    // Strictly decreasing jumps prevent cycles and form a DAG.
-    // Time: O(n * d), Space: O(n)
+    // Use monotonic stacks to find nearest greater neighbors within d.
+    // Reverse the jump graph so larger values point to smaller values.
+    // DFS + memoization computes the longest reachable chain per index.
+    // Time: O(n), Space: O(n)
     public int maxJumps(int[] arr, int d) {
-        int n = arr.length;
-        int[] memo = new int[n];
 
-        int best = 1;
+        int n = arr.length;
+
+        // nearest greater index on left within distance d
+        int[] leftGreater = new int[n];
+
+        // monotonic decreasing stack of indices
+        int[] stack = new int[n];
+        int top = -1;
 
         for (int i = 0; i < n; i++) {
-            best = Math.max(best, dfs(arr, d, i, memo));
+
+            while (top >= 0 && arr[stack[top]] <= arr[i]) {
+                top--;
+            }
+
+            leftGreater[i] =
+                (top < 0 || i - stack[top] > d)
+                ? -1
+                : stack[top];
+
+            stack[++top] = i;
+        }
+
+        // nearest greater index on right within distance d
+        int[] rightGreater = new int[n];
+
+        top = -1;
+
+        for (int i = n - 1; i >= 0; i--) {
+
+            while (top >= 0 && arr[stack[top]] <= arr[i]) {
+                top--;
+            }
+
+            rightGreater[i] =
+                (top < 0 || stack[top] - i > d)
+                ? -1
+                : stack[top];
+
+            stack[++top] = i;
+        }
+
+        int[] memo = new int[n];
+
+        int best = 0;
+
+        for (int i = 0; i < n; i++) {
+            best = Math.max(
+                best,
+                dfs(i, leftGreater, rightGreater, memo)
+            );
         }
 
         return best;
     }
 
-    private int dfs(int[] arr, int d, int idx, int[] memo) {
+    private int dfs(
+        int idx,
+        int[] leftGreater,
+        int[] rightGreater,
+        int[] memo
+    ) {
 
-        if (memo[idx] != 0) {
-            return memo[idx];
+        if (idx < 0) {
+            return 0;
         }
 
-        int best = 1;
+        if (memo[idx] == 0) {
 
-        // Explore left
-        for (int next = idx - 1;
-             next >= Math.max(0, idx - d);
-             next--) {
+            memo[idx] =
+                1 + Math.max(
+                    dfs(leftGreater[idx],
+                        leftGreater,
+                        rightGreater,
+                        memo),
 
-            // Blocked by taller/equal element
-            if (arr[next] >= arr[idx]) {
-                break;
-            }
-
-            best = Math.max(
-                best,
-                1 + dfs(arr, d, next, memo)
-            );
+                    dfs(rightGreater[idx],
+                        leftGreater,
+                        rightGreater,
+                        memo)
+                );
         }
 
-        // Explore right
-        for (int next = idx + 1;
-             next <= Math.min(arr.length - 1, idx + d);
-             next++) {
-
-            // Blocked by taller/equal element
-            if (arr[next] >= arr[idx]) {
-                break;
-            }
-
-            best = Math.max(
-                best,
-                1 + dfs(arr, d, next, memo)
-            );
-        }
-
-        memo[idx] = best;
-        return best;
+        return memo[idx];
     }
 }
