@@ -7,6 +7,8 @@ LeetCode
 |---| ----- | -------- | ---------- |
 |3783|[Mirror Distance of an Integer](https://leetcode.com/problems/mirror-distance-of-an-integer/)|[Java](./algorithms/java/3783_mirror-distance-of-an-integer.java)|Easy|
 |3761|[Minimum Absolute Distance Between Mirror Pairs](https://leetcode.com/problems/minimum-absolute-distance-between-mirror-pairs/)|[Java](./algorithms/java/3761_minimum-absolute-distance-between-mirror-pairs.java)|Medium|
+|3753|[Total Waviness of Numbers in Range II](https://leetcode.com/problems/total-waviness-of-numbers-in-range-ii/)|[Java](./algorithms/java/3753_total-waviness-of-numbers-in-range-ii.java)|Hard|
+|3751|[Total Waviness of Numbers in Range I](https://leetcode.com/problems/total-waviness-of-numbers-in-range-i/)|[Java](./algorithms/java/3751_total-waviness-of-numbers-in-range-i.java)|Medium|
 |3742|[Maximum Path Score in a Grid](https://leetcode.com/problems/maximum-path-score-in-a-grid/)|[Java](./algorithms/java/3742_maximum-path-score-in-a-grid.java)|Medium|
 |3741|[Minimum Distance Between Three Equal Elements II](https://leetcode.com/problems/minimum-distance-between-three-equal-elements-ii/)|[Java](./algorithms/java/3741_minimum-distance-between-three-equal-elements-ii.java)|Medium|
 |3740|[Minimum Distance Between Three Equal Elements I](https://leetcode.com/problems/minimum-distance-between-three-equal-elements-i/)|[Java](./algorithms/java/3740_minimum-distance-between-three-equal-elements-i.java)|Easy|
@@ -24,7 +26,9 @@ LeetCode
 |3650|[Minimum Cost Path with Edge Reversals](https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/)|[Java](./algorithms/java/3650_minimum-cost-path-with-edge-reversals.java)|Medium|
 |3640|[Trionic Array II](https://leetcode.com/problems/trionic-array-ii/)|[Java](./algorithms/java/3640_trionic-array-ii.java)|Hard|
 |3637|[Trionic Array I](https://leetcode.com/problems/trionic-array-i/)|[Java](./algorithms/java/3637_trionic-array-i.java)|Easy|
+|3635|[Earliest Finish Time for Land and Water Rides II](https://leetcode.com/problems/earliest-finish-time-for-land-and-water-rides-ii/)|[Java](./algorithms/java/3635_earliest-finish-time-for-land-and-water-rides-ii.java)|Medium|
 |3634|[Minimum Removals to Balance Array](https://leetcode.com/problems/minimum-removals-to-balance-array/)|[Java](./algorithms/java/3634_minimum-removals-to-balance-array.java)|Medium|
+|3633|[Earliest Finish Time for Land and Water Rides I](https://leetcode.com/problems/earliest-finish-time-for-land-and-water-rides-i/)|[Java](./algorithms/java/3633_earliest-finish-time-for-land-and-water-rides-i.java)|Easy|
 |3629|[Minimum Jumps to Reach End via Prime Teleportation](https://leetcode.com/problems/minimum-jumps-to-reach-end-via-prime-teleportation/)|[Java](./algorithms/java/3629_minimum-jumps-to-reach-end-via-prime-teleportation.java)|Medium|
 |3625|[Count Number of Trapezoids II](https://leetcode.com/problems/count-number-of-trapezoids-ii/)|[Java](./algorithms/java/3625_count-number-of-trapezoids-ii.java)|Hard|
 |3623|[Count Number of Trapezoids I](https://leetcode.com/problems/count-number-of-trapezoids-i/)|[Java](./algorithms/java/3623_count-number-of-trapezoids-i.java)|Medium|
@@ -108,6 +112,7 @@ LeetCode
 |3307|[Find the K-th Character in String Game II](https://leetcode.com/problems/find-the-k-th-character-in-string-game-ii/)|[Java](./algorithms/java/3307_find-the-k-th-character-in-string-game-ii.java)|Hard|
 |3306|[Count of Substrings Containing Every Vowel and K Consonants II](https://leetcode.com/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/)|[Java](./algorithms/java/3306_count-of-substrings-containing-every-vowel-and-k-consonants-ii.java)|Medium|
 |3304|[Find the K-th Character in String Game I](https://leetcode.com/problems/find-the-k-th-character-in-string-game-i/)|[Java](./algorithms/java/3304_find-the-k-th-character-in-string-game-i.java)|Easy|
+|3300|[Minimum Element After Replacement With Digit Sum](https://leetcode.com/problems/minimum-element-after-replacement-with-digit-sum/)|[Java](./algorithms/java/3300_minimum-element-after-replacement-with-digit-sum.java)|Easy|
 |3296|[Minimum Number of Seconds to Make Mountain Height Zero](https://leetcode.com/problems/minimum-number-of-seconds-to-make-mountain-height-zero/)|[Java](./algorithms/java/3296_minimum-number-of-seconds-to-make-mountain-height-zero.java)|Medium|
 |3289|[The Two Sneaky Numbers of Digitville](https://leetcode.com/problems/the-two-sneaky-numbers-of-digitville/)|[Java](./algorithms/java/3289_the-two-sneaky-numbers-of-digitville.java)|Easy|
 |3272|[Find the Count of Good Integers](https://leetcode.com/problems/find-the-count-of-good-integers/)|[Java](./algorithms/java/3272_find-the-count-of-good-integers.java)|Hard|
@@ -129,15 +134,19 @@ LeetCode
 |3174|[Clear Digits](https://leetcode.com/problems/clear-digits/)|[Java](./algorithms/java/3174_clear-digits.java)|Easy|
 |3170|[Lexicographically Minimum String After Removing Stars](https://leetcode.com/problems/lexicographically-minimum-string-after-removing-stars/)|[Java](./algorithms/java/3170_lexicographically-minimum-string-after-removing-stars.java)|Medium|
 |3169|[Count Days Without Meetings](https://leetcode.com/problems/count-days-without-meetings/)|[Java](./algorithms/java/3169_count-days-without-meetings.java)|Medium|
+|3161|[Block Placement Queries](https://leetcode.com/problems/block-placement-queries/)|[Java](./algorithms/java/3161_block-placement-queries.java)|Hard|
 |3160|[Find the Number of Distinct Colors Among the Balls](https://leetcode.com/problems/find-the-number-of-distinct-colors-among-the-balls/)|[Java](./algorithms/java/3160_find-the-number-of-distinct-colors-among-the-balls.java)|Medium|
 |3151|[Special Array I](https://leetcode.com/problems/special-array-i/)|[Java](./algorithms/java/3151_special-array-i.java)|Easy|
 |3147|[Taking Maximum Energy From the Mystic Dungeon](https://leetcode.com/problems/taking-maximum-energy-from-the-mystic-dungeon/)|[Java](./algorithms/java/3147_taking-maximum-energy-from-the-mystic-dungeon.java)|Medium|
 |3136|[Valid Word](https://leetcode.com/problems/valid-word/)|[Java](./algorithms/java/3136_valid-word.java)|Easy|
 |3130|[Find All Possible Stable Binary Arrays II](https://leetcode.com/problems/find-all-possible-stable-binary-arrays-ii/)|[Java](./algorithms/java/3130_find-all-possible-stable-binary-arrays-ii.java)|Hard|
 |3129|[Find All Possible Stable Binary Arrays I](https://leetcode.com/problems/find-all-possible-stable-binary-arrays-i/)|[Java](./algorithms/java/3129_find-all-possible-stable-binary-arrays-i.java)|Medium|
+|3121|[Count the Number of Special Characters II](https://leetcode.com/problems/count-the-number-of-special-characters-ii/)|[Java](./algorithms/java/3121_count-the-number-of-special-characters-ii.java)|Medium|
+|3120|[Count the Number of Special Characters I](https://leetcode.com/problems/count-the-number-of-special-characters-i/)|[Java](./algorithms/java/3120_count-the-number-of-special-characters-i.java)|Easy|
 |3108|[Minimum Cost Walk in Weighted Graph](https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/)|[Java](./algorithms/java/3108_minimum-cost-walk-in-weighted-graph.java)|Hard|
 |3105|[Longest Strictly Increasing or Strictly Decreasing Subarray](https://leetcode.com/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/)|[Java](./algorithms/java/3105_longest-strictly-increasing-or-strictly-decreasing-subarray.java)|Easy|
 |3100|[Water Bottles II](https://leetcode.com/problems/water-bottles-ii/)|[Java](./algorithms/java/3100_water-bottles-ii.java)|Medium|
+|3093|[Longest Common Suffix Queries](https://leetcode.com/problems/longest-common-suffix-queries/)|[Java](./algorithms/java/3093_longest-common-suffix-queries.java)|Hard|
 |3085|[Minimum Deletions to Make String K-Special](https://leetcode.com/problems/minimum-deletions-to-make-string-k-special/)|[Java](./algorithms/java/3085_minimum-deletions-to-make-string-k-special.java)|Medium|
 |3075|[Maximize Happiness of Selected Children](https://leetcode.com/problems/maximize-happiness-of-selected-children/)|[Java](./algorithms/java/3075_maximize-happiness-of-selected-children.java)|Medium|
 |3074|[Apple Redistribution into Boxes](https://leetcode.com/problems/apple-redistribution-into-boxes/)|[Java](./algorithms/java/3074_apple-redistribution-into-boxes.java)|Easy|
@@ -202,6 +211,7 @@ LeetCode
 |2598|[Smallest Missing Non-negative Integer After Operations](https://leetcode.com/problems/smallest-missing-non-negative-integer-after-operations/)|[Java](./algorithms/java/2598_smallest-missing-non-negative-integer-after-operations.java)|Medium|
 |2594|[Minimum Time to Repair Cars](https://leetcode.com/problems/minimum-time-to-repair-cars/)|[Java](./algorithms/java/2594_minimum-time-to-repair-cars.java)|Medium|
 |2579|[Count Total Number of Colored Cells](https://leetcode.com/problems/count-total-number-of-colored-cells/)|[Java](./algorithms/java/2579_count-total-number-of-colored-cells.java)|Medium|
+|2574|[Left and Right Sum Differences](https://leetcode.com/problems/left-and-right-sum-differences/)|[Java](./algorithms/java/2574_left-and-right-sum-differences.java)|Easy|
 |2573|[Find the String with LCP](https://leetcode.com/problems/find-the-string-with-lcp/)|[Java](./algorithms/java/2573_find-the-string-with-lcp.java)|Hard|
 |2570|[Merge Two 2D Arrays by Summing Values](https://leetcode.com/problems/merge-two-2d-arrays-by-summing-values/)|[Java](./algorithms/java/2570_merge-two-2d-arrays-by-summing-values.java)|Easy|
 |2566|[Maximum Difference by Remapping a Digit](https://leetcode.com/problems/maximum-difference-by-remapping-a-digit/)|[Java](./algorithms/java/2566_maximum-difference-by-remapping-a-digit.java)|Easy|
@@ -264,6 +274,7 @@ LeetCode
 |2206|[Divide Array Into Equal Pairs](https://leetcode.com/problems/divide-array-into-equal-pairs/)|[Java](./algorithms/java/2206_divide-array-into-equal-pairs.java)|Easy|
 |2200|[Find All K-Distant Indices in an Array](https://leetcode.com/problems/find-all-k-distant-indices-in-an-array/)|[Java](./algorithms/java/2200_find-all-k-distant-indices-in-an-array.java)|Easy|
 |2197|[Replace Non-Coprime Numbers in Array](https://leetcode.com/problems/replace-non-coprime-numbers-in-array/)|[Java](./algorithms/java/2197_replace-non-coprime-numbers-in-array.java)|Hard|
+|2196|[Create Binary Tree From Descriptions](https://leetcode.com/problems/create-binary-tree-from-descriptions/)|[Java](./algorithms/java/2196_create-binary-tree-from-descriptions.java)|Medium|
 |2185|[Counting Words With a Given Prefix](https://leetcode.com/problems/counting-words-with-a-given-prefix/)|[Java](./algorithms/java/2185_counting-words-with-a-given-prefix.java)|Easy|
 |2179|[Count Good Triplets in an Array](https://leetcode.com/problems/count-good-triplets-in-an-array/)|[Java](./algorithms/java/2179_count-good-triplets-in-an-array.java)|Hard|
 |2176|[Count Equal and Divisible Pairs in an Array](https://leetcode.com/problems/count-equal-and-divisible-pairs-in-an-array/)|[Java](./algorithms/java/2176_count-equal-and-divisible-pairs-in-an-array.java)|Easy|
@@ -273,11 +284,13 @@ LeetCode
 |2154|[Keep Multiplying Found Values by Two](https://leetcode.com/problems/keep-multiplying-found-values-by-two/)|[Java](./algorithms/java/2154_keep-multiplying-found-values-by-two.java)|Easy|
 |2147|[Number of Ways to Divide a Long Corridor](https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/)|[Java](./algorithms/java/2147_number-of-ways-to-divide-a-long-corridor.java)|Hard|
 |2145|[Count the Hidden Sequences](https://leetcode.com/problems/count-the-hidden-sequences/)|[Java](./algorithms/java/2145_count-the-hidden-sequences.java)|Medium|
+|2144|[Minimum Cost of Buying Candies With Discount](https://leetcode.com/problems/minimum-cost-of-buying-candies-with-discount/)|[Java](./algorithms/java/2144_minimum-cost-of-buying-candies-with-discount.java)|Easy|
 |2141|[Maximum Running Time of N Computers](https://leetcode.com/problems/maximum-running-time-of-n-computers/)|[Java](./algorithms/java/2141_maximum-running-time-of-n-computers.java)|Hard|
 |2140|[Solving Questions With Brainpower](https://leetcode.com/problems/solving-questions-with-brainpower/)|[Java](./algorithms/java/2140_solving-questions-with-brainpower.java)|Medium|
 |2138|[Divide a String Into Groups of Size k](https://leetcode.com/problems/divide-a-string-into-groups-of-size-k/)|[Java](./algorithms/java/2138_divide-a-string-into-groups-of-size-k.java)|Easy|
 |2131|[Longest Palindrome by Concatenating Two Letter Words](https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/)|[Java](./algorithms/java/2131_longest-palindrome-by-concatenating-two-letter-words.java)|Medium|
 |2127|[Maximum Employees to Be Invited to a Meeting](https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)|[Java](./algorithms/java/2127_maximum-employees-to-be-invited-to-a-meeting.java)|Hard|
+|2126|[Destroying Asteroids](https://leetcode.com/problems/destroying-asteroids/)|[Java](./algorithms/java/2126_destroying-asteroids.java)|Medium|
 |2125|[Number of Laser Beams in a Bank](https://leetcode.com/problems/number-of-laser-beams-in-a-bank/)|[Java](./algorithms/java/2125_number-of-laser-beams-in-a-bank.java)|Medium|
 |2116|[Check if a Parentheses String Can Be Valid](https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/)|[Java](./algorithms/java/2116_check-if-a-parentheses-string-can-be-valid.java)|Medium|
 |2115|[Find All Possible Recipes from Given Supplies](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)|[Java](./algorithms/java/2115_find-all-possible-recipes-from-given-supplies.java)|Medium|
@@ -323,6 +336,7 @@ LeetCode
 |1886|[Determine Whether Matrix Can Be Obtained By Rotation](https://leetcode.com/problems/determine-whether-matrix-can-be-obtained-by-rotation/)|[Java](./algorithms/java/1886_determine-whether-matrix-can-be-obtained-by-rotation.java)|Easy|
 |1878|[Get Biggest Three Rhombus Sums in a Grid](https://leetcode.com/problems/get-biggest-three-rhombus-sums-in-a-grid/)|[Java](./algorithms/java/1878_get-biggest-three-rhombus-sums-in-a-grid.java)|Medium|
 |1877|[Minimize Maximum Pair Sum in Array](https://leetcode.com/problems/minimize-maximum-pair-sum-in-array/)|[Java](./algorithms/java/1877_minimize-maximum-pair-sum-in-array.java)|Medium|
+|1871|[Jump Game VII](https://leetcode.com/problems/jump-game-vii/)|[Java](./algorithms/java/1871_jump-game-vii.java)|Medium|
 |1865|[Finding Pairs With a Certain Sum](https://leetcode.com/problems/finding-pairs-with-a-certain-sum/)|[Java](./algorithms/java/1865_finding-pairs-with-a-certain-sum.java)|Medium|
 |1863|[Sum of All Subset XOR Totals](https://leetcode.com/problems/sum-of-all-subset-xor-totals/)|[Java](./algorithms/java/1863_sum-of-all-subset-xor-totals.java)|Easy|
 |1861|[Rotating the Box](https://leetcode.com/problems/rotating-the-box/)|[Java](./algorithms/java/1861_rotating-the-box.java)|Medium|
@@ -398,6 +412,7 @@ LeetCode
 |1352|[Product of the Last K Numbers](https://leetcode.com/problems/product-of-the-last-k-numbers/)|[Java](./algorithms/java/1352_product-of-the-last-k-numbers.java)|Medium|
 |1351|[Count Negative Numbers in a Sorted Matrix](https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/)|[Java](./algorithms/java/1351_count-negative-numbers-in-a-sorted-matrix.java)|Easy|
 |1345|[Jump Game IV](https://leetcode.com/problems/jump-game-iv/)|[Java](./algorithms/java/1345_jump-game-iv.java)|Hard|
+|1340|[Jump Game V](https://leetcode.com/problems/jump-game-v/)|[Java](./algorithms/java/1340_jump-game-v.java)|Hard|
 |1339|[Maximum Product of Splitted Binary Tree](https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/)|[Java](./algorithms/java/1339_maximum-product-of-splitted-binary-tree.java)|Medium|
 |1323|[Maximum 69 Number](https://leetcode.com/problems/maximum-69-number/)|[Java](./algorithms/java/1323_maximum-69-number.java)|Easy|
 |1320|[Minimum Distance to Type a Word Using Two Fingers](https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/)|[Java](./algorithms/java/1320_minimum-distance-to-type-a-word-using-two-fingers.java)|Hard|
