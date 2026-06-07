@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-26
 // At the time of submission:
-//   Runtime 21 ms Beats 58.52%
-//   Memory 48.47 MB Beats 13.01%
+//   Runtime 8 ms Beats 95.46%
+//   Memory 48.04 MB Beats 69.87%
 
 /****************************************
 * 
@@ -36,40 +36,44 @@
 * 
 ****************************************/
 
+import java.util.Arrays;
+
 class Solution {
-    // Store the last lowercase and first uppercase index per letter.
+    // Track the last lowercase and first uppercase index per letter.
     // A letter is special if all lowercase occurrences appear before
-    // the first uppercase occurrence for the same character.
+    // the first uppercase occurrence of the same character.
     // Time: O(n), Space: O(1)
     public int numberOfSpecialChars(String word) {
-        int[] lastLower = new int[26];
-        int[] firstUpper = new int[26];
+        int[] lastLowerIndex = new int[26]; // last index of lowercase
+        int[] firstUpperIndex = new int[26]; // - first index of uppercase
 
-        for (int i = 0; i < 26; i++) {
-            lastLower[i] = -1;
-            firstUpper[i] = -1;
-        }
+        Arrays.fill(lastLowerIndex, -1);
+        Arrays.fill(firstUpperIndex, -1);
 
         for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
+            char ch = word.charAt(i);
 
-            if (Character.isLowerCase(c)) {
-                lastLower[c - 'a'] = i;
-            } else {
-                int idx = c - 'A';
+            // Update latest lowercase occurrence
+            if (ch >= 'a' && ch <= 'z') {
+                lastLowerIndex[ch - 'a'] = i;
+            }
+            // Store earliest uppercase occurrence
+            else {
+                int letterIndex = ch - 'A';
 
-                if (firstUpper[idx] == -1) {
-                    firstUpper[idx] = i;
+                if (firstUpperIndex[letterIndex] == -1) {
+                    firstUpperIndex[letterIndex] = i;
                 }
             }
         }
 
         int specialCount = 0;
 
+        // Valid if lowercase exists before first uppercase
         for (int i = 0; i < 26; i++) {
-            if (lastLower[i] != -1 &&
-                firstUpper[i] != -1 &&
-                lastLower[i] < firstUpper[i]) {
+            if (lastLowerIndex[i] != -1 &&
+                firstUpperIndex[i] != -1 &&
+                lastLowerIndex[i] < firstUpperIndex[i]) {
 
                 specialCount++;
             }
