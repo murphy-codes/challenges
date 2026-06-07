@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-25
 // At the time of submission:
-//   Runtime 9 ms Beats 78.15%
-//   Memory 47.88 MB Beats 59.33%
+//   Runtime 6 ms Beats 99.11%
+//   Memory 47.44 MB Beats 93.96%
 
 /****************************************
 * 
@@ -35,38 +35,55 @@
 ****************************************/
 
 class Solution {
-    // Sliding window tracks reachable indices within jump range.
-    // Index i is reachable if s[i] == '0' and window count > 0.
-    // Add entering indices and remove exiting indices in O(1) time.
+    // Expand reachable intervals from each valid index using DP.
+    // Track the farthest processed boundary to avoid rescanning ranges.
+    // Each index is processed at most once across all interval expansions.
     // Time: O(n), Space: O(n)
     public boolean canReach(String s, int minJump, int maxJump) {
 
         int n = s.length();
 
+        // Invalid start/end positions
+        if (n == 0 ||
+            s.charAt(0) == '1' ||
+            s.charAt(n - 1) == '1') {
+
+            return false;
+        }
+
         boolean[] reachable = new boolean[n];
         reachable[0] = true;
 
-        int reachableCount = 0;
+        // Tracks farthest index already processed
+        int farthestProcessed = 0;
 
-        for (int i = 1; i < n; i++) {
+        for (int i = 0; i < n; i++) {
 
-            // Add newly reachable index entering window
-            if (i - minJump >= 0 && reachable[i - minJump]) {
-                reachableCount++;
+            // Skip unreachable positions
+            if (!reachable[i]) {
+                continue;
             }
 
-            // Remove index leaving window
-            if (i - maxJump - 1 >= 0 &&
-                reachable[i - maxJump - 1]) {
+            int start =
+                Math.max(farthestProcessed + 1,
+                         i + minJump);
 
-                reachableCount--;
+            int end =
+                Math.min(n - 1,
+                         i + maxJump);
+
+            for (int j = start; j <= end; j++) {
+
+                if (s.charAt(j) == '0') {
+                    reachable[j] = true;
+                }
             }
 
-            // Current index reachable if:
-            // 1. current char is '0'
-            // 2. at least one valid previous position reachable
-            if (s.charAt(i) == '0' && reachableCount > 0) {
-                reachable[i] = true;
+            farthestProcessed = end;
+
+            // Early exit once destination reachable
+            if (reachable[n - 1]) {
+                return true;
             }
         }
 
