@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-27
 // At the time of submission:
-//   Runtime 79 ms Beats 35.57%
-//   Memory 284.1 MB Beats 45.03%
+//   Runtime 46 ms Beats 96.37%
+//   Memory 284.49 MB Beats 15.12%
 
 /****************************************
 * 
@@ -46,99 +46,89 @@
 ****************************************/
 
 class Solution {
-    // Reverse words so suffix matching becomes prefix matching in a Trie.
-    // Each Trie node stores the best container index for that suffix path,
-    // preferring shorter words and earlier indices on ties.
+    // Reverse words so suffix matching becomes Trie prefix traversal.
+    // Each Trie node stores the shortest matching container word index,
+    // with insertion order naturally resolving equal-length ties.
     // Time: O(containerChars + queryChars), Space: O(containerChars)
-
-    private static class TrieNode {
+    
+    class TrieNode {
         TrieNode[] children = new TrieNode[26];
 
-        // Best candidate index for this suffix/prefix
-        int bestIndex = -1;
+        // Best candidate for this suffix path
+        int shortestLen = Integer.MAX_VALUE;
+        int bestIndex = 0;
+    }
+
+    TrieNode root = new TrieNode();
+
+    void insert(String word, int index) {
+
+        TrieNode node = root;
+        int length = word.length();
+
+        // Update empty suffix candidate
+        if (length < node.shortestLen) {
+            node.shortestLen = length;
+            node.bestIndex = index;
+        }
+
+        // Insert reversed word into Trie
+        for (int i = length - 1; i >= 0; --i) {
+
+            int charIndex = word.charAt(i) - 'a';
+
+            if (node.children[charIndex] == null) {
+                node.children[charIndex] = new TrieNode();
+            }
+
+            node = node.children[charIndex];
+
+            // Keep shortest word for this suffix
+            if (length < node.shortestLen) {
+                node.shortestLen = length;
+                node.bestIndex = index;
+            }
+        }
+    }
+
+    int search(String query) {
+
+        TrieNode node = root;
+
+        // Default answer = shortest overall container word
+        int answer = node.bestIndex;
+
+        // Traverse reversed query
+        for (int i = query.length() - 1; i >= 0; --i) {
+
+            int charIndex = query.charAt(i) - 'a';
+
+            if (node.children[charIndex] == null) {
+                break;
+            }
+
+            node = node.children[charIndex];
+
+            // Longest suffix match so far
+            answer = node.bestIndex;
+        }
+
+        return answer;
     }
 
     public int[] stringIndices(String[] wordsContainer,
                                String[] wordsQuery) {
 
-        TrieNode root = new TrieNode();
-
-        // Build reversed trie
-        for (int i = 0; i < wordsContainer.length; i++) {
-            insert(root, wordsContainer, i);
+        for (int i = 0; i < wordsContainer.length; ++i) {
+            insert(wordsContainer[i], i);
         }
 
-        int[] ans = new int[wordsQuery.length];
+        int[] result = new int[wordsQuery.length];
 
-        for (int i = 0; i < wordsQuery.length; i++) {
-            ans[i] = search(root, wordsQuery[i]);
+        for (int i = 0; i < wordsQuery.length; ++i) {
+            result[i] = search(wordsQuery[i]);
         }
 
-        return ans;
-    }
-
-    private void insert(TrieNode root,
-                        String[] wordsContainer,
-                        int index) {
-
-        String word = wordsContainer[index];
-        TrieNode node = root;
-
-        // Update root candidate
-        updateBest(node, wordsContainer, index);
-
-        // Insert reversed word
-        for (int i = word.length() - 1; i >= 0; i--) {
-            int c = word.charAt(i) - 'a';
-
-            if (node.children[c] == null) {
-                node.children[c] = new TrieNode();
-            }
-
-            node = node.children[c];
-
-            // Update best candidate at this node
-            updateBest(node, wordsContainer, index);
-        }
-    }
-
-    private int search(TrieNode root, String query) {
-        TrieNode node = root;
-
-        // Traverse reversed query
-        for (int i = query.length() - 1; i >= 0; i--) {
-            int c = query.charAt(i) - 'a';
-
-            if (node.children[c] == null) {
-                break;
-            }
-
-            node = node.children[c];
-        }
-
-        return node.bestIndex;
-    }
-
-    private void updateBest(TrieNode node,
-                            String[] wordsContainer,
-                            int candidateIndex) {
-
-        if (node.bestIndex == -1) {
-            node.bestIndex = candidateIndex;
-            return;
-        }
-
-        int currentLen = wordsContainer[node.bestIndex].length();
-        int candidateLen = wordsContainer[candidateIndex].length();
-
-        // Prefer:
-        // 1. shorter length
-        // 2. earlier index if tied
-        if (candidateLen < currentLen ||
-            (candidateLen == currentLen &&
-             candidateIndex < node.bestIndex)) {
-
-            node.bestIndex = candidateIndex;
-        }
+        return result;
     }
 }
