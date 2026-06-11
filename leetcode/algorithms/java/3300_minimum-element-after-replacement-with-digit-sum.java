@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-27
 // At the time of submission:
-//   Runtime 1 ms Beats 100.00%
-//   Memory 44.68 MB Beats 86.90%
+//   Runtime 1 ms Beats 99.99%
+//   Memory 44.42 MB Beats 95.90%
 
 /****************************************
 * 
@@ -36,19 +36,16 @@
 ****************************************/
 
 class Solution {
+    // Compute digit sums using n - 9 * Σ(n / 10^k), which equals the
+    // sum of digits for numbers up to 5 digits (per constraints).
+    // Track the minimum transformed value while scanning the array.
+    // Time: O(n), Space: O(1)
     public int minElement(int[] nums) {
-        int minDE = Integer.MAX_VALUE;
-        for (int i = 0; i < nums.length; i++)
-            minDE = Math.min(minDE, getDigitSum(nums[i]));
-        return minDE;
-    }
-    
-    private int getDigitSum(int num) {
-        int sum = 0;
-        while (num > 0) {
-            sum += num % 10;
-            num /= 10;
-        }
-        return sum;
+        // Maximum possible digit sum for nums[i] <= 10000 is: 36
+        // 9 + 9 + 9 + 9 = 36 … // 1 + 0 + 0 + 0 + 0 = 1
+        int mDS = 36;
+        for (int i : nums)
+            mDS = Math.min(mDS, i - 9 * ((i/10) + (i/100) + (i/1000) + (i/10000)));
+        return mDS;
     }
 }
