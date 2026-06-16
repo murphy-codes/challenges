@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-30
 // At the time of submission:
-//   Runtime 116 ms Beats 99.00%
-//   Memory 282.12 MB Beats 52.00%
+//   Runtime 111 ms Beats 99.00%
+//   Memory 280.35 MB Beats 60.00%
 
 /****************************************
 * 
@@ -50,61 +50,80 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Solution {
-    // Dynamic segment tree stores nearest right obstacle and max free span.
-    // Obstacle inserts update affected ranges; queries search valid starts
-    // within [0, x - sz] and check whether any free segment reaches sz.
-    // Time: O(q log M), Space: O(k log M), M=max coordinate, k=obstacles.
-
+    // Dynamic segment tree stores nearest obstacles and max free gaps.
+    // Obstacle insertions update affected intervals lazily on demand.
+    // Queries prune subtrees whose max gap cannot fit the requested block.
+    // Time: O(q log M), Space: O(M log M), M = max obstacle position.
     class SegmentTreeNode {
         SegmentTreeNode leftChild;
         SegmentTreeNode rightChild;
 
-        int start;
-        int end;
+        int rangeStart;
+        int rangeEnd;
 
-        // Maximum obstacle-free segment length within this range.
-        int maxFreeSpace = 0;
-
-        // Closest obstacle strictly to the right of this range.
+        // First obstacle to the right of this interval.
         int nearestObstacle = Integer.MAX_VALUE;
 
-        SegmentTreeNode(int start, int end, int obstaclePosition) {
-            this.start = start;
-            this.end = end;
+        // Largest block that can fit somewhere in this interval.
+        int maxFreeSpace = 0;
+
+        SegmentTreeNode(int rangeStart, int rangeEnd,
+                        int obstaclePosition) {
+
+            this.rangeStart = rangeStart;
+            this.rangeEnd = rangeEnd;
             this.nearestObstacle = obstaclePosition;
 
             this.maxFreeSpace =
                 obstaclePosition == Integer.MAX_VALUE
                     ? Integer.MAX_VALUE
-                    : obstaclePosition - start;
+                    : obstaclePosition - rangeStart;
         }
     }
 
     public List<Boolean> getResults(int[][] queries) {
-        int maxCoordinate = 0;
+
+        int largestObstaclePosition = 0;
 
         for (int[] query : queries) {
             if (query[0] == 1) {
-                maxCoordinate = Math.max(maxCoordinate, query[1]);
+                largestObstaclePosition =
+                    Math.max(largestObstaclePosition, query[1]);
             }
         }
 
         SegmentTreeNode root =
-            new SegmentTreeNode(0, maxCoordinate, Integer.MAX_VALUE);
+            new SegmentTreeNode(
+                0,
+                largestObstaclePosition,
+                Integer.MAX_VALUE
+            );
 
         List<Boolean> results = new ArrayList<>();
 
         for (int[] query : queries) {
-            if (query[0] == 1) {
-                addObstacle(root, query[1]);
-            } else {
-                int latestStart = query[1] - query[2];
 
-                if (latestStart >= root.end) {
+            if (query[0] == 1) {
+
+                addObstacle(root, query[1]);
+
+            } else {
+
+                int latestPossibleStart =
+                    query[1] - query[2];
+
+                if (latestPossibleStart >= root.rangeEnd) {
+
                     results.add(true);
+
                 } else {
+
                     results.add(
-                        isBlockPlaceable(root, latestStart, query[2])
+                        isBlockPlaceable(
+                            root,
+                            latestPossibleStart,
+                            query[2]
+                        )
                     );
                 }
             }
@@ -112,131 +131,166 @@ class Solution {
 
         return results;
     }
-
     boolean isBlockPlaceable(
         SegmentTreeNode node,
-        int latestStart,
+        int latestPossibleStart,
         int blockSize
     ) {
-        if (node.leftChild == null && node.rightChild == null) {
 
-            if (latestStart >= node.end) {
+        if (node.leftChild == null &&
+            node.rightChild == null) {
+
+            if (latestPossibleStart >= node.rangeEnd) {
+
                 return blockSize <= node.maxFreeSpace;
-            }
 
-            if (latestStart < node.start) {
+            } else if (latestPossibleStart < node.rangeStart) {
+
                 return false;
-            }
 
-            return blockSize <= (node.nearestObstacle - node.start);
+            } else {
+
+                return blockSize <=
+                    (node.nearestObstacle - node.rangeStart);
+            }
         }
 
-        if (node.rightChild.end <= latestStart) {
+        if (node.rightChild.rangeEnd <= latestPossibleStart) {
+
             if (node.rightChild.maxFreeSpace >= blockSize) {
                 return true;
             }
         }
 
-        if (node.leftChild.end <= latestStart) {
+        if (node.leftChild.rangeEnd <= latestPossibleStart) {
+
             if (node.leftChild.maxFreeSpace >= blockSize) {
                 return true;
             }
+
         } else {
+
             return isBlockPlaceable(
                 node.leftChild,
-                latestStart,
+                latestPossibleStart,
                 blockSize
             );
         }
 
-        if (
-            node.rightChild.start <= latestStart
-                && node.rightChild.end >= latestStart
-        ) {
+        if (node.rightChild.rangeStart <= latestPossibleStart &&
+            node.rightChild.rangeEnd >= latestPossibleStart) {
+
             return isBlockPlaceable(
                 node.rightChild,
-                latestStart,
+                latestPossibleStart,
                 blockSize
             );
         }
 
         return false;
     }
+
     int addObstacle(
         SegmentTreeNode node,
         int obstaclePosition
     ) {
-        if (node.end == node.start) {
+
+        if (node.rangeEnd == node.rangeStart) {
 
             node.nearestObstacle =
-                (node.end < obstaclePosition
-                    && obstaclePosition < node.nearestObstacle)
-                        ? obstaclePosition
-                        : node.nearestObstacle;
+                (node.rangeEnd < obstaclePosition &&
+                 obstaclePosition < node.nearestObstacle)
+                    ? obstaclePosition
+                    : node.nearestObstacle;
 
             node.maxFreeSpace =
                 node.nearestObstacle == Integer.MAX_VALUE
                     ? node.nearestObstacle
-                    : node.nearestObstacle - node.start;
+                    : node.nearestObstacle - node.rangeStart;
 
             return node.maxFreeSpace;
         }
 
-        if (obstaclePosition <= node.start) {
+        // Obstacle is not relevant to this interval.
+        if (obstaclePosition <= node.rangeStart) {
             return node.maxFreeSpace;
         }
 
-        if (obstaclePosition > node.end) {
+        // Obstacle lies completely to the right of this interval.
+        // Update nearest obstacle information.
+        if (obstaclePosition > node.rangeEnd) {
 
             if (obstaclePosition < node.nearestObstacle) {
 
                 node.nearestObstacle = obstaclePosition;
 
-                if (
-                    node.leftChild == null
-                        && node.rightChild == null
-                ) {
+                if (node.leftChild == null &&
+                    node.rightChild == null) {
+
                     node.maxFreeSpace =
-                        obstaclePosition - node.start;
+                        obstaclePosition - node.rangeStart;
+
                 } else {
+
                     node.maxFreeSpace = Math.max(
-                        addObstacle(node.leftChild, obstaclePosition),
-                        addObstacle(node.rightChild, obstaclePosition)
+                        addObstacle(
+                            node.leftChild,
+                            obstaclePosition
+                        ),
+                        addObstacle(
+                            node.rightChild,
+                            obstaclePosition
+                        )
                     );
                 }
             }
 
             return node.maxFreeSpace;
         }
+        // Obstacle falls inside this interval.
+        // Recurse into children.
+        if (node.leftChild != null &&
+            node.rightChild != null) {
 
-        if (node.leftChild != null && node.rightChild != null) {
             node.maxFreeSpace = Math.max(
-                addObstacle(node.leftChild, obstaclePosition),
-                addObstacle(node.rightChild, obstaclePosition)
+                addObstacle(
+                    node.leftChild,
+                    obstaclePosition
+                ),
+                addObstacle(
+                    node.rightChild,
+                    obstaclePosition
+                )
             );
 
             return node.maxFreeSpace;
         }
 
-        int mid = (node.end - node.start) / 2 + node.start;
+        int mid =
+            (node.rangeEnd - node.rangeStart) / 2
+            + node.rangeStart;
 
-        node.leftChild =
-            new SegmentTreeNode(
-                node.start,
-                mid,
-                node.nearestObstacle
-            );
+        node.leftChild = new SegmentTreeNode(
+            node.rangeStart,
+            mid,
+            node.nearestObstacle
+        );
 
-        node.rightChild =
-            new SegmentTreeNode(
-                mid + 1,
-                node.end,
-                node.nearestObstacle
-            );
+        node.rightChild = new SegmentTreeNode(
+            mid + 1,
+            node.rangeEnd,
+            node.nearestObstacle
+        );
 
         node.maxFreeSpace = Math.max(
-            addObstacle(node.leftChild, obstaclePosition),
-            addObstacle(node.rightChild, obstaclePosition)
+            addObstacle(
+                node.leftChild,
+                obstaclePosition
+            ),
+            addObstacle(
+                node.rightChild,
+                obstaclePosition
+            )
         );
 
         return node.maxFreeSpace;
