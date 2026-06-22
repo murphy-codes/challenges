@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-06-02
 // At the time of submission:
-//   Runtime 201 ms Beats 10.35%
-//   Memory 98.06 MB Beats 25.86%
+//   Runtime 2 ms Beats 100.00%
+//   Memory 100.99 MB Beats 31.72%
 
 /****************************************
 * 
@@ -59,117 +59,60 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort second rides by start time; build prefix min durations and
-    // suffix min(start + duration). For each first ride completion time,
-    // binary-search the split between already-open and future rides.
-    // Evaluate both ride orders and take the minimum finish time.
-    // Time: O((n + m) log m), Space: O(m).
+    // Let a1/a2 be the earliest completion times among land/water rides.
+    // For a fixed order, replacing the first ride with the earliest-finishing
+    // ride can never worsen the final completion time.
+    // Evaluate Water→Land using a2 and Land→Water using a1.
+    // Time: O(n + m), Space: O(1).
+
     public int earliestFinishTime(
         int[] landStartTime,
         int[] landDuration,
         int[] waterStartTime,
         int[] waterDuration
     ) {
-        return Math.min(
-            solve(
-                landStartTime,
-                landDuration,
-                waterStartTime,
-                waterDuration
-            ),
-            solve(
-                waterStartTime,
-                waterDuration,
-                landStartTime,
-                landDuration
-            )
-        );
-    }
+        int landCount = landDuration.length;
+        int waterCount = waterDuration.length;
 
-    private int solve(
-        int[] firstStart,
-        int[] firstDuration,
-        int[] secondStart,
-        int[] secondDuration
-    ) {
-        int m = secondStart.length;
-
-        int[][] secondRides = new int[m][2];
-        for (int i = 0; i < m; i++) {
-            secondRides[i][0] = secondStart[i];
-            secondRides[i][1] = secondDuration[i];
-        }
-
-        Arrays.sort(secondRides, (a, b) -> Integer.compare(a[0], b[0]));
-
-        int[] starts = new int[m];
-        int[] prefixMinDuration = new int[m];
-        int[] suffixMinFinish = new int[m];
-
-        for (int i = 0; i < m; i++) {
-            starts[i] = secondRides[i][0];
-        }
-
-        prefixMinDuration[0] = secondRides[0][1];
-        for (int i = 1; i < m; i++) {
-            prefixMinDuration[i] = Math.min(
-                prefixMinDuration[i - 1],
-                secondRides[i][1]
+        // Earliest completion among all land rides.
+        int earliestLandFinish = Integer.MAX_VALUE;
+        for (int i = 0; i < landCount; i++) {
+            earliestLandFinish = Math.min(
+                earliestLandFinish,
+                landStartTime[i] + landDuration[i]
             );
         }
 
-        suffixMinFinish[m - 1] =
-            secondRides[m - 1][0] + secondRides[m - 1][1];
-
-        for (int i = m - 2; i >= 0; i--) {
-            suffixMinFinish[i] = Math.min(
-                suffixMinFinish[i + 1],
-                secondRides[i][0] + secondRides[i][1]
+        // Earliest completion among all water rides.
+        int earliestWaterFinish = Integer.MAX_VALUE;
+        for (int i = 0; i < waterCount; i++) {
+            earliestWaterFinish = Math.min(
+                earliestWaterFinish,
+                waterStartTime[i] + waterDuration[i]
             );
         }
 
         int answer = Integer.MAX_VALUE;
 
-        for (int i = 0; i < firstStart.length; i++) {
-            int finishFirst = firstStart[i] + firstDuration[i];
+        // Water → Land
+        for (int i = 0; i < landCount; i++) {
+            answer = Math.min(
+                answer,
+                Math.max(earliestWaterFinish, landStartTime[i])
+                    + landDuration[i]
+            );
+        }
 
-            int split = upperBound(starts, finishFirst);
-
-            if (split > 0) {
-                answer = Math.min(
-                    answer,
-                    finishFirst + prefixMinDuration[split - 1]
-                );
-            }
-
-            if (split < m) {
-                answer = Math.min(
-                    answer,
-                    suffixMinFinish[split]
-                );
-            }
+        // Land → Water
+        for (int i = 0; i < waterCount; i++) {
+            answer = Math.min(
+                answer,
+                Math.max(earliestLandFinish, waterStartTime[i])
+                    + waterDuration[i]
+            );
         }
 
         return answer;
-    }
-
-    private int upperBound(int[] arr, int target) {
-        int left = 0;
-        int right = arr.length;
-
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-
-            if (arr[mid] <= target) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-
-        return left;
     }
 }
