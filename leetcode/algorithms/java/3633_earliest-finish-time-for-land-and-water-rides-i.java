@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-06-01
 // At the time of submission:
-//   Runtime 3 ms Beats 66.67%
-//   Memory 46.74 MB Beats 77.78%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 46.88 MB Beats 61.51%
 
 /****************************************
 * 
@@ -61,43 +61,62 @@
 ****************************************/
 
 class Solution {
-    // Try every land/water ride pair in both possible orders.
-    // Finish time = max(firstRideFinish, secondRideOpen) + secondDuration.
-    // Track the minimum finish time across all ride combinations.
-    // Time: O(n * m), Space: O(1).
-    public int earliestFinishTime(
-            int[] landStartTime,
-            int[] landDuration,
-            int[] waterStartTime,
-            int[] waterDuration) {
+    // For a fixed ride order, only the earliest first-ride completion matters.
+    // Find min(start[i] + duration[i]), then choose the second ride that
+    // minimizes max(secondStart, firstFinish) + secondDuration.
+    // Evaluate both orders and return the smaller result.
+    // Time: O(n + m), Space: O(1).
 
-        int earliestFinish = Integer.MAX_VALUE;
+    private int earliestCompletionAfterSecondRide(
+        int[] firstRideStart,
+        int[] firstRideDuration,
+        int[] secondRideStart,
+        int[] secondRideDuration
+    ) {
+        // Earliest possible completion of any first ride.
+        int earliestFirstFinish = Integer.MAX_VALUE;
 
-        for (int land = 0; land < landStartTime.length; land++) {
-            int landFinish = landStartTime[land] + landDuration[land];
-
-            for (int water = 0; water < waterStartTime.length; water++) {
-
-                // Land -> Water
-                int finishLandThenWater =
-                    Math.max(landFinish, waterStartTime[water])
-                    + waterDuration[water];
-
-                // Water -> Land
-                int waterFinish =
-                    waterStartTime[water] + waterDuration[water];
-
-                int finishWaterThenLand =
-                    Math.max(waterFinish, landStartTime[land])
-                    + landDuration[land];
-
-                earliestFinish = Math.min(
-                    earliestFinish,
-                    Math.min(finishLandThenWater, finishWaterThenLand)
-                );
-            }
+        for (int i = 0; i < firstRideStart.length; i++) {
+            earliestFirstFinish = Math.min(
+                earliestFirstFinish,
+                firstRideStart[i] + firstRideDuration[i]
+            );
         }
 
-        return earliestFinish;
+        // Best completion time after taking a second ride.
+        int earliestTotalFinish = Integer.MAX_VALUE;
+
+        for (int i = 0; i < secondRideStart.length; i++) {
+            earliestTotalFinish = Math.min(
+                earliestTotalFinish,
+                Math.max(secondRideStart[i], earliestFirstFinish)
+                    + secondRideDuration[i]
+            );
+        }
+
+        return earliestTotalFinish;
+    }
+
+    public int earliestFinishTime(
+        int[] landStartTime,
+        int[] landDuration,
+        int[] waterStartTime,
+        int[] waterDuration
+    ) {
+        int landThenWater = earliestCompletionAfterSecondRide(
+            landStartTime,
+            landDuration,
+            waterStartTime,
+            waterDuration
+        );
+
+        int waterThenLand = earliestCompletionAfterSecondRide(
+            waterStartTime,
+            waterDuration,
+            landStartTime,
+            landDuration
+        );
+
+        return Math.min(landThenWater, waterThenLand);
     }
 }
