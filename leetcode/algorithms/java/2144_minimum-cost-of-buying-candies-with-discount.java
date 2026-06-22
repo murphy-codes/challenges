@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-31
 // At the time of submission:
-//   Runtime 5 ms Beats 96.09%
-//   Memory 44.60 MB Beats 33.49%
+//   Runtime 1 ms Beats 100.00%
+//   Memory 44.16 MB Beats 94.99%
 
 /****************************************
 * 
@@ -48,21 +48,33 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort costs descending and group candies in triples.
-    // In each group, pay for the two most expensive and skip the third.
-    // This maximizes the value of free candies and minimizes total cost.
-    // Time: O(n log n), Space: O(log n) due to sorting recursion.
-    public int minimumCost(int[] cost) {
-        int minCost = 0;
-        int candyNum = 0;
-        Arrays.sort(cost);
-        for (int i = cost.length-1; i >= 0; i--){
-            if (++candyNum == 3) candyNum = 0;
-            else minCost += cost[i];
+    // Use counting sort since candy costs are bounded to [1,100].
+    // Process prices from high to low and apply the buy-2-get-1-free rule.
+    // Batch identical-cost candies to avoid explicit sorting or simulation.
+    // Time: O(n + 100) = O(n), Space: O(100) = O(1).
+    public int minimumCost(int[] costs) {
+        int[] frequency = new int[101];
+        for (int cost : costs) {
+            frequency[cost]++;
         }
-        return minCost;
+        int paidInCurrentGroup = 0;
+        int totalCost = 0;
+        for (int price = 100; price > 0; price--) {
+            if (frequency[price] > 2 - paidInCurrentGroup) {
+                frequency[price] -= (3 - paidInCurrentGroup);
+                // Finish current buy-buy-free group
+                totalCost += (2 - paidInCurrentGroup) * price;
+                // Process complete groups of 3 identical candies
+                totalCost += 2 * price * (frequency[price] / 3);
+                paidInCurrentGroup = frequency[price] % 3;
+                // Remaining paid candies
+                totalCost += price * paidInCurrentGroup;
+            } else {
+                paidInCurrentGroup += frequency[price];
+                totalCost += price * frequency[price];
+            }
+        }
+        return totalCost;
     }
 }
