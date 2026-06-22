@@ -3,7 +3,7 @@
 // Date: 2026-05-31
 // At the time of submission:
 //   Runtime 1 ms Beats 100.00%
-//   Memory 44.16 MB Beats 94.99%
+//   Memory 43.82 MB Beats 98.77%
 
 /****************************************
 * 
@@ -54,27 +54,27 @@ class Solution {
     // Batch identical-cost candies to avoid explicit sorting or simulation.
     // Time: O(n + 100) = O(n), Space: O(100) = O(1).
     public int minimumCost(int[] costs) {
-        int[] frequency = new int[101];
-        for (int cost : costs) {
-            frequency[cost]++;
+        int[] frq = new int[101];
+        for (int c : costs) {
+            frq[c]++;
         }
-        int paidInCurrentGroup = 0;
-        int totalCost = 0;
+        int paid = 0;
+        int total = 0;
         for (int price = 100; price > 0; price--) {
-            if (frequency[price] > 2 - paidInCurrentGroup) {
-                frequency[price] -= (3 - paidInCurrentGroup);
+            if (frq[price] > 2 - paid) {
+                frq[price] -= (3 - paid);
                 // Finish current buy-buy-free group
-                totalCost += (2 - paidInCurrentGroup) * price;
+                total += (2 - paid) * price;
                 // Process complete groups of 3 identical candies
-                totalCost += 2 * price * (frequency[price] / 3);
-                paidInCurrentGroup = frequency[price] % 3;
+                total += 2 * price * (frq[price] / 3);
+                paid = frq[price] % 3;
                 // Remaining paid candies
-                totalCost += price * paidInCurrentGroup;
+                total += price * paid;
             } else {
-                paidInCurrentGroup += frequency[price];
-                totalCost += price * frequency[price];
+                paid += frq[price];
+                total += price * frq[price];
             }
         }
-        return totalCost;
+        return total;
     }
 }
