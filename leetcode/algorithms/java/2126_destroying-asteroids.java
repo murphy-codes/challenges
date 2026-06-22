@@ -2,8 +2,8 @@
 // Author: Tom Murphy https://github.com/murphy-codes/
 // Date: 2026-05-30
 // At the time of submission:
-//   Runtime 26 ms Beats 81.52%
-//   Memory 107.08 MB Beats 85.45%
+//   Runtime 5 ms Beats 99.34%
+//   Memory 105.69 MB Beats 98.22%
 
 /****************************************
 * 
@@ -42,20 +42,50 @@
 * 
 ****************************************/
 
-import java.util.Arrays;
-
 class Solution {
-    // Sort asteroids and greedily absorb them from smallest to largest.
-    // If the current mass cannot absorb the smallest remaining asteroid,
-    // no larger asteroid can be absorbed either, so return false.
-    // Time: O(n log n), Space: O(log n) due to sorting recursion.
+    // Count asteroid frequencies instead of sorting, leveraging mass <= 100000.
+    // Absorb all currently destroyable asteroids, then process masses ascending.
+    // If currentMass < next asteroid mass, no remaining asteroid is destroyable.
+    // Time: O(n + M), Space: O(M), where M = max asteroid mass. 
     public boolean asteroidsDestroyed(int mass, int[] asteroids) {
-        Arrays.sort(asteroids);
-        long cMass = mass;
-        for (int i : asteroids) {
-            if (cMass < i) return false;
-            cMass += i;
+        int minMass = 100000;
+        int maxMass = 0;
+
+        for (int asteroid : asteroids) {
+            maxMass = Math.max(maxMass, asteroid);
+            minMass = Math.min(minMass, asteroid);
         }
+
+        int[] frequency = new int[maxMass + 1];
+        long currentMass = mass;
+
+        // Immediately absorb any asteroid we can already destroy.
+        for (int asteroid : asteroids) {
+            if (asteroid > currentMass) {
+                frequency[asteroid]++;
+            } else {
+                currentMass += asteroid;
+            }
+        }
+
+        if (currentMass >= maxMass) {
+            return true;
+        }
+
+        for (int asteroidMass = minMass;
+             asteroidMass <= maxMass;
+             asteroidMass++) {
+
+            if (currentMass < asteroidMass) {
+                return false;
+            }
+
+            if (frequency[asteroidMass] != 0) {
+                currentMass += (long) asteroidMass
+                             * frequency[asteroidMass];
+            }
+        }
+
         return true;
     }
 }
